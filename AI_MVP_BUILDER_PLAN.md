@@ -16,7 +16,7 @@ Targets:
 
 - Android app using Compose Multiplatform
 - iOS app starting with Compose Multiplatform UI
-- Desktop app used for testing, preview, and Compose Hot Reload
+- Desktop app used for testing, preview, and MCP-driven Hot Reload
 
 Future direction:
 
@@ -64,7 +64,7 @@ Responsibilities:
 - `shared`: Kotlin Multiplatform library containing shared app logic and shared Compose UI for V1.
 - `androidApp`: Android runnable app.
 - `iosApp`: iOS runnable app using Compose UI in V1.
-- `desktopApp`: Desktop runnable app for preview, testing, and Compose Hot Reload.
+- `desktopApp`: Desktop runnable app for preview, testing, and MCP-driven Hot Reload.
 
 Future native UI structure:
 
@@ -104,7 +104,7 @@ In the server-enabled structure:
 - `app/shared` contains KMP client logic and Compose UI.
 - `app/androidApp` contains the Android runnable app.
 - `app/iosApp` contains the iOS Compose runnable app.
-- `app/desktopApp` contains the desktop preview and hot reload app.
+- `app/desktopApp` contains the desktop preview and MCP-driven hot reload app.
 
 ## V1 Generated Project Layout
 
@@ -511,14 +511,14 @@ Recommended Ktor stack:
 
 For V1.5, prefer Ktor + SQLite + Exposed for fastest CRUD generation. Add SQLDelight as an option when shared SQL modeling is useful.
 
-## Desktop Preview And Hot Reload
+## Desktop Preview And MCP-Driven Hot Reload
 
 The desktop app is the local preview surface.
 
 Use it for:
 
 - Fast app launch
-- Compose Hot Reload
+- MCP-driven Hot Reload
 - Fake data previews
 - Manual UI testing
 - Visual iteration
@@ -534,7 +534,7 @@ The template should include preview states for generated screens:
 - Small window
 - Large window
 
-Compose Hot Reload should be wired to `desktopApp`, not Android.
+MCP-driven Hot Reload (using Model Context Protocol) should be wired to `desktopApp`, not Android.
 
 When backend is enabled, `mvp preview` should start both the Ktor server and the desktop app:
 
@@ -624,7 +624,7 @@ Include in V1:
 - JetBrains KMP wizard-based template
 - Android app
 - iOS app with Compose UI
-- Desktop app for preview and hot reload
+- Desktop app for preview and MCP-driven hot reload
 - User-selectable storage
 - Tests included by default
 - Feature contracts
@@ -746,7 +746,7 @@ Output:
 - Desktop app runs
 - Tests pass
 - Expense feature works with selected persistence
-- Desktop preview supports hot reload
+- Desktop preview supports MCP-driven hot reload
 - Verification report is generated
 ```
 
@@ -771,7 +771,7 @@ Output:
 ## Recommended Implementation Order
 
 1. Create the KMP project template.
-2. Add `desktopApp` and hot reload support.
+2. Add `desktopApp` and MCP-driven hot reload support.
 3. Add core architecture code.
 4. Add storage option hooks.
 5. Add `.mvp/` metadata format.
