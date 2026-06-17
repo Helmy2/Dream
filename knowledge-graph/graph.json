@@ -1,0 +1,1146 @@
+{
+  "metadata": {
+    "name": "best-practices-knowledge-graph",
+    "version": 1,
+    "sourceDocuments": [
+      "knowledge-graph/best-practices/README.md"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "document.best_practices",
+      "type": "Document",
+      "title": "Extracted Best Practices Handbook",
+      "path": "knowledge-graph/best-practices/README.md"
+    },
+    {
+      "id": "section.core_architecture",
+      "type": "Section",
+      "title": "Core Architectural Philosophy",
+      "sectionNumber": "3",
+      "documentId": "document.best_practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/03-core-architectural-philosophy.md",
+        "startLine": 1,
+        "endLine": 26
+      }
+    },
+    {
+      "id": "section.feature_template",
+      "type": "Section",
+      "title": "Feature Module Template",
+      "sectionNumber": "5",
+      "documentId": "document.best_practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/05-feature-module-template.md",
+        "startLine": 1,
+        "endLine": 62
+      }
+    },
+    {
+      "id": "section.dependency_rules",
+      "type": "Section",
+      "title": "Dependency Rules To Keep",
+      "sectionNumber": "6",
+      "documentId": "document.best_practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/06-dependency-rules-to-keep.md",
+        "startLine": 1,
+        "endLine": 34
+      }
+    },
+    {
+      "id": "section.domain_practices",
+      "type": "Section",
+      "title": "Domain Layer Practices",
+      "sectionNumber": "9",
+      "documentId": "document.best_practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/09-domain-layer-practices.md",
+        "startLine": 1,
+        "endLine": 61
+      }
+    },
+    {
+      "id": "section.data_practices",
+      "type": "Section",
+      "title": "Data Layer Practices",
+      "sectionNumber": "10",
+      "documentId": "document.best_practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/10-data-layer-practices.md",
+        "startLine": 1,
+        "endLine": 72
+      }
+    },
+    {
+      "id": "section.presentation_practices",
+      "type": "Section",
+      "title": "Presentation Layer Practices",
+      "sectionNumber": "14",
+      "documentId": "document.best_practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "startLine": 1,
+        "endLine": 71
+      }
+    },
+    {
+      "id": "section.navigation_practices",
+      "type": "Section",
+      "title": "Navigation Practices",
+      "sectionNumber": "15",
+      "documentId": "document.best_practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/15-navigation-practices.md",
+        "startLine": 1,
+        "endLine": 50
+      }
+    },
+    {
+      "id": "section.resource_practices",
+      "type": "Section",
+      "title": "Resource And Localization Practices",
+      "sectionNumber": "17",
+      "documentId": "document.best_practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/17-resource-and-localization-practices.md",
+        "startLine": 1,
+        "endLine": 30
+      }
+    },
+    {
+      "id": "section.di_practices",
+      "type": "Section",
+      "title": "Dependency Injection Practices",
+      "sectionNumber": "18",
+      "documentId": "document.best_practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/18-dependency-injection-practices.md",
+        "startLine": 1,
+        "endLine": 36
+      }
+    },
+    {
+      "id": "section.defaults",
+      "type": "Section",
+      "title": "Recommended Default Rules For Future Projects",
+      "sectionNumber": "25",
+      "documentId": "document.best_practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/25-recommended-default-rules-for-future-projects.md",
+        "startLine": 1,
+        "endLine": 36
+      }
+    },
+    {
+      "id": "section.anti_patterns",
+      "type": "Section",
+      "title": "Anti-Patterns To Avoid When Reusing This Architecture",
+      "sectionNumber": "26",
+      "documentId": "document.best_practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/26-anti-patterns-to-avoid-when-reusing-this-architecture.md",
+        "startLine": 1,
+        "endLine": 12
+      }
+    },
+    {
+      "id": "layer.domain",
+      "type": "Layer",
+      "name": "domain",
+      "description": "Pure business layer containing models, use cases, repository interfaces, and domain errors."
+    },
+    {
+      "id": "layer.data",
+      "type": "Layer",
+      "name": "data",
+      "description": "Runtime integration layer containing repository implementations, DTOs, local and remote sources, and boundary mapping."
+    },
+    {
+      "id": "layer.presentation",
+      "type": "Layer",
+      "name": "presentation",
+      "description": "UI-facing layer containing screens, view models, UI models, and presentation mappers."
+    },
+    {
+      "id": "layer.shared_core",
+      "type": "Layer",
+      "name": "shared_core",
+      "description": "Shared cross-cutting infrastructure split by responsibility."
+    },
+    {
+      "id": "layer.navigation",
+      "type": "Layer",
+      "name": "navigation",
+      "description": "App-shell routing and navigation ownership layer."
+    },
+    {
+      "id": "layer.design_system",
+      "type": "Layer",
+      "name": "design_system",
+      "description": "Shared tokens, components, and string resources."
+    },
+    {
+      "id": "module.feature.domain",
+      "type": "ModulePattern",
+      "name": "Feature Domain Module",
+      "pattern": "feature/<name>/domain",
+      "source": {
+        "file": "knowledge-graph/best-practices/05-feature-module-template.md",
+        "startLine": 1,
+        "endLine": 30
+      }
+    },
+    {
+      "id": "module.feature.data",
+      "type": "ModulePattern",
+      "name": "Feature Data Module",
+      "pattern": "feature/<name>/data",
+      "source": {
+        "file": "knowledge-graph/best-practices/05-feature-module-template.md",
+        "startLine": 1,
+        "endLine": 42
+      }
+    },
+    {
+      "id": "module.feature.presentation",
+      "type": "ModulePattern",
+      "name": "Feature Presentation Module",
+      "pattern": "feature/<name>/presentation",
+      "source": {
+        "file": "knowledge-graph/best-practices/05-feature-module-template.md",
+        "startLine": 1,
+        "endLine": 58
+      }
+    },
+    {
+      "id": "practice.feature_based_packaging",
+      "type": "Practice",
+      "name": "Package by feature",
+      "statement": "Package product behavior by feature rather than by technical layer alone.",
+      "classification": "universal",
+      "strength": "recommended",
+      "source": {
+        "file": "knowledge-graph/best-practices/03-core-architectural-philosophy.md",
+        "startLine": 5,
+        "endLine": 13
+      }
+    },
+    {
+      "id": "practice.shared_core_split",
+      "type": "Practice",
+      "name": "Split shared core by responsibility",
+      "statement": "Split shared core infrastructure by responsibility and dependency weight instead of using one giant core module.",
+      "classification": "kmp_oriented",
+      "strength": "recommended",
+      "source": {
+        "file": "knowledge-graph/best-practices/08-shared-core-splitting.md",
+        "startLine": 1,
+        "endLine": 20
+      }
+    },
+    {
+      "id": "practice.typed_results",
+      "type": "Practice",
+      "name": "Use typed result wrappers",
+      "statement": "Use typed result wrappers for domain-facing operations and feature-specific error hierarchies for expected failures.",
+      "classification": "universal",
+      "strength": "recommended",
+      "source": {
+        "file": "knowledge-graph/best-practices/09-domain-layer-practices.md",
+        "startLine": 15,
+        "endLine": 33
+      }
+    },
+    {
+      "id": "practice.cache_first_reads",
+      "type": "Practice",
+      "name": "Prefer cache-first reads",
+      "statement": "Prefer local cache as the first read path in offline-first or low-churn features when appropriate.",
+      "classification": "universal",
+      "strength": "recommended",
+      "source": {
+        "file": "knowledge-graph/best-practices/10-data-layer-practices.md",
+        "startLine": 29,
+        "endLine": 37
+      }
+    },
+    {
+      "id": "practice.small_mvi_base",
+      "type": "Practice",
+      "name": "Keep MVI infrastructure small",
+      "statement": "Keep the base MVI view model small and practical, providing only primitives the team actually uses.",
+      "classification": "universal",
+      "strength": "recommended",
+      "source": {
+        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "startLine": 19,
+        "endLine": 35
+      }
+    },
+    {
+      "id": "practice.callback_navigation_decoupling",
+      "type": "Practice",
+      "name": "Decouple feature UI from routing",
+      "statement": "Pass intent-level callbacks into feature UI and keep routing infrastructure at the app shell when possible.",
+      "classification": "universal",
+      "strength": "recommended",
+      "source": {
+        "file": "knowledge-graph/best-practices/15-navigation-practices.md",
+        "startLine": 24,
+        "endLine": 33
+      }
+    },
+    {
+      "id": "practice.shared_strings",
+      "type": "Practice",
+      "name": "Centralize user-visible strings",
+      "statement": "Keep one shared strings source for shared UI layers and avoid feature-local string stores unless architecture truly requires them.",
+      "classification": "kmp_oriented",
+      "strength": "recommended",
+      "source": {
+        "file": "knowledge-graph/best-practices/17-resource-and-localization-practices.md",
+        "startLine": 3,
+        "endLine": 12
+      }
+    },
+    {
+      "id": "practice.constructor_injection",
+      "type": "Practice",
+      "name": "Prefer constructor injection",
+      "statement": "Use constructor injection for repositories, use cases, and view models whenever possible.",
+      "classification": "universal",
+      "strength": "default",
+      "source": {
+        "file": "knowledge-graph/best-practices/18-dependency-injection-practices.md",
+        "startLine": 20,
+        "endLine": 24
+      }
+    },
+    {
+      "id": "platform.shared_logic_native_ui",
+      "type": "PlatformPattern",
+      "name": "Share business logic without forcing shared UI",
+      "statement": "Share domain and data logic broadly, but do not force shared UI when native UI is the better product choice.",
+      "classification": "kmp_oriented",
+      "strength": "recommended",
+      "source": {
+        "file": "knowledge-graph/best-practices/19-android-and-ios-boundary-practices.md",
+        "startLine": 1,
+        "endLine": 23
+      }
+    },
+    {
+      "id": "rule.dependency_direction",
+      "type": "Rule",
+      "name": "Canonical dependency direction",
+      "statement": "Enforce Presentation -> Domain <- Data dependency direction.",
+      "scope": "architecture",
+      "classification": "universal",
+      "strength": "non_negotiable",
+      "source": {
+        "file": "knowledge-graph/best-practices/03-core-architectural-philosophy.md",
+        "startLine": 15,
+        "endLine": 19
+      }
+    },
+    {
+      "id": "rule.domain_pure_kotlin",
+      "type": "Rule",
+      "name": "Domain stays pure Kotlin",
+      "statement": "Domain must remain platform-agnostic and framework-light.",
+      "scope": "domain",
+      "classification": "universal",
+      "strength": "non_negotiable",
+      "source": {
+        "file": "knowledge-graph/best-practices/09-domain-layer-practices.md",
+        "startLine": 5,
+        "endLine": 13
+      }
+    },
+    {
+      "id": "rule.domain_time_provider_only",
+      "type": "Rule",
+      "name": "Time flows through TimeProvider",
+      "statement": "Domain and feature code must not call Clock.System.now() directly and should access time through TimeProvider.",
+      "scope": "domain",
+      "classification": "universal",
+      "strength": "non_negotiable",
+      "source": {
+        "file": "knowledge-graph/best-practices/09-domain-layer-practices.md",
+        "startLine": 49,
+        "endLine": 61
+      }
+    },
+    {
+      "id": "rule.repository_translates_infrastructure",
+      "type": "Rule",
+      "name": "Repositories own boundary translation",
+      "statement": "Repositories map DTOs and entities into domain models, convert infrastructure failures into domain errors, and expose domain-friendly return types.",
+      "scope": "data",
+      "classification": "universal",
+      "strength": "recommended",
+      "source": {
+        "file": "knowledge-graph/best-practices/10-data-layer-practices.md",
+        "startLine": 5,
+        "endLine": 12
+      }
+    },
+    {
+      "id": "rule.rethrow_cancellation_exception",
+      "type": "Rule",
+      "name": "Never swallow coroutine cancellation",
+      "statement": "Repository helpers must always rethrow CancellationException.",
+      "scope": "data",
+      "classification": "universal",
+      "strength": "non_negotiable",
+      "source": {
+        "file": "knowledge-graph/best-practices/10-data-layer-practices.md",
+        "startLine": 14,
+        "endLine": 27
+      }
+    },
+    {
+      "id": "rule.feature_named_http_client",
+      "type": "Rule",
+      "name": "Prefer named per-feature HttpClient",
+      "statement": "Each data module that talks to a backend should own its own named HttpClient unless there is a strong reason to share one.",
+      "scope": "data",
+      "classification": "kmp_oriented",
+      "strength": "recommended",
+      "source": {
+        "file": "knowledge-graph/best-practices/10-data-layer-practices.md",
+        "startLine": 39,
+        "endLine": 51
+      }
+    },
+    {
+      "id": "rule.mapper_placement",
+      "type": "Rule",
+      "name": "Keep mappers at their boundaries",
+      "statement": "Keep DTO, entity, and domain mapping in data; keep domain-to-UI mapping in presentation.",
+      "scope": "architecture",
+      "classification": "universal",
+      "strength": "recommended",
+      "source": {
+        "file": "knowledge-graph/best-practices/10-data-layer-practices.md",
+        "startLine": 53,
+        "endLine": 72
+      }
+    },
+    {
+      "id": "rule.presentation_state_action_event",
+      "type": "Rule",
+      "name": "Separate state, actions, and events",
+      "statement": "Presentation should distinguish long-lived state, input actions, and one-off events.",
+      "scope": "presentation",
+      "classification": "universal",
+      "strength": "default",
+      "source": {
+        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "startLine": 5,
+        "endLine": 17
+      }
+    },
+    {
+      "id": "rule.presentation_consistent_pattern",
+      "type": "Rule",
+      "name": "Use one consistent presentation pattern",
+      "statement": "Prefer one consistent presentation pattern across the app, using the shared MVI base unless there is a compelling reason not to.",
+      "scope": "presentation",
+      "classification": "universal",
+      "strength": "recommended",
+      "source": {
+        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "startLine": 63,
+        "endLine": 71
+      }
+    },
+    {
+      "id": "rule.app_shell_owns_navigation",
+      "type": "Rule",
+      "name": "App shell owns global navigation and theme",
+      "statement": "The root app shell should own app-wide navigation, theme application, and layout direction.",
+      "scope": "navigation",
+      "classification": "universal",
+      "strength": "recommended",
+      "source": {
+        "file": "knowledge-graph/best-practices/15-navigation-practices.md",
+        "startLine": 5,
+        "endLine": 12
+      }
+    },
+    {
+      "id": "rule.typed_routes",
+      "type": "Rule",
+      "name": "Use typed routes",
+      "statement": "Model routes as typed values instead of raw strings.",
+      "scope": "navigation",
+      "classification": "universal",
+      "strength": "recommended",
+      "source": {
+        "file": "knowledge-graph/best-practices/15-navigation-practices.md",
+        "startLine": 14,
+        "endLine": 22
+      }
+    },
+    {
+      "id": "rule.shared_ui_no_hardcoded_strings",
+      "type": "Rule",
+      "name": "No hardcoded user-visible strings in shared UI",
+      "statement": "All user-visible strings in shared UI should come from shared resources.",
+      "scope": "resources",
+      "classification": "kmp_oriented",
+      "strength": "non_negotiable",
+      "source": {
+        "file": "knowledge-graph/best-practices/17-resource-and-localization-practices.md",
+        "startLine": 3,
+        "endLine": 22
+      }
+    },
+    {
+      "id": "rule.top_level_di_start",
+      "type": "Rule",
+      "name": "Start DI only at the top level",
+      "statement": "Call startKoin only from top-level app initialization paths and do not let features bootstrap DI themselves.",
+      "scope": "di",
+      "classification": "universal",
+      "strength": "non_negotiable",
+      "source": {
+        "file": "knowledge-graph/best-practices/18-dependency-injection-practices.md",
+        "startLine": 5,
+        "endLine": 10
+      }
+    },
+    {
+      "id": "rule.platform_contracts",
+      "type": "Rule",
+      "name": "Abstract platform capabilities behind shared contracts",
+      "statement": "Define platform capability contracts in shared code, provide platform implementations separately, and inject them through DI.",
+      "scope": "platform",
+      "classification": "kmp_oriented",
+      "strength": "recommended",
+      "source": {
+        "file": "knowledge-graph/best-practices/20-platform-specific-capability-patterns.md",
+        "startLine": 5,
+        "endLine": 17
+      }
+    },
+    {
+      "id": "exception.aggregator_feature_domain_only",
+      "type": "Exception",
+      "name": "Aggregator feature exception",
+      "statement": "An aggregator-style feature may depend on other features' domain modules only, never their presentation modules.",
+      "source": {
+        "file": "knowledge-graph/best-practices/06-dependency-rules-to-keep.md",
+        "startLine": 12,
+        "endLine": 22
+      }
+    },
+    {
+      "id": "antipattern.cross_feature_data_coupling",
+      "type": "AntiPattern",
+      "name": "Cross-feature data-module coupling",
+      "statement": "Do not let feature data modules depend casually on other feature data modules.",
+      "replacementGuidance": "Move shared logic into shared core, expose a domain contract, or isolate setup behavior behind a dedicated shared service.",
+      "classification": "universal",
+      "strength": "caution",
+      "source": {
+        "file": "knowledge-graph/best-practices/06-dependency-rules-to-keep.md",
+        "startLine": 24,
+        "endLine": 34
+      }
+    },
+    {
+      "id": "antipattern.raw_preference_parsing",
+      "type": "AntiPattern",
+      "name": "Raw preference parsing outside repositories",
+      "statement": "Do not mix raw preference parsing into UI or domain layers.",
+      "replacementGuidance": "Convert primitive storage values into domain types at the repository boundary.",
+      "classification": "universal",
+      "strength": "caution",
+      "source": {
+        "file": "knowledge-graph/best-practices/12-settings-and-preference-storage.md",
+        "startLine": 13,
+        "endLine": 24
+      }
+    },
+    {
+      "id": "antipattern.direct_system_time",
+      "type": "AntiPattern",
+      "name": "Direct system time access",
+      "statement": "Do not call system time directly throughout the app.",
+      "replacementGuidance": "Use a dedicated production time provider as the only clock access point.",
+      "classification": "universal",
+      "strength": "caution",
+      "source": {
+        "file": "knowledge-graph/best-practices/13-time-and-logical-date-practices.md",
+        "startLine": 5,
+        "endLine": 9
+      }
+    },
+    {
+      "id": "antipattern.route_leakage",
+      "type": "AntiPattern",
+      "name": "Navigation route leakage into features",
+      "statement": "Do not let navigation route types leak into every feature module by default.",
+      "replacementGuidance": "Prefer intent-level callbacks and keep routing ownership in the app shell or coordinator layer.",
+      "classification": "universal",
+      "strength": "caution",
+      "source": {
+        "file": "knowledge-graph/best-practices/15-navigation-practices.md",
+        "startLine": 24,
+        "endLine": 33
+      }
+    },
+    {
+      "id": "antipattern.hardcoded_shared_ui_strings",
+      "type": "AntiPattern",
+      "name": "Hardcoded shared UI strings",
+      "statement": "Do not hardcode user-visible strings in shared UI code.",
+      "replacementGuidance": "Use shared design-system resources as the single source of truth for user-visible strings.",
+      "classification": "kmp_oriented",
+      "strength": "caution",
+      "source": {
+        "file": "knowledge-graph/best-practices/17-resource-and-localization-practices.md",
+        "startLine": 14,
+        "endLine": 22
+      }
+    },
+    {
+      "id": "antipattern.giant_convention_plugins",
+      "type": "AntiPattern",
+      "name": "Giant convention plugins",
+      "statement": "Do not create giant convention plugins that hide the whole build.",
+      "replacementGuidance": "Keep convention plugins narrow and keep real module dependencies explicit in build files.",
+      "classification": "universal",
+      "strength": "caution",
+      "source": {
+        "file": "knowledge-graph/best-practices/07-build-system-practices.md",
+        "startLine": 7,
+        "endLine": 23
+      }
+    },
+    {
+      "id": "antipattern.overbuilt_mvi",
+      "type": "AntiPattern",
+      "name": "Overbuilt MVI framework",
+      "statement": "Do not build a complicated MVI framework if a small base class is enough.",
+      "replacementGuidance": "Keep the MVI base minimal and focused on reusable primitives.",
+      "classification": "universal",
+      "strength": "caution",
+      "source": {
+        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "startLine": 31,
+        "endLine": 35
+      }
+    },
+    {
+      "id": "rule.no_cross_feature_presentation",
+      "type": "Rule",
+      "name": "No cross-feature presentation coupling",
+      "statement": "Feature presentation modules should not depend on other feature presentation modules.",
+      "scope": "presentation",
+      "classification": "universal",
+      "strength": "non_negotiable",
+      "source": {
+        "file": "knowledge-graph/best-practices/06-dependency-rules-to-keep.md",
+        "startLine": 9,
+        "endLine": 10
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "document.best_practices",
+      "type": "CONTAINS",
+      "to": "section.core_architecture",
+      "source": {
+        "file": "knowledge-graph/best-practices/03-core-architectural-philosophy.md",
+        "startLine": 1,
+        "endLine": 26
+      }
+    },
+    {
+      "from": "document.best_practices",
+      "type": "CONTAINS",
+      "to": "section.feature_template",
+      "source": {
+        "file": "knowledge-graph/best-practices/05-feature-module-template.md",
+        "startLine": 1,
+        "endLine": 62
+      }
+    },
+    {
+      "from": "document.best_practices",
+      "type": "CONTAINS",
+      "to": "section.dependency_rules",
+      "source": {
+        "file": "knowledge-graph/best-practices/06-dependency-rules-to-keep.md",
+        "startLine": 1,
+        "endLine": 34
+      }
+    },
+    {
+      "from": "document.best_practices",
+      "type": "CONTAINS",
+      "to": "section.domain_practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/09-domain-layer-practices.md",
+        "startLine": 1,
+        "endLine": 61
+      }
+    },
+    {
+      "from": "document.best_practices",
+      "type": "CONTAINS",
+      "to": "section.data_practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/10-data-layer-practices.md",
+        "startLine": 1,
+        "endLine": 72
+      }
+    },
+    {
+      "from": "document.best_practices",
+      "type": "CONTAINS",
+      "to": "section.presentation_practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "startLine": 1,
+        "endLine": 71
+      }
+    },
+    {
+      "from": "document.best_practices",
+      "type": "CONTAINS",
+      "to": "section.navigation_practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/15-navigation-practices.md",
+        "startLine": 1,
+        "endLine": 50
+      }
+    },
+    {
+      "from": "document.best_practices",
+      "type": "CONTAINS",
+      "to": "section.resource_practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/17-resource-and-localization-practices.md",
+        "startLine": 1,
+        "endLine": 30
+      }
+    },
+    {
+      "from": "document.best_practices",
+      "type": "CONTAINS",
+      "to": "section.di_practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/18-dependency-injection-practices.md",
+        "startLine": 1,
+        "endLine": 36
+      }
+    },
+    {
+      "from": "document.best_practices",
+      "type": "CONTAINS",
+      "to": "section.defaults",
+      "source": {
+        "file": "knowledge-graph/best-practices/25-recommended-default-rules-for-future-projects.md",
+        "startLine": 1,
+        "endLine": 36
+      }
+    },
+    {
+      "from": "document.best_practices",
+      "type": "CONTAINS",
+      "to": "section.anti_patterns",
+      "source": {
+        "file": "knowledge-graph/best-practices/26-anti-patterns-to-avoid-when-reusing-this-architecture.md",
+        "startLine": 1,
+        "endLine": 12
+      }
+    },
+    {
+      "from": "layer.presentation",
+      "type": "DEPENDS_ON",
+      "to": "layer.domain",
+      "source": {
+        "file": "knowledge-graph/best-practices/03-core-architectural-philosophy.md",
+        "startLine": 15,
+        "endLine": 19
+      }
+    },
+    {
+      "from": "layer.data",
+      "type": "DEPENDS_ON",
+      "to": "layer.domain",
+      "source": {
+        "file": "knowledge-graph/best-practices/03-core-architectural-philosophy.md",
+        "startLine": 15,
+        "endLine": 19
+      }
+    },
+    {
+      "from": "layer.domain",
+      "type": "MUST_NOT_DEPEND_ON",
+      "to": "layer.data",
+      "source": {
+        "file": "knowledge-graph/best-practices/03-core-architectural-philosophy.md",
+        "startLine": 15,
+        "endLine": 19
+      }
+    },
+    {
+      "from": "layer.domain",
+      "type": "MUST_NOT_DEPEND_ON",
+      "to": "layer.presentation",
+      "source": {
+        "file": "knowledge-graph/best-practices/03-core-architectural-philosophy.md",
+        "startLine": 15,
+        "endLine": 19
+      }
+    },
+    {
+      "from": "module.feature.domain",
+      "type": "APPLIES_TO",
+      "to": "layer.domain",
+      "source": {
+        "file": "knowledge-graph/best-practices/05-feature-module-template.md",
+        "startLine": 12,
+        "endLine": 29
+      }
+    },
+    {
+      "from": "module.feature.data",
+      "type": "APPLIES_TO",
+      "to": "layer.data",
+      "source": {
+        "file": "knowledge-graph/best-practices/05-feature-module-template.md",
+        "startLine": 31,
+        "endLine": 41
+      }
+    },
+    {
+      "from": "module.feature.presentation",
+      "type": "APPLIES_TO",
+      "to": "layer.presentation",
+      "source": {
+        "file": "knowledge-graph/best-practices/05-feature-module-template.md",
+        "startLine": 43,
+        "endLine": 58
+      }
+    },
+    {
+      "from": "module.feature.domain",
+      "type": "MUST_NOT_DEPEND_ON",
+      "to": "layer.presentation",
+      "source": {
+        "file": "knowledge-graph/best-practices/05-feature-module-template.md",
+        "startLine": 22,
+        "endLine": 29
+      }
+    },
+    {
+      "from": "module.feature.domain",
+      "type": "MUST_NOT_DEPEND_ON",
+      "to": "layer.data",
+      "source": {
+        "file": "knowledge-graph/best-practices/05-feature-module-template.md",
+        "startLine": 22,
+        "endLine": 29
+      }
+    },
+    {
+      "from": "practice.feature_based_packaging",
+      "type": "APPLIES_TO",
+      "to": "section.core_architecture",
+      "source": {
+        "file": "knowledge-graph/best-practices/03-core-architectural-philosophy.md",
+        "startLine": 5,
+        "endLine": 13
+      }
+    },
+    {
+      "from": "practice.shared_core_split",
+      "type": "APPLIES_TO",
+      "to": "layer.shared_core",
+      "source": {
+        "file": "knowledge-graph/best-practices/08-shared-core-splitting.md",
+        "startLine": 1,
+        "endLine": 20
+      }
+    },
+    {
+      "from": "practice.typed_results",
+      "type": "SUPPORTED_BY",
+      "to": "rule.repository_translates_infrastructure",
+      "source": {
+        "file": "knowledge-graph/best-practices/09-domain-layer-practices.md",
+        "startLine": 24,
+        "endLine": 33
+      }
+    },
+    {
+      "from": "rule.domain_pure_kotlin",
+      "type": "APPLIES_TO",
+      "to": "layer.domain",
+      "source": {
+        "file": "knowledge-graph/best-practices/09-domain-layer-practices.md",
+        "startLine": 5,
+        "endLine": 13
+      }
+    },
+    {
+      "from": "rule.repository_translates_infrastructure",
+      "type": "APPLIES_TO",
+      "to": "layer.data",
+      "source": {
+        "file": "knowledge-graph/best-practices/10-data-layer-practices.md",
+        "startLine": 5,
+        "endLine": 12
+      }
+    },
+    {
+      "from": "rule.rethrow_cancellation_exception",
+      "type": "APPLIES_TO",
+      "to": "layer.data",
+      "source": {
+        "file": "knowledge-graph/best-practices/10-data-layer-practices.md",
+        "startLine": 14,
+        "endLine": 27
+      }
+    },
+    {
+      "from": "practice.cache_first_reads",
+      "type": "APPLIES_TO",
+      "to": "layer.data",
+      "source": {
+        "file": "knowledge-graph/best-practices/10-data-layer-practices.md",
+        "startLine": 29,
+        "endLine": 37
+      }
+    },
+    {
+      "from": "rule.feature_named_http_client",
+      "type": "APPLIES_TO",
+      "to": "layer.data",
+      "source": {
+        "file": "knowledge-graph/best-practices/10-data-layer-practices.md",
+        "startLine": 39,
+        "endLine": 51
+      }
+    },
+    {
+      "from": "rule.mapper_placement",
+      "type": "APPLIES_TO",
+      "to": "layer.data",
+      "source": {
+        "file": "knowledge-graph/best-practices/10-data-layer-practices.md",
+        "startLine": 63,
+        "endLine": 72
+      }
+    },
+    {
+      "from": "rule.mapper_placement",
+      "type": "APPLIES_TO",
+      "to": "layer.presentation",
+      "source": {
+        "file": "knowledge-graph/best-practices/10-data-layer-practices.md",
+        "startLine": 63,
+        "endLine": 72
+      }
+    },
+    {
+      "from": "rule.presentation_state_action_event",
+      "type": "APPLIES_TO",
+      "to": "layer.presentation",
+      "source": {
+        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "startLine": 5,
+        "endLine": 17
+      }
+    },
+    {
+      "from": "practice.small_mvi_base",
+      "type": "APPLIES_TO",
+      "to": "layer.presentation",
+      "source": {
+        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "startLine": 19,
+        "endLine": 35
+      }
+    },
+    {
+      "from": "rule.presentation_consistent_pattern",
+      "type": "REQUIRES",
+      "to": "practice.small_mvi_base",
+      "source": {
+        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "startLine": 63,
+        "endLine": 71
+      }
+    },
+    {
+      "from": "rule.app_shell_owns_navigation",
+      "type": "OWNS",
+      "to": "layer.navigation",
+      "source": {
+        "file": "knowledge-graph/best-practices/15-navigation-practices.md",
+        "startLine": 5,
+        "endLine": 12
+      }
+    },
+    {
+      "from": "rule.app_shell_owns_navigation",
+      "type": "OWNS",
+      "to": "layer.design_system",
+      "source": {
+        "file": "knowledge-graph/best-practices/15-navigation-practices.md",
+        "startLine": 5,
+        "endLine": 12
+      }
+    },
+    {
+      "from": "practice.callback_navigation_decoupling",
+      "type": "PREFERRED_OVER",
+      "to": "antipattern.route_leakage",
+      "source": {
+        "file": "knowledge-graph/best-practices/15-navigation-practices.md",
+        "startLine": 24,
+        "endLine": 33
+      }
+    },
+    {
+      "from": "rule.shared_ui_no_hardcoded_strings",
+      "type": "REQUIRES",
+      "to": "practice.shared_strings",
+      "source": {
+        "file": "knowledge-graph/best-practices/17-resource-and-localization-practices.md",
+        "startLine": 3,
+        "endLine": 22
+      }
+    },
+    {
+      "from": "rule.top_level_di_start",
+      "type": "APPLIES_TO",
+      "to": "section.di_practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/18-dependency-injection-practices.md",
+        "startLine": 5,
+        "endLine": 10
+      }
+    },
+    {
+      "from": "platform.shared_logic_native_ui",
+      "type": "APPLIES_TO",
+      "to": "section.defaults",
+      "source": {
+        "file": "knowledge-graph/best-practices/25-recommended-default-rules-for-future-projects.md",
+        "startLine": 32,
+        "endLine": 36
+      }
+    },
+    {
+      "from": "exception.aggregator_feature_domain_only",
+      "type": "EXCEPTION_TO",
+      "to": "rule.dependency_direction",
+      "source": {
+        "file": "knowledge-graph/best-practices/06-dependency-rules-to-keep.md",
+        "startLine": 12,
+        "endLine": 22
+      }
+    },
+    {
+      "from": "antipattern.cross_feature_data_coupling",
+      "type": "REPLACED_BY",
+      "to": "practice.shared_core_split",
+      "source": {
+        "file": "knowledge-graph/best-practices/06-dependency-rules-to-keep.md",
+        "startLine": 28,
+        "endLine": 34
+      }
+    },
+    {
+      "from": "antipattern.raw_preference_parsing",
+      "type": "REPLACED_BY",
+      "to": "rule.repository_translates_infrastructure",
+      "source": {
+        "file": "knowledge-graph/best-practices/12-settings-and-preference-storage.md",
+        "startLine": 13,
+        "endLine": 24
+      }
+    },
+    {
+      "from": "antipattern.direct_system_time",
+      "type": "REPLACED_BY",
+      "to": "rule.domain_time_provider_only",
+      "source": {
+        "file": "knowledge-graph/best-practices/13-time-and-logical-date-practices.md",
+        "startLine": 5,
+        "endLine": 9
+      }
+    },
+    {
+      "from": "antipattern.hardcoded_shared_ui_strings",
+      "type": "REPLACED_BY",
+      "to": "rule.shared_ui_no_hardcoded_strings",
+      "source": {
+        "file": "knowledge-graph/best-practices/17-resource-and-localization-practices.md",
+        "startLine": 14,
+        "endLine": 22
+      }
+    },
+    {
+      "from": "antipattern.giant_convention_plugins",
+      "type": "REPLACED_BY",
+      "to": "practice.feature_based_packaging",
+      "source": {
+        "file": "knowledge-graph/best-practices/07-build-system-practices.md",
+        "startLine": 16,
+        "endLine": 23
+      }
+    },
+    {
+      "from": "antipattern.overbuilt_mvi",
+      "type": "REPLACED_BY",
+      "to": "practice.small_mvi_base",
+      "source": {
+        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "startLine": 31,
+        "endLine": 35
+      }
+    },
+    {
+      "from": "practice.callback_navigation_decoupling",
+      "type": "APPLIES_TO",
+      "to": "layer.navigation",
+      "source": {
+        "file": "knowledge-graph/best-practices/15-navigation-practices.md",
+        "startLine": 24,
+        "endLine": 33
+      }
+    },
+    {
+      "from": "antipattern.route_leakage",
+      "type": "APPLIES_TO",
+      "to": "layer.navigation",
+      "source": {
+        "file": "knowledge-graph/best-practices/15-navigation-practices.md",
+        "startLine": 24,
+        "endLine": 33
+      }
+    },
+    {
+      "from": "rule.no_cross_feature_presentation",
+      "type": "APPLIES_TO",
+      "to": "layer.presentation",
+      "source": {
+        "file": "knowledge-graph/best-practices/06-dependency-rules-to-keep.md",
+        "startLine": 9,
+        "endLine": 10
+      }
+    }
+  ]
+}

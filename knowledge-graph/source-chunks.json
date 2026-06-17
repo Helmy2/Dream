@@ -1,0 +1,119 @@
+{
+  "document": {
+    "id": "document.best_practices",
+    "title": "Extracted Best Practices Handbook",
+    "path": "knowledge-graph/best-practices/README.md"
+  },
+  "chunks": [
+    {
+      "id": "chunk.architecture.core_philosophy",
+      "title": "Core Architectural Philosophy",
+      "source": {
+        "file": "knowledge-graph/best-practices/03-core-architectural-philosophy.md",
+        "startLine": 1,
+        "endLine": 26
+      },
+      "summary": "Defines strict boundaries, feature packaging, pure domain, central shared core, and the canonical dependency direction.",
+      "text": "Strong architecture is usually strongest where it stays strict about boundaries. The main architectural ideas are package by feature, split each feature into domain, data, and presentation, keep domain pure Kotlin, make data implement domain contracts, keep UI dependent on domain, not on data internals, centralize cross-cutting concerns in shared/core/*, and use physical Gradle modules to enforce dependency direction. Canonical dependency rule: Presentation -> Domain <- Data."
+    },
+    {
+      "id": "chunk.feature.module_template",
+      "title": "Feature Module Template",
+      "source": {
+        "file": "knowledge-graph/best-practices/05-feature-module-template.md",
+        "startLine": 1,
+        "endLine": 62
+      },
+      "summary": "Defines domain, data, and presentation responsibilities and the presentation mapper rule.",
+      "text": "Feature modules should be split into domain, data, and presentation. Domain contains models, repository interfaces, use cases, domain errors, and pure business rules, and must not contain Compose, platform APIs, Room, Ktor clients, or DataStore. Data contains repository implementations, DAO usage, DTOs, mappers, remote calls, local caching, and exception-to-domain-error mapping. Presentation contains screens, composables, UI models, mapper classes from domain to UI, view models, and only necessary platform UI effects."
+    },
+    {
+      "id": "chunk.dependency.rules",
+      "title": "Dependency Rules To Keep",
+      "source": {
+        "file": "knowledge-graph/best-practices/06-dependency-rules-to-keep.md",
+        "startLine": 1,
+        "endLine": 34
+      },
+      "summary": "Defines strict dependency direction, aggregator exception, and warns against cross-feature data coupling.",
+      "text": "Feature domain depends only on pure shared core modules. Feature data depends on its own domain plus shared runtime infrastructure. Feature presentation depends on its own domain, shared presentation helpers, and design system. Feature presentation modules should not depend on other feature presentation modules. Aggregator-style features may depend on other features' domain modules only. Cross-feature data-module coupling should be treated as an exception, not a standard."
+    },
+    {
+      "id": "chunk.domain.practices",
+      "title": "Domain Layer Practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/09-domain-layer-practices.md",
+        "startLine": 1,
+        "endLine": 61
+      },
+      "summary": "Defines pure domain, typed result modeling, use case naming, and time access through TimeProvider.",
+      "text": "Domain should remain platform-agnostic and framework-light. Domain models describe business meaning, not storage shape. Repository interfaces live in domain and implementations live in data. Use typed result wrappers for domain-facing operations and define domain-specific error hierarchies. Domain and feature code must not call Clock.System.now() directly; time flows through TimeProvider."
+    },
+    {
+      "id": "chunk.data.practices",
+      "title": "Data Layer Practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/10-data-layer-practices.md",
+        "startLine": 1,
+        "endLine": 72
+      },
+      "summary": "Defines repository translation boundaries, safeCall behavior, cache-first reads, per-feature clients, and mapper placement.",
+      "text": "Repositories translate external systems into domain-safe behavior. They map DTOs and entities into domain models, convert infrastructure failures into domain errors, and expose domain-friendly return types. Repository helpers must always rethrow CancellationException. Prefer local cache as the first read path when appropriate. Data modules that talk to a backend should own a named HttpClient unless there is a strong reason to share one. Mapping should stay near the boundary, with data mapping in data and domain-to-UI mapping in presentation."
+    },
+    {
+      "id": "chunk.presentation.practices",
+      "title": "Presentation Layer Practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "startLine": 1,
+        "endLine": 71
+      },
+      "summary": "Defines state/action/event separation, a small MVI base, exclusive jobs, and consistent presentation structure.",
+      "text": "Presentation should separate UiState, UiAction, and UiEvent. A base MVI view model should stay small and practical, providing state, eventFlow, reduce, intent, and exclusiveIntent primitives only. Observation pipelines should be grouped by business concern. Prefer one consistent presentation pattern across the app, using the shared MVI base unless there is a compelling reason not to."
+    },
+    {
+      "id": "chunk.navigation.practices",
+      "title": "Navigation Practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/15-navigation-practices.md",
+        "startLine": 1,
+        "endLine": 50
+      },
+      "summary": "Defines app shell ownership, typed routes, callback-based feature decoupling, top-level route separation, and intentional back behavior.",
+      "text": "A root app shell should own app-wide navigation, theme application, and layout direction. Routes should be typed. Feature modules should stay decoupled from routing when callbacks are sufficient. Top-level tabs should be separated from push destinations, and back behavior should be an intentional product rule."
+    },
+    {
+      "id": "chunk.resources.localization",
+      "title": "Resource And Localization Practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/17-resource-and-localization-practices.md",
+        "startLine": 1,
+        "endLine": 30
+      },
+      "summary": "Defines centralized strings, no hardcoded user-visible strings, and a canonical Res import path.",
+      "text": "All user-visible strings should come from shared design-system resources. Shared UI code should not hardcode user-visible strings. One canonical Res import path should be defined and used consistently across modules."
+    },
+    {
+      "id": "chunk.di.practices",
+      "title": "Dependency Injection Practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/18-dependency-injection-practices.md",
+        "startLine": 1,
+        "endLine": 36
+      },
+      "summary": "Defines top-level DI startup, split registrations by layer and platform, constructor injection, and explicit platform service injection.",
+      "text": "startKoin should be called only from top-level app initialization paths. Shared modules provide shared registrations, platform modules provide platform implementations, and composition roots assemble everything together. Constructor injection is the default. Platform services should be injected through shared interfaces instead of reaching across boundaries directly."
+    },
+    {
+      "id": "chunk.defaults.and_anti_patterns",
+      "title": "Default Rules And Anti-Patterns",
+      "source": {
+        "file": "knowledge-graph/best-practices/25-recommended-default-rules-for-future-projects.md",
+        "startLine": 1,
+        "endLine": 36
+      },
+      "summary": "Defines default rules for future projects and the main anti-patterns to avoid.",
+      "text": "Default rules include feature-based modules, Presentation -> Domain <- Data, pure Kotlin domain, smaller shared core modules, TimeProvider as the centralized time source, shared design system and strings, repository typed results, and shared business logic with platform implementations behind interfaces. Anti-patterns include casual cross-feature data coupling, raw preference parsing in UI or domain, direct system time usage, hardcoded shared UI strings, leaked route types, giant convention plugins, over-opinionated design systems, and overbuilt MVI frameworks."
+    }
+  ]
+}
