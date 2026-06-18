@@ -17,6 +17,8 @@ Detailed architecture and generation rules live in:
 - `guidance/`
 - `knowledge-graph/`
 - `templates/`
+- `docs/cli-plan.md`
+- `docs/first-try-report.md`
 
 This file should stay compact, current, and task-oriented.
 
@@ -52,6 +54,8 @@ Dream currently builds on:
 The next product step is the CLI.
 
 Dream should become a usable local command-line tool before any backend generation work starts.
+
+See `docs/cli-plan.md` for the current CLI plan.
 
 ## Current Workflow
 
