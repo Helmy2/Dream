@@ -1,0 +1,5 @@
+template: dream-kmp-base
+architecture: modular-hybrid
+ui: compose-multiplatform
+desktopPreview: mcp-driven-hot-reload
+storage: none

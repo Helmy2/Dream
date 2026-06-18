@@ -1,0 +1,9 @@
+name: Dream Starter App
+goal: Provide a reusable Kotlin Multiplatform starting point for generated MVP apps.
+templateArchitecture: modular-hybrid
+platforms:
+  - android
+  - ios
+  - desktop
+backend:
+  enabled: false
