@@ -42,6 +42,9 @@ The initial graph covers:
 - dependency injection
 - default rules
 - anti-patterns
+- package and app identity normalization
+- stable composition roots
+- UI quality and state design
 
 ## Next Extensions
 

@@ -89,6 +89,7 @@ The `implementer` agent should:
 - replace sample feature content with real feature content when appropriate
 - reuse shared core, design system, navigation, and build-logic modules where possible
 - avoid collapsing the modular template into a simpler but less enforceable structure
+- remove the `feature/sample` module from the generated app once the first real feature fully replaces it, unless a temporary scaffolding exception is explicitly documented
 
 The `implementer` agent should not:
 

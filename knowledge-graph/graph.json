@@ -146,6 +146,42 @@
       }
     },
     {
+      "id": "section.identity_practices",
+      "type": "Section",
+      "title": "Package And App Identity Practices",
+      "sectionNumber": "29",
+      "documentId": "document.best_practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/29-package-and-app-identity-practices.md",
+        "startLine": 1,
+        "endLine": 37
+      }
+    },
+    {
+      "id": "section.composition_root_practices",
+      "type": "Section",
+      "title": "Stable Composition Root Practices",
+      "sectionNumber": "30",
+      "documentId": "document.best_practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/30-stable-composition-root-practices.md",
+        "startLine": 1,
+        "endLine": 27
+      }
+    },
+    {
+      "id": "section.ui_quality_practices",
+      "type": "Section",
+      "title": "UI Quality And State Design Practices",
+      "sectionNumber": "31",
+      "documentId": "document.best_practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/31-ui-quality-and-state-design-practices.md",
+        "startLine": 1,
+        "endLine": 31
+      }
+    },
+    {
       "id": "layer.domain",
       "type": "Layer",
       "name": "domain",
@@ -649,6 +685,62 @@
         "startLine": 9,
         "endLine": 10
       }
+    },
+    {
+      "id": "rule.canonical_app_identity",
+      "type": "Rule",
+      "name": "Derive one canonical app identity",
+      "statement": "Derive one canonical app identity first and normalize package roots, namespaces, app ids, and visible app identity from that source of truth.",
+      "scope": "instantiation",
+      "classification": "project_specific",
+      "strength": "non_negotiable",
+      "source": {
+        "file": "knowledge-graph/best-practices/29-package-and-app-identity-practices.md",
+        "startLine": 5,
+        "endLine": 18
+      }
+    },
+    {
+      "id": "rule.stable_composition_roots",
+      "type": "Rule",
+      "name": "Assemble dependencies at stable composition roots",
+      "statement": "Repositories, use cases, and ViewModels should be created at stable roots or factories, not inside recomposing composable bodies.",
+      "scope": "presentation",
+      "classification": "universal",
+      "strength": "non_negotiable",
+      "source": {
+        "file": "knowledge-graph/best-practices/30-stable-composition-root-practices.md",
+        "startLine": 5,
+        "endLine": 17
+      }
+    },
+    {
+      "id": "rule.intentional_state_quality",
+      "type": "Rule",
+      "name": "Define intentional state UX",
+      "statement": "Loading, empty, content, and error states should have explicit contract expectations and should not remain placeholder-level at review time.",
+      "scope": "presentation",
+      "classification": "project_specific",
+      "strength": "recommended",
+      "source": {
+        "file": "knowledge-graph/best-practices/31-ui-quality-and-state-design-practices.md",
+        "startLine": 5,
+        "endLine": 31
+      }
+    },
+    {
+      "id": "antipattern.recomposing_dependency_assembly",
+      "type": "AntiPattern",
+      "name": "Dependency assembly inside recomposing composables",
+      "statement": "Do not instantiate repositories, use cases, or ViewModels inside recomposing composables.",
+      "replacementGuidance": "Move assembly to app initialization, a stable factory, or another orchestration-focused root and pass constructed dependencies downward.",
+      "classification": "universal",
+      "strength": "caution",
+      "source": {
+        "file": "knowledge-graph/best-practices/26-anti-patterns-to-avoid-when-reusing-this-architecture.md",
+        "startLine": 3,
+        "endLine": 12
+      }
     }
   ],
   "edges": [
@@ -760,6 +852,36 @@
         "file": "knowledge-graph/best-practices/26-anti-patterns-to-avoid-when-reusing-this-architecture.md",
         "startLine": 1,
         "endLine": 12
+      }
+    },
+    {
+      "from": "document.best_practices",
+      "type": "CONTAINS",
+      "to": "section.identity_practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/29-package-and-app-identity-practices.md",
+        "startLine": 1,
+        "endLine": 37
+      }
+    },
+    {
+      "from": "document.best_practices",
+      "type": "CONTAINS",
+      "to": "section.composition_root_practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/30-stable-composition-root-practices.md",
+        "startLine": 1,
+        "endLine": 27
+      }
+    },
+    {
+      "from": "document.best_practices",
+      "type": "CONTAINS",
+      "to": "section.ui_quality_practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/31-ui-quality-and-state-design-practices.md",
+        "startLine": 1,
+        "endLine": 31
       }
     },
     {

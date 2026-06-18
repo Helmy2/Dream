@@ -113,6 +113,8 @@ Rules for the sample feature:
 - keep it only if it is still needed as temporary structural scaffolding
 - remove or replace it as soon as the first real feature is generated
 - do not let sample-domain concepts leak into the final generated product
+- when the first real feature is present, remove the `feature/sample` module directory from the generated app unless a documented scaffolding exception is still active
+- if `feature/sample` is intentionally retained temporarily, record the exact reason, the owner, and the removal step in the instantiation summary
 
 Required outputs:
 - instantiated project on disk

@@ -114,6 +114,39 @@
       },
       "summary": "Defines default rules for future projects and the main anti-patterns to avoid.",
       "text": "Default rules include feature-based modules, Presentation -> Domain <- Data, pure Kotlin domain, smaller shared core modules, TimeProvider as the centralized time source, shared design system and strings, repository typed results, and shared business logic with platform implementations behind interfaces. Anti-patterns include casual cross-feature data coupling, raw preference parsing in UI or domain, direct system time usage, hardcoded shared UI strings, leaked route types, giant convention plugins, over-opinionated design systems, and overbuilt MVI frameworks."
+    },
+    {
+      "id": "chunk.identity.practices",
+      "title": "Package And App Identity Practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/29-package-and-app-identity-practices.md",
+        "startLine": 1,
+        "endLine": 37
+      },
+      "summary": "Defines canonical app identity derivation, immediate normalization of package-defining surfaces, and explicit rename audits.",
+      "text": "Dream should derive one canonical app identity before renaming anything, then normalize package roots, namespaces, application ids, and visible app identity from that source of truth. Generated projects should record an explicit rename audit across Gradle names, module namespaces, package declarations, manifests, desktop titles, iOS identity, and .mvp metadata."
+    },
+    {
+      "id": "chunk.composition_root.practices",
+      "title": "Stable Composition Root Practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/30-stable-composition-root-practices.md",
+        "startLine": 1,
+        "endLine": 27
+      },
+      "summary": "Defines stable dependency assembly outside recomposing composables and forbids eager side effects at unstable creation sites.",
+      "text": "Repositories, use cases, and ViewModels should be assembled at stable roots such as app initialization, coordinators, or factories, not created inside recomposing composables. Root composables should stay orchestration-focused, and initial loading should not rely on unstable repeated construction paths."
+    },
+    {
+      "id": "chunk.ui_quality.practices",
+      "title": "UI Quality And State Design Practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/31-ui-quality-and-state-design-practices.md",
+        "startLine": 1,
+        "endLine": 31
+      },
+      "summary": "Defines state-specific UX expectations, shared-token usage, and intentional loading, empty, content, and error state quality.",
+      "text": "Dream should define user-facing expectations for loading, empty, content, and error states in the contract and review them before approval. Feature screens should use shared tokens instead of ad hoc sizing, and state handling should feel intentional rather than placeholder-level."
     }
   ]
 }

@@ -132,6 +132,7 @@ The first run proved that Dream can generate a runnable project, but it also exp
 - Android build passed
 - shared and feature tests passed
 - desktop app launched
+- sample scaffolding must not remain as a live feature module once the first real feature is generated in the target app
 
 ### What Failed Or Was Weak
 

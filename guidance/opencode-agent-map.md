@@ -128,6 +128,7 @@ Expected output:
 3. `general` generates or coordinates `.mvp/app-contract.yaml` and decisions.
 4. `implementer` instantiates the selected Dream template.
 5. `implementer` replaces or prepares sample feature scaffolding.
+6. when the first real feature is present, `implementer` removes `feature/sample` from the generated app unless a documented temporary exception remains.
 
 ### Feature Generation
 
