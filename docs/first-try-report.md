@@ -26,7 +26,7 @@ Why partial success:
 - the generated output still had contract, quality, and review-gap issues, so the run should not be treated as fully approved product quality
 
 ## Time And Cost
-
+- Model: GPT 5.4
 - Context used: `172,527` tokens
 - Context usage shown: `43% used`
 - Reported cost: `$3.30`
