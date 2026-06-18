@@ -28,11 +28,19 @@ Required verification for local-only MVPs:
 - `./gradlew :desktopApp:run`
 
 Required behavior:
-- do not report success until verification is green or a blocker is clearly documented
+- do not report validated success until verification is green, contract behavior is implemented, required tests exist, and review status is documented
 - preserve `Presentation -> Domain <- Data`
 - do not fix failures by collapsing module boundaries
 - do not move business logic into host apps as a shortcut
 - do not ignore hardcoded shared UI strings, direct system time access, or swallowed `CancellationException`
+- do not treat green build commands alone as proof that the generated feature matches its contract
+
+Required parity checks before validated success:
+- every contract state is implemented in code and represented in the UI state model
+- every contract action maps to a concrete handling path
+- every required contract test appears in the test plan and is backed by code-level coverage
+- time-sensitive behavior uses `TimeProvider` instead of direct system time access
+- repositories, use cases, and ViewModels are not instantiated inside recomposing composables
 
 Repair loop:
 1. `general` runs verification
@@ -44,10 +52,17 @@ Repair loop:
 7. repeat until green or blocked
 8. `inspector` performs final review for substantial generation or repair work before validated success is reported
 
+If `inspector` fails at the tool level:
+1. record the delegated review failure and the error message
+2. run a manual review fallback against the contract, tests, and architecture rules
+3. report status as `partial` or `blocked` if review defects remain
+4. do not claim `validated` from verification results alone
+
 Output requirements:
 - produce a concise final verification summary
-- state whether status is `validated` or `blocked`
+- state whether status is `validated`, `partial`, or `blocked`
 - list commands run
+- state review mode as `delegated` or `manual`
 - list failing areas if blocked
 - write or update `.mvp/verification-report.md`
 

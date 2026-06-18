@@ -33,6 +33,9 @@ This folder contains the best-practices source material in small, section-focuse
 - `26-anti-patterns-to-avoid-when-reusing-this-architecture.md`
 - `27-open-refinements-for-this-handbook.md`
 - `28-short-summary.md`
+- `29-package-and-app-identity-practices.md`
+- `30-stable-composition-root-practices.md`
+- `31-ui-quality-and-state-design-practices.md`
 
 ## Notes
 

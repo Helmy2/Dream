@@ -1,4 +1,16 @@
 # Verification Report
 
-- Status: validated
-- Notes: Modular shared and feature template verified with shared tests, Android assemble, and desktop compile.
+## Status
+
+- Overall: partial
+- Verification: not-run
+- Review: not-run
+- Review mode: delegated
+
+## Commands
+
+- none yet
+
+## Notes
+
+- Reset for a new Dream generation cycle.

@@ -176,6 +176,8 @@ The first run proved that Dream can generate a runnable project, but it also exp
 - Derive canonical package root from app identity.
 - Normalize package names, namespaces, application ids, and visible app identity.
 - Report all renamed identifiers explicitly.
+- Treat identity normalization as required completion criteria for project instantiation, not a later cleanup pass.
+- Do not allow generated projects to keep template identity in package-defining or user-facing app surfaces unless a blocker is documented.
 
 4. Enforce stable composition roots.
 - Do not instantiate repositories, use cases, or ViewModels directly in recomposing composables.

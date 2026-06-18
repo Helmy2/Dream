@@ -120,35 +120,25 @@ The user should not need to hand-author an expense tracker contract, app contrac
 Those artifacts are Dream outputs, not Dream prerequisites.
 
 ## Contract Rules
-
-Every generated feature should start from a compact contract.
-
-At minimum, a feature contract should define:
-
+ route time-sensitive behavior through shared time abstractions
+ keep dependency assembly in stable composition roots
+ not report validated success until verification is green, contract behavior is implemented, required tests exist, and review status is documented
 - feature name
 - goal
 - entities
 - actions
-- screens
-- states
-- tests
-
-When backend is enabled, the contract should also define:
-
-- backend enabled flag
+ map each contract action, state, and required test to code and tests explicitly
+ avoid creating repositories, use cases, or ViewModels inside recomposing composables
+ inject `TimeProvider` for time-sensitive behavior instead of reading system time directly
 - API base path
 - endpoints
 - request and response shapes
 
-## Implementation Rules
-
-During feature implementation, the `implementer` agent should:
+ Green commands alone are not sufficient stop conditions.
+ Dream should also confirm contract-to-code parity, required test coverage, and final review status before reporting validated success.
 
 - create or update `feature/<name>/domain`
 - create or update `feature/<name>/data`
-- create or update `feature/<name>/presentation`
-- keep repository interfaces in domain
-- keep repository implementations and data mapping in data
 - keep domain-to-UI mapping in presentation
 - keep feature screens wired into the centralized shell using callbacks or controlled routing points
 

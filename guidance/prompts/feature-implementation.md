@@ -13,6 +13,7 @@ Implement the requested feature using the existing Dream modular template and th
 Read first:
 - `knowledge-graph/PRODUCT.md`
 - `guidance/opencode-agent-map.md`
+- `guidance/templates/implementation-report-template.md`
 - `AI_MVP_BUILDER_PLAN.md`
 - relevant files in `knowledge-graph/best-practices/`
 - template README and relevant modules
@@ -33,6 +34,8 @@ Architecture rules you must enforce:
 - navigation stays centralized
 - feature UI should prefer callbacks over owning the full route graph
 - shared user-visible strings should not be hardcoded
+- time-sensitive behavior must flow through `TimeProvider`
+- composition roots must stay stable across recomposition
 
 Implementation rules:
 - reuse the template structure instead of bypassing it
@@ -42,6 +45,12 @@ Implementation rules:
 - add or update tests for the feature
 - prefer minimal correct changes
 - keep shared infrastructure in shared modules
+- map every contract action, state, and required test to code and test coverage explicitly
+- do not generate placeholder states unless they are implemented and testable
+- do not instantiate repositories, use cases, or ViewModels directly inside recomposing composables
+- do not let feature UI own routing infrastructure when callbacks or events are sufficient
+- when the contract marks time-sensitive behavior, inject `TimeProvider` instead of reading system time directly
+- include loading, empty, content, and error state handling when the contract requires them
 
 Output requirements:
 - implement the code directly
@@ -50,6 +59,12 @@ Output requirements:
 
 Before finishing:
 - summarize which modules changed
-- list which contract behaviors are implemented
+- provide a contract mapping table with one row per action, state, and required test
+- mark each mapped item as `implemented`, `partial`, or `blocked`
+- identify the code location and test coverage for each mapped item
 - note any partial or blocked behavior explicitly
+- write `.mvp/features/<feature-name>/implementation-report.md` using `guidance/templates/implementation-report-template.md`
+
+Required final report shape:
+- follow `guidance/templates/implementation-report-template.md` exactly unless the orchestrator requests a stricter variant
 ```

@@ -5,6 +5,7 @@ plugins {
 dependencies {
     commonMainImplementation(projects.feature.sample.domain)
     commonMainImplementation(projects.feature.sample.data)
+    commonMainImplementation(projects.shared.core.domain)
     commonMainImplementation(projects.shared.core.presentation)
     commonMainImplementation(projects.shared.designsystem)
     commonMainImplementation(libs.compose.runtime)

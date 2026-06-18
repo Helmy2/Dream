@@ -114,10 +114,12 @@ Implication for Dream:
 Observed issue:
 
 - package naming was wrong for the generated app identity
+- generated app identity was not normalized consistently across package-defining and user-facing surfaces
 
 Implication for Dream:
 
 - project instantiation rules need stricter app identity normalization
+- Dream should require a canonical app identity decision and explicit rename audit before feature generation starts
 
 ## Review Findings Captured From The First Try
 
@@ -177,11 +179,12 @@ The first try did not yet prove that Dream can:
 1. tighten final success criteria
 2. tighten contract-to-implementation mapping
 3. tighten package and app identity normalization
-4. enforce `TimeProvider` usage for time-based behavior
-5. enforce stable composition-root rules
-6. raise minimum UI quality requirements
-7. define safe fallback behavior when inspector delegation fails
-8. start tracking exact run time in addition to token and cost data
+4. require a canonical app identity plus rename audit during instantiation
+5. enforce `TimeProvider` usage for time-based behavior
+6. enforce stable composition-root rules
+7. raise minimum UI quality requirements
+8. define safe fallback behavior when inspector delegation fails
+9. start tracking exact run time in addition to token and cost data
 
 ## Reporting Rules For Future Runs
 

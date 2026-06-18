@@ -23,6 +23,9 @@ Rules:
 - define screens and states from user outcomes, not from technical preference
 - include tests that verify behavior, not implementation details
 - do not invent backend endpoints unless backend is enabled
+- only include states, actions, and tests that Dream is expected to implement in this generation pass
+- mark time-sensitive behavior explicitly when the feature depends on current date, time, or logical period behavior
+- define minimum design expectations for loading, empty, content, and error states so UI quality is not left implicit
 
 Output requirements:
 - output valid YAML only
@@ -43,6 +46,14 @@ states:
   - empty
   - content
   - error
+timeSensitiveBehavior:
+  usesTimeProvider: <true|false>
+  notes: <required when true>
+designExpectations:
+  loading: <expected loading treatment>
+  empty: <expected empty-state message or action>
+  content: <expected primary content structure>
+  error: <expected error message and recovery treatment>
 tests:
   - <behavior test>
 

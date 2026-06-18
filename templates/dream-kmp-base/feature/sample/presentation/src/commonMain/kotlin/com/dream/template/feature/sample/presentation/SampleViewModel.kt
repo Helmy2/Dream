@@ -1,19 +1,38 @@
 package com.dream.template.feature.sample.presentation
 
 import com.dream.template.feature.sample.domain.repository.SampleRepository
+import com.dream.template.shared.core.domain.AppError
+import com.dream.template.shared.core.domain.Result
 import com.dream.template.shared.core.presentation.MviViewModel
+import kotlinx.coroutines.CoroutineScope
 
 class SampleViewModel(
-    private val repository: SampleRepository
-) : MviViewModel<SampleState, SampleAction, SampleEvent>(SampleState()) {
-
-    init {
-        load()
-    }
+    private val repository: SampleRepository,
+    coroutineScope: CoroutineScope
+) : MviViewModel<SampleState, SampleAction, SampleEvent>(
+    initialState = SampleState(),
+    scope = coroutineScope
+) {
 
     fun load() {
         updateState { current ->
-            current.copy(items = repository.loadItems())
+            current.copy(contentState = SampleContentState.Loading)
+        }
+
+        when (val result = repository.loadItems()) {
+            is Result.Success -> updateState { current ->
+                current.copy(
+                    contentState = if (result.value.isEmpty()) {
+                        SampleContentState.Empty
+                    } else {
+                        SampleContentState.Content(result.value)
+                    }
+                )
+            }
+
+            is Result.Failure -> updateState { current ->
+                current.copy(contentState = SampleContentState.Error(result.error.toMessage()))
+            }
         }
     }
 
@@ -21,5 +40,10 @@ class SampleViewModel(
         when (action) {
             SampleAction.Load -> load()
         }
+    }
+
+    private fun AppError.toMessage(): String = when (this) {
+        AppError.Unknown -> "Something went wrong while loading the starter content."
+        is AppError.Message -> value
     }
 }

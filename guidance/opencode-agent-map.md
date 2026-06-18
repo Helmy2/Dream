@@ -33,7 +33,7 @@ Should do:
 - decide whether backend is needed
 - decide whether more context gathering is required
 - launch `dream-context-scout`, `dream-explore`, `implementer`, or `inspector` as needed
-- ensure that Dream does not report success before verification is green or a blocker is documented
+- ensure that Dream does not report validated success before verification is green, contract parity is checked, required tests are present, and review status is documented
 
 Should not do by default:
 
@@ -145,6 +145,8 @@ Expected output:
 3. `implementer` applies the smallest correct fix.
 4. `general` reruns verification.
 5. `inspector` acts as the final review gate before validated status is reported.
+
+If `inspector` fails at the tool level, `general` must run a manual review fallback and avoid reporting validated status from verification results alone.
 
 ## Required Inputs By Agent
 

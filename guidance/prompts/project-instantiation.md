@@ -27,6 +27,7 @@ Inputs you must use:
 Expected output back to the orchestrator:
 - instantiated project summary
 - list of renamed identifiers
+- canonical app identity summary
 - list of preserved structural modules
 - note of whether sample feature scaffolding was kept temporarily or replaced
 
@@ -43,19 +44,46 @@ Non-negotiable rules:
 
 Instantiation steps:
 1. Copy the selected template into the destination project location.
-2. Rename app-visible template identifiers to app-specific identifiers.
-3. Rename package identifiers from template-specific values to project-specific values.
-4. Update Gradle, application id, namespace, and framework naming where needed.
-5. Replace sample-facing display text that should not survive into the generated app baseline.
-6. Preserve reusable shared infrastructure, build logic, and architecture modules.
-7. Reset `.mvp/verification-report.md` to reflect the new generation cycle rather than the source template's prior validation state.
-8. Update `.mvp/decisions.yaml` and `.mvp/app-contract.yaml` to reflect the generated app.
-9. Decide whether the sample feature should remain temporarily as scaffolding or be replaced immediately by the first real feature.
+2. Derive a canonical app identity before renaming anything.
+3. Rename app-visible template identifiers to app-specific identifiers.
+4. Rename package identifiers from template-specific values to project-specific values.
+5. Update Gradle, application id, namespace, and framework naming where needed.
+6. Audit all required identity surfaces and record each rename explicitly.
+7. Replace sample-facing display text that should not survive into the generated app baseline.
+8. Preserve reusable shared infrastructure, build logic, and architecture modules.
+9. Reset `.mvp/verification-report.md` to reflect the new generation cycle rather than the source template's prior validation state.
+10. Update `.mvp/decisions.yaml` and `.mvp/app-contract.yaml` to reflect the generated app.
+11. Decide whether the sample feature should remain temporarily as scaffolding or be replaced immediately by the first real feature.
+
+Canonical app identity you must derive and keep consistent:
+- app display name
+- canonical package root
+- Android application id
+- Android namespace values by module
+- desktop window title
+- iOS bundle or visible app identity where applicable
+- Gradle root project name and any generated naming derived from the app identity
+
+Required identity audit surfaces:
+- `settings.gradle.kts` root project name and included module naming where affected
+- every module `build.gradle.kts` namespace and Android application id values
+- Kotlin package declarations and directory layout where package roots are renamed
+- Android manifest labels and other visible app identity text
+- desktop app window title or launcher-visible identity text
+- iOS configuration values that carry app identity
+- README or `.mvp/` metadata values that still carry template identity
+- obvious sample or template display strings that would misidentify the generated app
 
 Template-specific decisions you must make explicitly:
 - whether `feature/sample/*` is kept only until the first real feature is generated
 - whether package prefixes should become app-specific immediately or through a later normalization pass
 - whether verification should run immediately after instantiation or only after the first feature lands
+
+Identity normalization rules:
+- normalize identity immediately unless a concrete blocker is documented
+- do not leave `template` or other template-only identity in package roots, namespaces, app ids, or user-facing app names
+- keep package roots deterministic from the canonical app identity rather than ad hoc renames
+- if a surface intentionally keeps template identity temporarily, record the exact reason and the follow-up removal step
 
 What to preserve from the template:
 - `androidApp/`
@@ -75,6 +103,12 @@ What to customize:
 - display text such as window title, starter labels, and obvious sample text
 - `.mvp/` metadata for the new project
 
+Required identity audit output:
+- canonical app identity summary
+- list of every renamed identifier with old value, new value, and file or surface
+- list of any intentionally deferred renames with reason
+- explicit statement that no known template-only identity remains in user-facing or package-defining surfaces, or a precise exception list
+
 Rules for the sample feature:
 - keep it only if it is still needed as temporary structural scaffolding
 - remove or replace it as soon as the first real feature is generated
@@ -86,10 +120,11 @@ Required outputs:
 - updated `.mvp/decisions.yaml`
 - reset or regenerated `.mvp/verification-report.md`
 - concise summary of all renamed identifiers and structural decisions
+- explicit identity audit summary
 
 Completion criteria:
 - the destination project is structurally valid
-- no obvious template-only identity remains in user-facing app surfaces unless intentionally preserved
+- no obvious template-only identity remains in user-facing app surfaces, package-defining surfaces, or build identity unless intentionally preserved and documented
 - Dream architecture boundaries remain intact
 - the project is ready for first-feature generation
 
