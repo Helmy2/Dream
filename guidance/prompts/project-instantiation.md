@@ -60,7 +60,7 @@ Canonical app identity you must derive and keep consistent:
 - canonical package root
 - Android application id
 - Android namespace values by module
-- desktop window title
+- desktop app window title, when Desktop is included in the app contract
 - iOS bundle or visible app identity where applicable
 - Gradle root project name and any generated naming derived from the app identity
 
@@ -69,7 +69,7 @@ Required identity audit surfaces:
 - every module `build.gradle.kts` namespace and Android application id values
 - Kotlin package declarations and directory layout where package roots are renamed
 - Android manifest labels and other visible app identity text
-- desktop app window title or launcher-visible identity text
+- desktop app window title or launcher-visible identity text, when Desktop is included in the app contract
 - iOS configuration values that carry app identity
 - README or `.mvp/` metadata values that still carry template identity
 - obvious sample or template display strings that would misidentify the generated app
@@ -88,7 +88,7 @@ Identity normalization rules:
 What to preserve from the template:
 - `androidApp/`
 - `iosApp/`
-- `desktopApp/`
+- `desktopApp/` when Desktop is included as a generated app target
 - `shared/core/*`
 - `shared/designsystem`
 - `shared/navigation`

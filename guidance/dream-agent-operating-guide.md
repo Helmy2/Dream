@@ -63,7 +63,11 @@ Unless a higher-priority project-specific document explicitly overrides them, al
 - keep shared MVI primitives small
 - keep routing concerns out of feature UI where practical
 - keep user-visible shared UI strings in shared resources
-- treat desktop as the main fast preview and repair surface
+- treat Android, iOS, and contract-selected Desktop as generated app product targets
+- use Android CLI for Android environment checks, emulator/device setup, APK install, launch, layout/screenshot inspection, logs, and repair loops
+- use `xcodebuild` and `xcrun simctl` for iOS build, simulator install, launch, logs, and crash capture
+- use Maestro for black-box smoke and end-to-end user-flow checks after platform launch is healthy
+- when Desktop is included in the app contract, validate it as a supported target and use `:desktopApp:hotRunJvm` for interactive runs
 - not report success until verification is green or a blocker is clearly documented
 
 ## Mandatory Graph Usage
@@ -147,17 +151,24 @@ If shared behavior appears across features, move it into the appropriate shared 
 
 ## Verification Rules
 
-At minimum, local-only Dream projects should pass:
+At minimum, local-only Dream projects should pass the baseline build and test checks:
 
 ```bash
 ./gradlew allTests
 ./gradlew :androidApp:assembleDebug
-./gradlew :desktopApp:run
 ```
 
 For modular projects, `allTests` should aggregate shared and feature tests.
 
-When `:desktopApp:run` is too heavy for the immediate iteration loop, `general` may allow an intermediate lighter compile step, but Dream must not report final success without the required verification behavior or a documented blocker.
+Final validation should then exercise the real product targets:
+
+1. Android CLI (`https://developer.android.com/tools/agents/android-cli`) for Android environment checks, emulator/device setup, APK install, launch, layout/screenshot inspection, and log capture.
+2. `xcodebuild` plus `xcrun simctl` for iOS simulator build, install, launch, logs, and crash capture.
+3. Maestro Android smoke flows for user-visible behavior after Android launches cleanly.
+4. Maestro iOS smoke flows where reliable after iOS launches cleanly.
+5. `./gradlew :desktopApp:compileKotlinJvm` plus `./gradlew :desktopApp:hotRunJvm` when `desktop` is included in the app contract.
+
+Desktop is a supported target when the app contract includes it, but Desktop validation does not replace Android/iOS readiness checks. Dream must not report final success without the required platform validation, smoke coverage, and contract review, or a documented blocker.
 
 ## Repair Rules
 

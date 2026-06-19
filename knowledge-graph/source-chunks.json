@@ -135,7 +135,7 @@
         "endLine": 37
       },
       "summary": "Defines canonical app identity derivation, immediate normalization of package-defining surfaces, and explicit rename audits.",
-      "text": "Dream should derive one canonical app identity before renaming anything, then normalize package roots, namespaces, application ids, and visible app identity from that source of truth. Generated projects should record an explicit rename audit across Gradle names, module namespaces, package declarations, manifests, desktop titles, iOS identity, and .mvp metadata."
+      "text": "Dream should derive one canonical app identity before renaming anything, then normalize package roots, namespaces, application ids, and visible app identity from that source of truth. Generated projects should record an explicit rename audit across Gradle names, module namespaces, package declarations, manifests, iOS identity, Desktop app titles when Desktop is included in the app contract, and .mvp metadata."
     },
     {
       "id": "chunk.composition_root.practices",

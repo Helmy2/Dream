@@ -25,10 +25,15 @@ Read first:
 Required verification for local-only MVPs:
 - `./gradlew allTests`
 - `./gradlew :androidApp:assembleDebug`
-- `./gradlew :desktopApp:run`
+- Android CLI install, launch, layout/screenshot inspection, and log capture for Android (`https://developer.android.com/tools/agents/android-cli`)
+- `xcodebuild` plus `xcrun simctl` build, install, launch, log, and crash capture for iOS
+- Maestro smoke flows for relevant Android user journeys after Android launches cleanly
+- Maestro smoke flows for relevant iOS user journeys where reliable after iOS launches cleanly
+- `./gradlew :desktopApp:compileKotlinJvm` plus `./gradlew :desktopApp:hotRunJvm` when `desktop` is included in the app contract
 
 Required behavior:
 - do not report validated success until verification is green, contract behavior is implemented, required tests exist, and review status is documented
+- treat Desktop as a supported product target when the app contract includes it, but do not use Desktop success as proof of Android/iOS runtime readiness
 - preserve `Presentation -> Domain <- Data`
 - do not fix failures by collapsing module boundaries
 - do not move business logic into host apps as a shortcut

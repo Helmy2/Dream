@@ -15,7 +15,7 @@ Good reusable pattern:
 
 - non-Compose shared modules provide domain/data registrations
 - UI modules provide navigation, screen, and view-model registrations
-- Android, Desktop, and iOS provide platform factories or implementations through dedicated startup paths
+- Android, iOS, and contract-selected Desktop provide product runtime platform factories or implementations through dedicated startup paths
 - composition roots assemble everything together without making exported core modules depend on Compose
 
 ### 17.3 Constructor injection everywhere possible

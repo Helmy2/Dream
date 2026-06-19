@@ -39,7 +39,10 @@ This file should stay compact, current, and task-oriented.
 - keep navigation centralized
 - keep shared MVI primitives small
 - keep shared user-visible strings in shared resources
-- use desktop as the main fast preview and repair surface
+- treat Android, iOS, and contract-selected Desktop as product runtime targets
+- use Android CLI and iOS command-line tooling for platform install, launch, logs, and repair loops
+- use Maestro for black-box smoke and end-to-end user-flow checks after platform launch is healthy
+- support Desktop when the generated app contract includes it; when Desktop is run interactively, use `:desktopApp:hotRunJvm`
 - do not report success until verification is green and the generated feature matches its contract, or a blocker is clearly documented
 
 ## Current Baseline
@@ -81,19 +84,35 @@ See `docs/cli-plan.md` for the current CLI plan.
 
 ## Required Verification
 
-For local-only MVPs, Dream must run:
+For local-only MVPs, Dream must validate the real product targets before treating a generated app as successful.
+
+Required baseline:
 
 ```bash
 ./gradlew allTests
 ./gradlew :androidApp:assembleDebug
-./gradlew :desktopApp:run
 ```
+
+Required platform and smoke ladder:
+
+1. Run shared, feature, Koin graph, and platform unit tests.
+2. Build Android with Gradle.
+3. Use Android CLI (`https://developer.android.com/tools/agents/android-cli`) for Android environment checks, emulator/device management, APK install, app launch, layout/screenshot inspection, and log capture.
+4. Build iOS with `xcodebuild`.
+5. Use `xcrun simctl` to boot a simulator, install the app, launch it, and capture logs or crash output.
+6. Run Maestro Android smoke flows for user-visible behavior after Android launches cleanly.
+7. Run Maestro iOS smoke flows where reliable after iOS launches cleanly.
+8. When `desktop` is included in the generated app contract, build Desktop with `./gradlew :desktopApp:compileKotlinJvm` and run it interactively with `./gradlew :desktopApp:hotRunJvm`.
 
 Green commands alone are not enough for final success.
 
 Final success requires:
 
 - verification commands passed or a precise environment blocker is documented
+- Android install, launch, and log inspection completed through Android CLI or a documented blocker exists
+- iOS build, simulator install, launch, and log inspection completed through `xcodebuild`/`xcrun simctl` or a documented blocker exists
+- Maestro smoke coverage completed for the relevant platform flows, or a precise tooling/platform blocker is documented
+- Desktop compile and `hotRunJvm` validation completed when `desktop` is in the app contract, or a precise blocker is documented
 - contract behavior implemented
 - required tests present for that behavior
 - final review approved, or manual review recorded if delegated review tooling fails
@@ -131,7 +150,7 @@ The first run proved that Dream can generate a runnable project, but it also exp
 - modular feature generation worked
 - Android build passed
 - shared and feature tests passed
-- desktop app launched
+- desktop app launched during the first run, and Desktop should use `:desktopApp:hotRunJvm` for interactive validation when it is a generated app target
 - sample scaffolding must not remain as a live feature module once the first real feature is generated in the target app
 
 ### What Failed Or Was Weak

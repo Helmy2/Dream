@@ -57,6 +57,15 @@ platforms:
   - android
   - ios
   - desktop
+validationTargets:
+  - android-cli
+  - ios-cli
+  - maestro-android
+  - maestro-ios
+  - desktop-hot-run
+desktop:
+  enabled: <true|false>
+  interactiveCommand: ./gradlew :desktopApp:hotRunJvm
 backend:
   enabled: <true|false>
   type: <none|ktor|mock>

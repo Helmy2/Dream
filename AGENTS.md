@@ -29,7 +29,11 @@ Prefer linking to those documents in discussions and change summaries instead of
 - Preserve Dream's architecture rules: thin app shells, centralized navigation, split shared core, and `Presentation -> Domain <- Data`.
 - Keep domain logic pure Kotlin and keep product behavior in feature modules, not host app modules.
 - Do not simplify the template by collapsing modules just to make a task faster.
-- Treat desktop as the main fast preview and repair surface for generated apps.
+- Treat Android, iOS, and contract-selected Desktop as generated app product targets.
+- Use Android CLI for Android device/emulator setup, install, launch, inspection, logs, and repair loops.
+- Use `xcodebuild` and `xcrun simctl` for iOS build, simulator install, launch, logs, and crash capture.
+- Use Maestro for black-box smoke flows after platform launch is healthy.
+- When Desktop is included in the app contract, validate it as a supported target and use `:desktopApp:hotRunJvm` for interactive runs.
 - Do not claim success from green commands alone; match the contract, tests, and review expectations in [AI_MVP_BUILDER_PLAN.md](AI_MVP_BUILDER_PLAN.md).
 
 ## Validation
@@ -48,7 +52,12 @@ Dream's stricter final verification target is documented in [AI_MVP_BUILDER_PLAN
 ```bash
 ./gradlew allTests
 ./gradlew :androidApp:assembleDebug
-./gradlew :desktopApp:run
+# Android CLI install/launch/log inspection
+# xcodebuild plus xcrun simctl build/install/launch/log inspection
+# Maestro smoke flows for relevant Android and iOS user journeys
+# Desktop target validation when desktop is in the app contract:
+./gradlew :desktopApp:compileKotlinJvm
+./gradlew :desktopApp:hotRunJvm
 ```
 
 Use the lighter template commands for focused iteration, but do not report final success without the required verification behavior or a documented blocker.
