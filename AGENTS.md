@@ -21,7 +21,6 @@ Prefer linking to those documents in discussions and change summaries instead of
 - [knowledge-graph/README.md](knowledge-graph/README.md): reusable architecture rules and source graph
 - [templates/dream-kmp-base/README.md](templates/dream-kmp-base/README.md): modular KMP base template and validation entry points
 - [.opencode/opencode.json](.opencode/opencode.json): OpenCode instruction injection
-- [docs/cli-plan.md](docs/cli-plan.md): planned CLI surface
 - [docs/first-try-report.md](docs/first-try-report.md): known generation and review gaps
 
 ## Working Rules

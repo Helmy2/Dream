@@ -17,7 +17,6 @@ Detailed architecture and generation rules live in:
 - `guidance/`
 - `knowledge-graph/`
 - `templates/`
-- `docs/cli-plan.md`
 - `docs/first-try-report.md`
 
 This file should stay compact, current, and task-oriented.
@@ -26,7 +25,7 @@ This file should stay compact, current, and task-oriented.
 
 - Name: `Dream`
 - Role: local AI MVP builder
-- Scope: provide a CLI that can generate, verify, preview, review, and repair Kotlin Multiplatform MVPs from natural-language prompts
+- Scope: provide an OpenCode-first workflow that can generate, verify, preview, review, and repair Kotlin Multiplatform MVPs from natural-language prompts
 - Style: local-first, template-driven, agent-assisted, verification-gated
 
 ## Non-Negotiable Rules
@@ -54,11 +53,9 @@ Dream currently builds on:
 - a modular KMP base template at `templates/dream-kmp-base/`
 - Dream-specific agents and commands under `.opencode/`
 
-The next product step is the CLI.
+The near-term product step is improving the OpenCode command workflow and regression loop.
 
-Dream should become a usable local command-line tool before any backend generation work starts.
-
-See `docs/cli-plan.md` for the current CLI plan.
+Dream should remain OpenCode-first until the generation, verification, repair, and review flow is reliable enough to wrap in another interface.
 
 ## Current Workflow
 
@@ -127,7 +124,7 @@ Final success requires:
 - created Dream agents and commands under `.opencode/`
 - aligned Dream around OpenCode-first orchestration
 - confirmed the modular base template at `templates/dream-kmp-base/`
-- defined the direction to make Dream CLI-first before any backend work
+- defined the direction to make Dream OpenCode-first before any backend work
 
 ### First Usable Flow
 
@@ -225,8 +222,8 @@ The first run proved that Dream can generate a runnable project, but it also exp
 3. Add a first-run regression checklist.
 - Re-run the same expense-tracker flow after each major Dream prompt or rule update.
 
-4. Define the CLI surface clearly.
-- Lock the first commands, arguments, expected outputs, and report locations before adding more generation scope.
+4. Define the OpenCode regression surface clearly.
+- Lock the repeatable smoke prompts, expected `.mvp/` outputs, verification behavior, and report locations before adding more generation scope.
 
 ## File Areas To Update Next
 
@@ -272,7 +269,6 @@ The first run proved that Dream can generate a runnable project, but it also exp
 
 ### Not Started
 
-- Dream CLI shell and command surface
 - formal regression checklist for repeated Dream smoke tests
 
 Backend generation is intentionally out of scope for now.
@@ -284,9 +280,8 @@ Backend generation is intentionally out of scope for now.
 3. Tighten project instantiation prompt around app identity and package normalization.
 4. Add minimum UI quality expectations to contract and implementation prompts.
 5. Define fallback behavior when `dream-inspector` tooling fails.
-6. Create the Dream CLI plan and first command set.
-7. Re-run the expense tracker smoke test after those updates.
-8. Document the second-run results in this file and in a dedicated run report.
+6. Re-run the expense tracker smoke test through OpenCode after those updates.
+7. Document the second-run results in this file and in a dedicated run report.
 
 ## Working Rule For This File
 
