@@ -18,6 +18,7 @@ kotlinx-coroutines = "1.11.0"
 room = "2.8.4"
 sqlite = "2.6.2"
 composeHotReload = "1.2.0-alpha02"
+mokkery = "3.4.1"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
@@ -46,6 +47,7 @@ kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "compose-navigation" }
 navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "navigation3-runtime" }
 navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
+mokkery-core = { module = "dev.mokkery:mokkery-core", version.ref = "mokkery" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -65,3 +67,4 @@ kmpSharedCore = { id = "app.kmp.shared-core", version = "unspecified" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+mokkery = { id = "dev.mokkery", version.ref = "mokkery" }

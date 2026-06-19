@@ -2,7 +2,6 @@ package com.dream.template.shared.core.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,18 +15,16 @@ import kotlinx.coroutines.launch
 
 abstract class MviViewModel<State : Any, Action : Any, Event : Any>(
     initialState: State,
-    actionScope: CoroutineScope? = null
 ) : ViewModel() {
     private val _state = MutableStateFlow(initialState)
     private val _events = MutableSharedFlow<Event>()
     private val actions = Channel<Action>(capacity = Channel.UNLIMITED)
-    private val processingScope = actionScope ?: viewModelScope
 
     val state: StateFlow<State> = _state.asStateFlow()
     val eventFlow: SharedFlow<Event> = _events.asSharedFlow()
 
     init {
-        processingScope.launch {
+        viewModelScope.launch {
             actions.receiveAsFlow().collect { action ->
                 handleAction(action)
             }

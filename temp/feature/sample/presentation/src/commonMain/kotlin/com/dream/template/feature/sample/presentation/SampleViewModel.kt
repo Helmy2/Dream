@@ -4,15 +4,12 @@ import com.dream.template.feature.sample.domain.repository.SampleRepository
 import com.dream.template.shared.core.domain.AppError
 import com.dream.template.shared.core.domain.Result
 import com.dream.template.shared.core.presentation.MviViewModel
-import kotlinx.coroutines.CoroutineScope
 import org.koin.core.annotation.KoinViewModel
 
 class SampleViewModel(
     private val repository: SampleRepository,
-    actionScope: CoroutineScope? = null
 ) : MviViewModel<SampleState, SampleAction, SampleEvent>(
     initialState = SampleState(),
-    actionScope = actionScope
 ) {
     private var hasLoadedOnce = false
 

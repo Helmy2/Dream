@@ -1,42 +1,35 @@
 package com.dream.template.shared.core.presentation
 
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class MviViewModelTest {
     @Test
-    fun processesActionsSequentially() = runBlocking {
-        val actionScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-        val viewModel = RecordingViewModel(actionScope = actionScope)
+    fun processesActionsSequentially() = runTest {
+        Dispatchers.setMain(UnconfinedTestDispatcher(testScheduler))
+        val viewModel = RecordingViewModel()
 
-        try {
-            viewModel.onAction(1)
-            viewModel.onAction(2)
-            withTimeout(2_000) {
-                while (viewModel.state.value != 2) {
-                    delay(10)
-                }
-            }
+        viewModel.onAction(1)
+        advanceUntilIdle()
 
-            assertEquals(listOf(1, 2), viewModel.processedActions)
-            assertEquals(2, viewModel.state.value)
-        } finally {
-            actionScope.cancel()
-        }
+        assertEquals(listOf(1), viewModel.processedActions)
+        assertEquals(1, viewModel.state.value)
+
+        viewModel.onAction(2)
+        advanceUntilIdle()
+
+        assertEquals(listOf(1, 2), viewModel.processedActions)
+        assertEquals(2, viewModel.state.value)
     }
 
-    private class RecordingViewModel(
-        actionScope: CoroutineScope
-    ) : MviViewModel<Int, Int, Nothing>(
+    private class RecordingViewModel : MviViewModel<Int, Int, Nothing>(
         initialState = 0,
-        actionScope = actionScope
     ) {
         val processedActions = mutableListOf<Int>()
 

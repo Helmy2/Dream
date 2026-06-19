@@ -27,3 +27,39 @@ Best practice:
 - keep fake time and dispatcher providers in `shared/core/testing`
 - add coroutine test dependencies once in the shared testing module and reuse them from feature tests
 - test feature behavior at the feature layer and queue semantics at the shared presentation layer
+
+### 22.6 Use Mokkery for mocks
+
+The project bundles [Mokkery](https://mokkery.dev) 3.4.1 as the KMP-native mocking library. It uses a Kotlin compiler plugin (not reflection), so it works on all targets including iOS and Wasm.
+
+- **No per-module setup** — the Mokkery plugin and `commonTest` dependency are applied automatically via `DreamKmpConventionPlugin`
+- **Suspend-friendly** — use `everySuspend` for coroutine methods and `verifySuspend` for interaction checks
+- **Mock at method level** — create mocks inside individual test methods rather than as shared fields to keep tests isolated
+
+```kotlin
+val repository = mock<SampleRepository> {
+    everySuspend { loadItems() } returns Result.Success(listOf(...))
+}
+val viewModel = SampleViewModel(repository = repository)
+```
+
+For paused or conditional answers, use `calls`:
+
+```kotlin
+val repository = mock<SampleRepository> {
+    everySuspend { loadItems() } calls {
+        releaseLoad.await()
+        Result.Success(emptyList())
+    }
+}
+```
+
+Interaction verification is available when needed:
+
+```kotlin
+verifySuspend(exhaustiveOrder) {
+    repository.loadItems()
+}
+```
+
+Defaults to strict mode (un-stubbed calls throw). For very simple interfaces (single method), anonymous objects remain acceptable. Complex reusable fakes belong in `shared/core/testing`.

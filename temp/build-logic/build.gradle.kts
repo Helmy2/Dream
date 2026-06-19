@@ -23,6 +23,7 @@ dependencies {
     implementation(libs.plugins.composeMultiplatform.toDependency())
     implementation(libs.plugins.composeCompiler.toDependency())
     implementation(libs.plugins.androidMultiplatformLibrary.toDependency())
+    implementation(libs.plugins.mokkery.toDependency())
 }
 
 fun Provider<PluginDependency>.toDependency(): Provider<String> =

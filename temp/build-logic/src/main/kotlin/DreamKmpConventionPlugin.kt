@@ -11,10 +11,12 @@ class DreamKmpConventionPlugin : Plugin<Project> {
         with(target) {
             pluginManager.apply("org.jetbrains.kotlin.multiplatform")
             pluginManager.apply("com.android.kotlin.multiplatform.library")
+            pluginManager.apply("dev.mokkery")
 
             val libs = the<org.gradle.accessors.dm.LibrariesForLibs>()
             val coroutinesAndroid = libs.kotlinx.coroutines.android
             val coroutinesSwing = libs.kotlinx.coroutines.swing
+            val mokkeryCore = libs.mokkery.core
 
             extensions.configure<KotlinMultiplatformExtension> {
                 jvmToolchain(17)
@@ -48,6 +50,10 @@ class DreamKmpConventionPlugin : Plugin<Project> {
 
                 sourceSets.getByName("desktopMain").dependencies {
                     implementation(coroutinesSwing)
+                }
+
+                sourceSets.commonTest.dependencies {
+                    implementation(mokkeryCore)
                 }
             }
         }

@@ -4,8 +4,11 @@ import com.dream.template.feature.sample.domain.model.SampleItem
 import com.dream.template.feature.sample.domain.repository.SampleRepository
 import com.dream.template.shared.core.domain.AppError
 import com.dream.template.shared.core.domain.Result
+import dev.mokkery.answering.calls
+import dev.mokkery.answering.returns
+import dev.mokkery.everySuspend
+import dev.mokkery.mock
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -20,15 +23,13 @@ class SampleViewModelTest {
     @Test
     fun startsInLoadingStateWhileLoadIsRunning() = runTest {
         val releaseLoad = CompletableDeferred<Unit>()
-        val viewModel = SampleViewModel(
-            repository = object : SampleRepository {
-                override suspend fun loadItems(): Result<List<SampleItem>> {
-                    releaseLoad.await()
-                    return Result.Success(emptyList())
-                }
-            },
-            actionScope = backgroundScope
-        )
+        val repository = mock<SampleRepository> {
+            everySuspend { loadItems() } calls {
+                releaseLoad.await()
+                Result.Success(emptyList())
+            }
+        }
+        val viewModel = SampleViewModel(repository = repository)
 
         backgroundScope.launch {
             viewModel.load(force = true)
@@ -43,17 +44,16 @@ class SampleViewModelTest {
 
     @Test
     fun loadsStarterCards() = runTest {
-        val viewModel = SampleViewModel(
-            repository = object : SampleRepository {
-                override suspend fun loadItems(): Result<List<SampleItem>> = Result.Success(
-                    listOf(
-                        SampleItem("One", "A"),
-                        SampleItem("Two", "B"),
-                        SampleItem("Three", "C")
-                    )
+        val repository = mock<SampleRepository> {
+            everySuspend { loadItems() } returns Result.Success(
+                listOf(
+                    SampleItem("One", "A"),
+                    SampleItem("Two", "B"),
+                    SampleItem("Three", "C")
                 )
-            }
-        )
+            )
+        }
+        val viewModel = SampleViewModel(repository = repository)
 
         viewModel.load(force = true)
 
@@ -63,11 +63,10 @@ class SampleViewModelTest {
 
     @Test
     fun exposesEmptyState() = runTest {
-        val viewModel = SampleViewModel(
-            repository = object : SampleRepository {
-                override suspend fun loadItems(): Result<List<SampleItem>> = Result.Success(emptyList())
-            }
-        )
+        val repository = mock<SampleRepository> {
+            everySuspend { loadItems() } returns Result.Success(emptyList())
+        }
+        val viewModel = SampleViewModel(repository = repository)
 
         viewModel.load(force = true)
 
@@ -76,11 +75,10 @@ class SampleViewModelTest {
 
     @Test
     fun exposesErrorState() = runTest {
-        val viewModel = SampleViewModel(
-            repository = object : SampleRepository {
-                override suspend fun loadItems(): Result<List<SampleItem>> = Result.Failure(AppError.Message("No data source"))
-            }
-        )
+        val repository = mock<SampleRepository> {
+            everySuspend { loadItems() } returns Result.Failure(AppError.Message("No data source"))
+        }
+        val viewModel = SampleViewModel(repository = repository)
 
         viewModel.load(force = true)
 
