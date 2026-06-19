@@ -11,9 +11,9 @@ Your task:
 Turn the selected template into a new app-specific project baseline before feature generation begins.
 
 Read first:
-- `knowledge-graph/PRODUCT.md`
-- `AI_MVP_BUILDER_PLAN.md`
-- `guidance/dream-agent-operating-guide.md`
+- `.knowledge-graph/PRODUCT.md`
+- `AGENTS.md`
+- `.opencode/guidance/dream-agent-operating-guide.md`
 - selected template README
 - selected template `.mvp/` metadata
 - any already-generated `.mvp/app-contract.yaml` or `.mvp/decisions.yaml`

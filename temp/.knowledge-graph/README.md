@@ -2,7 +2,7 @@
 
 This folder contains the initial architecture knowledge graph used by Dream, the AI MVP builder.
 
-The first version is sourced from the split files under `knowledge-graph/best-practices/`.
+The first version is sourced from the split files under `.knowledge-graph/best-practices/`.
 
 ## Purpose
 
@@ -50,7 +50,7 @@ The initial graph covers:
 
 Future iterations can add:
 
-- `AI_MVP_BUILDER_PLAN.md` as a separate source document
+- `AGENTS.md` as a separate source document
 - generated query presets for the builder
 - automated validation scripts for graph completeness
 

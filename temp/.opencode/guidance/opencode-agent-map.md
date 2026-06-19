@@ -154,8 +154,8 @@ If `inspector` fails at the tool level, `general` must run a manual review fallb
 ### `general`
 
 - user request
-- `AI_MVP_BUILDER_PLAN.md`
-- `knowledge-graph/PRODUCT.md`
+- `AGENTS.md`
+- `.knowledge-graph/PRODUCT.md`
 - `dream-agent-operating-guide.md`
 - relevant `.mvp/` metadata
 

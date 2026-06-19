@@ -11,11 +11,11 @@ Do not require the user to precreate app contracts or feature contracts.
 Dream must derive those artifacts from the prompt as part of the workflow.
 
 Read:
-- `guidance/opencode-agent-map.md`
-- `guidance/dream-agent-operating-guide.md`
-- `AI_MVP_BUILDER_PLAN.md`
-- `knowledge-graph/PRODUCT.md`
-- relevant `knowledge-graph/best-practices/*.md`
+- `.opencode/guidance/opencode-agent-map.md`
+- `.opencode/guidance/dream-agent-operating-guide.md`
+- `AGENTS.md`
+- `.knowledge-graph/PRODUCT.md`
+- relevant `.knowledge-graph/best-practices/*.md`
 
 Then:
 - generate or update `.mvp/app-contract.yaml`

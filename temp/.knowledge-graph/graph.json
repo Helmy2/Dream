@@ -3,7 +3,7 @@
     "name": "best-practices-knowledge-graph",
     "version": 1,
     "sourceDocuments": [
-      "knowledge-graph/best-practices/README.md"
+      ".knowledge-graph/best-practices/README.md"
     ]
   },
   "nodes": [
@@ -11,7 +11,7 @@
       "id": "document.best_practices",
       "type": "Document",
       "title": "Extracted Best Practices Handbook",
-      "path": "knowledge-graph/best-practices/README.md"
+      "path": ".knowledge-graph/best-practices/README.md"
     },
     {
       "id": "section.core_architecture",
@@ -20,7 +20,7 @@
       "sectionNumber": "3",
       "documentId": "document.best_practices",
       "source": {
-        "file": "knowledge-graph/best-practices/03-core-architectural-philosophy.md",
+        "file": ".knowledge-graph/best-practices/03-core-architectural-philosophy.md",
         "startLine": 1,
         "endLine": 26
       }
@@ -32,7 +32,7 @@
       "sectionNumber": "5",
       "documentId": "document.best_practices",
       "source": {
-        "file": "knowledge-graph/best-practices/05-feature-module-template.md",
+        "file": ".knowledge-graph/best-practices/05-feature-module-template.md",
         "startLine": 1,
         "endLine": 62
       }
@@ -44,7 +44,7 @@
       "sectionNumber": "6",
       "documentId": "document.best_practices",
       "source": {
-        "file": "knowledge-graph/best-practices/06-dependency-rules-to-keep.md",
+        "file": ".knowledge-graph/best-practices/06-dependency-rules-to-keep.md",
         "startLine": 1,
         "endLine": 34
       }
@@ -56,7 +56,7 @@
       "sectionNumber": "9",
       "documentId": "document.best_practices",
       "source": {
-        "file": "knowledge-graph/best-practices/09-domain-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/09-domain-layer-practices.md",
         "startLine": 1,
         "endLine": 71
       }
@@ -68,7 +68,7 @@
       "sectionNumber": "10",
       "documentId": "document.best_practices",
       "source": {
-        "file": "knowledge-graph/best-practices/10-data-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/10-data-layer-practices.md",
         "startLine": 1,
         "endLine": 72
       }
@@ -80,7 +80,7 @@
       "sectionNumber": "14",
       "documentId": "document.best_practices",
       "source": {
-        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/14-presentation-layer-practices.md",
         "startLine": 1,
         "endLine": 99
       }
@@ -92,7 +92,7 @@
       "sectionNumber": "15",
       "documentId": "document.best_practices",
       "source": {
-        "file": "knowledge-graph/best-practices/15-navigation-practices.md",
+        "file": ".knowledge-graph/best-practices/15-navigation-practices.md",
         "startLine": 1,
         "endLine": 50
       }
@@ -104,7 +104,7 @@
       "sectionNumber": "17",
       "documentId": "document.best_practices",
       "source": {
-        "file": "knowledge-graph/best-practices/17-resource-and-localization-practices.md",
+        "file": ".knowledge-graph/best-practices/17-resource-and-localization-practices.md",
         "startLine": 1,
         "endLine": 31
       }
@@ -116,7 +116,7 @@
       "sectionNumber": "18",
       "documentId": "document.best_practices",
       "source": {
-        "file": "knowledge-graph/best-practices/18-dependency-injection-practices.md",
+        "file": ".knowledge-graph/best-practices/18-dependency-injection-practices.md",
         "startLine": 1,
         "endLine": 46
       }
@@ -128,7 +128,7 @@
       "sectionNumber": "23",
       "documentId": "document.best_practices",
       "source": {
-        "file": "knowledge-graph/best-practices/23-testing-oriented-practices-to-reuse.md",
+        "file": ".knowledge-graph/best-practices/23-testing-oriented-practices-to-reuse.md",
         "startLine": 1,
         "endLine": 29
       }
@@ -140,7 +140,7 @@
       "sectionNumber": "25",
       "documentId": "document.best_practices",
       "source": {
-        "file": "knowledge-graph/best-practices/25-recommended-default-rules-for-future-projects.md",
+        "file": ".knowledge-graph/best-practices/25-recommended-default-rules-for-future-projects.md",
         "startLine": 1,
         "endLine": 36
       }
@@ -152,7 +152,7 @@
       "sectionNumber": "26",
       "documentId": "document.best_practices",
       "source": {
-        "file": "knowledge-graph/best-practices/26-anti-patterns-to-avoid-when-reusing-this-architecture.md",
+        "file": ".knowledge-graph/best-practices/26-anti-patterns-to-avoid-when-reusing-this-architecture.md",
         "startLine": 1,
         "endLine": 12
       }
@@ -164,7 +164,7 @@
       "sectionNumber": "29",
       "documentId": "document.best_practices",
       "source": {
-        "file": "knowledge-graph/best-practices/29-package-and-app-identity-practices.md",
+        "file": ".knowledge-graph/best-practices/29-package-and-app-identity-practices.md",
         "startLine": 1,
         "endLine": 37
       }
@@ -176,7 +176,7 @@
       "sectionNumber": "30",
       "documentId": "document.best_practices",
       "source": {
-        "file": "knowledge-graph/best-practices/30-stable-composition-root-practices.md",
+        "file": ".knowledge-graph/best-practices/30-stable-composition-root-practices.md",
         "startLine": 1,
         "endLine": 44
       }
@@ -188,7 +188,7 @@
       "sectionNumber": "31",
       "documentId": "document.best_practices",
       "source": {
-        "file": "knowledge-graph/best-practices/31-ui-quality-and-state-design-practices.md",
+        "file": ".knowledge-graph/best-practices/31-ui-quality-and-state-design-practices.md",
         "startLine": 1,
         "endLine": 31
       }
@@ -235,7 +235,7 @@
       "name": "Feature Domain Module",
       "pattern": "feature/<name>/domain",
       "source": {
-        "file": "knowledge-graph/best-practices/05-feature-module-template.md",
+        "file": ".knowledge-graph/best-practices/05-feature-module-template.md",
         "startLine": 1,
         "endLine": 30
       }
@@ -246,7 +246,7 @@
       "name": "Feature Data Module",
       "pattern": "feature/<name>/data",
       "source": {
-        "file": "knowledge-graph/best-practices/05-feature-module-template.md",
+        "file": ".knowledge-graph/best-practices/05-feature-module-template.md",
         "startLine": 1,
         "endLine": 42
       }
@@ -257,7 +257,7 @@
       "name": "Feature Presentation Module",
       "pattern": "feature/<name>/presentation",
       "source": {
-        "file": "knowledge-graph/best-practices/05-feature-module-template.md",
+        "file": ".knowledge-graph/best-practices/05-feature-module-template.md",
         "startLine": 1,
         "endLine": 58
       }
@@ -270,7 +270,7 @@
       "classification": "universal",
       "strength": "recommended",
       "source": {
-        "file": "knowledge-graph/best-practices/03-core-architectural-philosophy.md",
+        "file": ".knowledge-graph/best-practices/03-core-architectural-philosophy.md",
         "startLine": 5,
         "endLine": 13
       }
@@ -283,7 +283,7 @@
       "classification": "kmp_oriented",
       "strength": "recommended",
       "source": {
-        "file": "knowledge-graph/best-practices/08-shared-core-splitting.md",
+        "file": ".knowledge-graph/best-practices/08-shared-core-splitting.md",
         "startLine": 1,
         "endLine": 20
       }
@@ -296,7 +296,7 @@
       "classification": "universal",
       "strength": "recommended",
       "source": {
-        "file": "knowledge-graph/best-practices/09-domain-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/09-domain-layer-practices.md",
         "startLine": 15,
         "endLine": 33
       }
@@ -309,7 +309,7 @@
       "classification": "universal",
       "strength": "recommended",
       "source": {
-        "file": "knowledge-graph/best-practices/09-domain-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/09-domain-layer-practices.md",
         "startLine": 35,
         "endLine": 43
       }
@@ -322,7 +322,7 @@
       "classification": "universal",
       "strength": "recommended",
       "source": {
-        "file": "knowledge-graph/best-practices/10-data-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/10-data-layer-practices.md",
         "startLine": 29,
         "endLine": 37
       }
@@ -335,7 +335,7 @@
       "classification": "universal",
       "strength": "recommended",
       "source": {
-        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/14-presentation-layer-practices.md",
         "startLine": 19,
         "endLine": 35
       }
@@ -348,7 +348,7 @@
       "classification": "universal",
       "strength": "recommended",
       "source": {
-        "file": "knowledge-graph/best-practices/15-navigation-practices.md",
+        "file": ".knowledge-graph/best-practices/15-navigation-practices.md",
         "startLine": 33,
         "endLine": 41
       }
@@ -361,7 +361,7 @@
       "classification": "kmp_oriented",
       "strength": "recommended",
       "source": {
-        "file": "knowledge-graph/best-practices/17-resource-and-localization-practices.md",
+        "file": ".knowledge-graph/best-practices/17-resource-and-localization-practices.md",
         "startLine": 3,
         "endLine": 14
       }
@@ -374,7 +374,7 @@
       "classification": "universal",
       "strength": "default",
       "source": {
-        "file": "knowledge-graph/best-practices/18-dependency-injection-practices.md",
+        "file": ".knowledge-graph/best-practices/18-dependency-injection-practices.md",
         "startLine": 20,
         "endLine": 24
       }
@@ -387,7 +387,7 @@
       "classification": "project_specific",
       "strength": "recommended",
       "source": {
-        "file": "knowledge-graph/best-practices/23-testing-oriented-practices-to-reuse.md",
+        "file": ".knowledge-graph/best-practices/23-testing-oriented-practices-to-reuse.md",
         "startLine": 21,
         "endLine": 29
       }
@@ -400,7 +400,7 @@
       "classification": "kmp_oriented",
       "strength": "recommended",
       "source": {
-        "file": "knowledge-graph/best-practices/19-android-and-ios-boundary-practices.md",
+        "file": ".knowledge-graph/best-practices/19-android-and-ios-boundary-practices.md",
         "startLine": 1,
         "endLine": 23
       }
@@ -414,7 +414,7 @@
       "classification": "universal",
       "strength": "non_negotiable",
       "source": {
-        "file": "knowledge-graph/best-practices/03-core-architectural-philosophy.md",
+        "file": ".knowledge-graph/best-practices/03-core-architectural-philosophy.md",
         "startLine": 15,
         "endLine": 19
       }
@@ -428,7 +428,7 @@
       "classification": "universal",
       "strength": "non_negotiable",
       "source": {
-        "file": "knowledge-graph/best-practices/09-domain-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/09-domain-layer-practices.md",
         "startLine": 5,
         "endLine": 13
       }
@@ -442,7 +442,7 @@
       "classification": "universal",
       "strength": "non_negotiable",
       "source": {
-        "file": "knowledge-graph/best-practices/09-domain-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/09-domain-layer-practices.md",
         "startLine": 49,
         "endLine": 61
       }
@@ -456,7 +456,7 @@
       "classification": "universal",
       "strength": "recommended",
       "source": {
-        "file": "knowledge-graph/best-practices/10-data-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/10-data-layer-practices.md",
         "startLine": 5,
         "endLine": 12
       }
@@ -470,7 +470,7 @@
       "classification": "universal",
       "strength": "non_negotiable",
       "source": {
-        "file": "knowledge-graph/best-practices/10-data-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/10-data-layer-practices.md",
         "startLine": 14,
         "endLine": 27
       }
@@ -484,7 +484,7 @@
       "classification": "kmp_oriented",
       "strength": "recommended",
       "source": {
-        "file": "knowledge-graph/best-practices/10-data-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/10-data-layer-practices.md",
         "startLine": 39,
         "endLine": 51
       }
@@ -498,7 +498,7 @@
       "classification": "universal",
       "strength": "recommended",
       "source": {
-        "file": "knowledge-graph/best-practices/10-data-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/10-data-layer-practices.md",
         "startLine": 53,
         "endLine": 72
       }
@@ -512,7 +512,7 @@
       "classification": "universal",
       "strength": "default",
       "source": {
-        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/14-presentation-layer-practices.md",
         "startLine": 5,
         "endLine": 17
       }
@@ -526,7 +526,7 @@
       "classification": "kmp_oriented",
       "strength": "recommended",
       "source": {
-        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/14-presentation-layer-practices.md",
         "startLine": 35,
         "endLine": 43
       }
@@ -540,7 +540,7 @@
       "classification": "universal",
       "strength": "recommended",
       "source": {
-        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/14-presentation-layer-practices.md",
         "startLine": 45,
         "endLine": 53
       }
@@ -554,7 +554,7 @@
       "classification": "universal",
       "strength": "recommended",
       "source": {
-        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/14-presentation-layer-practices.md",
         "startLine": 63,
         "endLine": 71
       }
@@ -568,7 +568,7 @@
       "classification": "universal",
       "strength": "recommended",
       "source": {
-        "file": "knowledge-graph/best-practices/15-navigation-practices.md",
+        "file": ".knowledge-graph/best-practices/15-navigation-practices.md",
         "startLine": 5,
         "endLine": 12
       }
@@ -582,7 +582,7 @@
       "classification": "universal",
       "strength": "recommended",
       "source": {
-        "file": "knowledge-graph/best-practices/15-navigation-practices.md",
+        "file": ".knowledge-graph/best-practices/15-navigation-practices.md",
         "startLine": 14,
         "endLine": 24
       }
@@ -596,7 +596,7 @@
       "classification": "kmp_oriented",
       "strength": "non_negotiable",
       "source": {
-        "file": "knowledge-graph/best-practices/17-resource-and-localization-practices.md",
+        "file": ".knowledge-graph/best-practices/17-resource-and-localization-practices.md",
         "startLine": 3,
         "endLine": 24
       }
@@ -610,7 +610,7 @@
       "classification": "universal",
       "strength": "non_negotiable",
       "source": {
-        "file": "knowledge-graph/best-practices/18-dependency-injection-practices.md",
+        "file": ".knowledge-graph/best-practices/18-dependency-injection-practices.md",
         "startLine": 5,
         "endLine": 10
       }
@@ -624,7 +624,7 @@
       "classification": "kmp_oriented",
       "strength": "recommended",
       "source": {
-        "file": "knowledge-graph/best-practices/18-dependency-injection-practices.md",
+        "file": ".knowledge-graph/best-practices/18-dependency-injection-practices.md",
         "startLine": 26,
         "endLine": 35
       }
@@ -638,7 +638,7 @@
       "classification": "kmp_oriented",
       "strength": "recommended",
       "source": {
-        "file": "knowledge-graph/best-practices/20-platform-specific-capability-patterns.md",
+        "file": ".knowledge-graph/best-practices/20-platform-specific-capability-patterns.md",
         "startLine": 5,
         "endLine": 17
       }
@@ -649,7 +649,7 @@
       "name": "Aggregator feature exception",
       "statement": "An aggregator-style feature may depend on other features' domain modules only, never their presentation modules.",
       "source": {
-        "file": "knowledge-graph/best-practices/06-dependency-rules-to-keep.md",
+        "file": ".knowledge-graph/best-practices/06-dependency-rules-to-keep.md",
         "startLine": 12,
         "endLine": 22
       }
@@ -663,7 +663,7 @@
       "classification": "universal",
       "strength": "caution",
       "source": {
-        "file": "knowledge-graph/best-practices/06-dependency-rules-to-keep.md",
+        "file": ".knowledge-graph/best-practices/06-dependency-rules-to-keep.md",
         "startLine": 24,
         "endLine": 34
       }
@@ -677,7 +677,7 @@
       "classification": "universal",
       "strength": "caution",
       "source": {
-        "file": "knowledge-graph/best-practices/12-settings-and-preference-storage.md",
+        "file": ".knowledge-graph/best-practices/12-settings-and-preference-storage.md",
         "startLine": 13,
         "endLine": 24
       }
@@ -691,7 +691,7 @@
       "classification": "universal",
       "strength": "caution",
       "source": {
-        "file": "knowledge-graph/best-practices/13-time-and-logical-date-practices.md",
+        "file": ".knowledge-graph/best-practices/13-time-and-logical-date-practices.md",
         "startLine": 5,
         "endLine": 9
       }
@@ -705,7 +705,7 @@
       "classification": "universal",
       "strength": "caution",
       "source": {
-        "file": "knowledge-graph/best-practices/15-navigation-practices.md",
+        "file": ".knowledge-graph/best-practices/15-navigation-practices.md",
         "startLine": 33,
         "endLine": 41
       }
@@ -719,7 +719,7 @@
       "classification": "kmp_oriented",
       "strength": "caution",
       "source": {
-        "file": "knowledge-graph/best-practices/17-resource-and-localization-practices.md",
+        "file": ".knowledge-graph/best-practices/17-resource-and-localization-practices.md",
         "startLine": 14,
         "endLine": 22
       }
@@ -733,7 +733,7 @@
       "classification": "universal",
       "strength": "caution",
       "source": {
-        "file": "knowledge-graph/best-practices/07-build-system-practices.md",
+        "file": ".knowledge-graph/best-practices/07-build-system-practices.md",
         "startLine": 7,
         "endLine": 23
       }
@@ -747,7 +747,7 @@
       "classification": "universal",
       "strength": "caution",
       "source": {
-        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/14-presentation-layer-practices.md",
         "startLine": 31,
         "endLine": 35
       }
@@ -761,7 +761,7 @@
       "classification": "universal",
       "strength": "non_negotiable",
       "source": {
-        "file": "knowledge-graph/best-practices/06-dependency-rules-to-keep.md",
+        "file": ".knowledge-graph/best-practices/06-dependency-rules-to-keep.md",
         "startLine": 9,
         "endLine": 10
       }
@@ -775,7 +775,7 @@
       "classification": "project_specific",
       "strength": "non_negotiable",
       "source": {
-        "file": "knowledge-graph/best-practices/29-package-and-app-identity-practices.md",
+        "file": ".knowledge-graph/best-practices/29-package-and-app-identity-practices.md",
         "startLine": 5,
         "endLine": 18
       }
@@ -789,7 +789,7 @@
       "classification": "universal",
       "strength": "non_negotiable",
       "source": {
-        "file": "knowledge-graph/best-practices/30-stable-composition-root-practices.md",
+        "file": ".knowledge-graph/best-practices/30-stable-composition-root-practices.md",
         "startLine": 5,
         "endLine": 17
       }
@@ -803,7 +803,7 @@
       "classification": "kmp_oriented",
       "strength": "recommended",
       "source": {
-        "file": "knowledge-graph/best-practices/30-stable-composition-root-practices.md",
+        "file": ".knowledge-graph/best-practices/30-stable-composition-root-practices.md",
         "startLine": 36,
         "endLine": 44
       }
@@ -817,7 +817,7 @@
       "classification": "project_specific",
       "strength": "recommended",
       "source": {
-        "file": "knowledge-graph/best-practices/31-ui-quality-and-state-design-practices.md",
+        "file": ".knowledge-graph/best-practices/31-ui-quality-and-state-design-practices.md",
         "startLine": 5,
         "endLine": 31
       }
@@ -831,7 +831,7 @@
       "classification": "universal",
       "strength": "caution",
       "source": {
-        "file": "knowledge-graph/best-practices/26-anti-patterns-to-avoid-when-reusing-this-architecture.md",
+        "file": ".knowledge-graph/best-practices/26-anti-patterns-to-avoid-when-reusing-this-architecture.md",
         "startLine": 3,
         "endLine": 12
       }
@@ -843,7 +843,7 @@
       "type": "CONTAINS",
       "to": "section.core_architecture",
       "source": {
-        "file": "knowledge-graph/best-practices/03-core-architectural-philosophy.md",
+        "file": ".knowledge-graph/best-practices/03-core-architectural-philosophy.md",
         "startLine": 1,
         "endLine": 26
       }
@@ -853,7 +853,7 @@
       "type": "CONTAINS",
       "to": "section.feature_template",
       "source": {
-        "file": "knowledge-graph/best-practices/05-feature-module-template.md",
+        "file": ".knowledge-graph/best-practices/05-feature-module-template.md",
         "startLine": 1,
         "endLine": 62
       }
@@ -863,7 +863,7 @@
       "type": "CONTAINS",
       "to": "section.dependency_rules",
       "source": {
-        "file": "knowledge-graph/best-practices/06-dependency-rules-to-keep.md",
+        "file": ".knowledge-graph/best-practices/06-dependency-rules-to-keep.md",
         "startLine": 1,
         "endLine": 34
       }
@@ -873,7 +873,7 @@
       "type": "CONTAINS",
       "to": "section.domain_practices",
       "source": {
-        "file": "knowledge-graph/best-practices/09-domain-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/09-domain-layer-practices.md",
         "startLine": 1,
         "endLine": 61
       }
@@ -883,7 +883,7 @@
       "type": "CONTAINS",
       "to": "section.data_practices",
       "source": {
-        "file": "knowledge-graph/best-practices/10-data-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/10-data-layer-practices.md",
         "startLine": 1,
         "endLine": 72
       }
@@ -893,7 +893,7 @@
       "type": "CONTAINS",
       "to": "section.presentation_practices",
       "source": {
-        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/14-presentation-layer-practices.md",
         "startLine": 1,
         "endLine": 71
       }
@@ -903,7 +903,7 @@
       "type": "CONTAINS",
       "to": "section.navigation_practices",
       "source": {
-        "file": "knowledge-graph/best-practices/15-navigation-practices.md",
+        "file": ".knowledge-graph/best-practices/15-navigation-practices.md",
         "startLine": 1,
         "endLine": 50
       }
@@ -913,7 +913,7 @@
       "type": "CONTAINS",
       "to": "section.resource_practices",
       "source": {
-        "file": "knowledge-graph/best-practices/17-resource-and-localization-practices.md",
+        "file": ".knowledge-graph/best-practices/17-resource-and-localization-practices.md",
         "startLine": 1,
         "endLine": 30
       }
@@ -923,7 +923,7 @@
       "type": "CONTAINS",
       "to": "section.di_practices",
       "source": {
-        "file": "knowledge-graph/best-practices/18-dependency-injection-practices.md",
+        "file": ".knowledge-graph/best-practices/18-dependency-injection-practices.md",
         "startLine": 1,
         "endLine": 46
       }
@@ -933,7 +933,7 @@
       "type": "CONTAINS",
       "to": "section.testing_practices",
       "source": {
-        "file": "knowledge-graph/best-practices/23-testing-oriented-practices-to-reuse.md",
+        "file": ".knowledge-graph/best-practices/23-testing-oriented-practices-to-reuse.md",
         "startLine": 1,
         "endLine": 29
       }
@@ -943,7 +943,7 @@
       "type": "CONTAINS",
       "to": "section.defaults",
       "source": {
-        "file": "knowledge-graph/best-practices/25-recommended-default-rules-for-future-projects.md",
+        "file": ".knowledge-graph/best-practices/25-recommended-default-rules-for-future-projects.md",
         "startLine": 1,
         "endLine": 36
       }
@@ -953,7 +953,7 @@
       "type": "CONTAINS",
       "to": "section.anti_patterns",
       "source": {
-        "file": "knowledge-graph/best-practices/26-anti-patterns-to-avoid-when-reusing-this-architecture.md",
+        "file": ".knowledge-graph/best-practices/26-anti-patterns-to-avoid-when-reusing-this-architecture.md",
         "startLine": 1,
         "endLine": 12
       }
@@ -963,7 +963,7 @@
       "type": "CONTAINS",
       "to": "section.identity_practices",
       "source": {
-        "file": "knowledge-graph/best-practices/29-package-and-app-identity-practices.md",
+        "file": ".knowledge-graph/best-practices/29-package-and-app-identity-practices.md",
         "startLine": 1,
         "endLine": 37
       }
@@ -973,7 +973,7 @@
       "type": "CONTAINS",
       "to": "section.composition_root_practices",
       "source": {
-        "file": "knowledge-graph/best-practices/30-stable-composition-root-practices.md",
+        "file": ".knowledge-graph/best-practices/30-stable-composition-root-practices.md",
         "startLine": 1,
         "endLine": 27
       }
@@ -983,7 +983,7 @@
       "type": "CONTAINS",
       "to": "section.ui_quality_practices",
       "source": {
-        "file": "knowledge-graph/best-practices/31-ui-quality-and-state-design-practices.md",
+        "file": ".knowledge-graph/best-practices/31-ui-quality-and-state-design-practices.md",
         "startLine": 1,
         "endLine": 31
       }
@@ -993,7 +993,7 @@
       "type": "DEPENDS_ON",
       "to": "layer.domain",
       "source": {
-        "file": "knowledge-graph/best-practices/03-core-architectural-philosophy.md",
+        "file": ".knowledge-graph/best-practices/03-core-architectural-philosophy.md",
         "startLine": 15,
         "endLine": 19
       }
@@ -1003,7 +1003,7 @@
       "type": "DEPENDS_ON",
       "to": "layer.domain",
       "source": {
-        "file": "knowledge-graph/best-practices/03-core-architectural-philosophy.md",
+        "file": ".knowledge-graph/best-practices/03-core-architectural-philosophy.md",
         "startLine": 15,
         "endLine": 19
       }
@@ -1013,7 +1013,7 @@
       "type": "MUST_NOT_DEPEND_ON",
       "to": "layer.data",
       "source": {
-        "file": "knowledge-graph/best-practices/03-core-architectural-philosophy.md",
+        "file": ".knowledge-graph/best-practices/03-core-architectural-philosophy.md",
         "startLine": 15,
         "endLine": 19
       }
@@ -1023,7 +1023,7 @@
       "type": "MUST_NOT_DEPEND_ON",
       "to": "layer.presentation",
       "source": {
-        "file": "knowledge-graph/best-practices/03-core-architectural-philosophy.md",
+        "file": ".knowledge-graph/best-practices/03-core-architectural-philosophy.md",
         "startLine": 15,
         "endLine": 19
       }
@@ -1033,7 +1033,7 @@
       "type": "APPLIES_TO",
       "to": "layer.domain",
       "source": {
-        "file": "knowledge-graph/best-practices/05-feature-module-template.md",
+        "file": ".knowledge-graph/best-practices/05-feature-module-template.md",
         "startLine": 12,
         "endLine": 29
       }
@@ -1043,7 +1043,7 @@
       "type": "APPLIES_TO",
       "to": "layer.data",
       "source": {
-        "file": "knowledge-graph/best-practices/05-feature-module-template.md",
+        "file": ".knowledge-graph/best-practices/05-feature-module-template.md",
         "startLine": 31,
         "endLine": 41
       }
@@ -1053,7 +1053,7 @@
       "type": "APPLIES_TO",
       "to": "layer.presentation",
       "source": {
-        "file": "knowledge-graph/best-practices/05-feature-module-template.md",
+        "file": ".knowledge-graph/best-practices/05-feature-module-template.md",
         "startLine": 43,
         "endLine": 58
       }
@@ -1063,7 +1063,7 @@
       "type": "MUST_NOT_DEPEND_ON",
       "to": "layer.presentation",
       "source": {
-        "file": "knowledge-graph/best-practices/05-feature-module-template.md",
+        "file": ".knowledge-graph/best-practices/05-feature-module-template.md",
         "startLine": 22,
         "endLine": 29
       }
@@ -1073,7 +1073,7 @@
       "type": "MUST_NOT_DEPEND_ON",
       "to": "layer.data",
       "source": {
-        "file": "knowledge-graph/best-practices/05-feature-module-template.md",
+        "file": ".knowledge-graph/best-practices/05-feature-module-template.md",
         "startLine": 22,
         "endLine": 29
       }
@@ -1083,7 +1083,7 @@
       "type": "APPLIES_TO",
       "to": "section.core_architecture",
       "source": {
-        "file": "knowledge-graph/best-practices/03-core-architectural-philosophy.md",
+        "file": ".knowledge-graph/best-practices/03-core-architectural-philosophy.md",
         "startLine": 5,
         "endLine": 13
       }
@@ -1093,7 +1093,7 @@
       "type": "APPLIES_TO",
       "to": "layer.shared_core",
       "source": {
-        "file": "knowledge-graph/best-practices/08-shared-core-splitting.md",
+        "file": ".knowledge-graph/best-practices/08-shared-core-splitting.md",
         "startLine": 1,
         "endLine": 20
       }
@@ -1103,7 +1103,7 @@
       "type": "SUPPORTED_BY",
       "to": "rule.repository_translates_infrastructure",
       "source": {
-        "file": "knowledge-graph/best-practices/09-domain-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/09-domain-layer-practices.md",
         "startLine": 24,
         "endLine": 33
       }
@@ -1113,7 +1113,7 @@
       "type": "SUPPORTED_BY",
       "to": "rule.rethrow_cancellation_exception",
       "source": {
-        "file": "knowledge-graph/best-practices/09-domain-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/09-domain-layer-practices.md",
         "startLine": 35,
         "endLine": 43
       }
@@ -1123,7 +1123,7 @@
       "type": "APPLIES_TO",
       "to": "layer.domain",
       "source": {
-        "file": "knowledge-graph/best-practices/09-domain-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/09-domain-layer-practices.md",
         "startLine": 5,
         "endLine": 13
       }
@@ -1133,7 +1133,7 @@
       "type": "APPLIES_TO",
       "to": "layer.data",
       "source": {
-        "file": "knowledge-graph/best-practices/10-data-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/10-data-layer-practices.md",
         "startLine": 5,
         "endLine": 12
       }
@@ -1143,7 +1143,7 @@
       "type": "APPLIES_TO",
       "to": "layer.data",
       "source": {
-        "file": "knowledge-graph/best-practices/10-data-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/10-data-layer-practices.md",
         "startLine": 14,
         "endLine": 27
       }
@@ -1153,7 +1153,7 @@
       "type": "APPLIES_TO",
       "to": "layer.data",
       "source": {
-        "file": "knowledge-graph/best-practices/10-data-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/10-data-layer-practices.md",
         "startLine": 29,
         "endLine": 37
       }
@@ -1163,7 +1163,7 @@
       "type": "APPLIES_TO",
       "to": "layer.data",
       "source": {
-        "file": "knowledge-graph/best-practices/10-data-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/10-data-layer-practices.md",
         "startLine": 39,
         "endLine": 51
       }
@@ -1173,7 +1173,7 @@
       "type": "APPLIES_TO",
       "to": "layer.data",
       "source": {
-        "file": "knowledge-graph/best-practices/10-data-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/10-data-layer-practices.md",
         "startLine": 63,
         "endLine": 72
       }
@@ -1183,7 +1183,7 @@
       "type": "APPLIES_TO",
       "to": "layer.presentation",
       "source": {
-        "file": "knowledge-graph/best-practices/10-data-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/10-data-layer-practices.md",
         "startLine": 63,
         "endLine": 72
       }
@@ -1193,7 +1193,7 @@
       "type": "APPLIES_TO",
       "to": "layer.presentation",
       "source": {
-        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/14-presentation-layer-practices.md",
         "startLine": 5,
         "endLine": 17
       }
@@ -1203,7 +1203,7 @@
       "type": "APPLIES_TO",
       "to": "layer.presentation",
       "source": {
-        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/14-presentation-layer-practices.md",
         "startLine": 35,
         "endLine": 43
       }
@@ -1213,7 +1213,7 @@
       "type": "APPLIES_TO",
       "to": "layer.presentation",
       "source": {
-        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/14-presentation-layer-practices.md",
         "startLine": 45,
         "endLine": 53
       }
@@ -1223,7 +1223,7 @@
       "type": "APPLIES_TO",
       "to": "layer.presentation",
       "source": {
-        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/14-presentation-layer-practices.md",
         "startLine": 19,
         "endLine": 35
       }
@@ -1233,7 +1233,7 @@
       "type": "REQUIRES",
       "to": "practice.small_mvi_base",
       "source": {
-        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/14-presentation-layer-practices.md",
         "startLine": 63,
         "endLine": 71
       }
@@ -1243,7 +1243,7 @@
       "type": "OWNS",
       "to": "layer.navigation",
       "source": {
-        "file": "knowledge-graph/best-practices/15-navigation-practices.md",
+        "file": ".knowledge-graph/best-practices/15-navigation-practices.md",
         "startLine": 5,
         "endLine": 12
       }
@@ -1253,7 +1253,7 @@
       "type": "OWNS",
       "to": "layer.design_system",
       "source": {
-        "file": "knowledge-graph/best-practices/15-navigation-practices.md",
+        "file": ".knowledge-graph/best-practices/15-navigation-practices.md",
         "startLine": 5,
         "endLine": 12
       }
@@ -1263,7 +1263,7 @@
       "type": "PREFERRED_OVER",
       "to": "antipattern.route_leakage",
       "source": {
-        "file": "knowledge-graph/best-practices/15-navigation-practices.md",
+        "file": ".knowledge-graph/best-practices/15-navigation-practices.md",
         "startLine": 24,
         "endLine": 33
       }
@@ -1273,7 +1273,7 @@
       "type": "REQUIRES",
       "to": "practice.shared_strings",
       "source": {
-        "file": "knowledge-graph/best-practices/17-resource-and-localization-practices.md",
+        "file": ".knowledge-graph/best-practices/17-resource-and-localization-practices.md",
         "startLine": 3,
         "endLine": 22
       }
@@ -1283,7 +1283,7 @@
       "type": "APPLIES_TO",
       "to": "section.di_practices",
       "source": {
-        "file": "knowledge-graph/best-practices/18-dependency-injection-practices.md",
+        "file": ".knowledge-graph/best-practices/18-dependency-injection-practices.md",
         "startLine": 5,
         "endLine": 10
       }
@@ -1293,7 +1293,7 @@
       "type": "APPLIES_TO",
       "to": "section.di_practices",
       "source": {
-        "file": "knowledge-graph/best-practices/18-dependency-injection-practices.md",
+        "file": ".knowledge-graph/best-practices/18-dependency-injection-practices.md",
         "startLine": 26,
         "endLine": 34
       }
@@ -1303,7 +1303,7 @@
       "type": "APPLIES_TO",
       "to": "section.testing_practices",
       "source": {
-        "file": "knowledge-graph/best-practices/23-testing-oriented-practices-to-reuse.md",
+        "file": ".knowledge-graph/best-practices/23-testing-oriented-practices-to-reuse.md",
         "startLine": 21,
         "endLine": 29
       }
@@ -1313,7 +1313,7 @@
       "type": "APPLIES_TO",
       "to": "section.defaults",
       "source": {
-        "file": "knowledge-graph/best-practices/25-recommended-default-rules-for-future-projects.md",
+        "file": ".knowledge-graph/best-practices/25-recommended-default-rules-for-future-projects.md",
         "startLine": 32,
         "endLine": 36
       }
@@ -1323,7 +1323,7 @@
       "type": "EXCEPTION_TO",
       "to": "rule.dependency_direction",
       "source": {
-        "file": "knowledge-graph/best-practices/06-dependency-rules-to-keep.md",
+        "file": ".knowledge-graph/best-practices/06-dependency-rules-to-keep.md",
         "startLine": 12,
         "endLine": 22
       }
@@ -1333,7 +1333,7 @@
       "type": "REPLACED_BY",
       "to": "practice.shared_core_split",
       "source": {
-        "file": "knowledge-graph/best-practices/06-dependency-rules-to-keep.md",
+        "file": ".knowledge-graph/best-practices/06-dependency-rules-to-keep.md",
         "startLine": 28,
         "endLine": 34
       }
@@ -1343,7 +1343,7 @@
       "type": "REPLACED_BY",
       "to": "rule.repository_translates_infrastructure",
       "source": {
-        "file": "knowledge-graph/best-practices/12-settings-and-preference-storage.md",
+        "file": ".knowledge-graph/best-practices/12-settings-and-preference-storage.md",
         "startLine": 13,
         "endLine": 24
       }
@@ -1353,7 +1353,7 @@
       "type": "REPLACED_BY",
       "to": "rule.domain_time_provider_only",
       "source": {
-        "file": "knowledge-graph/best-practices/13-time-and-logical-date-practices.md",
+        "file": ".knowledge-graph/best-practices/13-time-and-logical-date-practices.md",
         "startLine": 5,
         "endLine": 9
       }
@@ -1363,7 +1363,7 @@
       "type": "REPLACED_BY",
       "to": "rule.shared_ui_no_hardcoded_strings",
       "source": {
-        "file": "knowledge-graph/best-practices/17-resource-and-localization-practices.md",
+        "file": ".knowledge-graph/best-practices/17-resource-and-localization-practices.md",
         "startLine": 14,
         "endLine": 22
       }
@@ -1373,7 +1373,7 @@
       "type": "REPLACED_BY",
       "to": "practice.feature_based_packaging",
       "source": {
-        "file": "knowledge-graph/best-practices/07-build-system-practices.md",
+        "file": ".knowledge-graph/best-practices/07-build-system-practices.md",
         "startLine": 16,
         "endLine": 23
       }
@@ -1383,7 +1383,7 @@
       "type": "REPLACED_BY",
       "to": "practice.small_mvi_base",
       "source": {
-        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "file": ".knowledge-graph/best-practices/14-presentation-layer-practices.md",
         "startLine": 31,
         "endLine": 35
       }
@@ -1393,7 +1393,7 @@
       "type": "APPLIES_TO",
       "to": "layer.navigation",
       "source": {
-        "file": "knowledge-graph/best-practices/15-navigation-practices.md",
+        "file": ".knowledge-graph/best-practices/15-navigation-practices.md",
         "startLine": 24,
         "endLine": 33
       }
@@ -1403,7 +1403,7 @@
       "type": "APPLIES_TO",
       "to": "layer.navigation",
       "source": {
-        "file": "knowledge-graph/best-practices/15-navigation-practices.md",
+        "file": ".knowledge-graph/best-practices/15-navigation-practices.md",
         "startLine": 24,
         "endLine": 33
       }
@@ -1413,7 +1413,7 @@
       "type": "APPLIES_TO",
       "to": "layer.presentation",
       "source": {
-        "file": "knowledge-graph/best-practices/06-dependency-rules-to-keep.md",
+        "file": ".knowledge-graph/best-practices/06-dependency-rules-to-keep.md",
         "startLine": 9,
         "endLine": 10
       }
@@ -1423,7 +1423,7 @@
       "type": "REQUIRES",
       "to": "rule.stable_composition_roots",
       "source": {
-        "file": "knowledge-graph/best-practices/30-stable-composition-root-practices.md",
+        "file": ".knowledge-graph/best-practices/30-stable-composition-root-practices.md",
         "startLine": 36,
         "endLine": 44
       }

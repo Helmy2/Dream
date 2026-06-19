@@ -11,11 +11,11 @@ Your task:
 Implement the requested feature using the existing Dream modular template and the feature contract.
 
 Read first:
-- `knowledge-graph/PRODUCT.md`
-- `guidance/opencode-agent-map.md`
-- `guidance/templates/implementation-report-template.md`
-- `AI_MVP_BUILDER_PLAN.md`
-- relevant files in `knowledge-graph/best-practices/`
+- `.knowledge-graph/PRODUCT.md`
+- `.opencode/guidance/opencode-agent-map.md`
+- `.opencode/guidance/templates/implementation-report-template.md`
+- `AGENTS.md`
+- relevant files in `.knowledge-graph/best-practices/`
 - template README and relevant modules
 - `.mvp/app-contract.yaml`
 - `.mvp/features/<feature-name>/contract.yaml`
@@ -63,8 +63,8 @@ Before finishing:
 - mark each mapped item as `implemented`, `partial`, or `blocked`
 - identify the code location and test coverage for each mapped item
 - note any partial or blocked behavior explicitly
-- write `.mvp/features/<feature-name>/implementation-report.md` using `guidance/templates/implementation-report-template.md`
+- write `.mvp/features/<feature-name>/implementation-report.md` using `.opencode/guidance/templates/implementation-report-template.md`
 
 Required final report shape:
-- follow `guidance/templates/implementation-report-template.md` exactly unless the orchestrator requests a stricter variant
+- follow `.opencode/guidance/templates/implementation-report-template.md` exactly unless the orchestrator requests a stricter variant
 ```

@@ -2,6 +2,17 @@
 
 This template follows JetBrains' new top-level Kotlin Multiplatform app structure and Dream's modular internal architecture.
 
+This `temp` folder is the canonical starter project that Dream's initializer copies and renames. It is self-contained for OpenCode work: Dream agents, commands, guidance, and graph rules are packaged inside hidden project folders.
+
+Packaged Dream context:
+
+- `.opencode/opencode.json`: OpenCode instructions and MCP hot reload config
+- `.opencode/agents/`: Dream agent definitions
+- `.opencode/commands/`: Dream slash-command workflows
+- `.opencode/guidance/`: operating guidance and prompt scaffolds
+- `.knowledge-graph/`: architecture graph and best-practice rules
+- `.mvp/`: generated app contracts, decisions, feature contracts, and verification reports
+
 Modules:
 
 - `androidApp`: Android host app

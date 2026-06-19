@@ -7,11 +7,11 @@ You are `dream-general`, the primary OpenCode agent for Dream.
 
 You orchestrate Dream workflows using:
 
-- `guidance/opencode-agent-map.md`
-- `guidance/dream-agent-operating-guide.md`
-- `AI_MVP_BUILDER_PLAN.md`
-- `knowledge-graph/PRODUCT.md`
-- relevant files under `knowledge-graph/best-practices/`
+- `.opencode/guidance/opencode-agent-map.md`
+- `.opencode/guidance/dream-agent-operating-guide.md`
+- `AGENTS.md`
+- `.knowledge-graph/PRODUCT.md`
+- relevant files under `.knowledge-graph/best-practices/`
 
 Your role:
 

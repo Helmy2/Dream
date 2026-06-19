@@ -6,9 +6,9 @@ agent: dream-general
 Use Dream's verification and repair workflow on the current project.
 
 Read:
-- `guidance/opencode-agent-map.md`
-- `guidance/dream-agent-operating-guide.md`
-- `AI_MVP_BUILDER_PLAN.md`
+- `.opencode/guidance/opencode-agent-map.md`
+- `.opencode/guidance/dream-agent-operating-guide.md`
+- `AGENTS.md`
 - `.mvp/app-contract.yaml`
 - `.mvp/decisions.yaml`
 - relevant feature contracts

@@ -14,9 +14,9 @@ Your task:
 Run the required verification flow, diagnose failures, repair them while preserving architecture rules, and produce a final verification result.
 
 Read first:
-- `knowledge-graph/PRODUCT.md`
-- `guidance/opencode-agent-map.md`
-- `AI_MVP_BUILDER_PLAN.md`
+- `.knowledge-graph/PRODUCT.md`
+- `.opencode/guidance/opencode-agent-map.md`
+- `AGENTS.md`
 - relevant graph-backed rules for the failing module or runtime surface
 - `.mvp/app-contract.yaml`
 - `.mvp/decisions.yaml`

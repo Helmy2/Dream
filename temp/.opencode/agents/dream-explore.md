@@ -25,8 +25,8 @@ Your job:
 
 Prioritize these sources when relevant:
 
-- `guidance/`
-- `knowledge-graph/`
+- `.opencode/guidance/`
+- `.knowledge-graph/`
 - `.mvp/`
 - `templates/`
 - target project modules under `feature/`, `shared/`, `androidApp/`, `iosApp/`, and `desktopApp/`

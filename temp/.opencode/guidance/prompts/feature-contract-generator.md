@@ -14,8 +14,8 @@ Inputs you must use:
 - user request
 - `.mvp/app-contract.yaml`
 - `.mvp/decisions.yaml` if present
-- `AI_MVP_BUILDER_PLAN.md`
-- relevant architecture rules from `knowledge-graph/`
+- `AGENTS.md`
+- relevant architecture rules from `.knowledge-graph/`
 
 Rules:
 - keep the contract compact

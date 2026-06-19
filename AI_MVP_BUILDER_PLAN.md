@@ -14,9 +14,9 @@ Use it to answer three questions quickly:
 
 Detailed architecture and generation rules live in:
 
-- `guidance/`
-- `knowledge-graph/`
-- `templates/`
+- `temp/.opencode/guidance/`
+- `temp/.knowledge-graph/`
+- `temp/`
 - `docs/first-try-report.md`
 
 This file should stay compact, current, and task-oriented.
@@ -48,14 +48,14 @@ This file should stay compact, current, and task-oriented.
 
 Dream currently builds on:
 
-- a knowledge graph under `knowledge-graph/`
-- OpenCode-first guidance under `guidance/`
-- a modular KMP base template at `templates/dream-kmp-base/`
-- Dream-specific agents and commands under `.opencode/`
+- a canonical starter project under `temp/`
+- a packaged knowledge graph under `temp/.knowledge-graph/`
+- packaged OpenCode guidance under `temp/.opencode/guidance/`
+- packaged Dream agents and commands under `temp/.opencode/`
 
-The near-term product step is improving the OpenCode command workflow and regression loop.
+The near-term product step is finishing the initializer packaging workflow and regression loop.
 
-Dream should remain OpenCode-first until the generation, verification, repair, and review flow is reliable enough to wrap in another interface.
+Dream should remain OpenCode-first. The initializer should only copy `temp/`, rename it, apply deterministic identity rewrites, and tell the user to open the generated project in OpenCode.
 
 ## Current Workflow
 
@@ -118,12 +118,12 @@ Final success requires:
 
 ### Foundation
 
-- created `knowledge-graph/` with schema, graph data, source chunks, product identity, and split best-practice sources
+- created `.knowledge-graph/` with schema, graph data, source chunks, product identity, and split best-practice sources
 - removed the old monolithic `BEST_PRACTICES.md`
-- created Dream guidance under `guidance/`
+- created Dream guidance under `.opencode/guidance/`
 - created Dream agents and commands under `.opencode/`
 - aligned Dream around OpenCode-first orchestration
-- confirmed the modular base template at `templates/dream-kmp-base/`
+- consolidated the modular KMP starter under root `temp/` as the initializer copy source
 - defined the direction to make Dream OpenCode-first before any backend work
 
 ### First Usable Flow
@@ -222,26 +222,26 @@ The first run proved that Dream can generate a runnable project, but it also exp
 3. Add a first-run regression checklist.
 - Re-run the same expense-tracker flow after each major Dream prompt or rule update.
 
-4. Define the OpenCode regression surface clearly.
-- Lock the repeatable smoke prompts, expected `.mvp/` outputs, verification behavior, and report locations before adding more generation scope.
+4. Define the initializer rewrite surface clearly.
+- Lock the identity rewrite files, expected `.mvp/` outputs, OpenCode handoff behavior, verification behavior, and report locations before adding more generation scope.
 
 ## File Areas To Update Next
 
 ### Guidance
 
-- `guidance/prompts/feature-implementation.md`
-- `guidance/prompts/feature-contract-generator.md`
-- `guidance/prompts/project-instantiation.md`
-- `guidance/prompts/verification-and-repair.md`
-- `guidance/prompts/app-contract-generator.md`
+- `temp/.opencode/guidance/prompts/feature-implementation.md`
+- `temp/.opencode/guidance/prompts/feature-contract-generator.md`
+- `temp/.opencode/guidance/prompts/project-instantiation.md`
+- `temp/.opencode/guidance/prompts/verification-and-repair.md`
+- `temp/.opencode/guidance/prompts/app-contract-generator.md`
 
 ### OpenCode Commands And Agents
 
-- `.opencode/commands/dream-create.md`
-- `.opencode/commands/dream-review.md`
-- `.opencode/commands/dream-verify.md`
-- `.opencode/agents/dream-general.md`
-- `.opencode/agents/dream-inspector.md`
+- `temp/.opencode/commands/dream-create.md`
+- `temp/.opencode/commands/dream-review.md`
+- `temp/.opencode/commands/dream-verify.md`
+- `temp/.opencode/agents/dream-general.md`
+- `temp/.opencode/agents/dream-inspector.md`
 
 ### Knowledge Graph Rules To Reinforce In Retrieval
 
@@ -269,6 +269,7 @@ The first run proved that Dream can generate a runnable project, but it also exp
 
 ### Not Started
 
+- initializer CLI copy-and-rename tool
 - formal regression checklist for repeated Dream smoke tests
 
 Backend generation is intentionally out of scope for now.
@@ -280,8 +281,9 @@ Backend generation is intentionally out of scope for now.
 3. Tighten project instantiation prompt around app identity and package normalization.
 4. Add minimum UI quality expectations to contract and implementation prompts.
 5. Define fallback behavior when `dream-inspector` tooling fails.
-6. Re-run the expense tracker smoke test through OpenCode after those updates.
-7. Document the second-run results in this file and in a dedicated run report.
+6. Implement the initializer rewrite surface for copying `temp/` into a new app.
+7. Re-run the expense tracker smoke test through OpenCode after those updates.
+8. Document the second-run results in this file and in a dedicated run report.
 
 ## Working Rule For This File
 
@@ -295,4 +297,4 @@ When Dream changes, update:
 - `Next Tasks`
 
 Do not turn this file back into a giant architecture essay.
-Use `guidance/` and `knowledge-graph/` for detailed rules.
+Use `temp/.opencode/guidance/` and `temp/.knowledge-graph/` for detailed rules.

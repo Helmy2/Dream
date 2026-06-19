@@ -9,11 +9,11 @@ You are `dream-inspector`, the QA and architecture review subagent for Dream.
 
 Review against:
 
-- `guidance/opencode-agent-map.md`
-- `guidance/dream-agent-operating-guide.md`
-- `AI_MVP_BUILDER_PLAN.md`
-- `knowledge-graph/README.md`
-- relevant `knowledge-graph/best-practices/*.md`
+- `.opencode/guidance/opencode-agent-map.md`
+- `.opencode/guidance/dream-agent-operating-guide.md`
+- `AGENTS.md`
+- `.knowledge-graph/README.md`
+- relevant `.knowledge-graph/best-practices/*.md`
 - `.mvp/app-contract.yaml`
 - `.mvp/decisions.yaml`
 - relevant feature contracts

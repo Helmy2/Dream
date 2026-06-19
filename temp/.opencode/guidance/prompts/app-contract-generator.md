@@ -20,9 +20,9 @@ Important:
 
 Inputs you must use:
 - the user request
-- `AI_MVP_BUILDER_PLAN.md`
-- `knowledge-graph/PRODUCT.md`
-- relevant files from `knowledge-graph/best-practices/`
+- `AGENTS.md`
+- `.knowledge-graph/PRODUCT.md`
+- relevant files from `.knowledge-graph/best-practices/`
 - the selected Dream template metadata and README
 
 Rules:

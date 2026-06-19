@@ -1,7 +1,0 @@
-{
-  "$schema": "https://opencode.ai/config.json",
-  "instructions": [
-    "guidance/opencode-agent-map.md",
-    "guidance/dream-agent-operating-guide.md"
-  ]
-}

@@ -8,9 +8,9 @@ Use Dream's OpenCode-first workflow to add or update a feature in the current pr
 Treat `$ARGUMENTS` as the feature request.
 
 Read:
-- `guidance/opencode-agent-map.md`
-- `guidance/dream-agent-operating-guide.md`
-- relevant `knowledge-graph/best-practices/*.md`
+- `.opencode/guidance/opencode-agent-map.md`
+- `.opencode/guidance/dream-agent-operating-guide.md`
+- relevant `.knowledge-graph/best-practices/*.md`
 - `.mvp/app-contract.yaml`
 - `.mvp/decisions.yaml`
 - existing feature contracts if present
