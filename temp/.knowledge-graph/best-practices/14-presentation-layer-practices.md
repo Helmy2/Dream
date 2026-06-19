@@ -88,7 +88,75 @@ Best practice:
 - make retry behavior explicit instead of relying on reconstruction side effects
 - keep first-load behavior testable without a Compose runtime
 
-### 13.8 One caution from the current codebase
+### 13.8 Split screens into a Screen/Content pair
+
+Each screen should be composed of two composable functions:
+
+- **`XxxScreen`** — the smart container. Accepts the ViewModel (defaulting to `koinViewModel()`) and navigation callbacks. Collects state, observes `eventFlow` for one-shot effects, dispatches initial actions, and delegates rendering to `XxxContent`.
+- **`XxxContent`** — the pure presentation composable. Accepts only the state, an event callback, and an optional `modifier`. No ViewModel dependency, no effect handling, no navigation awareness.
+
+This keeps rendering testable without a ViewModel and makes effect handling (navigation, snackbars) explicit at the screen boundary.
+
+```kotlin
+@Composable
+fun SampleScreen(
+    viewModel: SampleViewModel = koinViewModel(),
+    onNavigateBack: () -> Unit = {}
+) {
+    val state by viewModel.state.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.eventFlow.collect { event ->
+            // handle one-shot effects
+        }
+    }
+
+    LaunchedEffect(viewModel) {
+        viewModel.onAction(SampleAction.Load())
+    }
+
+    SampleContent(
+        state = state,
+        onAction = { action -> viewModel.onAction(action) },
+        onNavigateBack = onNavigateBack
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SampleContent(
+    state: SampleState,
+    onAction: (SampleAction) -> Unit,
+    onNavigateBack: () -> Unit = {},
+    modifier: Modifier = Modifier
+) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(Res.string.sample_title)) },
+                navigationIcon = {
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
+                    }
+                }
+            )
+        },
+        modifier = modifier
+    ) { innerPadding ->
+        // pure rendering, no ViewModel reference
+    }
+}
+```
+
+Best practice:
+
+- keep `XxxScreen` thin — wire ViewModel, collect effects, delegate layout
+- keep `XxxContent` stateless — derive everything from `state`, emit actions via `onAction`
+- wrap every `XxxContent` in a `Scaffold` with a `TopAppBar` for consistent screen structure
+- pass navigation as explicit lambda parameters (`onNavigateBack`, etc.), not via a navigator singleton
+- add a `@PreviewScreenSizes` annotated wrapper to `XxxContent` with sample state for IDE preview
+
+### 13.9 One caution from the current codebase
 
 Not every presentation module in a real codebase will be fully aligned. For example, one screen may still use plain `ViewModel` plus internal `MutableStateFlow` rather than the shared MVI base.
 

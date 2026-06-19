@@ -9,4 +9,6 @@ dependencies {
     commonMainImplementation(libs.compose.ui)
     commonMainImplementation(libs.compose.components.resources)
     commonMainImplementation(libs.compose.uiToolingPreview)
+    commonMainImplementation(libs.compose.uiTooling)
+    commonMainImplementation(libs.compose.icons.core)
 }

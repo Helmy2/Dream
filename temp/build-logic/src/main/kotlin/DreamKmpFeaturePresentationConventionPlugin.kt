@@ -14,7 +14,15 @@ class DreamKmpFeaturePresentationConventionPlugin : Plugin<Project> {
             extensions.configure<KotlinMultiplatformExtension> {
                 sourceSets.commonMain.dependencies {
                     implementation(libs.androidx.lifecycle.runtimeCompose)
+                    implementation(libs.compose.icons.core)
+                    implementation(libs.compose.uiToolingPreview)
                     implementation(libs.kotlinx.coroutines.core)
+                }
+                sourceSets.getByName("androidMain").dependencies {
+                    implementation(libs.compose.uiTooling)
+                }
+                sourceSets.getByName("desktopMain").dependencies {
+                    implementation(libs.compose.uiTooling)
                 }
             }
         }
