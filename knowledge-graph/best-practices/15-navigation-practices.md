@@ -1,50 +1,53 @@
 # 15. Navigation Practices
 
-A centralized navigation structure is one of the clearest reusable patterns in this style of app.
+A centralized Navigation 3 structure is one of the clearest reusable patterns in this style of app.
 
-### 14.1 Central app shell
+### 15.1 Central app shell
 
-A root app shell can act as the single structural entry point for shared Android UI.
+A root app shell acts as the single structural entry point for shared UI.
 
 Best practice:
 
-- keep app-wide navigation, theme application, and layout direction at the shell level
+- keep app-wide navigation, theme application, and safe-area handling at the shell level
 - keep feature screens unaware of the full routing graph when possible
 
-### 14.2 Typed routes
+### 15.2 Navigation 3 typed routes
 
-Routes are modeled as `@Serializable data object` instances implementing a sealed `Route` hierarchy.
+Routes are modeled as typed values implementing a sealed route hierarchy, such as `SampleRoute : AppRoute`.
+
+Keep the top-level route hierarchy in a shared presentation/core module when both feature presentation and shared navigation need to reference it. Do not duplicate route types in the navigation module.
 
 Why this is good:
 
 - exhaustive route handling
-- safer saved-state serialization
 - less stringly-typed navigation
+- a direct path to serializable route keys when destinations need arguments or saved back stacks
 
-### 14.3 Keep feature modules decoupled from routing when possible
+### 15.3 Navigator owns the back stack
 
-The home feature does not depend on `shared:navigation`. Instead, it receives plain callbacks.
-
-This is highly reusable.
+Shared navigation should expose a small `Navigator` with a mutable back stack and intent-level operations such as `goTo()` and `goBack()`.
 
 Best practice:
 
-- pass intent-level callbacks into feature UI modules
-- keep routing infrastructure at the app shell or coordinator layer
+- keep the back stack in a stable shared navigation owner
+- render it with Navigation 3 `NavDisplay`
+- make back behavior a product rule instead of an accidental side effect of navigation defaults
 
-### 14.4 Differentiate top-level tabs from push destinations
+### 15.4 Koin owns entry providers
+
+Composition roots or feature presentation modules should register Koin Navigation 3 entries with `navigation<Route> { ... }`.
+
+Best practice:
+
+- keep route-to-screen wiring in Compose/UI modules, not non-Compose core export modules
+- keep feature modules free of global route dependencies unless the feature owns the destination or nested graph
+- retrieve DI-managed screen dependencies at the navigation entry boundary
+
+### 15.5 Differentiate top-level tabs from push destinations
 
 A well-structured app should clearly separate:
 
-- top-level routes with bottom bar visibility
-- push destinations without bottom bar visibility
+- top-level routes with persistent navigation chrome
+- push destinations without persistent navigation chrome
 
-This is a simple but effective app-shell rule that improves consistency.
-
-### 14.5 Back behavior should be intentional
-
-The app uses `AppBackHandler` and a `goHome()` pattern for non-home routes.
-
-Best practice:
-
-- define global back behavior as a product rule, not an accidental side effect of navigation defaults
+This app-shell rule improves consistency as the graph grows.

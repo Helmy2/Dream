@@ -11,5 +11,6 @@ android {
 }
 
 dependencies {
+    implementation(projects.shared.umbrellaCore)
     implementation(projects.shared.umbrellaUi)
 }

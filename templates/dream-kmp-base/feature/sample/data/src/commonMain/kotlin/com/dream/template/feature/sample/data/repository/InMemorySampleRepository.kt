@@ -5,7 +5,7 @@ import com.dream.template.feature.sample.domain.repository.SampleRepository
 import com.dream.template.shared.core.domain.Result
 
 class InMemorySampleRepository : SampleRepository {
-    override fun loadItems(): Result<List<SampleItem>> = Result.Success(
+    override suspend fun loadItems(): Result<List<SampleItem>> = Result.Success(
         listOf(
             SampleItem(
                 title = "Contract-first features",

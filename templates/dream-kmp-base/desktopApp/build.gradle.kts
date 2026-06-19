@@ -10,10 +10,12 @@ kotlin {
 
     sourceSets {
         jvmMain.dependencies {
+            implementation(projects.shared.umbrellaCore)
             implementation(projects.shared.umbrellaUi)
             implementation(compose.desktop.currentOs)
             implementation(libs.compose.uiTooling)
             implementation(libs.compose.material3)
+            implementation(libs.kotlinx.coroutines.swing)
         }
         jvmTest.dependencies {
             implementation(kotlin("test"))

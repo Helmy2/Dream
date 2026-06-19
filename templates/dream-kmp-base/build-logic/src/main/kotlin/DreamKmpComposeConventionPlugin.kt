@@ -18,6 +18,7 @@ class DreamKmpComposeConventionPlugin : Plugin<Project> {
             extensions.configure<org.jetbrains.compose.ComposeExtension> {
                 (this as ExtensionAware).extensions.configure<ResourcesExtension>("resources") {
                     packageOfResClass = modulePackage
+                    publicResClass = true
                 }
             }
 

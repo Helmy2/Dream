@@ -5,16 +5,21 @@ import com.dream.template.shared.core.domain.AppError
 import com.dream.template.shared.core.domain.Result
 import com.dream.template.shared.core.presentation.MviViewModel
 import kotlinx.coroutines.CoroutineScope
+import org.koin.core.annotation.KoinViewModel
 
 class SampleViewModel(
     private val repository: SampleRepository,
-    coroutineScope: CoroutineScope
+    actionScope: CoroutineScope? = null
 ) : MviViewModel<SampleState, SampleAction, SampleEvent>(
     initialState = SampleState(),
-    scope = coroutineScope
+    actionScope = actionScope
 ) {
+    private var hasLoadedOnce = false
 
-    fun load() {
+    suspend fun load(force: Boolean = false) {
+        if (hasLoadedOnce && !force) return
+
+        hasLoadedOnce = true
         updateState { current ->
             current.copy(contentState = SampleContentState.Loading)
         }
@@ -38,7 +43,7 @@ class SampleViewModel(
 
     override suspend fun handleAction(action: SampleAction) {
         when (action) {
-            SampleAction.Load -> load()
+            is SampleAction.Load -> load(force = action.force)
         }
     }
 

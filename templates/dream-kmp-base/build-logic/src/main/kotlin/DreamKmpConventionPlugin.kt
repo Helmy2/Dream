@@ -13,6 +13,8 @@ class DreamKmpConventionPlugin : Plugin<Project> {
             pluginManager.apply("com.android.kotlin.multiplatform.library")
 
             val libs = the<org.gradle.accessors.dm.LibrariesForLibs>()
+            val coroutinesAndroid = libs.kotlinx.coroutines.android
+            val coroutinesSwing = libs.kotlinx.coroutines.swing
 
             extensions.configure<KotlinMultiplatformExtension> {
                 jvmToolchain(17)
@@ -21,7 +23,7 @@ class DreamKmpConventionPlugin : Plugin<Project> {
                     freeCompilerArgs.add("-Xexpect-actual-classes")
                 }
 
-                android {
+                configureAndroid {
                     namespace = target.path
                         .trim(':')
                         .split(':')
@@ -39,11 +41,19 @@ class DreamKmpConventionPlugin : Plugin<Project> {
                     iosArm64(),
                     iosSimulatorArm64()
                 )
+
+                sourceSets.getByName("androidMain").dependencies {
+                    implementation(coroutinesAndroid)
+                }
+
+                sourceSets.getByName("desktopMain").dependencies {
+                    implementation(coroutinesSwing)
+                }
             }
         }
     }
 
-    private fun KotlinMultiplatformExtension.android(
+    private fun KotlinMultiplatformExtension.configureAndroid(
         configure: KotlinMultiplatformAndroidLibraryExtension.() -> Unit
     ) {
         (this as ExtensionAware).extensions.configure("android", configure)

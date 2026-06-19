@@ -32,3 +32,13 @@ Reusable principle:
 - do not rely on repeated construction inside recomposing UI to trigger loading
 - avoid coupling init-time loading to unstable composition paths
 - make refresh and initial-load behavior explicit and testable
+
+### 30.4 Let root composables retrieve stable ViewModels, not build them
+
+DI-backed root composables may retrieve stable ViewModels from the container, but they should not construct repositories or coroutine scopes to manufacture them.
+
+Reusable principle:
+
+- use root composables to retrieve DI-managed ViewModels
+- avoid pairing `rememberCoroutineScope()` with manual ViewModel factories for screen lifetime management
+- keep platform lifecycle ownership aligned with the DI entry point

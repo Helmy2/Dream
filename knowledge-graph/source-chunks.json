@@ -44,10 +44,10 @@
       "source": {
         "file": "knowledge-graph/best-practices/09-domain-layer-practices.md",
         "startLine": 1,
-        "endLine": 61
+        "endLine": 71
       },
-      "summary": "Defines pure domain, typed result modeling, use case naming, and time access through TimeProvider.",
-      "text": "Domain should remain platform-agnostic and framework-light. Domain models describe business meaning, not storage shape. Repository interfaces live in domain and implementations live in data. Use typed result wrappers for domain-facing operations and define domain-specific error hierarchies. Domain and feature code must not call Clock.System.now() directly; time flows through TimeProvider."
+      "summary": "Defines pure domain, typed result modeling, cancellation-safe suspend result helpers, use case naming, and time access through TimeProvider.",
+      "text": "Domain should remain platform-agnostic and framework-light. Domain models describe business meaning, not storage shape. Repository interfaces live in domain and implementations live in data. Use typed result wrappers for domain-facing operations and define domain-specific error hierarchies. Shared suspend result helpers should preserve structured concurrency by rethrowing CancellationException and mapping only real failures. Domain and feature code must not call Clock.System.now() directly; time flows through TimeProvider."
     },
     {
       "id": "chunk.data.practices",
@@ -57,8 +57,8 @@
         "startLine": 1,
         "endLine": 72
       },
-      "summary": "Defines repository translation boundaries, safeCall behavior, cache-first reads, per-feature clients, and mapper placement.",
-      "text": "Repositories translate external systems into domain-safe behavior. They map DTOs and entities into domain models, convert infrastructure failures into domain errors, and expose domain-friendly return types. Repository helpers must always rethrow CancellationException. Prefer local cache as the first read path when appropriate. Data modules that talk to a backend should own a named HttpClient unless there is a strong reason to share one. Mapping should stay near the boundary, with data mapping in data and domain-to-UI mapping in presentation."
+      "summary": "Defines repository translation boundaries, cancellation-safe helpers, cache-first reads, shared Room builder setup, per-feature clients, and mapper placement.",
+      "text": "Repositories translate external systems into domain-safe behavior. They map DTOs and entities into domain models, convert infrastructure failures into domain errors, and expose domain-friendly return types. Repository helpers must always rethrow CancellationException. Prefer local cache as the first read path when appropriate. Common Room builder setup belongs in shared/core/database so feature data modules do not duplicate bundled SQLite driver or KMP-safe query dispatcher policy. Data modules that talk to a backend should own a named HttpClient unless there is a strong reason to share one. Mapping should stay near the boundary, with data mapping in data and domain-to-UI mapping in presentation."
     },
     {
       "id": "chunk.presentation.practices",
@@ -66,10 +66,10 @@
       "source": {
         "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
         "startLine": 1,
-        "endLine": 71
+        "endLine": 99
       },
-      "summary": "Defines state/action/event separation, a small MVI base, exclusive jobs, and consistent presentation structure.",
-      "text": "Presentation should separate UiState, UiAction, and UiEvent. A base MVI view model should stay small and practical, providing state, eventFlow, reduce, intent, and exclusiveIntent primitives only. Observation pipelines should be grouped by business concern. Prefer one consistent presentation pattern across the app, using the shared MVI base unless there is a compelling reason not to."
+      "summary": "Defines state/action/event separation, a small lifecycle-backed MVI base, sequential action handling, explicit initial loading, and consistent presentation structure.",
+      "text": "Presentation should separate UiState, UiAction, and UiEvent. A base MVI view model should stay small and practical, extend lifecycle ViewModel when screen state is long-lived, and process rapid actions through a single sequential queue. Initial loading and retry behavior should be explicit and testable from stable lifecycle-aware entry points. Observation pipelines should be grouped by business concern. Prefer one consistent presentation pattern across the app, using the shared MVI base unless there is a compelling reason not to."
     },
     {
       "id": "chunk.navigation.practices",
@@ -77,10 +77,10 @@
       "source": {
         "file": "knowledge-graph/best-practices/15-navigation-practices.md",
         "startLine": 1,
-        "endLine": 50
+        "endLine": 52
       },
-      "summary": "Defines app shell ownership, typed routes, callback-based feature decoupling, top-level route separation, and intentional back behavior.",
-      "text": "A root app shell should own app-wide navigation, theme application, and layout direction. Routes should be typed. Feature modules should stay decoupled from routing when callbacks are sufficient. Top-level tabs should be separated from push destinations, and back behavior should be an intentional product rule."
+      "summary": "Defines app shell ownership, Navigation 3 typed routes, canonical route ownership, Navigator back stack ownership, Koin entry providers, and top-level route separation.",
+      "text": "A root app shell should own app-wide navigation, theme application, and safe-area handling. Navigation 3 routes should be typed values, such as SampleRoute implementing AppRoute, and the top-level route hierarchy should live in one shared presentation/core module instead of being duplicated in navigation. Shared navigation should expose a small Navigator that owns the back stack and renders it with NavDisplay. Compose UI modules should register Koin Navigation 3 entries with navigation<Route> { ... } and retrieve screen dependencies at the navigation entry boundary. Feature modules should stay free of global route dependencies unless they own the destination or a nested graph."
     },
     {
       "id": "chunk.resources.localization",
@@ -88,10 +88,10 @@
       "source": {
         "file": "knowledge-graph/best-practices/17-resource-and-localization-practices.md",
         "startLine": 1,
-        "endLine": 30
+        "endLine": 31
       },
-      "summary": "Defines centralized strings, no hardcoded user-visible strings, and a canonical Res import path.",
-      "text": "All user-visible strings should come from shared design-system resources. Shared UI code should not hardcode user-visible strings. One canonical Res import path should be defined and used consistently across modules."
+      "summary": "Defines shared/core/strings Compose Resources, no hardcoded user-visible strings, public Res export, and a canonical Res import path.",
+      "text": "Shared user-visible strings should come from the dedicated shared/core/strings Compose Resources module. Shared UI code should not hardcode user-visible strings. Resource modules that are consumed across module boundaries should export the generated Res class publicly. One canonical Res import path should be defined and used consistently across modules, such as com.dream.template.shared.core.strings.Res for template strings."
     },
     {
       "id": "chunk.di.practices",
@@ -99,10 +99,21 @@
       "source": {
         "file": "knowledge-graph/best-practices/18-dependency-injection-practices.md",
         "startLine": 1,
-        "endLine": 36
+        "endLine": 48
       },
-      "summary": "Defines top-level DI startup, split registrations by layer and platform, constructor injection, and explicit platform service injection.",
-      "text": "startKoin should be called only from top-level app initialization paths. Shared modules provide shared registrations, platform modules provide platform implementations, and composition roots assemble everything together. Constructor injection is the default. Platform services should be injected through shared interfaces instead of reaching across boundaries directly."
+      "summary": "Defines top-level DI startup, non-Compose core registrations, UI-owned navigation and ViewModel registrations, constructor injection, and explicit platform service injection.",
+      "text": "startKoin should be called only from top-level app initialization paths. Non-Compose shared modules provide domain/data registrations, UI modules provide navigation, screen, and view-model registrations, platform startup paths provide platform factories, and composition roots assemble everything without making exported core modules depend on Compose. Constructor injection is the default. Lifecycle ViewModels should be registered through Koin's dedicated view-model DSL and retrieved from Compose through koinViewModel() instead of being built from rememberCoroutineScope(). Platform services should be injected through shared interfaces instead of reaching across boundaries directly."
+    },
+    {
+      "id": "chunk.testing.practices",
+      "title": "Testing-Oriented Practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/23-testing-oriented-practices-to-reuse.md",
+        "startLine": 1,
+        "endLine": 29
+      },
+      "summary": "Defines reusable testing anchors such as injected time, explicit repository boundaries, and shared test utilities in shared/core/testing.",
+      "text": "Keep domain pure, inject time, and use explicit repository interfaces with typed results to reduce mocking complexity. Shared fake providers and coroutine-aware helpers should live in shared/core/testing so features can reuse one test infrastructure baseline. Test feature behavior at the feature layer and queue semantics at the shared presentation layer."
     },
     {
       "id": "chunk.defaults.and_anti_patterns",
@@ -132,10 +143,10 @@
       "source": {
         "file": "knowledge-graph/best-practices/30-stable-composition-root-practices.md",
         "startLine": 1,
-        "endLine": 27
+        "endLine": 44
       },
-      "summary": "Defines stable dependency assembly outside recomposing composables and forbids eager side effects at unstable creation sites.",
-      "text": "Repositories, use cases, and ViewModels should be assembled at stable roots such as app initialization, coordinators, or factories, not created inside recomposing composables. Root composables should stay orchestration-focused, and initial loading should not rely on unstable repeated construction paths."
+      "summary": "Defines stable dependency assembly outside recomposing composables, explicit initial loading, and DI-managed ViewModel retrieval at root composables.",
+      "text": "Repositories, use cases, and ViewModels should be assembled at stable roots such as app initialization, coordinators, or factories, not created inside recomposing composables. Root composables should stay orchestration-focused, initial loading should not rely on unstable repeated construction paths, and root composables may retrieve DI-managed ViewModels but should not construct repositories or coroutine scopes to manufacture them."
     },
     {
       "id": "chunk.ui_quality.practices",

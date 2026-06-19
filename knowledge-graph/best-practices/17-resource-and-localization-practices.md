@@ -2,7 +2,7 @@
 
 A strong resource rule is:
 
-- all user-visible strings come from `shared/designsystem` resources
+- all shared user-visible strings come from the dedicated `shared/core/strings` Compose Resources module
 
 ### 16.1 Single source of truth for strings
 
@@ -10,6 +10,7 @@ Best practice to copy directly:
 
 - keep one shared strings source for shared UI layers
 - do not create random feature-local string stores unless architecture truly requires it
+- export the generated `Res` class publicly when another module consumes those resources
 
 ### 16.2 No hardcoded strings in composables
 
@@ -23,7 +24,7 @@ Why it helps:
 
 ### 16.3 Standardize the `Res` import path
 
-The project documents the correct `Res` import and avoids alias confusion.
+The project documents the correct `Res` import and avoids alias confusion. For the template strings module, use `com.dream.template.shared.core.strings.Res`.
 
 Best practice:
 

@@ -2,7 +2,17 @@
 
 This architecture works especially well in local-first applications.
 
-### 10.1 Single shared Room database
+### 11.1 Shared Room database helpers
+
+Common Room builder setup should live in `shared/core/database` so feature data modules do not duplicate driver or query dispatcher policy.
+
+Best practice:
+
+- put bundled SQLite driver setup in the shared database core module
+- use KMP-safe coroutine dispatchers directly, such as `Dispatchers.Default`, instead of a template-specific dispatcher provider abstraction
+- keep feature-specific databases, DAOs, entities, and factories in the feature data module unless multiple features truly share one schema
+
+### 11.2 Single shared Room database
 
 The app can use one shared database for multiple features.
 
@@ -12,7 +22,7 @@ Why this is useful:
 - feature-specific tables can still live together cleanly
 - easier migrations and schema export management
 
-### 10.2 Entity design follows feature boundaries
+### 11.3 Entity design follows feature boundaries
 
 The schema is feature-oriented:
 
@@ -26,7 +36,7 @@ Best practice:
 - let entities model stable persistence needs, not temporary UI shapes
 - use singleton rows when the business object is logically singular, such as settings-like goals or bookmarks
 
-### 10.3 Auto migrations where possible
+### 11.4 Auto migrations where possible
 
 The database uses auto migrations when possible and explicit migration logic when needed.
 
@@ -36,7 +46,7 @@ Best practice:
 - use explicit migration logic only when schema transformation requires it
 - export schema files and keep them in version control
 
-### 10.4 DAO exposure through DI
+### 11.5 DAO exposure through DI
 
 The database module exposes DAOs individually through Koin.
 

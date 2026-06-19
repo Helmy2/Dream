@@ -3,6 +3,7 @@ plugins {
 }
 
 dependencies {
+    commonMainImplementation(projects.shared.umbrellaCore)
     commonMainImplementation(projects.feature.sample.data)
     commonMainImplementation(projects.feature.sample.domain)
     commonMainImplementation(projects.shared.core.presentation)
@@ -10,6 +11,8 @@ dependencies {
     commonMainApi(projects.shared.navigation)
     commonMainApi(projects.feature.sample.presentation)
     commonMainImplementation(libs.compose.runtime)
+    commonMainImplementation(libs.koin.compose)
+    commonMainImplementation(libs.koin.composeViewModel)
 }
 
 kotlin {
@@ -20,9 +23,6 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "Shared"
             isStatic = true
-            export(projects.shared.designsystem)
-            export(projects.shared.navigation)
-            export(projects.feature.sample.presentation)
         }
     }
 }

@@ -13,9 +13,10 @@ Best practice:
 
 Good reusable pattern:
 
-- shared modules provide shared registrations
-- Android and iOS provide platform implementations through dedicated modules
-- composition roots assemble everything together
+- non-Compose shared modules provide domain/data registrations
+- UI modules provide navigation, screen, and view-model registrations
+- Android, Desktop, and iOS provide platform factories or implementations through dedicated startup paths
+- composition roots assemble everything together without making exported core modules depend on Compose
 
 ### 17.3 Constructor injection everywhere possible
 
@@ -23,7 +24,18 @@ Most of the codebase follows constructor injection for repositories, use cases, 
 
 That remains the cleanest default.
 
-### 17.4 iOS bridge injection is explicit
+### 17.4 Prefer DI-managed ViewModel creation
+
+If a screen state holder is a lifecycle `ViewModel`, register it with the DI container through the dedicated view-model DSL instead of a plain factory.
+
+Best practice:
+
+- use Koin's `viewModel` or `viewModelOf` DSL for shared view models
+- let Compose retrieve view models through `koinViewModel()` instead of building them from `rememberCoroutineScope()`
+- keep runtime parameters explicit and rare
+- keep ViewModel and Navigation 3 entry-provider modules out of SwiftUI-facing `umbrella-core` modules
+
+### 17.5 iOS bridge injection is explicit
 
 `initializeKoin(...)` accepts Swift-provided implementations such as:
 

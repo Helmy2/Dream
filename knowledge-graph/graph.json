@@ -58,7 +58,7 @@
       "source": {
         "file": "knowledge-graph/best-practices/09-domain-layer-practices.md",
         "startLine": 1,
-        "endLine": 61
+        "endLine": 71
       }
     },
     {
@@ -82,7 +82,7 @@
       "source": {
         "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
         "startLine": 1,
-        "endLine": 71
+        "endLine": 99
       }
     },
     {
@@ -106,7 +106,7 @@
       "source": {
         "file": "knowledge-graph/best-practices/17-resource-and-localization-practices.md",
         "startLine": 1,
-        "endLine": 30
+        "endLine": 31
       }
     },
     {
@@ -118,7 +118,19 @@
       "source": {
         "file": "knowledge-graph/best-practices/18-dependency-injection-practices.md",
         "startLine": 1,
-        "endLine": 36
+        "endLine": 46
+      }
+    },
+    {
+      "id": "section.testing_practices",
+      "type": "Section",
+      "title": "Testing-Oriented Practices To Reuse",
+      "sectionNumber": "23",
+      "documentId": "document.best_practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/23-testing-oriented-practices-to-reuse.md",
+        "startLine": 1,
+        "endLine": 29
       }
     },
     {
@@ -166,7 +178,7 @@
       "source": {
         "file": "knowledge-graph/best-practices/30-stable-composition-root-practices.md",
         "startLine": 1,
-        "endLine": 27
+        "endLine": 44
       }
     },
     {
@@ -290,6 +302,19 @@
       }
     },
     {
+      "id": "practice.cancellation_safe_result_helpers",
+      "type": "Practice",
+      "name": "Use cancellation-safe suspend result helpers",
+      "statement": "Wrap suspend infrastructure work with one shared helper that rethrows CancellationException and maps only real failures into domain or app errors.",
+      "classification": "universal",
+      "strength": "recommended",
+      "source": {
+        "file": "knowledge-graph/best-practices/09-domain-layer-practices.md",
+        "startLine": 35,
+        "endLine": 43
+      }
+    },
+    {
       "id": "practice.cache_first_reads",
       "type": "Practice",
       "name": "Prefer cache-first reads",
@@ -319,26 +344,26 @@
       "id": "practice.callback_navigation_decoupling",
       "type": "Practice",
       "name": "Decouple feature UI from routing",
-      "statement": "Pass intent-level callbacks into feature UI and keep routing infrastructure at the app shell when possible.",
+      "statement": "Keep route-to-screen wiring in the shared composition root and keep feature modules free of global route dependencies unless they own a nested graph.",
       "classification": "universal",
       "strength": "recommended",
       "source": {
         "file": "knowledge-graph/best-practices/15-navigation-practices.md",
-        "startLine": 24,
-        "endLine": 33
+        "startLine": 33,
+        "endLine": 41
       }
     },
     {
       "id": "practice.shared_strings",
       "type": "Practice",
       "name": "Centralize user-visible strings",
-      "statement": "Keep one shared strings source for shared UI layers and avoid feature-local string stores unless architecture truly requires them.",
+      "statement": "Keep shared user-visible strings in shared/core/strings Compose Resources and export the generated Res class publicly for cross-module consumers.",
       "classification": "kmp_oriented",
       "strength": "recommended",
       "source": {
         "file": "knowledge-graph/best-practices/17-resource-and-localization-practices.md",
         "startLine": 3,
-        "endLine": 12
+        "endLine": 14
       }
     },
     {
@@ -352,6 +377,19 @@
         "file": "knowledge-graph/best-practices/18-dependency-injection-practices.md",
         "startLine": 20,
         "endLine": 24
+      }
+    },
+    {
+      "id": "practice.shared_test_utilities",
+      "type": "Practice",
+      "name": "Reuse shared test utilities",
+      "statement": "Keep fake providers and coroutine-aware helpers in shared/core/testing and reuse them from feature tests.",
+      "classification": "project_specific",
+      "strength": "recommended",
+      "source": {
+        "file": "knowledge-graph/best-practices/23-testing-oriented-practices-to-reuse.md",
+        "startLine": 21,
+        "endLine": 29
       }
     },
     {
@@ -480,6 +518,34 @@
       }
     },
     {
+      "id": "rule.lifecycle_backed_viewmodels",
+      "type": "Rule",
+      "name": "Use lifecycle-backed ViewModels for long-lived screen state",
+      "statement": "In multiplatform Compose apps, long-lived screen state should use lifecycle ViewModel rather than a plain class so Android preserves it across configuration changes.",
+      "scope": "presentation",
+      "classification": "kmp_oriented",
+      "strength": "recommended",
+      "source": {
+        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "startLine": 35,
+        "endLine": 43
+      }
+    },
+    {
+      "id": "rule.sequential_action_queue",
+      "type": "Rule",
+      "name": "Process rapid UI actions sequentially",
+      "statement": "If actions can arrive rapidly, the base presentation layer should queue them through one sequential processor instead of launching one coroutine per action.",
+      "scope": "presentation",
+      "classification": "universal",
+      "strength": "recommended",
+      "source": {
+        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "startLine": 45,
+        "endLine": 53
+      }
+    },
+    {
       "id": "rule.presentation_consistent_pattern",
       "type": "Rule",
       "name": "Use one consistent presentation pattern",
@@ -497,7 +563,7 @@
       "id": "rule.app_shell_owns_navigation",
       "type": "Rule",
       "name": "App shell owns global navigation and theme",
-      "statement": "The root app shell should own app-wide navigation, theme application, and layout direction.",
+      "statement": "The root app shell should own app-wide navigation, theme application, and safe-area handling.",
       "scope": "navigation",
       "classification": "universal",
       "strength": "recommended",
@@ -511,28 +577,28 @@
       "id": "rule.typed_routes",
       "type": "Rule",
       "name": "Use typed routes",
-      "statement": "Model routes as typed values instead of raw strings.",
+      "statement": "Model Navigation 3 routes as typed values in one canonical shared route hierarchy instead of raw strings or duplicated route types.",
       "scope": "navigation",
       "classification": "universal",
       "strength": "recommended",
       "source": {
         "file": "knowledge-graph/best-practices/15-navigation-practices.md",
         "startLine": 14,
-        "endLine": 22
+        "endLine": 24
       }
     },
     {
       "id": "rule.shared_ui_no_hardcoded_strings",
       "type": "Rule",
       "name": "No hardcoded user-visible strings in shared UI",
-      "statement": "All user-visible strings in shared UI should come from shared resources.",
+      "statement": "All user-visible strings in shared UI should come from shared/core/strings resources or another deliberate shared resource module.",
       "scope": "resources",
       "classification": "kmp_oriented",
       "strength": "non_negotiable",
       "source": {
         "file": "knowledge-graph/best-practices/17-resource-and-localization-practices.md",
         "startLine": 3,
-        "endLine": 22
+        "endLine": 24
       }
     },
     {
@@ -547,6 +613,20 @@
         "file": "knowledge-graph/best-practices/18-dependency-injection-practices.md",
         "startLine": 5,
         "endLine": 10
+      }
+    },
+    {
+      "id": "rule.di_managed_viewmodels",
+      "type": "Rule",
+      "name": "Register lifecycle ViewModels through DI",
+      "statement": "Lifecycle ViewModels should be registered through the DI container's view-model DSL in UI modules and retrieved from Compose instead of being built from rememberCoroutineScope().",
+      "scope": "di",
+      "classification": "kmp_oriented",
+      "strength": "recommended",
+      "source": {
+        "file": "knowledge-graph/best-practices/18-dependency-injection-practices.md",
+        "startLine": 26,
+        "endLine": 35
       }
     },
     {
@@ -621,13 +701,13 @@
       "type": "AntiPattern",
       "name": "Navigation route leakage into features",
       "statement": "Do not let navigation route types leak into every feature module by default.",
-      "replacementGuidance": "Prefer intent-level callbacks and keep routing ownership in the app shell or coordinator layer.",
+      "replacementGuidance": "Keep route-to-screen wiring in the shared composition root and pass intent-level callbacks when feature UI does not own routing.",
       "classification": "universal",
       "strength": "caution",
       "source": {
         "file": "knowledge-graph/best-practices/15-navigation-practices.md",
-        "startLine": 24,
-        "endLine": 33
+        "startLine": 33,
+        "endLine": 41
       }
     },
     {
@@ -635,7 +715,7 @@
       "type": "AntiPattern",
       "name": "Hardcoded shared UI strings",
       "statement": "Do not hardcode user-visible strings in shared UI code.",
-      "replacementGuidance": "Use shared design-system resources as the single source of truth for user-visible strings.",
+      "replacementGuidance": "Use shared/core/strings Compose Resources or another deliberate shared resource module as the source of truth for user-visible strings.",
       "classification": "kmp_oriented",
       "strength": "caution",
       "source": {
@@ -712,6 +792,20 @@
         "file": "knowledge-graph/best-practices/30-stable-composition-root-practices.md",
         "startLine": 5,
         "endLine": 17
+      }
+    },
+    {
+      "id": "rule.root_composables_retrieve_viewmodels",
+      "type": "Rule",
+      "name": "Root composables retrieve stable ViewModels instead of building them",
+      "statement": "Root composables may retrieve DI-managed ViewModels, but they should not manufacture them by creating repositories or coroutine scopes in the composition path.",
+      "scope": "presentation",
+      "classification": "kmp_oriented",
+      "strength": "recommended",
+      "source": {
+        "file": "knowledge-graph/best-practices/30-stable-composition-root-practices.md",
+        "startLine": 36,
+        "endLine": 44
       }
     },
     {
@@ -831,7 +925,17 @@
       "source": {
         "file": "knowledge-graph/best-practices/18-dependency-injection-practices.md",
         "startLine": 1,
-        "endLine": 36
+        "endLine": 46
+      }
+    },
+    {
+      "from": "document.best_practices",
+      "type": "CONTAINS",
+      "to": "section.testing_practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/23-testing-oriented-practices-to-reuse.md",
+        "startLine": 1,
+        "endLine": 29
       }
     },
     {
@@ -1005,6 +1109,16 @@
       }
     },
     {
+      "from": "practice.cancellation_safe_result_helpers",
+      "type": "SUPPORTED_BY",
+      "to": "rule.rethrow_cancellation_exception",
+      "source": {
+        "file": "knowledge-graph/best-practices/09-domain-layer-practices.md",
+        "startLine": 35,
+        "endLine": 43
+      }
+    },
+    {
       "from": "rule.domain_pure_kotlin",
       "type": "APPLIES_TO",
       "to": "layer.domain",
@@ -1085,6 +1199,26 @@
       }
     },
     {
+      "from": "rule.lifecycle_backed_viewmodels",
+      "type": "APPLIES_TO",
+      "to": "layer.presentation",
+      "source": {
+        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "startLine": 35,
+        "endLine": 43
+      }
+    },
+    {
+      "from": "rule.sequential_action_queue",
+      "type": "APPLIES_TO",
+      "to": "layer.presentation",
+      "source": {
+        "file": "knowledge-graph/best-practices/14-presentation-layer-practices.md",
+        "startLine": 45,
+        "endLine": 53
+      }
+    },
+    {
       "from": "practice.small_mvi_base",
       "type": "APPLIES_TO",
       "to": "layer.presentation",
@@ -1152,6 +1286,26 @@
         "file": "knowledge-graph/best-practices/18-dependency-injection-practices.md",
         "startLine": 5,
         "endLine": 10
+      }
+    },
+    {
+      "from": "rule.di_managed_viewmodels",
+      "type": "APPLIES_TO",
+      "to": "section.di_practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/18-dependency-injection-practices.md",
+        "startLine": 26,
+        "endLine": 34
+      }
+    },
+    {
+      "from": "practice.shared_test_utilities",
+      "type": "APPLIES_TO",
+      "to": "section.testing_practices",
+      "source": {
+        "file": "knowledge-graph/best-practices/23-testing-oriented-practices-to-reuse.md",
+        "startLine": 21,
+        "endLine": 29
       }
     },
     {
@@ -1262,6 +1416,16 @@
         "file": "knowledge-graph/best-practices/06-dependency-rules-to-keep.md",
         "startLine": 9,
         "endLine": 10
+      }
+    },
+    {
+      "from": "rule.root_composables_retrieve_viewmodels",
+      "type": "REQUIRES",
+      "to": "rule.stable_composition_roots",
+      "source": {
+        "file": "knowledge-graph/best-practices/30-stable-composition-root-practices.md",
+        "startLine": 36,
+        "endLine": 44
       }
     }
   ]

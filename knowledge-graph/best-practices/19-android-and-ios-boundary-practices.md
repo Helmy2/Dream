@@ -19,6 +19,7 @@ A dedicated iOS export module can aggregate domain and data modules for iOS.
 Best practice:
 
 - keep the iOS export framework free of Android-only UI dependencies
+- keep SwiftUI-facing shared core modules free of Compose, Navigation 3 UI, and Koin Compose dependencies
 - export domain/data capabilities cleanly to Swift
 
 ### 18.3 Use provider classes for Swift access

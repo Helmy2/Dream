@@ -32,7 +32,17 @@ Best practice to copy:
 - use typed result wrappers for domain-facing operations
 - define domain-specific error hierarchies per feature
 
-### 8.3 Use case naming
+### 8.3 Cancellation-safe suspend result helpers
+
+If a shared helper wraps suspend infrastructure work into a typed result, it must preserve structured concurrency.
+
+Best practice:
+
+- provide one shared `runSuspendCatching`-style helper instead of ad hoc `runCatching` in repositories
+- always rethrow `CancellationException`
+- map only real failures into domain or app errors
+
+### 8.4 Use case naming
 
 Good use case names are generally action-oriented and readable:
 
@@ -46,7 +56,7 @@ Best practice:
 - name use cases after clear business intent
 - prefer `ObserveX`, `SetX`, `ToggleX`, `MarkX`, `ComputeX`, `AdvanceX`
 
-### 8.4 Time access through a contract
+### 8.5 Time access through a contract
 
 This is one of the strongest rules in the repository:
 
