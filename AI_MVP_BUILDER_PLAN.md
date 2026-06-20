@@ -262,6 +262,10 @@ The first run proved that Dream can generate a runnable project, but it also exp
 - base template confirmed and used
 - first plain-prompt creation flow completed successfully once
 
+### Done
+
+- initializer CLI copy-and-rename tool (`dream-init`)
+
 ### In Progress
 
 - converting Dream from a structurally correct generator into a reliably reviewable and higher-quality generator
@@ -269,7 +273,6 @@ The first run proved that Dream can generate a runnable project, but it also exp
 
 ### Not Started
 
-- initializer CLI copy-and-rename tool
 - formal regression checklist for repeated Dream smoke tests
 
 Backend generation is intentionally out of scope for now.
