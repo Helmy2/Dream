@@ -52,6 +52,20 @@ Implementation rules:
 - when the contract marks time-sensitive behavior, inject `TimeProvider` instead of reading system time directly
 - include loading, empty, content, and error state handling when the contract requires them
 
+Mandatory checks before writing any Compose code:
+1. **Shared strings**: Create or update `shared/core/strings/src/commonMain/composeResources/values/strings.xml` with ALL user-visible strings for the feature BEFORE writing Compose UI. Every label, title, button, and message must use `stringResource(R.string.key)` in Compose code. No hardcoded text literals.
+2. **TimeProvider injection**: Identify all time-sensitive behavior in the contract. Inject `TimeProvider` (from `shared/core/domain`) via constructor in repositories and ViewModels. After implementation, grep the feature for `Clock.System.now()` — the only allowed occurrence is inside `TimeProvider` itself. Any other `Clock.System.now()` call is a defect.
+3. **No JVM-only APIs in common code**: grep for `String.format`, `java.*`, `SimpleDateFormat` in common source sets. Replace with KMP-safe alternatives like custom `formatCurrency()` or `kotlin.uuid.Uuid.random()`.
+4. **No deprecated APIs**: Verify `ExposedDropdownMenuBox.menuAnchor()` is not used. Use `MenuAnchorType` from Material3 instead.
+5. **Stable composition roots**: Verify that repositories, use cases, ViewModels are assembled through DI (Koin modules) or stable `remember` blocks, never inside a `@Composable` function body.
+
+Test requirements:
+- **Domain tests**: Create `feature/<name>/domain/src/commonTest/.../ModelTest.kt` — verify entity construction, enum values, default factory methods. Create `RepositoryContractTest.kt` — verify the repository interface contract is defined and documented.
+- **Data tests**: When Room is the storage layer, create `feature/<name>/data/src/commonTest/.../EntityMappingTest.kt` — verify entity-to-domain mapping. Create `DaoTest.kt` — verify DAO query behavior (insert, read by filter, delete) using an in-memory Room database.
+- **Repository tests**: Create `feature/<name>/data/src/commonTest/.../RepositoryImplTest.kt` — verify the repository implementation(s) using in-memory storage or a fake DAO.
+- **Presentation tests**: Create `feature/<name>/presentation/src/commonTest/.../ViewModelTest.kt` — verify loading → content, loading → empty, loading → error transitions, action handling, and event emission.
+- **Test dependencies**: Ensure every module's `build.gradle.kts` declares `kotlin("test")` in `commonTest.dependencies`. Data modules need an in-memory Room test dependency. Add these BEFORE writing tests.
+
 Output requirements:
 - implement the code directly
 - keep code readable and modular

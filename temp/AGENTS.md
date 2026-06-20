@@ -38,7 +38,7 @@ When working in this generated project, read in this order:
 Run commands from this project root:
 
 ```bash
-./gradlew :feature:sample:presentation:allTests :shared:core:domain:allTests :shared:core:data:allTests :shared:core:presentation:allTests :shared:core:storage:allTests :shared:core:testing:allTests
+./gradlew :feature:sample:presentation:allTests :shared:core:domain:allTests :shared:core:data:allTests :shared:core:presentation:allTests :shared:core:testing:allTests
 ./gradlew :androidApp:assembleDebug
 ./gradlew :desktopApp:compileKotlinJvm
 ```

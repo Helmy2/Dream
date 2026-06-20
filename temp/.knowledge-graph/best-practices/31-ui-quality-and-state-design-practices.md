@@ -43,3 +43,17 @@ Reusable principle:
 
 - do not mark a feature approved when state handling is visually or behaviorally placeholder-level
 - require contracts, implementation notes, and review output to mention state design quality when relevant
+
+### 31.5 All user-visible strings must come from shared resources
+
+No hardcoded string literals should appear in Compose UI code. Every user-visible string — labels, titles, buttons, error messages, content descriptions, hints — must be defined in `shared/core/strings/src/commonMain/composeResources/values/strings.xml` and referenced via `stringResource()`.
+
+Workflow:
+1. Before writing any Compose UI, define all needed strings in `strings.xml` with a clear naming convention (`<feature>_<purpose>`).
+2. In Compose code, use `stringResource(Res.string.<feature>_<purpose>)` exclusively.
+3. During review, grep for unescaped string literals in `@Composable` functions to catch any missed hardcoded text.
+
+Reusable principle:
+
+- shared strings are the single source of truth for user-facing text across all platforms (Android, iOS, Desktop)
+- hardcoded strings in Compose code will not be translated, cannot be reviewed centrally, and violate the template's localization strategy

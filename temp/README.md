@@ -57,7 +57,7 @@ Template baseline:
 Verification commands:
 
 ```bash
-./gradlew :feature:sample:presentation:allTests :feature:sample:data:compileKotlinDesktop :shared:navigation:allTests :shared:umbrella-core:allTests :shared:core:domain:allTests :shared:core:data:allTests :shared:core:presentation:allTests :shared:core:storage:allTests :shared:core:testing:allTests
+./gradlew :feature:sample:presentation:allTests :feature:sample:data:compileKotlinDesktop :shared:navigation:allTests :shared:umbrella-core:allTests :shared:core:domain:allTests :shared:core:data:allTests :shared:core:presentation:allTests :shared:core:testing:allTests
 ./gradlew :androidApp:assembleDebug
 ./gradlew :desktopApp:compileKotlinJvm
 # Interactive Desktop validation when Desktop is selected:

@@ -21,7 +21,7 @@ expect object SampleDatabaseConstructor : RoomDatabaseConstructor<SampleDatabase
     override fun initialize(): SampleDatabase
 }
 
-expect class SampleDatabaseFactory {
+interface SampleDatabaseFactory {
     fun createBuilder(): RoomDatabase.Builder<SampleDatabase>
 }
 

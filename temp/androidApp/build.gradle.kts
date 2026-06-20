@@ -13,4 +13,5 @@ android {
 dependencies {
     implementation(projects.shared.umbrellaCore)
     implementation(projects.shared.umbrellaUi)
+    implementation(libs.androidx.splashscreen)
 }

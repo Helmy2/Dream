@@ -44,7 +44,7 @@ The repository root is not the main Gradle execution surface. For starter valida
 
 ```bash
 cd temp
-./gradlew :feature:sample:presentation:allTests :shared:core:domain:allTests :shared:core:data:allTests :shared:core:presentation:allTests :shared:core:storage:allTests :shared:core:testing:allTests
+./gradlew :feature:sample:presentation:allTests :shared:core:domain:allTests :shared:core:data:allTests :shared:core:presentation:allTests :shared:core:testing:allTests
 ./gradlew :androidApp:assembleDebug
 ./gradlew :desktopApp:compileKotlinJvm
 ```

@@ -7,3 +7,14 @@ plugins {
     alias(libs.plugins.koinCompiler) apply false
     alias(libs.plugins.composeHotReload) apply false
 }
+
+tasks.register("allTests") {
+    description = "Run all tests across all modules."
+    group = "verification"
+    subprojects.forEach { subproject ->
+        val testTask = subproject.tasks.findByName("allTests")
+        if (testTask != null) {
+            dependsOn(testTask)
+        }
+    }
+}

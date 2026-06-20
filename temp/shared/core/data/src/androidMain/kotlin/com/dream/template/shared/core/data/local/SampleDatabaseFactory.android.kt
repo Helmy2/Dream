@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-actual class SampleDatabaseFactory(
+class AndroidSampleDatabaseFactory(
     private val context: Context
-) {
-    actual fun createBuilder(): RoomDatabase.Builder<SampleDatabase> {
+) : SampleDatabaseFactory {
+    override fun createBuilder(): RoomDatabase.Builder<SampleDatabase> {
         val appContext = context.applicationContext
         val databaseFile = appContext.getDatabasePath("dream_sample.db")
 

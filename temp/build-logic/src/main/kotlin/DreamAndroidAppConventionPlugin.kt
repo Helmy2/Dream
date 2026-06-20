@@ -45,6 +45,7 @@ class DreamAndroidAppConventionPlugin : Plugin<Project> {
 
             dependencies {
                 add("implementation", libs.androidx.activity.compose)
+                add("implementation", libs.androidx.splashscreen)
                 add("implementation", libs.compose.foundation)
                 add("implementation", libs.compose.uiToolingPreview)
                 add("implementation", libs.kotlinx.coroutines.android)

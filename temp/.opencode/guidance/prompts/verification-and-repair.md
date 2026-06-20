@@ -47,6 +47,15 @@ Required parity checks before validated success:
 - time-sensitive behavior uses `TimeProvider` instead of direct system time access
 - repositories, use cases, and ViewModels are not instantiated inside recomposing composables
 
+Automated defect scans (run these BEFORE signing off):
+1. **Grep for `Clock.System.now()`** in feature source files. The ONLY allowed occurrence is in `TimeProvider` implementations (e.g., `shared/core/domain/TimeProvider.kt` or an `expect/actual` platform time provider). Any other usage is a defect — flag it.
+2. **Grep for hardcoded user-visible strings** in Compose UI files. Look for string literals passed to `Text()`, `TextField()`, `Button()`, `contentDescription`, or similar UI parameters that are not wrapped in `stringResource()`. Flag any hardcoded visible text.
+3. **Grep for `String.format`** or `java.text.*` or `java.util.*` in `commonMain` source sets (not `androidMain`). These are JVM-only APIs that break iOS. Flag them.
+4. **Grep for `menuAnchor()`** — this Material3 API is deprecated. Flag for migration to `MenuAnchorType`.
+5. **Verify test coverage by layer**: Check that domain, data, and presentation modules each have at least one test file under `src/commonTest/`. A feature with only presentation tests but no domain or data tests is incomplete — flag it.
+6. **Verify shared strings XML exists**: Check that `shared/core/strings/src/commonMain/composeResources/values/strings.xml` contains string resources for the feature. Cross-reference with the feature's UI to ensure every user-visible string has a resource entry.
+7. **Verify DI setup**: Check that the feature's DI module registers repositories, ViewModels, and navigation entries through Koin DSL (not manual construction). Verify that repositories and ViewModels are not instantiated inside `@Composable` functions.
+
 Repair loop:
 1. `general` runs verification
 2. `general` identifies the failing module or runtime layer

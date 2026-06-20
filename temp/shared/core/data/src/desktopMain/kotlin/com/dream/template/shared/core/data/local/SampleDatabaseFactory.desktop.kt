@@ -4,8 +4,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import java.io.File
 
-actual class SampleDatabaseFactory {
-    actual fun createBuilder(): RoomDatabase.Builder<SampleDatabase> {
+class DesktopSampleDatabaseFactory : SampleDatabaseFactory {
+    override fun createBuilder(): RoomDatabase.Builder<SampleDatabase> {
         val appSupportDirectory = File(
             System.getProperty("user.home"),
             "Library/Application Support/DreamTemplate"

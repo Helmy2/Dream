@@ -24,8 +24,10 @@ Rules:
 - include tests that verify behavior, not implementation details
 - do not invent backend endpoints unless backend is enabled
 - only include states, actions, and tests that Dream is expected to implement in this generation pass
-- mark time-sensitive behavior explicitly when the feature depends on current date, time, or logical period behavior
-- define minimum design expectations for loading, empty, content, and error states so UI quality is not left implicit
+- mark time-sensitive behavior explicitly when the feature depends on current date, time, or logical period behavior — this is REQUIRED, not optional
+- define minimum design expectations for loading, empty, content, and error states so UI quality is not left implicit — all four states must be defined
+- require test coverage for each architecture layer: domain (model construction, repository contract), data (entity mapping, DAO queries, repository impl), and presentation (ViewModel state transitions)
+- do not generate a contract with `usesTimeProvider: false` if the feature involves current date, logical month, or any time-derived filter — those are time-sensitive by nature
 
 Output requirements:
 - output valid YAML only
@@ -48,14 +50,16 @@ states:
   - error
 timeSensitiveBehavior:
   usesTimeProvider: <true|false>
-  notes: <required when true>
+  notes: <required when true; must describe what time-sensitive behavior exists and why TimeProvider is needed>
 designExpectations:
-  loading: <expected loading treatment>
-  empty: <expected empty-state message or action>
-  content: <expected primary content structure>
-  error: <expected error message and recovery treatment>
+  loading: <expected loading treatment (e.g., centered spinner with status message)>
+  empty: <expected empty-state message and suggested user action>
+  content: <expected primary content structure and layout hierarchy>
+  error: <expected error message format and recovery treatment (e.g., retry button)>
 tests:
-  - <behavior test>
+  - domain: <list of domain-layer tests required: model construction, enum values, repository interface contract>
+  - data: <list of data-layer tests required: entity-to-domain mapping, DAO queries, repository implementation>
+  - presentation: <list of presentation-layer tests required: ViewModel state transitions, action handling, event emission>
 
 If backend is enabled, also include:
 backend:

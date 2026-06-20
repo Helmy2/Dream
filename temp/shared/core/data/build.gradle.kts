@@ -9,7 +9,6 @@ dependencies {
     commonMainImplementation(libs.androidx.sqlite.bundled)
     commonMainImplementation(libs.kotlinx.coroutines.core)
     commonMainImplementation(projects.shared.core.domain)
-    commonMainApi(libs.androidx.datastore.preferences.core)
 
     add("kspAndroid", libs.androidx.room.compiler)
     add("kspDesktop", libs.androidx.room.compiler)
