@@ -4,11 +4,11 @@ This architecture works especially well in local-first applications.
 
 ### 11.1 Shared Room database helpers
 
-Common Room builder setup should live in `shared/core/database` so feature data modules do not duplicate driver or query dispatcher policy.
+Common Room builder setup should live in `shared/core/data` so feature data modules do not duplicate driver or query dispatcher policy.
 
 Best practice:
 
-- put bundled SQLite driver setup in the shared database core module
+- put bundled SQLite driver setup in the shared data core module
 - use KMP-safe coroutine dispatchers directly, such as `Dispatchers.Default`, instead of a template-specific dispatcher provider abstraction
 - keep feature-specific databases, DAOs, entities, and factories in the feature data module unless multiple features truly share one schema
 

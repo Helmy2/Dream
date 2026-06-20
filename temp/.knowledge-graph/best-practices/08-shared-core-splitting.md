@@ -6,7 +6,6 @@ Current split:
 
 - `shared:core:domain`
 - `shared:core:data`
-- `shared:core:database`
 - `shared:core:presentation`
 
 Why this is worth reusing:

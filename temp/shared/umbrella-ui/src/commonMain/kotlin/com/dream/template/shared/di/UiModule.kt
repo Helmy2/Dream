@@ -1,7 +1,7 @@
 package com.dream.template.shared.di
 
-import com.dream.template.feature.sample.data.local.SampleDatabaseFactory
 import com.dream.template.feature.sample.di.sampleUiModule
+import com.dream.template.shared.core.data.local.SampleDatabaseFactory
 import com.dream.template.shared.core.presentation.SampleRoute
 import com.dream.template.shared.navigation.Navigator
 import org.koin.core.context.startKoin
@@ -14,11 +14,12 @@ val navigatorModule = module {
 }
 
 fun initKoin(
-    sampleDatabaseFactory: SampleDatabaseFactory? = null,
+    sampleDatabaseFactory: SampleDatabaseFactory,
+    appContext: Any? = null,
     appDeclaration: KoinAppDeclaration = {}
 ) {
     startKoin {
         appDeclaration()
-        modules(sampleDataModule(sampleDatabaseFactory), sampleUiModule, navigatorModule)
+        modules(sampleDataModule(sampleDatabaseFactory, appContext), sampleUiModule, navigatorModule)
     }
 }

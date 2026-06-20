@@ -26,7 +26,7 @@ feature/<name>/
 - iOS APIs
 - Room annotations
 - Ktor clients
-- DataStore
+- DataStore (setup lives in `shared:core:data` with expect/actual)
 
 ### 4.2 Data module responsibilities
 

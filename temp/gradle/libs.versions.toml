@@ -17,6 +17,7 @@ ksp = "2.3.9"
 kotlinx-coroutines = "1.11.0"
 room = "2.8.4"
 sqlite = "2.6.2"
+datastore = "1.2.1"
 composeHotReload = "1.2.0-alpha02"
 mokkery = "3.4.1"
 
@@ -35,6 +36,7 @@ androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", nam
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
+androidx-datastore-preferences-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastore" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
 koin-composeNavigation3 = { module = "io.insert-koin:koin-compose-navigation3", version.ref = "koin" }
 koin-composeViewModel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }

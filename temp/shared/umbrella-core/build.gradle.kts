@@ -6,7 +6,6 @@ dependencies {
     commonMainApi(projects.feature.sample.data)
     commonMainApi(projects.feature.sample.domain)
     commonMainApi(projects.shared.core.data)
-    commonMainApi(projects.shared.core.database)
     commonMainApi(projects.shared.core.domain)
     commonMainImplementation(libs.koin.annotations)
     commonMainImplementation(libs.koin.core)
