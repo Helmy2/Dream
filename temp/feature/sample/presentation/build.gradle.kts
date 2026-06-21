@@ -12,7 +12,6 @@ dependencies {
     commonMainImplementation(libs.compose.runtime)
     commonMainImplementation(libs.compose.foundation)
     commonMainImplementation(libs.compose.components.resources)
-    commonMainImplementation(libs.koin.annotations)
     commonMainImplementation(libs.koin.compose)
     commonMainImplementation(libs.koin.composeNavigation3)
     commonMainImplementation(libs.koin.composeViewModel)

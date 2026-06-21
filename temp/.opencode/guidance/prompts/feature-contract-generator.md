@@ -28,6 +28,8 @@ Rules:
 - define minimum design expectations for loading, empty, content, and error states so UI quality is not left implicit — all four states must be defined
 - require test coverage for each architecture layer: domain (model construction, repository contract), data (entity mapping, DAO queries, repository impl), and presentation (ViewModel state transitions)
 - do not generate a contract with `usesTimeProvider: false` if the feature involves current date, logical month, or any time-derived filter — those are time-sensitive by nature
+- timestamp fields must be named by meaning and unit, such as `createdAtMillis`, `occurredAtMillis`, or `dueAtMillis`; avoid ambiguous names like `date`, `dateTime`, or `dateMillis`
+- choose entity field names before implementation and treat them as stable contract requirements
 
 Output requirements:
 - output valid YAML only
@@ -38,9 +40,15 @@ Minimum shape:
 feature: <feature name>
 goal: <feature goal>
 entities:
-  - <entity>
+  - name: <entity>
+    fields:
+      - name: <field name>
+        type: <field type>
+        required: <true|false>
 actions:
-  - <action>
+  - name: <action>
+    inputs:
+      - <input name and type, or none>
 screens:
   - <screen>
 states:

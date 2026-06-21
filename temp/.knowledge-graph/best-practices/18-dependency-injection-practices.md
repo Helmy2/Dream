@@ -2,6 +2,8 @@
 
 This approach uses Koin with a composition-root mindset.
 
+Dream-generated modules should use the Koin compiler plugin with Koin DSL registrations for compile-time safety. Do not use annotation-based DI such as `@KoinViewModel`, `@Module`, or `@ComponentScan` in generated feature code unless the user explicitly requests annotation style.
+
 ### 17.1 DI starts at the top
 
 Best practice:
@@ -34,6 +36,8 @@ Best practice:
 - let Compose retrieve view models through `koinViewModel()` instead of building them from `rememberCoroutineScope()`
 - keep runtime parameters explicit and rare
 - keep ViewModel and Navigation 3 entry-provider modules out of SwiftUI-facing `umbrella-core` modules
+- use compiler-plugin DSL imports from `org.koin.plugin.module.dsl.*` when using compile-safe registrations such as `viewModel<FeatureViewModel>()`
+- do not use annotation-based DI such as `@KoinViewModel`, `@Module`, or `@ComponentScan` unless the user explicitly requests annotation style
 
 ### 17.5 iOS bridge injection is explicit
 

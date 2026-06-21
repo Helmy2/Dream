@@ -16,7 +16,7 @@ Use this template when writing `.mvp/features/<feature-name>/implementation-repo
 
 | item | type | status | code location | test coverage | notes |
 | --- | --- | --- | --- | --- | --- |
-| <contract item> | action\|state\|test | implemented\|partial\|blocked | <module/path> | <test name or file> | <important note> |
+| <contract item> | entity-field\|action\|state\|test | implemented\|partial\|blocked | <module/path> | <test name or file> | <important note> |
 
 ## Partial Items
 
@@ -35,6 +35,7 @@ Required usage rules:
 
 - include one row for every contract action
 - include one row for every contract state
+- include one row for every contract entity field when the feature has persisted or user-entered entities
 - include one row for every required contract test
 - use `implemented`, `partial`, or `blocked` only
 - do not omit partial or blocked behavior; record it explicitly

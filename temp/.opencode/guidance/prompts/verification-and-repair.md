@@ -42,10 +42,12 @@ Required behavior:
 
 Required parity checks before validated success:
 - every contract state is implemented in code and represented in the UI state model
+- every contract entity field maps to domain models and data mappings without silent renames
 - every contract action maps to a concrete handling path
 - every required contract test appears in the test plan and is backed by code-level coverage
-- time-sensitive behavior uses `TimeProvider` instead of direct system time access
+- time-sensitive behavior uses the appropriate `TimeProvider` API instead of direct system time access or feature-local formatting
 - repositories, use cases, and ViewModels are not instantiated inside recomposing composables
+- generated feature DI uses Koin compiler plugin DSL registration, not annotation-based DI such as `@KoinViewModel`, `@Module`, or `@ComponentScan`
 
 Automated defect scans (run these BEFORE signing off):
 1. **Grep for `Clock.System.now()`** in feature source files. The ONLY allowed occurrence is in `TimeProvider` implementations (e.g., `shared/core/domain/TimeProvider.kt` or an `expect/actual` platform time provider). Any other usage is a defect — flag it.
@@ -55,6 +57,9 @@ Automated defect scans (run these BEFORE signing off):
 5. **Verify test coverage by layer**: Check that domain, data, and presentation modules each have at least one test file under `src/commonTest/`. A feature with only presentation tests but no domain or data tests is incomplete — flag it.
 6. **Verify shared strings XML exists**: Check that `shared/core/strings/src/commonMain/composeResources/values/strings.xml` contains string resources for the feature. Cross-reference with the feature's UI to ensure every user-visible string has a resource entry.
 7. **Verify DI setup**: Check that the feature's DI module registers repositories, ViewModels, and navigation entries through Koin DSL (not manual construction). Verify that repositories and ViewModels are not instantiated inside `@Composable` functions.
+8. **Verify date formatting**: Check user-visible date/date-time text in common UI code uses `TimeProvider.formatDate(...)` or `TimeProvider.formatDateTime(...)`. Flag feature-local date formatting helpers.
+9. **Verify Koin compiler DSL setup**: Grep generated feature modules for `@KoinViewModel`, `@Module`, `@ComponentScan`, and `koin.annotations`. Flag any usage unless the user explicitly requested annotation-based DI. Verify modules using compiler DSL registrations apply `libs.plugins.koinCompiler`.
+10. **Verify git completion for feature flows**: After validated feature work, run `git status`, `git diff`, and `git log --oneline -10`; stage only intended files and create a concise feature commit. Do not commit blocked, partial, unreviewed, or unsafe worktree states.
 
 Repair loop:
 1. `general` runs verification
@@ -79,6 +84,7 @@ Output requirements:
 - state review mode as `delegated` or `manual`
 - list failing areas if blocked
 - write or update `.mvp/verification-report.md`
+- for completed feature flows, state the git commit hash or the precise reason no commit was created
 
 If blocked:
 - document the blocker precisely

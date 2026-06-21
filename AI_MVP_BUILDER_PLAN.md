@@ -265,11 +265,12 @@ The first run proved that Dream can generate a runnable project, but it also exp
 ### Done
 
 - initializer CLI copy-and-rename tool (`dream-init`)
+- second-run template hardening: contract-first feature gates, Koin compiler-plugin DSL default without annotation-based DI, realistic Room/commonTest guidance, stronger TimeProvider/date-field rules, feature wiring checklist, inspector contract-integrity checks, and automatic git commits for completed generated features
 
 ### In Progress
 
 - converting Dream from a structurally correct generator into a reliably reviewable and higher-quality generator
-- tightening prompts and success gates based on first-run findings
+- re-running generated-app smoke flows after prompt and template hardening
 
 ### Not Started
 
@@ -279,14 +280,11 @@ Backend generation is intentionally out of scope for now.
 
 ## Next Tasks
 
-1. Tighten Dream success criteria and verification-report rules.
-2. Tighten feature implementation prompt around contract parity, time rules, and stable composition roots.
+1. Re-run the expense tracker smoke test through OpenCode after these hardening updates.
+2. Document the second-run results in this file and in a dedicated run report.
 3. Tighten project instantiation prompt around app identity and package normalization.
-4. Add minimum UI quality expectations to contract and implementation prompts.
-5. Define fallback behavior when `dream-inspector` tooling fails.
-6. Implement the initializer rewrite surface for copying `temp/` into a new app.
-7. Re-run the expense tracker smoke test through OpenCode after those updates.
-8. Document the second-run results in this file and in a dedicated run report.
+4. Implement the initializer rewrite surface for copying `temp/` into a new app.
+5. Add a release-time deprecation scan for Compose and Material3 APIs.
 
 ## Working Rule For This File
 

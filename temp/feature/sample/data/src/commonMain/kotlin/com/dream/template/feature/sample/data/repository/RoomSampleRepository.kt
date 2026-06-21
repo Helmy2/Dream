@@ -1,9 +1,10 @@
 package com.dream.template.feature.sample.data.repository
 
-import com.dream.template.shared.core.data.local.SampleDatabase
-import com.dream.template.shared.core.data.local.SampleItemEntity
+import com.dream.template.feature.sample.data.mapper.toDomain
 import com.dream.template.feature.sample.domain.model.SampleItem
 import com.dream.template.feature.sample.domain.repository.SampleRepository
+import com.dream.template.shared.core.data.local.SampleDatabase
+import com.dream.template.shared.core.data.local.SampleItemEntity
 import com.dream.template.shared.core.domain.AppError
 import com.dream.template.shared.core.domain.Result
 import com.dream.template.shared.core.domain.runSuspendCatching
@@ -17,12 +18,7 @@ class RoomSampleRepository(
         if (dao.count() == 0) {
             dao.insertAll(defaultSampleEntities())
         }
-        dao.getAll().map { entity ->
-            SampleItem(
-                title = entity.title,
-                description = entity.description
-            )
-        }
+        dao.getAll().map { entity -> entity.toDomain() }
     },
         onFailure = { AppError.Unknown }
     )

@@ -23,10 +23,23 @@ Your priorities:
 
 - architectural violations
 - contract mismatches
+- field-level contract drift: every entity field, action signature, state field, time-sensitive behavior, and required test in each feature contract must map to code and tests
 - missing tests or verification gaps
 - regressions
 - anti-patterns Dream explicitly forbids
 - placeholder-level state handling or UI quality when the contract expects intentional loading, empty, content, and error treatment
+- generated-feature DI that uses annotation-based Koin DI such as `@KoinViewModel`, `@Module`, or `@ComponentScan` instead of Koin compiler plugin DSL registration
+
+Required checks:
+
+- read every relevant `.mvp/features/<feature>/contract.yaml`
+- verify each contract entity field exists in domain models and any persistence mappings
+- verify each contract action has a concrete handling path and test coverage
+- verify each contract state exists in the UI state model and has UI treatment
+- verify time-sensitive behavior uses the appropriate `TimeProvider` API and tests use `FakeTimeProvider` or equivalent fixed time
+- verify shared UI date text uses `TimeProvider.formatDate(...)` or `TimeProvider.formatDateTime(...)`, not feature-local formatting
+- verify each required domain, data, and presentation test is present or explicitly blocked
+- verify modules using Koin compiler DSL apply the Koin compiler plugin
 
 When clean, reply exactly:
 

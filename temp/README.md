@@ -12,6 +12,7 @@ Packaged Dream context:
 - `.opencode/guidance/`: operating guidance and prompt scaffolds
 - `.knowledge-graph/`: architecture graph and best-practice rules
 - `.mvp/`: generated app contracts, decisions, feature contracts, and verification reports
+- `NEW-FEATURE-CHECKLIST.md`: contract-first feature wiring, testing, verification, and git checklist
 
 Modules:
 
@@ -38,7 +39,7 @@ Key architecture rules:
 
 Template baseline:
 
-- Koin compiler plugin is the default DI path for new modules
+- Koin compiler plugin DSL modules are the default DI path for new modules; do not use annotation-based DI such as `@KoinViewModel`, `@Module`, or `@ComponentScan`
 - shared screen state uses lifecycle `ViewModel` plus Koin ViewModel wiring at stable navigation/composition roots
 - app navigation uses Navigation 3 typed routes, a Koin-provided `Navigator`, `NavDisplay`, and Koin `navigation<Route>` entry providers
 - canonical top-level route keys live in `shared/core/presentation` so feature presentation and shared navigation use one route type

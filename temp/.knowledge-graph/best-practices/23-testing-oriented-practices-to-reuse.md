@@ -14,6 +14,20 @@ Pure domain modules are easier to unit test and easier to port.
 
 Typed results and repository interfaces reduce mocking complexity.
 
+For Room-backed feature data modules, common tests should not depend on Android-only database setup. Prefer:
+
+- pure entity-to-domain and domain-to-entity mapping tests in `commonTest`
+- repository tests against fake DAO or fake database interfaces when the repository can depend on a narrow boundary
+- integration tests with a real Room database only where the target setup is known to run reliably
+
+Do not claim a Room repository is fully covered by a presentation test that mocks the repository.
+
+The sample feature includes copyable test examples:
+
+- `feature/sample/domain/src/commonTest/.../SampleItemTest.kt` for simple domain model tests
+- `feature/sample/domain/src/commonTest/.../SampleRepositoryContractTest.kt` for repository contract expectations
+- `feature/sample/data/src/commonTest/.../SampleItemMapperTest.kt` for data/entity mapping tests
+
 ### 22.4 Prefer flows for observable state sources
 
 Flows make settings, logs, and derived state easier to observe consistently in both production and tests.

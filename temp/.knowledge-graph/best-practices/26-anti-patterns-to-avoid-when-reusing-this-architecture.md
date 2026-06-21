@@ -17,3 +17,5 @@ These are the main things to avoid in future projects, even if traces of them ex
 - do not let documentation (README, AGENTS.md, verification commands) reference modules that no longer exist — update them when changing the module structure
 - do not generate feature tests for only the presentation layer — domain model tests and data layer tests are required for every feature
 - do not leave `Clock.System.now()` calls in feature code — always inject `TimeProvider`
+- do not add feature-local date/date-time formatting in common code — use `TimeProvider.formatDate(...)` or `TimeProvider.formatDateTime(...)`
+- do not use annotation-based Koin DI such as `@KoinViewModel`, `@Module`, or `@ComponentScan` in generated feature modules by default; use Koin compiler plugin DSL registrations instead

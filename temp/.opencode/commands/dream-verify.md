@@ -19,4 +19,8 @@ Then:
 - use `dream-implementer` for minimal architecture-safe fixes
 - rerun verification until green or blocked
 - use `dream-inspector` as the final QA gate for substantial work
+- run `git status`, `git diff`, and `git log --oneline -10` after a completed feature flow
+- if this command is part of a completed feature generation and review is approved, stage only intended feature files and create a concise feature commit automatically
 - update `.mvp/verification-report.md` with the final validated or blocked result
+
+Do not auto-commit blocked, partial, unreviewed, or unsafe worktree states.

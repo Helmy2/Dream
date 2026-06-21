@@ -125,29 +125,56 @@ The user should not need to hand-author an expense tracker contract, app contrac
 Those artifacts are Dream outputs, not Dream prerequisites.
 
 ## Contract Rules
- route time-sensitive behavior through shared time abstractions
- keep dependency assembly in stable composition roots
- not report validated success until verification is green, contract behavior is implemented, required tests exist, and review status is documented
+
+Feature contracts must be created before implementation starts. `dream-general` owns producing or coordinating the contract, and `dream-implementer` must stop if no relevant contract exists.
+
+Every feature contract should define:
+
 - feature name
 - goal
-- entities
-- actions
- map each contract action, state, and required test to code and tests explicitly
- avoid creating repositories, use cases, or ViewModels inside recomposing composables
- inject `TimeProvider` for time-sensitive behavior instead of reading system time directly
+- entities and field names, including meaningful timestamp names such as `createdAtMillis` or `occurredAtMillis`
+- actions and expected inputs
+- screens
+- loading, empty, content, and error states
+- time-sensitive behavior, using the appropriate `TimeProvider` API whenever current time, dates, logical periods, formatting, or timestamps are involved
+- design expectations for each state
+- required tests by layer: domain, data, and presentation
+
+If backend is enabled, contracts should also define:
+
 - API base path
 - endpoints
 - request and response shapes
 
- Green commands alone are not sufficient stop conditions.
- Dream should also confirm contract-to-code parity, required test coverage, and final review status before reporting validated success.
+Implementation must map each contract action, state, entity field, and required test to code and test coverage explicitly. Green commands alone are not sufficient stop conditions. Dream should confirm contract-to-code parity, required test coverage, and final review status before reporting validated success.
+
+Dependency assembly must stay in stable composition roots. Generated feature modules should use Koin compiler plugin DSL registration for repositories, ViewModels, and Navigation 3 entries. Do not use annotation-based Koin DI such as `@KoinViewModel`, `@Module`, or `@ComponentScan` by default.
+
+Time-sensitive behavior must inject `TimeProvider` instead of reading system time directly. Use `nowMillis()` for persisted timestamps, `today()` for current-date behavior, `currentYearMonth()` for logical period filters, and `formatDate(...)` or `formatDateTime(...)` for deterministic English shared UI formatting. The only allowed direct `Clock.System.now()` call is inside the production `SystemTimeProvider` implementation. Tests for time-sensitive behavior should use `FakeTimeProvider` from `shared/core/testing` or an equivalent fixed-time fake.
+
+Feature implementation should:
 
 - create or update `feature/<name>/domain`
 - create or update `feature/<name>/data`
+- create or update `feature/<name>/presentation`
 - keep domain-to-UI mapping in presentation
 - keep feature screens wired into the centralized shell using callbacks or controlled routing points
 
 If shared behavior appears across features, move it into the appropriate shared module instead of duplicating it.
+
+## Git Rules
+
+After a completed feature generation flow, Dream must inspect and commit the completed feature automatically.
+
+Required git flow:
+
+- run `git status`
+- run `git diff`
+- run `git log --oneline -10`
+- stage only the intended files for the generated feature and related `.mvp/` reports
+- create a concise commit message, such as `Add expenses feature`
+
+Do not auto-commit when verification is blocked, review is not approved, required reports are missing, or unrelated worktree changes make safe staging unclear. Never amend, force push, reset, or revert unrelated changes unless the user explicitly requests it.
 
 ## Verification Rules
 

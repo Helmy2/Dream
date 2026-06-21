@@ -4,7 +4,6 @@ import com.dream.template.feature.sample.domain.repository.SampleRepository
 import com.dream.template.shared.core.domain.AppError
 import com.dream.template.shared.core.domain.Result
 import com.dream.template.shared.core.presentation.MviViewModel
-import org.koin.core.annotation.KoinViewModel
 
 class SampleViewModel(
     private val repository: SampleRepository,

@@ -21,10 +21,16 @@ Then:
 - generate or update `.mvp/app-contract.yaml`
 - generate or update `.mvp/decisions.yaml`
 - instantiate the appropriate Dream template
-- generate the first feature contract
+- generate the first feature contract before any feature code is written
+- inspect the feature contract for entity fields, actions, states, time behavior, storage choices, and required tests
+- only then hand implementation to `dream-implementer`
 - implement the first feature using Dream's modular architecture
 - run verification
 - repair failures until green or blocked
+- run `git status`, `git diff`, and `git log --oneline -10`
+- when verification is green, inspector review passes, and only intended files are staged, create a feature commit automatically
 - finish with `.mvp/verification-report.md`
 
 Use `dream-implementer` for code changes and `dream-inspector` as the final QA gate for substantial work.
+
+Do not auto-commit blocked, partial, unreviewed, or unsafe worktree states. If unrelated changes make safe staging unclear, stop and report the blocker instead of committing.

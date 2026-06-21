@@ -20,5 +20,7 @@ Focus on:
 - regressions
 - contract mismatches
 - missing verification coverage
+- field-level contract integrity: every entity field, action signature, state field, time-sensitive behavior, and required test in each feature contract must map to code and tests
+- generated-feature DI must use Koin compiler plugin DSL registrations, not annotation-based DI such as `@KoinViewModel`, `@Module`, or `@ComponentScan`
 
 Report concrete findings with file references before any summary.

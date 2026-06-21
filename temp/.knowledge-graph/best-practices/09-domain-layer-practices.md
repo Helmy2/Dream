@@ -61,7 +61,7 @@ Best practice:
 This is one of the strongest rules in the repository:
 
 - domain and feature code must not call `Clock.System.now()` directly
-- time flows through `TimeProvider`
+- current time, current date, logical year/month, and shared date formatting flow through `TimeProvider`
 
 Why it matters:
 

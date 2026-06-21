@@ -20,6 +20,7 @@ When working in this generated project, read in this order:
 - [.opencode/commands/](.opencode/commands): Dream slash-command workflows
 - [.opencode/guidance/](.opencode/guidance): operating guide and prompt scaffolds
 - [.knowledge-graph/](.knowledge-graph): architecture rules and retrieval sources
+- [NEW-FEATURE-CHECKLIST.md](NEW-FEATURE-CHECKLIST.md): contract-first feature wiring, verification, and git checklist
 
 ## Working Rules
 
