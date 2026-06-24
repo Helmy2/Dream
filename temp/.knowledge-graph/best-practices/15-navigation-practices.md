@@ -13,15 +13,16 @@ Best practice:
 
 ### 15.2 Navigation 3 typed routes
 
-Routes are modeled as typed values implementing a sealed route hierarchy, such as `SampleRoute : AppRoute`.
+Routes are modeled as typed values implementing `androidx.navigation3.runtime.NavKey`, such as `SampleRoute : NavKey`.
 
-Keep the top-level route hierarchy in a shared presentation/core module when both feature presentation and shared navigation need to reference it. Do not duplicate route types in the navigation module.
+Concrete route types belong to the feature presentation module that owns the destination. Shared navigation should depend on `NavKey`, not a shared sealed hierarchy containing feature-specific destinations. Put a route in shared core only when there is a concrete cross-feature reason.
 
 Why this is good:
 
 - exhaustive route handling
 - less stringly-typed navigation
 - a direct path to serializable route keys when destinations need arguments or saved back stacks
+- clearer feature ownership without leaking feature-specific destinations into shared core
 
 ### 15.3 Navigator owns the back stack
 

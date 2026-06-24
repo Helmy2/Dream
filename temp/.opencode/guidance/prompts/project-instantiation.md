@@ -54,6 +54,9 @@ Instantiation steps:
 9. Reset `.mvp/verification-report.md` to reflect the new generation cycle rather than the source template's prior validation state.
 10. Update `.mvp/decisions.yaml` and `.mvp/app-contract.yaml` to reflect the generated app.
 11. Decide whether the sample feature should remain temporarily as scaffolding or be replaced immediately by the first real feature.
+12. Verify git readiness in the destination project before later workflow stages depend on git commands.
+13. Verify Android SDK and Maestro readiness early, or record precise environment blockers.
+14. Run `./scripts/dream-preflight.sh` when it exists and include the result in the instantiation summary.
 
 Canonical app identity you must derive and keep consistent:
 - app display name
@@ -114,6 +117,8 @@ Rules for the sample feature:
 - remove or replace it as soon as the first real feature is generated
 - do not let sample-domain concepts leak into the final generated product
 - when the first real feature is present, remove the `feature/sample` module directory from the generated app unless a documented scaffolding exception is still active
+- when removing sample, also remove sample routes, DI registrations, settings includes, docs text, string resources, and Room schema exports
+- run a leftover artifact scan for sample route names, module names, database names, string keys, schema paths, and README/AGENTS references before review
 - if `feature/sample` is intentionally retained temporarily, record the exact reason, the owner, and the removal step in the instantiation summary
 
 Required outputs:

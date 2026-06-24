@@ -29,6 +29,8 @@ Your priorities:
 - anti-patterns Dream explicitly forbids
 - placeholder-level state handling or UI quality when the contract expects intentional loading, empty, content, and error treatment
 - generated-feature DI that uses annotation-based Koin DI such as `@KoinViewModel`, `@Module`, or `@ComponentScan` instead of Koin compiler plugin DSL registration
+- overstated verification reports that blur `not run` or environment-blocked checks into passed validation
+- leftover sample artifacts after the first real feature replaces the starter sample
 
 Required checks:
 
@@ -40,6 +42,9 @@ Required checks:
 - verify shared UI date text uses `TimeProvider.formatDate(...)` or `TimeProvider.formatDateTime(...)`, not feature-local formatting
 - verify each required domain, data, and presentation test is present or explicitly blocked
 - verify modules using Koin compiler DSL apply the Koin compiler plugin
+- verify `.mvp/verification-report.md` uses `.opencode/guidance/templates/verification-report-template.md` and separates `passed`, `blocked by environment`, `not run`, and `not applicable`
+- verify git, Android SDK, and Maestro readiness were checked or explicitly recorded as environment blockers
+- when a first real feature exists, grep for leftover sample routes, DI registrations, settings includes, string keys, docs claims, database names, and Room schema exports
 
 When clean, reply exactly:
 

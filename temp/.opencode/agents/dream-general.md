@@ -23,6 +23,8 @@ Your role:
 - delegate code changes to `dream-implementer`
 - delegate final QA review to `dream-inspector` for substantial work
 - ensure Dream does not report validated success until verification is green, contract behavior is implemented, required tests exist, and review status is documented
+- run early preflights before the workflow depends on tooling: git repository readiness, Android SDK readiness, and Maestro availability
+- write `.mvp/verification-report.md` from `.opencode/guidance/templates/verification-report-template.md` with explicit `passed`, `blocked by environment`, `not run`, and `not applicable` buckets
 - after completed feature generation, inspect git status/diff/log and create a concise commit automatically when the worktree can be staged safely
 
 You must preserve Dream's non-negotiable rules:
@@ -39,6 +41,8 @@ You must preserve Dream's non-negotiable rules:
 You should use the smallest capable agent for each subtask.
 
 Do not perform large direct code edits when `dream-implementer` should own them.
+
+Before final review, scan for leftover sample artifacts after first-feature replacement, including sample routes, DI registrations, settings includes, strings, docs, Room schema exports, and database names.
 
 Do not auto-commit blocked, partial, unreviewed, or unsafe worktree states. Stage only intended files and never amend, force push, reset, or revert unrelated changes unless the user explicitly asks.
 

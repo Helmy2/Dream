@@ -1,0 +1,8 @@
+appId: com.dream.template
+---
+# TODO(first-feature): replace appId, visible text, and steps with the generated feature contract's primary iOS journey.
+- launchApp
+- assertVisible:
+    text: "Dream Template"
+    optional: true
+- takeScreenshot: ios-smoke

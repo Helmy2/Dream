@@ -7,18 +7,20 @@ Dream is a local-first AI MVP builder for Kotlin Multiplatform apps. This reposi
 When working on Dream itself, read in this order:
 
 1. [AI_MVP_BUILDER_PLAN.md](AI_MVP_BUILDER_PLAN.md)
-2. [temp/AGENTS.md](temp/AGENTS.md)
-3. [temp/.opencode/guidance/opencode-agent-map.md](temp/.opencode/guidance/opencode-agent-map.md)
-4. [temp/.opencode/guidance/dream-agent-operating-guide.md](temp/.opencode/guidance/dream-agent-operating-guide.md)
-5. [temp/.knowledge-graph/README.md](temp/.knowledge-graph/README.md)
-6. Relevant topic files in [temp/.knowledge-graph/best-practices/](temp/.knowledge-graph/best-practices/README.md)
-7. [temp/README.md](temp/README.md) when touching the starter project
+2. [ONBOARDING.md](ONBOARDING.md)
+3. [temp/AGENTS.md](temp/AGENTS.md)
+4. [temp/.opencode/guidance/opencode-agent-map.md](temp/.opencode/guidance/opencode-agent-map.md)
+5. [temp/.opencode/guidance/dream-agent-operating-guide.md](temp/.opencode/guidance/dream-agent-operating-guide.md)
+6. [temp/.knowledge-graph/README.md](temp/.knowledge-graph/README.md)
+7. Relevant topic files in [temp/.knowledge-graph/best-practices/](temp/.knowledge-graph/best-practices/README.md)
+8. [temp/README.md](temp/README.md) when touching the starter project
 
 Prefer linking to those documents in discussions and change summaries instead of restating them.
 
 ## Repository Map
 
 - [temp](temp): canonical starter project copied by the initializer
+- [ONBOARDING.md](ONBOARDING.md): human-readable guide to the project architecture, workflow, and validation model
 - [temp/.opencode/opencode.json](temp/.opencode/opencode.json): packaged OpenCode instruction injection and MCP config
 - [temp/.opencode/agents/](temp/.opencode/agents): packaged Dream agents
 - [temp/.opencode/commands/](temp/.opencode/commands): packaged Dream slash-command workflows

@@ -35,6 +35,7 @@ class DreamKmpConventionPlugin : Plugin<Project> {
                         .let { "com.dream.template.$it" }
                     compileSdk = libs.versions.android.compileSdk.get().toInt()
                     minSdk = libs.versions.android.minSdk.get().toInt()
+                    withHostTest {}
                 }
 
                 jvm("desktop")

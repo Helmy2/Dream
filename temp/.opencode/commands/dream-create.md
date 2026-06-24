@@ -18,6 +18,11 @@ Read:
 - relevant `.knowledge-graph/best-practices/*.md`
 
 Then:
+- run early preflights before implementation depends on the environment:
+- run `./scripts/dream-preflight.sh` from the project root when it exists
+- verify the destination project is a git repository and `git status`, `git diff`, and `git log --oneline -10` work, or record a precise git blocker
+- verify Android SDK readiness through `ANDROID_HOME` or the configured SDK path, or record a precise Android environment blocker
+- verify Maestro is installed for smoke-flow validation, or record a precise Maestro environment blocker
 - generate or update `.mvp/app-contract.yaml`
 - generate or update `.mvp/decisions.yaml`
 - instantiate the appropriate Dream template
@@ -29,7 +34,7 @@ Then:
 - repair failures until green or blocked
 - run `git status`, `git diff`, and `git log --oneline -10`
 - when verification is green, inspector review passes, and only intended files are staged, create a feature commit automatically
-- finish with `.mvp/verification-report.md`
+- finish with `.mvp/verification-report.md` using `.opencode/guidance/templates/verification-report-template.md`
 
 Use `dream-implementer` for code changes and `dream-inspector` as the final QA gate for substantial work.
 

@@ -21,8 +21,13 @@ Read first:
 - `.mvp/app-contract.yaml`
 - `.mvp/decisions.yaml`
 - `.mvp/features/<feature-name>/contract.yaml` if feature-specific
+- `.opencode/guidance/templates/verification-report-template.md`
 
 Required verification for local-only MVPs:
+- `./scripts/dream-preflight.sh` when present
+- early git readiness: project is a git repository and `git status`, `git diff`, and `git log --oneline -10` work
+- early Android SDK readiness: `ANDROID_HOME` or the configured SDK path is available before Android validation is treated as code-ready
+- early Maestro readiness: Maestro is installed or the missing tool is recorded as an environment blocker
 - `./gradlew allTests`
 - `./gradlew :androidApp:assembleDebug`
 - Android CLI install, launch, layout/screenshot inspection, and log capture for Android (`https://developer.android.com/tools/agents/android-cli`)
@@ -46,8 +51,10 @@ Required parity checks before validated success:
 - every contract action maps to a concrete handling path
 - every required contract test appears in the test plan and is backed by code-level coverage
 - time-sensitive behavior uses the appropriate `TimeProvider` API instead of direct system time access or feature-local formatting
+- meaningful date/month/time tests use readable `kotlinx-datetime` construction rather than unexplained raw epoch values
 - repositories, use cases, and ViewModels are not instantiated inside recomposing composables
 - generated feature DI uses Koin compiler plugin DSL registration, not annotation-based DI such as `@KoinViewModel`, `@Module`, or `@ComponentScan`
+- feature-specific Navigation 3 route keys are owned by the feature presentation module and implement `NavKey`; shared navigation should not regain a shared `AppRoute` hierarchy without a concrete reason
 
 Automated defect scans (run these BEFORE signing off):
 1. **Grep for `Clock.System.now()`** in feature source files. The ONLY allowed occurrence is in `TimeProvider` implementations (e.g., `shared/core/domain/TimeProvider.kt` or an `expect/actual` platform time provider). Any other usage is a defect — flag it.
@@ -84,6 +91,8 @@ Output requirements:
 - state review mode as `delegated` or `manual`
 - list failing areas if blocked
 - write or update `.mvp/verification-report.md`
+- in `.mvp/verification-report.md`, list every check under one of these statuses: `passed`, `blocked by environment`, `not run`, or `not applicable`
+- follow `.opencode/guidance/templates/verification-report-template.md` unless the orchestrator requests a stricter variant
 - for completed feature flows, state the git commit hash or the precise reason no commit was created
 
 If blocked:

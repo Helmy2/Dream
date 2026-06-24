@@ -12,6 +12,8 @@ Packaged Dream context:
 - `.opencode/guidance/`: operating guidance and prompt scaffolds
 - `.knowledge-graph/`: architecture graph and best-practice rules
 - `.mvp/`: generated app contracts, decisions, feature contracts, and verification reports
+- `maestro/`: Android and iOS smoke-flow scaffolding for generated feature validation
+- `scripts/dream-preflight.sh`: git, Android SDK, and Maestro readiness check used before verification depends on local tooling
 - `NEW-FEATURE-CHECKLIST.md`: contract-first feature wiring, testing, verification, and git checklist
 
 Modules:
@@ -42,10 +44,11 @@ Template baseline:
 - Koin compiler plugin DSL modules are the default DI path for new modules; do not use annotation-based DI such as `@KoinViewModel`, `@Module`, or `@ComponentScan`
 - shared screen state uses lifecycle `ViewModel` plus Koin ViewModel wiring at stable navigation/composition roots
 - app navigation uses Navigation 3 typed routes, a Koin-provided `Navigator`, `NavDisplay`, and Koin `navigation<Route>` entry providers
-- canonical top-level route keys live in `shared/core/presentation` so feature presentation and shared navigation use one route type
+- concrete route keys live in the owning feature presentation module as `NavKey` types; shared navigation stays centralized by operating on `NavKey`
 - the shared MVI base processes actions sequentially instead of launching one coroutine per action
 - the sample feature uses Room for local persisted data on Android, iOS, and Desktop
 - common Room builder setup lives in `shared/core/database` and uses a bundled SQLite driver plus `Dispatchers.Default` for KMP-safe query execution
+- common Room builder setup enables destructive migration fallback for first-pass MVP iteration; replace with real migrations when preserving local data matters
 - user-visible sample copy comes from `shared/core/strings` Compose Resources instead of hardcoded composable text
 - shared result helpers preserve `CancellationException` instead of swallowing structured concurrency
 - `shared/core/testing` is the reusable home for coroutine-aware test helpers

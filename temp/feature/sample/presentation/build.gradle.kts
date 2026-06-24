@@ -15,7 +15,7 @@ dependencies {
     commonMainImplementation(libs.koin.compose)
     commonMainImplementation(libs.koin.composeNavigation3)
     commonMainImplementation(libs.koin.composeViewModel)
-    commonMainImplementation(libs.navigation3.runtime)
+    commonMainApi(libs.navigation3.runtime)
     commonMainImplementation(libs.compose.material3)
     commonMainImplementation(libs.compose.ui)
     commonTestImplementation(projects.shared.core.testing)

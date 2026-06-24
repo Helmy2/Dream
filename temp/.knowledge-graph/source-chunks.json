@@ -80,7 +80,7 @@
         "endLine": 52
       },
       "summary": "Defines app shell ownership, Navigation 3 typed routes, canonical route ownership, Navigator back stack ownership, Koin entry providers, and top-level route separation.",
-      "text": "A root app shell should own app-wide navigation, theme application, and safe-area handling. Navigation 3 routes should be typed values, such as SampleRoute implementing AppRoute, and the top-level route hierarchy should live in one shared presentation/core module instead of being duplicated in navigation. Shared navigation should expose a small Navigator that owns the back stack and renders it with NavDisplay. Compose UI modules should register Koin Navigation 3 entries with navigation<Route> { ... } and retrieve screen dependencies at the navigation entry boundary. Feature modules should stay free of global route dependencies unless they own the destination or a nested graph."
+      "text": "A root app shell should own app-wide navigation, theme application, and safe-area handling. Navigation 3 routes should be typed values, such as SampleRoute implementing NavKey, and concrete route types should live in the feature presentation module that owns the destination unless a route is genuinely shared. Shared navigation should expose a small Navigator that owns a NavKey back stack and renders it with NavDisplay. Compose UI modules should register Koin Navigation 3 entries with navigation<Route> { ... } and retrieve screen dependencies at the navigation entry boundary. Feature modules should stay free of global route dependencies unless they own the destination or a nested graph."
     },
     {
       "id": "chunk.resources.localization",

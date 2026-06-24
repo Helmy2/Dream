@@ -32,6 +32,7 @@ Architecture rules you must enforce:
 - repository implementations and transport or persistence mapping live in data
 - domain-to-UI mapping lives in presentation
 - navigation stays centralized
+- concrete Navigation 3 route keys live in the owning feature presentation module as `NavKey` types unless a route is genuinely shared
 - feature UI should prefer callbacks over owning the full route graph
 - shared user-visible strings should not be hardcoded
 - time-sensitive behavior must flow through `TimeProvider`
@@ -51,6 +52,7 @@ Implementation rules:
 - do not generate placeholder states unless they are implemented and testable
 - do not instantiate repositories, use cases, or ViewModels directly inside recomposing composables
 - do not let feature UI own routing infrastructure when callbacks or events are sufficient
+- register feature-owned `NavKey` routes through Koin Navigation 3 entries; do not add feature-specific route keys to shared core by default
 - when the contract marks time-sensitive behavior, inject `TimeProvider`; use `nowMillis()` for persisted timestamps, `today()` for current-date behavior, `currentYearMonth()` for period filters, and `formatDate(...)` or `formatDateTime(...)` for shared UI display
 - include loading, empty, content, and error state handling when the contract requires them
 - do not rename contract fields during implementation; if a field name is wrong, update the contract first and then implement from the updated contract
@@ -67,8 +69,10 @@ Test requirements:
 - **Domain tests**: Create `feature/<name>/domain/src/commonTest/.../ModelTest.kt` — verify entity construction, enum values, default factory methods. Create `RepositoryContractTest.kt` — verify the repository interface contract is defined and documented.
 - **Data tests**: When Room is the storage layer, create `feature/<name>/data/src/commonTest/.../EntityMappingTest.kt` — verify entity-to-domain and domain-to-entity mapping. Do not require Android-only in-memory Room from `commonTest`; use fake DAO/database interfaces for repository behavior unless a real KMP Room test setup is already proven in the template.
 - **Repository tests**: Create `feature/<name>/data/src/commonTest/.../RepositoryImplTest.kt` — verify the repository implementation(s) using fake DAO/database boundaries or reliable KMP in-memory storage.
+- **Room migrations**: For first-pass local MVP iteration, the shared Room builder may use destructive migration fallback to recover from stale local test schemas. If the contract requires preserving existing local data, add real migrations and document why destructive recovery is not acceptable.
 - **Presentation tests**: Create `feature/<name>/presentation/src/commonTest/.../ViewModelTest.kt` — verify loading → content, loading → empty, loading → error transitions, action handling, and event emission.
-- **Time-sensitive tests**: Use `FakeTimeProvider` from `shared/core/testing` or an equivalent fixed-time fake for behavior involving current time, date filters, timestamps, formatting, or logical periods.
+- **Presentation tests**: Use reusable main dispatcher setup with `@BeforeTest` and `@AfterTest` when `Dispatchers.Main` is needed. Prefer Turbine or an explicit flow-testing pattern for ordered state transition assertions.
+- **Time-sensitive tests**: Use `FakeTimeProvider` from `shared/core/testing` or an equivalent fixed-time fake for behavior involving current time, date filters, timestamps, formatting, or logical periods. Use `kotlinx-datetime` helpers for readable date and month construction instead of unexplained raw epoch values.
 - **Test dependencies**: Ensure every module's `build.gradle.kts` declares the dependencies required by its tests, including `kotlin("test")` and `shared/core/testing` where reusable fakes are needed. Add these BEFORE writing tests.
 
 Output requirements:

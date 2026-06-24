@@ -41,6 +41,9 @@ Best practice:
 - keep fake time and dispatcher providers in `shared/core/testing`
 - add coroutine test dependencies once in the shared testing module and reuse them from feature tests
 - test feature behavior at the feature layer and queue semantics at the shared presentation layer
+- use `@BeforeTest` and `@AfterTest` for repeated main dispatcher setup in ViewModel tests instead of inlining `Dispatchers.setMain(...)` in every test
+- prefer explicit flow/state testing such as Turbine where transition order matters
+- construct meaningful date, month, and time cases with `kotlinx-datetime` helpers instead of unexplained raw epoch values
 
 ### 22.6 Use Mokkery for mocks
 

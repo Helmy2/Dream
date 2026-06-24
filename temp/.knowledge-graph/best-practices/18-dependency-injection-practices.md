@@ -9,6 +9,7 @@ Dream-generated modules should use the Koin compiler plugin with Koin DSL regist
 Best practice:
 
 - call `startKoin` only from top-level app initialization paths
+- expose a shared guarded startup helper for host apps so repeated Android, iOS, Desktop, preview, or test entry points do not accidentally start Koin twice
 - let modules contribute registrations, but do not let features bootstrap DI themselves
 
 ### 17.2 Split DI by layer and platform

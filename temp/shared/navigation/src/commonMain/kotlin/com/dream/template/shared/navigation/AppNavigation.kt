@@ -2,7 +2,7 @@ package com.dream.template.shared.navigation
 
 import androidx.navigation3.ui.NavDisplay
 import androidx.compose.runtime.Composable
-import com.dream.template.shared.core.presentation.AppRoute
+import androidx.navigation3.runtime.NavKey
 import org.koin.compose.koinInject
 import org.koin.compose.navigation3.koinEntryProvider
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -15,6 +15,6 @@ fun AppNavigation() {
     NavDisplay(
         backStack = navigator.backStack,
         onBack = { navigator.goBack() },
-        entryProvider = koinEntryProvider<AppRoute>()
+        entryProvider = koinEntryProvider<NavKey>()
     )
 }

@@ -14,6 +14,7 @@ Use it to answer three questions quickly:
 
 Detailed architecture and generation rules live in:
 
+- `ONBOARDING.md`
 - `temp/.opencode/guidance/`
 - `temp/.knowledge-graph/`
 - `temp/`
@@ -219,10 +220,17 @@ The first run proved that Dream can generate a runnable project, but it also exp
 2. Improve generated implementation reports.
 - Require a section that states which contract requirements are fully implemented, partial, or deferred.
 
-3. Add a first-run regression checklist.
+3. Apply temp workflow learnings.
+- The first-run improvement notes have been folded into `ONBOARDING.md`, `temp/NEW-FEATURE-CHECKLIST.md`, packaged guidance, and this tracker.
+- Keep feature-owned Navigation 3 `NavKey` routes instead of shared feature-specific `AppRoute` route definitions.
+- Add early git, Android SDK, and Maestro preflights to new-project workflows.
+- Require verification reports to separate `passed`, `blocked by environment`, `not run`, and `not applicable` checks.
+- Improve sample cleanup, presentation test setup, readable time-sensitive tests, Maestro scaffolding, and local Room schema recovery guidance.
+
+4. Add a first-run regression checklist.
 - Re-run the same expense-tracker flow after each major Dream prompt or rule update.
 
-4. Define the initializer rewrite surface clearly.
+5. Define the initializer rewrite surface clearly.
 - Lock the identity rewrite files, expected `.mvp/` outputs, OpenCode handoff behavior, verification behavior, and report locations before adding more generation scope.
 
 ## File Areas To Update Next

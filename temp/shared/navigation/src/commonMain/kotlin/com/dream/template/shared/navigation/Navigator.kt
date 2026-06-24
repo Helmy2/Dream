@@ -2,12 +2,12 @@ package com.dream.template.shared.navigation
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import com.dream.template.shared.core.presentation.AppRoute
+import androidx.navigation3.runtime.NavKey
 
-class Navigator(startDestination: AppRoute) {
-    val backStack: SnapshotStateList<AppRoute> = mutableStateListOf(startDestination)
+class Navigator(startDestination: NavKey) {
+    val backStack: SnapshotStateList<NavKey> = mutableStateListOf(startDestination)
 
-    fun goTo(destination: AppRoute) {
+    fun goTo(destination: NavKey) {
         backStack.add(destination)
     }
 

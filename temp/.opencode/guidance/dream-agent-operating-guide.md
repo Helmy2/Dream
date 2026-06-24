@@ -150,6 +150,8 @@ Implementation must map each contract action, state, entity field, and required 
 
 Dependency assembly must stay in stable composition roots. Generated feature modules should use Koin compiler plugin DSL registration for repositories, ViewModels, and Navigation 3 entries. Do not use annotation-based Koin DI such as `@KoinViewModel`, `@Module`, or `@ComponentScan` by default.
 
+Navigation must stay centralized while route ownership stays local. Shared navigation should operate on `androidx.navigation3.runtime.NavKey`, and concrete destination route keys should live in the feature presentation module that owns the screen unless a route is genuinely shared across features.
+
 Time-sensitive behavior must inject `TimeProvider` instead of reading system time directly. Use `nowMillis()` for persisted timestamps, `today()` for current-date behavior, `currentYearMonth()` for logical period filters, and `formatDate(...)` or `formatDateTime(...)` for deterministic English shared UI formatting. The only allowed direct `Clock.System.now()` call is inside the production `SystemTimeProvider` implementation. Tests for time-sensitive behavior should use `FakeTimeProvider` from `shared/core/testing` or an equivalent fixed-time fake.
 
 Feature implementation should:
@@ -165,6 +167,8 @@ If shared behavior appears across features, move it into the appropriate shared 
 ## Git Rules
 
 After a completed feature generation flow, Dream must inspect and commit the completed feature automatically.
+
+Before the flow depends on git, verify the generated project is a git repository and that `git status`, `git diff`, and `git log --oneline -10` work. If git is unavailable or the project is not initialized, stop early with a precise environment/setup blocker instead of discovering it at commit time.
 
 Required git flow:
 
@@ -187,6 +191,8 @@ At minimum, local-only Dream projects should pass the baseline build and test ch
 
 For modular projects, `allTests` should aggregate shared and feature tests.
 
+Before implementation is treated as verification-ready, run environment preflights for Android SDK readiness, git readiness, and Maestro availability. Missing tooling is an environment blocker, not a successful validation result.
+
 Final validation should then exercise the real product targets:
 
 1. Android CLI (`https://developer.android.com/tools/agents/android-cli`) for Android environment checks, emulator/device setup, APK install, launch, layout/screenshot inspection, and log capture.
@@ -196,6 +202,8 @@ Final validation should then exercise the real product targets:
 5. `./gradlew :desktopApp:compileKotlinJvm` plus `./gradlew :desktopApp:hotRunJvm` when `desktop` is included in the app contract.
 
 Desktop is a supported target when the app contract includes it, but Desktop validation does not replace Android/iOS readiness checks. Dream must not report final success without the required platform validation, smoke coverage, and contract review, or a documented blocker.
+
+Verification reports should use explicit status buckets for each check: `passed`, `blocked by environment`, `not run`, and `not applicable`. Do not blur an unrun smoke flow into a passed build result.
 
 ## Repair Rules
 
@@ -232,5 +240,7 @@ For generation tasks, Dream should leave behind:
 - `.mvp/features/<feature>/test-plan.md`
 - `.mvp/features/<feature>/implementation-report.md`
 - `.mvp/verification-report.md`
+
+Use `.opencode/guidance/templates/verification-report-template.md` when writing `.mvp/verification-report.md`.
 
 For review or repair tasks, the responsible OpenCode agents should update the relevant report files when they are part of the current flow.
