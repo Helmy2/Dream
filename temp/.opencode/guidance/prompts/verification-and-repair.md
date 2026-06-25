@@ -84,8 +84,9 @@ Repair loop:
 4. `implementer` loads relevant rules from the guidance and graph
 5. `implementer` makes the smallest correct fix
 6. `general` reruns verification
-7. repeat until green or blocked
-8. `inspector` performs final review for substantial generation or repair work before validated success is reported
+7. `general` checks skip conditions: iteration ≤ 5? failure count decreased? no regressions? environment blocker repeated?
+8. if a skip condition triggers, stop and report `blocked` with the skip reason (documented in `.mvp/verification-report.md`); otherwise repeat from step 1
+9. `inspector` performs final review for substantial generation or repair work before validated success is reported
 
 If `inspector` fails at the tool level:
 1. record the delegated review failure and the error message

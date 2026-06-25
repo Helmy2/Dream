@@ -117,7 +117,7 @@ The default OpenCode-first Dream workflow is:
 10. `implementer` implements the feature inside the template.
 11. `implementer` generates or updates tests.
 12. `general` runs or coordinates verification.
-13. `implementer` repairs failures until green or blocked.
+13. `implementer` repairs failures until green, blocked, or a skip condition is met (see Skip Conditions).
 14. `inspector` reviews substantial generation or repair work before validated success is reported.
 15. `general` writes or coordinates `.mvp/verification-report.md` and feature implementation notes.
 
@@ -229,7 +229,32 @@ Dream should keep repairing until:
 
 - the project is green
 - a real environment or platform blocker is identified
-- or the requested behavior is impossible under current constraints
+- the requested behavior is impossible under current constraints
+- a skip condition triggers (documented below)
+
+## Iteration Tracking
+
+`general` must maintain an implicit iteration counter across repair rounds:
+
+1. Before the first repair, record the initial failure count and set iteration = 1.
+2. After each repair, run verification and record: iteration number, failure count, list of failing tests or checks, and whether any new failures appeared.
+3. Before starting the next repair, check all skip conditions against the tracked data.
+4. When the loop ends (green or blocked), include the iteration history in `.mvp/verification-report.md`.
+
+## Skip Conditions
+
+To prevent infinite repair loops, `general` must enforce these skip conditions during the repair cycle:
+
+- **Max iterations exceeded (5)**: After 5 repair rounds, if verification is still not green, stop and report `blocked: max repair attempts reached` with a summary of what was tried and what failures remain.
+- **No progress detected**: If the total failure count has not decreased after 2 consecutive repair rounds, stop and report `blocked: no progress after N rounds — same failures persist`.
+- **Regression detected**: If a repair introduces new test failures (a previously passing test now fails), stop and report `blocked: regression detected — fix caused new failures`. Do not continue fixing on top of a regression.
+- **Environment loop**: If the same environment blocker (e.g., no Android device, missing SDK) appears in consecutive verification rounds, stop immediately and report the blocker — do not retry the same failing command.
+
+When a skip condition triggers, `general` must:
+
+1. stop repairing immediately
+2. record the skip condition, iteration count, and failure history in `.mvp/verification-report.md`
+3. report status as `blocked` with a clear reason string
 
 ## Stop Conditions
 
@@ -237,6 +262,7 @@ The current agent flow may stop only when one of these is true:
 
 - requested work is implemented and verified
 - a blocker is real, specific, and documented
+- a skip condition triggered (max iterations, no progress, regression, or environment loop)
 - the user changed or narrowed the task
 
 ## Required Outputs

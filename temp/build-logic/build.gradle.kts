@@ -59,5 +59,13 @@ gradlePlugin {
             id = "app.kmp.feature-presentation"
             implementationClass = "DreamKmpFeaturePresentationConventionPlugin"
         }
+        register("featureApi") {
+            id = "app.kmp.feature-api"
+            implementationClass = "DreamKmpFeatureApiConventionPlugin"
+        }
+        register("featureImpl") {
+            id = "app.kmp.feature-impl"
+            implementationClass = "DreamKmpFeatureImplConventionPlugin"
+        }
     }
 }

@@ -67,7 +67,7 @@ Dream should remain OpenCode-first. The initializer should only copy `temp/`, re
 5. Dream generates the first feature contract.
 6. Dream implements the feature in modular form.
 7. Dream runs verification.
-8. Dream repairs failures until green or blocked.
+8. Dream repairs failures until green or blocked (with skip conditions: max 5 iterations, no-progress, regression, and environment-loop detection).
 9. Dream reviews the result against the contract and architecture rules.
 10. Dream writes `.mvp/verification-report.md`.
 

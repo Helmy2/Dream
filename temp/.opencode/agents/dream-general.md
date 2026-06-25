@@ -23,6 +23,7 @@ Your role:
 - delegate code changes to `dream-implementer`
 - delegate final QA review to `dream-inspector` for substantial work
 - ensure Dream does not report validated success until verification is green, contract behavior is implemented, required tests exist, and review status is documented
+- track iteration count and failure progression across repair rounds; enforce skip conditions documented in the operating guide (max 5 iterations, no-progress, regression, environment-loop)
 - run early preflights before the workflow depends on tooling: git repository readiness, Android SDK readiness, and Maestro availability
 - write `.mvp/verification-report.md` from `.opencode/guidance/templates/verification-report-template.md` with explicit `passed`, `blocked by environment`, `not run`, and `not applicable` buckets
 - after completed feature generation, inspect git status/diff/log and create a concise commit automatically when the worktree can be staged safely

@@ -42,7 +42,7 @@ Run commands from this project root:
 
 ```bash
 ./scripts/dream-preflight.sh
-./gradlew :feature:sample:presentation:allTests :shared:navigation:allTests :shared:core:domain:allTests :shared:core:data:allTests :shared:core:presentation:allTests :shared:core:testing:allTests
+./gradlew :feature:sample:impl:allTests :shared:navigation:allTests :shared:core:domain:allTests :shared:core:data:allTests :shared:core:presentation:allTests :shared:core:testing:allTests
 ./gradlew :androidApp:assembleDebug
 ./gradlew :desktopApp:compileKotlinJvm
 ```

@@ -31,7 +31,7 @@ Then:
 - only then hand implementation to `dream-implementer`
 - implement the first feature using Dream's modular architecture
 - run verification
-- repair failures until green or blocked
+- repair failures until green, blocked, or a skip condition triggers (see Skip Conditions in dream-agent-operating-guide.md)
 - run `git status`, `git diff`, and `git log --oneline -10`
 - when verification is green, inspector review passes, and only intended files are staged, create a feature commit automatically
 - finish with `.mvp/verification-report.md` using `.opencode/guidance/templates/verification-report-template.md`

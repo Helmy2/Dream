@@ -68,6 +68,8 @@ kmpAndroidApp = { id = "app.kmp.android-app", version = "unspecified" }
 kmpCompose = { id = "app.kmp.compose", version = "unspecified" }
 kmpFeatureData = { id = "app.kmp.feature-data", version = "unspecified" }
 kmpFeatureDomain = { id = "app.kmp.feature-domain", version = "unspecified" }
+kmpFeatureApi = { id = "app.kmp.feature-api", version = "unspecified" }
+kmpFeatureImpl = { id = "app.kmp.feature-impl", version = "unspecified" }
 kmpFeaturePresentation = { id = "app.kmp.feature-presentation", version = "unspecified" }
 kmpSharedCore = { id = "app.kmp.shared-core", version = "unspecified" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

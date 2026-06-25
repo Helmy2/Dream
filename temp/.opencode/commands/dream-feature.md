@@ -28,7 +28,7 @@ Then:
 - implement the feature within `feature/<name>/domain`, `feature/<name>/data`, `feature/<name>/api` (route types only, no Koin), and `feature/<name>/impl` (screens, ViewModels, Koin navigation entry installers)
 - add or update tests
 - run verification
-- repair failures until green or blocked
+- repair failures until green, blocked, or a skip condition triggers (see Skip Conditions in dream-agent-operating-guide.md)
 - update `.mvp/features/<feature-name>/implementation-report.md`
 - update `.mvp/verification-report.md` using `.opencode/guidance/templates/verification-report-template.md`
 - run `git status`, `git diff`, and `git log --oneline -10`

@@ -22,7 +22,7 @@ Then:
 - run the required verification commands
 - diagnose any failures
 - use `dream-implementer` for minimal architecture-safe fixes
-- rerun verification until green or blocked
+- rerun verification until green, blocked, or a skip condition triggers (see Skip Conditions in dream-agent-operating-guide.md)
 - use `dream-inspector` as the final QA gate for substantial work
 - run `git status`, `git diff`, and `git log --oneline -10` after a completed feature flow
 - if this command is part of a completed feature generation and review is approved, stage only intended feature files and create a concise feature commit automatically
