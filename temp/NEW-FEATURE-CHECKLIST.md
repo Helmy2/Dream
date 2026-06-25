@@ -13,25 +13,28 @@ Use this checklist when adding or replacing a Dream feature module.
 
 - [ ] Add `feature/<feature-name>/domain/build.gradle.kts`.
 - [ ] Add `feature/<feature-name>/data/build.gradle.kts` when persistence, network, or platform data is needed.
-- [ ] Add `feature/<feature-name>/presentation/build.gradle.kts`.
+- [ ] Add `feature/<feature-name>/api/build.gradle.kts` with `NavKey` route types and any minimal public contracts; no Koin definitions in `api`.
+- [ ] Add `feature/<feature-name>/impl/build.gradle.kts` with screens, ViewModels, UI state/actions/events, and the Koin module that installs Navigation 3 entry providers.
 - [ ] For multi-word features, keep folder paths, Gradle module names, and Kotlin packages aligned; prefer package-mirroring directories such as `feature/expense/details` with `feature.expense.details`.
 - [ ] Add feature includes to `settings.gradle.kts`.
 - [ ] Keep repository interfaces in domain and implementations in data.
-- [ ] Keep domain-to-UI mapping in presentation.
+- [ ] Keep domain-to-UI mapping in `impl`.
 - [ ] If reusing another feature's domain or data layer, document the reason in `.mvp/decisions.yaml`; extract to shared modules when ownership is equal or repeated.
+- [ ] No module outside this feature should depend on `feature/<feature-name>/impl`; callers use `api` only.
 
 ## Wiring
 
-- [ ] Add concrete Navigation 3 route keys in the owning feature presentation module using `androidx.navigation3.runtime.NavKey`.
-- [ ] Keep shared navigation centralized in `shared/navigation`, but do not put feature-specific route definitions in shared core unless there is a concrete cross-feature reason.
+- [ ] Add `NavKey` route types in `feature/<feature-name>/api`.
+- [ ] Install Navigation 3 entry providers in the Koin module inside `feature/<feature-name>/impl` using `navigation<Route> { FeatureScreen() }`.
+- [ ] Keep shared navigation centralized in `shared/navigation`; it must not depend on feature `api` or `impl` modules.
+- [ ] Import feature `impl` Koin modules in `shared/umbrella-ui` so that navigation entry providers are registered before `NavDisplay` renders.
 - [ ] Register data/domain dependencies in `shared/umbrella-core` or the appropriate non-Compose composition root.
-- [ ] Register ViewModels and Navigation 3 entries in `shared/umbrella-ui` or feature presentation DI modules.
 - [ ] Use Koin compiler plugin DSL registrations; do not use annotation-based DI such as `@KoinViewModel`, `@Module`, or `@ComponentScan`.
 - [ ] Apply `libs.plugins.koinCompiler` in modules that use compiler DSL registrations.
 - [ ] Call shared guarded Koin startup from host apps; do not call `startKoin` directly from multiple platform entry points.
 - [ ] Keep repositories, use cases, and ViewModels out of recomposing composable bodies.
 - [ ] Add all user-visible strings to `shared/core/strings` before writing UI text.
-- [ ] Do not let a feature presentation module depend directly on another feature presentation module; use callbacks or composition-root route wiring.
+- [ ] Do not let `feature/<name>/impl` depend directly on another feature's `impl` module; cross-feature navigation goes through the target feature's `api` only.
 
 ## Design System
 
@@ -61,7 +64,7 @@ Use this checklist when adding or replacing a Dream feature module.
 
 - [ ] Add domain tests for model construction, value rules, and repository contracts.
 - [ ] Add data tests for entity/domain mapping and repository behavior using fake DAO/database boundaries unless real KMP Room tests are already proven.
-- [ ] Add presentation tests for loading, empty, content, error, action handling, and event emission.
+- [ ] Add presentation tests for loading, empty, content, error, action handling, and event emission for the `impl` ViewModel.
 - [ ] Ensure required `commonTest` dependencies are present before writing tests.
 - [ ] Prefer reusable coroutine test setup with `@BeforeTest` main dispatcher setup and `@AfterTest` reset when a ViewModel test needs `Dispatchers.Main`.
 - [ ] Use Turbine or another explicit flow-testing pattern for state transition assertions when it improves readability over direct `state.value` checks.

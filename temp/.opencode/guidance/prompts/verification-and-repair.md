@@ -51,7 +51,8 @@ Required parity checks before validated success:
 - every contract action maps to a concrete handling path
 - every required contract test appears in the test plan and is backed by code-level coverage
 - multi-word feature folders and packages use one consistent naming convention
-- feature presentation modules do not depend directly on other feature presentation modules
+- `feature/<name>/api` contains only `NavKey` route types and minimal public contracts; no Koin definitions
+- `feature/<name>/impl` is not imported by any other feature or by shared navigation; cross-feature navigation goes through `feature/<name>/api`
 - cross-feature data implementation reuse is documented as an MVP exception or extracted to a shared module
 - editable-form primary actions remain reachable while the software keyboard may be open
 - responsive forms use compact single-column, wider grouped layout, and adaptive wrapping where applicable
@@ -60,7 +61,7 @@ Required parity checks before validated success:
 - meaningful date/month/time tests use readable `kotlinx-datetime` construction rather than unexplained raw epoch values
 - repositories, use cases, and ViewModels are not instantiated inside recomposing composables
 - generated feature DI uses Koin compiler plugin DSL registration, not annotation-based DI such as `@KoinViewModel`, `@Module`, or `@ComponentScan`
-- feature-specific Navigation 3 route keys are owned by the feature presentation module and implement `NavKey`; shared navigation should not regain a shared `AppRoute` hierarchy without a concrete reason
+- feature-specific Navigation 3 route types are owned by `feature/<name>/api` and implement `NavKey`; Navigation 3 entry providers are installed in the Koin module inside `feature/<name>/impl`; shared navigation should not regain a shared `AppRoute` hierarchy without a concrete reason
 
 Automated defect scans (run these BEFORE signing off):
 1. **Grep for `Clock.System.now()`** in feature source files. The ONLY allowed occurrence is in `TimeProvider` implementations (e.g., `shared/core/domain/TimeProvider.kt` or an `expect/actual` platform time provider). Any other usage is a defect — flag it.

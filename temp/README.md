@@ -28,7 +28,7 @@ Modules:
 - `shared/navigation`: centralized shell, Navigator, and Navigation 3 display infrastructure
 - `shared/umbrella-core`: non-Compose shared business logic aggregation and data/domain dependency wiring for SwiftUI or other native UI consumers
 - `shared/umbrella-ui`: exported Compose UI composition root, Koin startup, Navigator wiring, and Koin Navigation 3 entry aggregation
-- `feature/sample/*`: sample feature split into `domain`, `data`, and `presentation`
+- `feature/sample/*`: sample feature split into `domain`, `data`, `api`, and `impl`
 - `build-logic`: Dream convention plugins used by the modular template
 
 Key architecture rules:
@@ -43,8 +43,8 @@ Template baseline:
 
 - Koin compiler plugin DSL modules are the default DI path for new modules; do not use annotation-based DI such as `@KoinViewModel`, `@Module`, or `@ComponentScan`
 - shared screen state uses lifecycle `ViewModel` plus Koin ViewModel wiring at stable navigation/composition roots
-- app navigation uses Navigation 3 typed routes, a Koin-provided `Navigator`, `NavDisplay`, and Koin `navigation<Route>` entry providers
-- concrete route keys live in the owning feature presentation module as `NavKey` types; shared navigation stays centralized by operating on `NavKey`
+- app navigation uses Navigation 3 typed routes, a Koin-provided `Navigator`, `NavDisplay`, and Koin `navigation<Route>` entry providers installed by feature `impl` Koin modules
+- feature route types (`NavKey`) live in `feature/<name>/api`; screens and Koin navigation installers live in `feature/<name>/impl`; shared navigation stays centralized by operating on `NavKey`
 - the shared MVI base processes actions sequentially instead of launching one coroutine per action
 - the sample feature uses Room for local persisted data on Android, iOS, and Desktop
 - common Room builder setup lives in `shared/core/database` and uses a bundled SQLite driver plus `Dispatchers.Default` for KMP-safe query execution
@@ -61,7 +61,7 @@ Template baseline:
 Verification commands:
 
 ```bash
-./gradlew :feature:sample:presentation:allTests :feature:sample:data:compileKotlinDesktop :shared:navigation:allTests :shared:umbrella-core:allTests :shared:core:domain:allTests :shared:core:data:allTests :shared:core:presentation:allTests :shared:core:testing:allTests
+./gradlew :feature:sample:impl:allTests :feature:sample:data:compileKotlinDesktop :shared:navigation:allTests :shared:umbrella-core:allTests :shared:core:domain:allTests :shared:core:data:allTests :shared:core:presentation:allTests :shared:core:testing:allTests
 ./gradlew :androidApp:assembleDebug
 ./gradlew :desktopApp:compileKotlinJvm
 # Interactive Desktop validation when Desktop is selected:

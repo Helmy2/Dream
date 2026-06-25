@@ -24,8 +24,8 @@
         "startLine": 1,
         "endLine": 64
       },
-      "summary": "Defines domain, data, and presentation responsibilities, naming alignment, and the presentation mapper rule.",
-      "text": "Feature modules should be split into domain, data, and presentation. Multi-word feature folders, Gradle module names, and Kotlin packages should use one consistent convention; prefer package-mirroring directories such as feature/expense/details with feature.expense.details, or use one slug consistently everywhere. Domain contains models, repository interfaces, use cases, domain errors, and pure business rules, and must not contain Compose, platform APIs, Room, Ktor clients, or DataStore. Data contains repository implementations, DAO usage, DTOs, mappers, remote calls, local caching, and exception-to-domain-error mapping. Presentation contains screens, composables, UI models, mapper classes from domain to UI, view models, and only necessary platform UI effects."
+      "summary": "Defines the canonical feature module shape: domain, data, api, and impl, with naming alignment and mapper placement.",
+      "text": "Feature modules should be split into domain, data, api, and impl. The api module contains only NavKey route types and minimal public contracts; it has no Koin definitions and no screens. The impl module contains screens, ViewModels, UI state, actions, events, and the Koin module that installs Navigation 3 entry providers. Nothing outside the feature depends on the impl module; callers depend on api only. Multi-word feature folders, Gradle module names, and Kotlin packages should use one consistent convention; prefer package-mirroring directories such as feature/expense/details with feature.expense.details, or use one slug consistently everywhere. Domain-to-UI mapping lives in impl, not in domain or data."
     },
     {
       "id": "chunk.dependency.rules",
@@ -35,8 +35,8 @@
         "startLine": 1,
         "endLine": 34
       },
-      "summary": "Defines strict dependency direction, aggregator exception, and warns against cross-feature data coupling.",
-      "text": "Feature domain depends only on pure shared core modules. Feature data depends on its own domain plus shared runtime infrastructure. Feature presentation depends on its own domain, shared presentation helpers, and design system. Feature presentation modules should not depend on other feature presentation modules. Aggregator-style features may depend on other features' domain modules only. Cross-feature data-module coupling should be treated as an exception, not a standard."
+      "summary": "Defines strict dependency direction with api/impl split, aggregator exception, and warns against cross-feature data coupling.",
+      "text": "Feature domain depends only on pure shared core modules. Feature data depends on its own domain plus shared runtime infrastructure. Feature api depends only on shared navigation runtime for NavKey and minimal shared contracts; no Compose, no Koin module definitions. Feature impl depends on its own api, its own domain, shared presentation helpers, and design system. No module outside a feature depends on feature impl. Other features that navigate to feature X depend on feature X api only, never on feature X impl. Aggregator-style features may depend on other features domain modules only. Cross-feature data-module coupling should be treated as an exception, not a standard."
     },
     {
       "id": "chunk.domain.practices",
@@ -85,11 +85,11 @@
     {
       "id": "chunk.design_system.practices",
       "title": "Design System Practices",
-        "source": {
-          "file": ".knowledge-graph/best-practices/16-design-system-practices.md",
-          "startLine": 1,
+      "source": {
+        "file": ".knowledge-graph/best-practices/16-design-system-practices.md",
+        "startLine": 1,
         "endLine": 92
-        },
+      },
       "summary": "Defines DreamTheme tokens, reusable design-system components, and design-system-first feature UI rules.",
       "text": "Feature UI should use Dream design-system components before raw Material or ad hoc Compose components. Use shared/designsystem components for buttons, icon buttons, text fields, cards, dialogs, sheets, lists, navigation chrome, progress, snackbar/banner feedback, and common selection controls. Use raw Material3 components only when no design-system equivalent exists or when the feature needs documented behavior the wrapper does not support yet. Use DreamTheme tokens for spacing, shape, size, and color decisions instead of scattering raw dp values or one-off local styles."
     },
@@ -178,8 +178,8 @@
         "startLine": 1,
         "endLine": 52
       },
-      "summary": "Defines feature presentation ownership, domain reuse, cross-feature data exceptions, and shared extraction signals.",
-      "text": "Feature presentation modules should not depend directly on another feature presentation module. Cross-feature navigation should use callbacks, events, or route wiring at a composition root. Domain-only reuse can be valid for aggregators or dependent workflows when documented. Cross-feature data implementation reuse is a temporary MVP exception and should be recorded in .mvp/decisions.yaml. Extract to shared modules when multiple features equally own the same persisted concept, when three or more features need the same behavior, or when ownership cannot be explained clearly."
+      "summary": "Defines feature api/impl boundary, cross-feature navigation rules, domain reuse, cross-feature data exceptions, and shared extraction signals.",
+      "text": "Feature impl modules must not depend directly on another feature impl module. Cross-feature navigation goes through the target feature api module, which owns the NavKey route types. Domain-only reuse can be valid for aggregators or dependent workflows when documented. Cross-feature data implementation reuse is a temporary MVP exception and should be recorded in .mvp/decisions.yaml. Extract to shared modules when multiple features equally own the same persisted concept, when three or more features need the same behavior, or when ownership cannot be explained clearly."
     },
     {
       "id": "chunk.responsive.form_ime",

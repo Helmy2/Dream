@@ -6,16 +6,18 @@ These are among the most valuable practices to carry into another project.
 
 - `feature:x:domain` should depend only on shared pure core modules such as `shared:core:domain`
 - `feature:x:data` should depend on its own `domain` plus shared runtime infrastructure
-- `feature:x:presentation` should depend on its own `domain`, shared presentation helpers, and the design system
-- feature presentation modules should not depend on other feature presentation modules
+- `feature:x:api` should depend only on shared navigation runtime (for `NavKey`) and minimal shared contracts; no Compose, no Koin module definitions
+- `feature:x:impl` should depend on its own `api`, its own `domain`, shared presentation helpers, and the design system
+- no module outside a feature should depend on `feature:x:impl`
+- other features that navigate to feature X depend on `feature:x:api` only
 
 ### 5.2 Aggregator exception pattern
 
 A useful exception pattern is allowing one aggregator-style feature:
 
-- `feature:dashboard:presentation`
+- `feature:dashboard:impl`
 
-This module depends on other features' `domain` modules only, never their `presentation` modules. That is a good pattern for a dashboard or overview feature.
+This module depends on other features' `domain` modules only, never their `impl` modules. That is a good pattern for a dashboard or overview feature.
 
 Best rule to copy:
 

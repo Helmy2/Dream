@@ -25,7 +25,7 @@ Then:
 - generate or update `.mvp/features/<feature-name>/contract.yaml`
 - stop and inspect the contract before implementation; confirm entity fields, action names, state names, time behavior, storage choices, design expectations, and required tests are explicit
 - do not let `dream-implementer` write feature code until the contract exists and is the source of truth
-- implement the feature within `feature/<name>/domain`, `feature/<name>/data`, and `feature/<name>/presentation`
+- implement the feature within `feature/<name>/domain`, `feature/<name>/data`, `feature/<name>/api` (route types only, no Koin), and `feature/<name>/impl` (screens, ViewModels, Koin navigation entry installers)
 - add or update tests
 - run verification
 - repair failures until green or blocked

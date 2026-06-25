@@ -99,7 +99,7 @@ The `implementer` agent should not:
 
 - move business logic into host app modules
 - bypass shared infrastructure just to make a feature compile faster
-- introduce cross-feature presentation coupling by default
+- introduce cross-feature `impl`-to-`impl` coupling by default
 
 ## Generation Workflow
 
@@ -150,7 +150,7 @@ Implementation must map each contract action, state, entity field, and required 
 
 Dependency assembly must stay in stable composition roots. Generated feature modules should use Koin compiler plugin DSL registration for repositories, ViewModels, and Navigation 3 entries. Do not use annotation-based Koin DI such as `@KoinViewModel`, `@Module`, or `@ComponentScan` by default.
 
-Navigation must stay centralized while route ownership stays local. Shared navigation should operate on `androidx.navigation3.runtime.NavKey`, and concrete destination route keys should live in the feature presentation module that owns the screen unless a route is genuinely shared across features.
+Navigation must stay centralized while route ownership stays local. Shared navigation should operate on `androidx.navigation3.runtime.NavKey`, and concrete destination route types should live in `feature/<name>/api`. Screens, ViewModels, and Koin Navigation 3 entry providers should live in `feature/<name>/impl`. Other features or the app shell navigate to this feature by depending only on `feature/<name>/api`; nothing outside the feature depends on `feature/<name>/impl`.
 
 Feature paths, Gradle module names, and Kotlin packages must follow one convention. For multi-word feature concepts, prefer package-mirroring directories such as `feature/expense/details` with `com.example.feature.expense.details`, or use one slug consistently everywhere. Do not mix `feature/expense-details` folders with `feature.expense.details` packages unless a documented migration reason exists.
 
@@ -162,11 +162,12 @@ Feature implementation should:
 
 - create or update `feature/<name>/domain`
 - create or update `feature/<name>/data`
-- create or update `feature/<name>/presentation`
-- keep domain-to-UI mapping in presentation
-- keep feature screens wired into the centralized shell using callbacks or controlled routing points
+- create or update `feature/<name>/api` with `NavKey` route types; no Koin definitions in `api`
+- create or update `feature/<name>/impl` with screens, ViewModels, UI state/actions/events, and the Koin module that installs Navigation 3 entry providers
+- keep domain-to-UI mapping in `impl`
+- keep feature screens wired into the centralized shell through `impl` Koin navigation entries
 
-If shared behavior appears across features, move it into the appropriate shared module instead of duplicating it. A feature may reuse another feature's domain contract when it is an explicit aggregator or dependent workflow, but feature presentation modules should not depend directly on other feature presentation modules. Cross-feature data implementation reuse is a temporary exception for MVP work and must be recorded in `.mvp/decisions.yaml`; extract to shared modules when two features equally own the same persisted concept.
+If shared behavior appears across features, move it into the appropriate shared module instead of duplicating it. A feature may reuse another feature's domain contract when it is an explicit aggregator or dependent workflow, but `feature/<name>/impl` must not depend directly on another feature's `impl`. Cross-feature navigation goes through the target feature's `api`. Cross-feature data implementation reuse is a temporary exception for MVP work and must be recorded in `.mvp/decisions.yaml`; extract to shared modules when two features equally own the same persisted concept.
 
 Editable forms must be reachable with the software keyboard open. Prefer compact single-column forms on narrow screens, grouped fields on wider screens, adaptive chip wrapping, and primary actions close to active fields. Do not rely on `imePadding()` alone as proof that a save action is reachable.
 

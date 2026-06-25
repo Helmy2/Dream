@@ -2,15 +2,18 @@
 
 Feature reuse should preserve clear ownership instead of creating hidden cross-feature coupling.
 
-### 32.1 Keep presentation ownership local
+### 32.1 Keep navigation contracts in api, implementation in impl
 
-A feature presentation module owns its screens, UI state, actions, events, mappers, and Navigation 3 route keys.
+A feature is split into two presentation-facing sub-modules:
+
+- `feature/<name>/api`: the public navigation contract. Contains `NavKey` route types and any minimal public types needed for navigation. No screens, no ViewModels, no Koin module.
+- `feature/<name>/impl`: the private implementation. Contains screens, ViewModels, UI state/actions/events, presentation mappers, and the Koin module that installs Navigation 3 entry providers.
 
 Reusable principle:
 
-- feature presentation modules should not depend directly on another feature presentation module
-- cross-feature navigation should use callbacks, events, or route wiring at a composition root
-- a feature may navigate to a destination owned by another feature, but it should not import that destination screen or route from inside its own presentation code unless the composition-root contract explicitly allows it
+- other features and the app shell depend on `feature/<name>/api` only
+- no module outside the feature should depend on `feature/<name>/impl`
+- cross-feature navigation goes through the target feature's `api`, never its `impl`
 
 ### 32.2 Reuse domain contracts carefully
 
@@ -18,7 +21,7 @@ One feature may read another feature's domain model or repository contract when 
 
 Reusable principle:
 
-- domain-only reuse is safer than presentation or data reuse
+- domain-only reuse is safer than impl reuse
 - document why the dependency is product-level, not just convenient
 - avoid bidirectional feature dependencies
 

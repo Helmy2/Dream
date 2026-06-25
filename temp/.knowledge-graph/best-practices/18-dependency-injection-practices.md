@@ -17,7 +17,8 @@ Best practice:
 Good reusable pattern:
 
 - non-Compose shared modules provide domain/data registrations
-- UI modules provide navigation, screen, and view-model registrations
+- feature `impl` modules provide ViewModel and Navigation 3 entry-provider registrations
+- feature `api` modules contain no Koin definitions; they are pure public contracts
 - Android, iOS, and contract-selected Desktop provide product runtime platform factories or implementations through dedicated startup paths
 - composition roots assemble everything together without making exported core modules depend on Compose
 
@@ -33,14 +34,25 @@ If a screen state holder is a lifecycle `ViewModel`, register it with the DI con
 
 Best practice:
 
-- use Koin's `viewModel` or `viewModelOf` DSL for shared view models
+- use Koin's `viewModel` or `viewModelOf` DSL for shared view models inside the feature `impl` Koin module
 - let Compose retrieve view models through `koinViewModel()` instead of building them from `rememberCoroutineScope()`
 - keep runtime parameters explicit and rare
 - keep ViewModel and Navigation 3 entry-provider modules out of SwiftUI-facing `umbrella-core` modules
 - use compiler-plugin DSL imports from `org.koin.plugin.module.dsl.*` when using compile-safe registrations such as `viewModel<FeatureViewModel>()`
 - do not use annotation-based DI such as `@KoinViewModel`, `@Module`, or `@ComponentScan` unless the user explicitly requests annotation style
 
-### 17.5 iOS bridge injection is explicit
+### 17.5 Feature impl installs Navigation 3 entry providers
+
+The feature `impl` Koin module uses the Navigation 3 DSL to register entry provider installers for the feature's screens.
+
+Best practice:
+
+- use `navigation<Route> { FeatureScreen() }` inside the `impl` module's Koin module
+- the route type comes from `feature/<name>/api`; the screen comes from `feature/<name>/impl`
+- `shared/umbrella-ui` imports feature `impl` Koin modules so all navigation installers are available before `NavDisplay` renders
+- do not register navigation entry providers in shared core, app shells, or feature `api` modules
+
+### 17.6 iOS bridge injection is explicit
 
 `initializeKoin(...)` accepts Swift-provided implementations such as:
 

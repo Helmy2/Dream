@@ -126,24 +126,38 @@ flowchart TD
 
 ## Feature Modules
 
-Generated features should use this shape:
+Generated features use this shape:
 
-- `feature/<name>/domain`: domain models, repository interfaces, pure business contracts
+- `feature/<name>/domain`: domain models, repository interfaces, use cases, pure business contracts
 - `feature/<name>/data`: Room/network/local implementations, entities, mapping, repository implementations
-- `feature/<name>/presentation`: state, actions, events, ViewModels, UI, feature-owned route keys
+- `feature/<name>/api`: public navigation contract — `NavKey` route types and any minimal public types callers need to navigate to this feature
+- `feature/<name>/impl`: full feature implementation — screens, ViewModels, UI state/actions/events, presentation mappers, and the Koin module that installs Navigation 3 entry providers
 
 For multi-word feature concepts, keep folders, Gradle module names, and Kotlin packages aligned. Prefer package-mirroring directories such as `feature/expense/details` with `feature.expense.details`, or use a single slug consistently everywhere. Avoid mixed conventions such as a `feature/expense-details` folder with `feature.expense.details` packages.
+
+```mermaid
+flowchart TD
+    Domain[feature/name/domain]
+    Data[feature/name/data] --> Domain
+    Api[feature/name/api]
+    Impl[feature/name/impl] --> Api
+    Impl --> Domain
+    Impl --> Shared[shared/core/* + shared/designsystem]
+    OtherFeature[other feature or app shell] --> Api
+    UmbrellaUI[shared/umbrella-ui] --> Impl
+```
 
 Why this shape:
 
 - domain can be tested without platform dependencies
 - data depends on domain contracts rather than leaking persistence upward
-- presentation maps domain state into UI state and stays testable
-- host apps stay thin and do not accumulate product behavior
+- `api` keeps the public navigation contract small and stable; callers never need to know about implementation details
+- `impl` can be refactored or replaced without changing any caller
+- cross-feature navigation is enforced at the module boundary — depending on `impl` is a build error for other features
 
 Feature reuse rules:
 
-- feature presentation modules should not depend directly on another feature presentation module
+- other features and the app shell depend on `feature/<name>/api` only, never on `feature/<name>/impl`
 - domain-only reuse can be valid for aggregators or clearly dependent workflows
 - cross-feature data implementation reuse is an explicit MVP exception, not the default
 - extract to `shared/*` when multiple features equally own the same persisted concept or reusable behavior
@@ -158,23 +172,27 @@ Design-system rule:
 
 Dream uses Navigation 3 with centralized navigation display and feature-owned typed route keys.
 
-Current rule:
+Rules:
 
-- concrete route keys live in the feature presentation module that owns the destination
-- route keys implement `androidx.navigation3.runtime.NavKey`
-- shared navigation owns the `NavKey` back stack and renders it with `NavDisplay`
-- Koin Navigation 3 entries wire route keys to screens
+- route types live in `feature/<name>/api` and implement `androidx.navigation3.runtime.NavKey`
+- `feature/<name>/impl` installs Navigation 3 entry providers using `navigation<Route> { FeatureScreen() }` in its Koin module
+- `shared/navigation` owns the `NavKey` back stack and renders it with `NavDisplay`; it has no knowledge of feature-specific types
+- `shared/umbrella-ui` imports feature `impl` Koin modules so all navigation installers are registered before `NavDisplay` renders
+- other features or the app shell navigate by depending on `feature/<name>/api` for the route type only
 
 ```mermaid
 flowchart LR
-    Route[Feature-owned Route : NavKey] --> KoinEntry[Koin navigation<Route> entry]
-    Navigator[shared/navigation Navigator] --> BackStack[SnapshotStateList<NavKey>]
+    Api[feature/name/api\nSampleRoute : NavKey]
+    Impl[feature/name/impl\nKoin: navigation&lt;SampleRoute&gt;]
+    Impl --> Api
+    UmbrellaUI[shared/umbrella-ui] --> Impl
+    Navigator[shared/navigation Navigator] --> BackStack[SnapshotStateList&lt;NavKey&gt;]
     AppNavigation[shared/navigation AppNavigation] --> NavDisplay[Navigation 3 NavDisplay]
     BackStack --> NavDisplay
-    KoinEntry --> NavDisplay
+    UmbrellaUI --> AppNavigation
 ```
 
-This replaced the older shared `AppRoute` pattern because feature-specific route definitions should not live in shared core unless they are genuinely shared.
+This replaced the older shared `AppRoute` pattern and a single `presentation` module holding both routes and screens, because the public navigation contract and implementation details should live in separate modules.
 
 ## Dependency Injection
 
@@ -196,7 +214,7 @@ flowchart TD
     Init --> Guard[one-time startup guard]
     Guard --> Modules[Koin modules]
     Modules --> Core[shared/umbrella-core data/domain]
-    Modules --> UI[feature UI modules]
+    Modules --> UI[feature impl Koin modules]
     Modules --> Navigator[shared Navigator]
 ```
 
@@ -279,15 +297,16 @@ Use `temp/.opencode/guidance/templates/verification-report-template.md` for the 
 When adding or replacing a feature:
 
 1. Create or update the feature contract first.
-2. Add `feature/<name>/domain`, `feature/<name>/data`, and `feature/<name>/presentation` as needed.
-3. Add feature-owned `NavKey` routes in presentation.
-4. Register dependencies through Koin modules.
-5. Add shared string resources before writing UI copy.
-6. Add tests by layer.
-7. Update Maestro smoke scaffolding for the user-visible journey.
-8. Run preflight and verification.
-9. Write reports using the templates under `temp/.opencode/guidance/templates/`.
-10. Only commit when verification and review are clean and staging is safe.
+2. Add `feature/<name>/domain`, `feature/<name>/data`, `feature/<name>/api`, and `feature/<name>/impl` as needed.
+3. Add feature `NavKey` route types in `api`.
+4. Add screens, ViewModels, and Koin navigation entry installers in `impl`.
+5. Register data/domain dependencies through Koin modules in `impl`; do not put Koin definitions in `api`.
+6. Add shared string resources before writing UI copy.
+7. Add tests by layer.
+8. Update Maestro smoke scaffolding for the user-visible journey.
+9. Run preflight and verification.
+10. Write reports using the templates under `temp/.opencode/guidance/templates/`.
+11. Only commit when verification and review are clean and staging is safe.
 
 Use `temp/NEW-FEATURE-CHECKLIST.md` as the operational checklist.
 

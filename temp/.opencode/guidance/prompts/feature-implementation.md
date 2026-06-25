@@ -32,10 +32,10 @@ Architecture rules you must enforce:
 - repository implementations and transport or persistence mapping live in data
 - domain-to-UI mapping lives in presentation
 - navigation stays centralized
-- concrete Navigation 3 route keys live in the owning feature presentation module as `NavKey` types unless a route is genuinely shared
-- feature UI should prefer callbacks over owning the full route graph
+- concrete Navigation 3 route types live in `feature/<name>/api` as `NavKey` types; screens, ViewModels, and Koin navigation entry installers live in `feature/<name>/impl`
+- nothing outside the feature depends on `feature/<name>/impl`; cross-feature navigation goes through `feature/<name>/api`
 - multi-word feature folders, Gradle modules, and Kotlin packages must use one consistent convention; prefer package-mirroring directories such as `feature/expense/details` with `feature.expense.details`
-- feature presentation modules must not depend directly on another feature presentation module; use callbacks or composition-root navigation wiring
+- `feature/<name>/impl` must not depend directly on another feature's `impl` module; cross-feature navigation uses the target feature's `api` only
 - cross-feature data implementation reuse must be an explicit MVP exception recorded in `.mvp/decisions.yaml`, and shared ownership should be extracted to shared modules
 - feature UI must use `shared/designsystem` components and `DreamTheme` tokens by default; raw Material3 or ad hoc Compose primitives require a documented gap or feature-specific reason
 - shared user-visible strings should not be hardcoded
@@ -47,7 +47,8 @@ Implementation rules:
 - reuse the template structure instead of bypassing it
 - create or update `feature/<name>/domain`
 - create or update `feature/<name>/data`
-- create or update `feature/<name>/presentation`
+- create or update `feature/<name>/api` with `NavKey` route types; no Koin definitions in `api`
+- create or update `feature/<name>/impl` with screens, ViewModels, UI state/actions/events, and the Koin module that installs Navigation 3 entry providers
 - add or update tests for the feature
 - prefer minimal correct changes
 - keep shared infrastructure in shared modules
@@ -56,7 +57,7 @@ Implementation rules:
 - do not generate placeholder states unless they are implemented and testable
 - do not instantiate repositories, use cases, or ViewModels directly inside recomposing composables
 - do not let feature UI own routing infrastructure when callbacks or events are sufficient
-- register feature-owned `NavKey` routes through Koin Navigation 3 entries; do not add feature-specific route keys to shared core by default
+- register feature-owned `NavKey` route types in `feature/<name>/api`; install Navigation 3 entry providers through the Koin module in `feature/<name>/impl`; do not add feature-specific route keys to shared core by default
 - for editable forms, make the primary action reachable while the software keyboard may be open; do not depend on `imePadding()` alone
 - for responsive forms, use compact single-column layout on narrow screens, grouped fields on wider screens, and adaptive chip wrapping for categories/tags/filters
 - prefer existing design-system components for buttons, text fields, cards, dialogs, sheets, lists, navigation chrome, progress, snackbar/banner feedback, and common selection controls before importing raw Material3 equivalents
@@ -71,7 +72,7 @@ Mandatory checks before writing any Compose code:
 4. **No deprecated APIs**: Verify `ExposedDropdownMenuBox.menuAnchor()` is not used. Use `MenuAnchorType` from Material3 instead.
 5. **Stable composition roots**: Verify that repositories, use cases, ViewModels are assembled through DI (Koin modules) or stable `remember` blocks, never inside a `@Composable` function body.
 6. **Koin compiler DSL only**: Verify generated feature modules that use compiler DSL registrations apply `libs.plugins.koinCompiler`, and do not use `@KoinViewModel`, `@Module`, `@ComponentScan`, or `libs.koin.annotations` unless the user explicitly requested annotation-based DI.
-7. **Feature naming and boundaries**: Verify multi-word feature paths and packages use one convention, and verify the feature does not import another feature's presentation module directly.
+7. **Feature naming and boundaries**: Verify multi-word feature paths and packages use one convention, verify `feature/<name>/api` contains only route types and minimal public contracts (no Koin definitions), and verify no module outside the feature imports `feature/<name>/impl`.
 8. **Editable form reachability**: For create/update forms, plan for keyboard-open action reachability and responsive compact/wide layout behavior before writing the composables.
 9. **Design-system components first**: Before importing raw Material3 UI primitives, check `shared/designsystem/components`. Use the design-system wrapper when it exists; document any raw Material3 exception.
 
@@ -80,7 +81,7 @@ Test requirements:
 - **Data tests**: When Room is the storage layer, create `feature/<name>/data/src/commonTest/.../EntityMappingTest.kt` — verify entity-to-domain and domain-to-entity mapping. Do not require Android-only in-memory Room from `commonTest`; use fake DAO/database interfaces for repository behavior unless a real KMP Room test setup is already proven in the template.
 - **Repository tests**: Create `feature/<name>/data/src/commonTest/.../RepositoryImplTest.kt` — verify the repository implementation(s) using fake DAO/database boundaries or reliable KMP in-memory storage.
 - **Room migrations**: For first-pass local MVP iteration, the shared Room builder may use destructive migration fallback to recover from stale local test schemas. If the contract requires preserving existing local data, add real migrations and document why destructive recovery is not acceptable.
-- **Presentation tests**: Create `feature/<name>/presentation/src/commonTest/.../ViewModelTest.kt` — verify loading → content, loading → empty, loading → error transitions, action handling, and event emission.
+- **Presentation tests**: Create `feature/<name>/impl/src/commonTest/.../ViewModelTest.kt` — verify loading → content, loading → empty, loading → error transitions, action handling, and event emission.
 - **Presentation tests**: Use reusable main dispatcher setup with `@BeforeTest` and `@AfterTest` when `Dispatchers.Main` is needed. Prefer Turbine or an explicit flow-testing pattern for ordered state transition assertions.
 - **Time-sensitive tests**: Use `FakeTimeProvider` from `shared/core/testing` or an equivalent fixed-time fake for behavior involving current time, date filters, timestamps, formatting, or logical periods. Use `kotlinx-datetime` helpers for readable date and month construction instead of unexplained raw epoch values.
 - **Test dependencies**: Ensure every module's `build.gradle.kts` declares the dependencies required by its tests, including `kotlin("test")` and `shared/core/testing` where reusable fakes are needed. Add these BEFORE writing tests.
