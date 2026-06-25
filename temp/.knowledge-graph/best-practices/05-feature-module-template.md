@@ -9,6 +9,8 @@ feature/<name>/
   presentation/
 ```
 
+Multi-word features must use one consistent naming convention across folders, Gradle module names, and Kotlin packages. Prefer a folder path that mirrors package segments for multi-word concepts, such as `feature/expense/details/...` with `com.example.feature.expense.details...`, or use a single slug consistently everywhere. Do not mix a hyphenated folder such as `feature/expense-details` with package segments such as `feature.expense.details` unless a documented migration reason exists.
+
 ### 4.1 Domain module responsibilities
 
 `domain` should contain:

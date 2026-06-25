@@ -41,3 +41,9 @@ Use this exact status vocabulary for every check: `passed`, `blocked by environm
 ## Notes
 
 - `<important caveat, blocker, or follow-up>`
+
+## Template Feedback
+
+- Retrospective needed: `<yes | no>`
+- Retrospective path: `<.mvp/template-improvement-retrospective.md | not applicable>`
+- Reusable template lessons: `<short summary or not applicable>`

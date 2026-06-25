@@ -8,5 +8,8 @@ data class SampleItemEntity(
     @PrimaryKey val id: String,
     val title: String,
     val description: String,
-    val position: Int
+    val category: String,
+    val occurredAtMillis: Long,
+    val updatedAtMillis: Long,
+    val position: Int,
 )

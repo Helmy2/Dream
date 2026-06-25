@@ -32,8 +32,8 @@ Required verification for local-only MVPs:
 - `./gradlew :androidApp:assembleDebug`
 - Android CLI install, launch, layout/screenshot inspection, and log capture for Android (`https://developer.android.com/tools/agents/android-cli`)
 - `xcodebuild` plus `xcrun simctl` build, install, launch, log, and crash capture for iOS
-- Maestro smoke flows for relevant Android user journeys after Android launches cleanly
-- Maestro smoke flows for relevant iOS user journeys where reliable after iOS launches cleanly
+- Feature-owned Maestro smoke flows for every user-visible generated or touched Android feature after an Android emulator/device is open, the APK is installed, and Android launches cleanly
+- Feature-owned Maestro smoke flows for every user-visible generated or touched iOS feature where reliable after the target simulator is booted, the app is installed, and iOS launches cleanly
 - `./gradlew :desktopApp:compileKotlinJvm` plus `./gradlew :desktopApp:hotRunJvm` when `desktop` is included in the app contract
 
 Required behavior:
@@ -50,6 +50,12 @@ Required parity checks before validated success:
 - every contract entity field maps to domain models and data mappings without silent renames
 - every contract action maps to a concrete handling path
 - every required contract test appears in the test plan and is backed by code-level coverage
+- multi-word feature folders and packages use one consistent naming convention
+- feature presentation modules do not depend directly on other feature presentation modules
+- cross-feature data implementation reuse is documented as an MVP exception or extracted to a shared module
+- editable-form primary actions remain reachable while the software keyboard may be open
+- responsive forms use compact single-column, wider grouped layout, and adaptive wrapping where applicable
+- feature UI uses `shared/designsystem` components and `DreamTheme` tokens by default, with raw Material3 or ad hoc primitives documented as exceptions
 - time-sensitive behavior uses the appropriate `TimeProvider` API instead of direct system time access or feature-local formatting
 - meaningful date/month/time tests use readable `kotlinx-datetime` construction rather than unexplained raw epoch values
 - repositories, use cases, and ViewModels are not instantiated inside recomposing composables
@@ -67,6 +73,8 @@ Automated defect scans (run these BEFORE signing off):
 8. **Verify date formatting**: Check user-visible date/date-time text in common UI code uses `TimeProvider.formatDate(...)` or `TimeProvider.formatDateTime(...)`. Flag feature-local date formatting helpers.
 9. **Verify Koin compiler DSL setup**: Grep generated feature modules for `@KoinViewModel`, `@Module`, `@ComponentScan`, and `koin.annotations`. Flag any usage unless the user explicitly requested annotation-based DI. Verify modules using compiler DSL registrations apply `libs.plugins.koinCompiler`.
 10. **Verify git completion for feature flows**: After validated feature work, run `git status`, `git diff`, and `git log --oneline -10`; stage only intended files and create a concise feature commit. Do not commit blocked, partial, unreviewed, or unsafe worktree states.
+11. **Verify Maestro smoke quality**: Check that every user-visible generated or touched feature has feature-owned smoke files under `maestro/features/<feature-name>/android.yaml` and `maestro/features/<feature-name>/ios.yaml` when supported on those platforms. Do not accept one global smoke file as coverage for multiple features. Run Maestro only after the target emulator/simulator is open, the app is installed, and platform launch has been verified. Start smoke flows with `clearState` before `launchApp` unless the contract explicitly tests persisted state across launches. Prefer `eraseText`, `pressKey: Enter` on iOS single-line fields, full rendered-row regex selectors, and user-outcome assertions over keyboard-state assertions. Flag Android smoke flows that require app/window title text to be visible as the only launch proof.
+12. **Verify design-system usage**: Scan feature Compose code for raw Material3 imports such as `Button`, `OutlinedTextField`, `Card`, `AlertDialog`, `ModalBottomSheet`, `Snackbar`, `TopAppBar`, and progress indicators. If a Dream design-system wrapper exists, using the raw primitive is a defect unless a local exception is documented.
 
 Repair loop:
 1. `general` runs verification

@@ -18,7 +18,6 @@ fun TextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    label: String? = null,
     placeholder: String? = null,
     supportingText: String? = null,
     isError: Boolean = false,
@@ -27,6 +26,7 @@ fun TextField(
     leadingIcon: (@Composable () -> Unit)? = null,
     trailingIcon: (@Composable () -> Unit)? = null,
     singleLine: Boolean = true,
+    minLines: Int = 1,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default
@@ -37,13 +37,13 @@ fun TextField(
         modifier = modifier.fillMaxWidth(),
         enabled = enabled,
         readOnly = readOnly,
-        label = label?.let { { Text(it) } },
         placeholder = placeholder?.let { { Text(it) } },
         supportingText = supportingText?.let { { Text(it) } },
         isError = isError,
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
         singleLine = singleLine,
+        minLines = minLines,
         visualTransformation = visualTransformation,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
@@ -53,20 +53,21 @@ fun TextField(
             errorBorderColor = MaterialTheme.colorScheme.error,
             focusedLabelColor = MaterialTheme.colorScheme.primary,
             cursorColor = MaterialTheme.colorScheme.primary
-        )
+        ),
+        shape = MaterialTheme.shapes.medium
     )
 }
 
 @PreviewLightDark
 @Composable
 private fun TextFieldPreview() {
-    AppTheme { TextField(value = "", onValueChange = {}, label = "Email") }
+    AppTheme { TextField(value = "", onValueChange = {}) }
 }
 
 @PreviewLightDark
 @Composable
 private fun TextFieldWithValuePreview() {
-    AppTheme { TextField(value = "hello@example.com", onValueChange = {}, label = "Email") }
+    AppTheme { TextField(value = "hello@example.com", onValueChange = {}) }
 }
 
 @PreviewLightDark
@@ -76,7 +77,6 @@ private fun TextFieldErrorPreview() {
         TextField(
             value = "bad",
             onValueChange = {},
-            label = "Email",
             isError = true,
             supportingText = "Invalid email address"
         )

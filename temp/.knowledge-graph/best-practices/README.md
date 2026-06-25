@@ -36,6 +36,9 @@ This folder contains the best-practices source material in small, section-focuse
 - `29-package-and-app-identity-practices.md`
 - `30-stable-composition-root-practices.md`
 - `31-ui-quality-and-state-design-practices.md`
+- `32-feature-boundary-and-reuse-practices.md`
+- `33-responsive-form-and-ime-practices.md`
+- `34-maestro-smoke-verification-practices.md`
 
 ## Notes
 

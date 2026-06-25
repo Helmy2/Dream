@@ -57,6 +57,7 @@ Instantiation steps:
 12. Verify git readiness in the destination project before later workflow stages depend on git commands.
 13. Verify Android SDK and Maestro readiness early, or record precise environment blockers.
 14. Run `./scripts/dream-preflight.sh` when it exists and include the result in the instantiation summary.
+15. Choose and document the generated app's feature naming convention before creating multi-word feature modules.
 
 Canonical app identity you must derive and keep consistent:
 - app display name
@@ -86,6 +87,7 @@ Identity normalization rules:
 - normalize identity immediately unless a concrete blocker is documented
 - do not leave `template` or other template-only identity in package roots, namespaces, app ids, or user-facing app names
 - keep package roots deterministic from the canonical app identity rather than ad hoc renames
+- keep multi-word feature paths and Kotlin packages aligned; prefer package-mirroring directories such as `feature/expense/details` with `feature.expense.details`
 - if a surface intentionally keeps template identity temporarily, record the exact reason and the follow-up removal step
 
 What to preserve from the template:

@@ -52,3 +52,14 @@ Reusable principle:
 - keep structural scaffolding decisions separate from app identity decisions
 - record any temporary sample module retention explicitly
 - remove sample-domain naming as soon as the first real feature is generated
+
+### 29.5 Keep feature paths and packages aligned
+
+Feature directory names, Gradle module paths, and Kotlin package declarations should tell the same story.
+
+Reusable principle:
+
+- choose one multi-word feature convention before generation writes code
+- prefer package-mirroring directories for nested concepts, such as `feature/expense/details` with `feature.expense.details`
+- if using a slug such as `expense-details`, use the same slug consistently in generated module names and documentation
+- do not leave reviewers to mentally translate between `expense-details` folders and `expense.details` packages without an explicit convention

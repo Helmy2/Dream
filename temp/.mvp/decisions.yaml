@@ -2,4 +2,8 @@ template: dream-kmp-base
 architecture: modular-hybrid
 ui: compose-multiplatform
 desktopPreview: mcp-driven-hot-reload
-storage: none
+storage: local-room
+sampleStarterData:
+  persistence: room
+  seedContent: stable resource keys stored in data and resolved by presentation shared string resources
+  userEnteredContent: raw create/update text persisted locally

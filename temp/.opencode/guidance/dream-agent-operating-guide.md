@@ -152,6 +152,10 @@ Dependency assembly must stay in stable composition roots. Generated feature mod
 
 Navigation must stay centralized while route ownership stays local. Shared navigation should operate on `androidx.navigation3.runtime.NavKey`, and concrete destination route keys should live in the feature presentation module that owns the screen unless a route is genuinely shared across features.
 
+Feature paths, Gradle module names, and Kotlin packages must follow one convention. For multi-word feature concepts, prefer package-mirroring directories such as `feature/expense/details` with `com.example.feature.expense.details`, or use one slug consistently everywhere. Do not mix `feature/expense-details` folders with `feature.expense.details` packages unless a documented migration reason exists.
+
+Feature UI must use Dream design-system components and `DreamTheme` tokens by default. Use raw Material3 or ad hoc Compose UI primitives only when no design-system component exists or when the feature needs behavior the wrapper does not support yet; document the exception and consider adding a shared wrapper.
+
 Time-sensitive behavior must inject `TimeProvider` instead of reading system time directly. Use `nowMillis()` for persisted timestamps, `today()` for current-date behavior, `currentYearMonth()` for logical period filters, and `formatDate(...)` or `formatDateTime(...)` for deterministic English shared UI formatting. The only allowed direct `Clock.System.now()` call is inside the production `SystemTimeProvider` implementation. Tests for time-sensitive behavior should use `FakeTimeProvider` from `shared/core/testing` or an equivalent fixed-time fake.
 
 Feature implementation should:
@@ -162,7 +166,9 @@ Feature implementation should:
 - keep domain-to-UI mapping in presentation
 - keep feature screens wired into the centralized shell using callbacks or controlled routing points
 
-If shared behavior appears across features, move it into the appropriate shared module instead of duplicating it.
+If shared behavior appears across features, move it into the appropriate shared module instead of duplicating it. A feature may reuse another feature's domain contract when it is an explicit aggregator or dependent workflow, but feature presentation modules should not depend directly on other feature presentation modules. Cross-feature data implementation reuse is a temporary exception for MVP work and must be recorded in `.mvp/decisions.yaml`; extract to shared modules when two features equally own the same persisted concept.
+
+Editable forms must be reachable with the software keyboard open. Prefer compact single-column forms on narrow screens, grouped fields on wider screens, adaptive chip wrapping, and primary actions close to active fields. Do not rely on `imePadding()` alone as proof that a save action is reachable.
 
 ## Git Rules
 
@@ -197,13 +203,15 @@ Final validation should then exercise the real product targets:
 
 1. Android CLI (`https://developer.android.com/tools/agents/android-cli`) for Android environment checks, emulator/device setup, APK install, launch, layout/screenshot inspection, and log capture.
 2. `xcodebuild` plus `xcrun simctl` for iOS simulator build, install, launch, logs, and crash capture.
-3. Maestro Android smoke flows for user-visible behavior after Android launches cleanly.
-4. Maestro iOS smoke flows where reliable after iOS launches cleanly.
+3. Feature-owned Maestro Android smoke flows for every user-visible generated or touched feature after Android launches cleanly.
+4. Feature-owned Maestro iOS smoke flows for every user-visible generated or touched feature where reliable after iOS launches cleanly.
 5. `./gradlew :desktopApp:compileKotlinJvm` plus `./gradlew :desktopApp:hotRunJvm` when `desktop` is included in the app contract.
 
 Desktop is a supported target when the app contract includes it, but Desktop validation does not replace Android/iOS readiness checks. Dream must not report final success without the required platform validation, smoke coverage, and contract review, or a documented blocker.
 
 Verification reports should use explicit status buckets for each check: `passed`, `blocked by environment`, `not run`, and `not applicable`. Do not blur an unrun smoke flow into a passed build result.
+
+Maestro smoke flows should be feature-owned under `maestro/features/<feature-name>/android.yaml` and `maestro/features/<feature-name>/ios.yaml`. Every user-visible generated or touched feature should have at least one Android flow and one iOS flow when the feature is supported on that platform. Do not rely on one global smoke file to cover multiple features. Maestro smoke flows should run only after the target emulator/simulator is open, the app is installed, and platform tooling has confirmed the app launches. Maestro validates user behavior after runtime launch is healthy; it should not be treated as the install step. Start every smoke flow with `clearState` before `launchApp` unless the contract explicitly tests persistence across app launches. Maestro smoke flows should prove user outcomes with stable selectors. For iOS single-line edits, prefer `tapOn`, `eraseText`, `inputText`, `pressKey: Enter`, then the save action when `hideKeyboard` is unreliable. For detail screens, prefer full rendered-row assertions such as `Occurred: .*` instead of standalone labels. If no Android device or emulator is attached, the iOS app is not installed, or Maestro `launchApp` fails on a physical device while `adb install` and `adb shell am start` work, record a precise environment/tooling blocker and try an emulator-backed smoke run when feasible.
 
 ## Repair Rules
 

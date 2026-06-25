@@ -34,6 +34,10 @@ Architecture rules you must enforce:
 - navigation stays centralized
 - concrete Navigation 3 route keys live in the owning feature presentation module as `NavKey` types unless a route is genuinely shared
 - feature UI should prefer callbacks over owning the full route graph
+- multi-word feature folders, Gradle modules, and Kotlin packages must use one consistent convention; prefer package-mirroring directories such as `feature/expense/details` with `feature.expense.details`
+- feature presentation modules must not depend directly on another feature presentation module; use callbacks or composition-root navigation wiring
+- cross-feature data implementation reuse must be an explicit MVP exception recorded in `.mvp/decisions.yaml`, and shared ownership should be extracted to shared modules
+- feature UI must use `shared/designsystem` components and `DreamTheme` tokens by default; raw Material3 or ad hoc Compose primitives require a documented gap or feature-specific reason
 - shared user-visible strings should not be hardcoded
 - time-sensitive behavior must flow through `TimeProvider`
 - composition roots must stay stable across recomposition
@@ -53,6 +57,9 @@ Implementation rules:
 - do not instantiate repositories, use cases, or ViewModels directly inside recomposing composables
 - do not let feature UI own routing infrastructure when callbacks or events are sufficient
 - register feature-owned `NavKey` routes through Koin Navigation 3 entries; do not add feature-specific route keys to shared core by default
+- for editable forms, make the primary action reachable while the software keyboard may be open; do not depend on `imePadding()` alone
+- for responsive forms, use compact single-column layout on narrow screens, grouped fields on wider screens, and adaptive chip wrapping for categories/tags/filters
+- prefer existing design-system components for buttons, text fields, cards, dialogs, sheets, lists, navigation chrome, progress, snackbar/banner feedback, and common selection controls before importing raw Material3 equivalents
 - when the contract marks time-sensitive behavior, inject `TimeProvider`; use `nowMillis()` for persisted timestamps, `today()` for current-date behavior, `currentYearMonth()` for period filters, and `formatDate(...)` or `formatDateTime(...)` for shared UI display
 - include loading, empty, content, and error state handling when the contract requires them
 - do not rename contract fields during implementation; if a field name is wrong, update the contract first and then implement from the updated contract
@@ -64,6 +71,9 @@ Mandatory checks before writing any Compose code:
 4. **No deprecated APIs**: Verify `ExposedDropdownMenuBox.menuAnchor()` is not used. Use `MenuAnchorType` from Material3 instead.
 5. **Stable composition roots**: Verify that repositories, use cases, ViewModels are assembled through DI (Koin modules) or stable `remember` blocks, never inside a `@Composable` function body.
 6. **Koin compiler DSL only**: Verify generated feature modules that use compiler DSL registrations apply `libs.plugins.koinCompiler`, and do not use `@KoinViewModel`, `@Module`, `@ComponentScan`, or `libs.koin.annotations` unless the user explicitly requested annotation-based DI.
+7. **Feature naming and boundaries**: Verify multi-word feature paths and packages use one convention, and verify the feature does not import another feature's presentation module directly.
+8. **Editable form reachability**: For create/update forms, plan for keyboard-open action reachability and responsive compact/wide layout behavior before writing the composables.
+9. **Design-system components first**: Before importing raw Material3 UI primitives, check `shared/designsystem/components`. Use the design-system wrapper when it exists; document any raw Material3 exception.
 
 Test requirements:
 - **Domain tests**: Create `feature/<name>/domain/src/commonTest/.../ModelTest.kt` — verify entity construction, enum values, default factory methods. Create `RepositoryContractTest.kt` — verify the repository interface contract is defined and documented.

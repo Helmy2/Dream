@@ -9,17 +9,30 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun SampleScreen(
     viewModel: SampleViewModel = koinViewModel(),
-    onNavigateBack: () -> Unit = {}
+    selectedId: String? = null,
+    onNavigateDetail: (String) -> Unit = {},
+    onNavigateBack: () -> Unit = {},
 ) {
     val state by viewModel.state.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.eventFlow.collect { _ ->
+        viewModel.eventFlow.collect { event ->
+            when (event) {
+                is SampleEvent.NavigateToDetail -> onNavigateDetail(event.id)
+                SampleEvent.NavigateBack,
+                SampleEvent.SaveSucceeded -> Unit
+            }
         }
     }
 
     LaunchedEffect(viewModel) {
         viewModel.onAction(SampleAction.Load())
+    }
+
+    LaunchedEffect(viewModel, selectedId) {
+        if (selectedId != null) {
+            viewModel.onAction(SampleAction.SelectItem(selectedId, navigate = false))
+        }
     }
 
     SampleContent(

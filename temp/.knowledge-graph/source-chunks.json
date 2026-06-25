@@ -22,10 +22,10 @@
       "source": {
         "file": ".knowledge-graph/best-practices/05-feature-module-template.md",
         "startLine": 1,
-        "endLine": 62
+        "endLine": 64
       },
-      "summary": "Defines domain, data, and presentation responsibilities and the presentation mapper rule.",
-      "text": "Feature modules should be split into domain, data, and presentation. Domain contains models, repository interfaces, use cases, domain errors, and pure business rules, and must not contain Compose, platform APIs, Room, Ktor clients, or DataStore. Data contains repository implementations, DAO usage, DTOs, mappers, remote calls, local caching, and exception-to-domain-error mapping. Presentation contains screens, composables, UI models, mapper classes from domain to UI, view models, and only necessary platform UI effects."
+      "summary": "Defines domain, data, and presentation responsibilities, naming alignment, and the presentation mapper rule.",
+      "text": "Feature modules should be split into domain, data, and presentation. Multi-word feature folders, Gradle module names, and Kotlin packages should use one consistent convention; prefer package-mirroring directories such as feature/expense/details with feature.expense.details, or use one slug consistently everywhere. Domain contains models, repository interfaces, use cases, domain errors, and pure business rules, and must not contain Compose, platform APIs, Room, Ktor clients, or DataStore. Data contains repository implementations, DAO usage, DTOs, mappers, remote calls, local caching, and exception-to-domain-error mapping. Presentation contains screens, composables, UI models, mapper classes from domain to UI, view models, and only necessary platform UI effects."
     },
     {
       "id": "chunk.dependency.rules",
@@ -83,6 +83,17 @@
       "text": "A root app shell should own app-wide navigation, theme application, and safe-area handling. Navigation 3 routes should be typed values, such as SampleRoute implementing NavKey, and concrete route types should live in the feature presentation module that owns the destination unless a route is genuinely shared. Shared navigation should expose a small Navigator that owns a NavKey back stack and renders it with NavDisplay. Compose UI modules should register Koin Navigation 3 entries with navigation<Route> { ... } and retrieve screen dependencies at the navigation entry boundary. Feature modules should stay free of global route dependencies unless they own the destination or a nested graph."
     },
     {
+      "id": "chunk.design_system.practices",
+      "title": "Design System Practices",
+        "source": {
+          "file": ".knowledge-graph/best-practices/16-design-system-practices.md",
+          "startLine": 1,
+        "endLine": 92
+        },
+      "summary": "Defines DreamTheme tokens, reusable design-system components, and design-system-first feature UI rules.",
+      "text": "Feature UI should use Dream design-system components before raw Material or ad hoc Compose components. Use shared/designsystem components for buttons, icon buttons, text fields, cards, dialogs, sheets, lists, navigation chrome, progress, snackbar/banner feedback, and common selection controls. Use raw Material3 components only when no design-system equivalent exists or when the feature needs documented behavior the wrapper does not support yet. Use DreamTheme tokens for spacing, shape, size, and color decisions instead of scattering raw dp values or one-off local styles."
+    },
+    {
       "id": "chunk.resources.localization",
       "title": "Resource And Localization Practices",
       "source": {
@@ -132,10 +143,10 @@
       "source": {
         "file": ".knowledge-graph/best-practices/29-package-and-app-identity-practices.md",
         "startLine": 1,
-        "endLine": 37
+        "endLine": 65
       },
-      "summary": "Defines canonical app identity derivation, immediate normalization of package-defining surfaces, and explicit rename audits.",
-      "text": "Dream should derive one canonical app identity before renaming anything, then normalize package roots, namespaces, application ids, and visible app identity from that source of truth. Generated projects should record an explicit rename audit across Gradle names, module namespaces, package declarations, manifests, iOS identity, Desktop app titles when Desktop is included in the app contract, and .mvp metadata."
+      "summary": "Defines canonical app identity derivation, immediate normalization of package-defining surfaces, explicit rename audits, and feature path/package alignment.",
+      "text": "Dream should derive one canonical app identity before renaming anything, then normalize package roots, namespaces, application ids, and visible app identity from that source of truth. Generated projects should record an explicit rename audit across Gradle names, module namespaces, package declarations, manifests, iOS identity, Desktop app titles when Desktop is included in the app contract, and .mvp metadata. Feature directory names, Gradle module paths, and Kotlin package declarations should tell the same story; avoid mixing feature/expense-details folders with feature.expense.details packages without an explicit convention."
     },
     {
       "id": "chunk.composition_root.practices",
@@ -158,6 +169,39 @@
       },
       "summary": "Defines state-specific UX expectations, shared-token usage, and intentional loading, empty, content, and error state quality.",
       "text": "Dream should define user-facing expectations for loading, empty, content, and error states in the contract and review them before approval. Feature screens should use shared tokens instead of ad hoc sizing, and state handling should feel intentional rather than placeholder-level."
+    },
+    {
+      "id": "chunk.feature.boundary_reuse",
+      "title": "Feature Boundary And Reuse Practices",
+      "source": {
+        "file": ".knowledge-graph/best-practices/32-feature-boundary-and-reuse-practices.md",
+        "startLine": 1,
+        "endLine": 52
+      },
+      "summary": "Defines feature presentation ownership, domain reuse, cross-feature data exceptions, and shared extraction signals.",
+      "text": "Feature presentation modules should not depend directly on another feature presentation module. Cross-feature navigation should use callbacks, events, or route wiring at a composition root. Domain-only reuse can be valid for aggregators or dependent workflows when documented. Cross-feature data implementation reuse is a temporary MVP exception and should be recorded in .mvp/decisions.yaml. Extract to shared modules when multiple features equally own the same persisted concept, when three or more features need the same behavior, or when ownership cannot be explained clearly."
+    },
+    {
+      "id": "chunk.responsive.form_ime",
+      "title": "Responsive Form And IME Practices",
+      "source": {
+        "file": ".knowledge-graph/best-practices/33-responsive-form-and-ime-practices.md",
+        "startLine": 1,
+        "endLine": 57
+      },
+      "summary": "Defines keyboard-open primary-action reachability, compact/wide form layouts, adaptive wrapping, and outcome-based smoke verification.",
+      "text": "Editable forms must keep primary actions reachable while the software keyboard may be open. imePadding helps but is not proof of reachability. Compact width should use single-column forms, wider width may group related fields, primary actions should stay near edited fields, and validation should stay attached to relevant fields. Chips, categories, tags, and filters should use adaptive wrapping instead of rigid fixed rows. Smoke tests should verify entered text, reachable save action, and success outcome rather than keyboard internals."
+    },
+    {
+      "id": "chunk.maestro.smoke_verification",
+      "title": "Maestro Smoke Verification Practices",
+      "source": {
+        "file": ".knowledge-graph/best-practices/34-maestro-smoke-verification-practices.md",
+        "startLine": 1,
+        "endLine": 80
+      },
+      "summary": "Defines feature-owned Maestro coverage, editable form patterns, detail assertions, platform brittleness, and environment fallback reporting.",
+      "text": "Maestro smoke flows should prove user-visible outcomes without depending on brittle internals. Smoke coverage is owned by features, not by one global app file. Every user-visible generated or touched feature should have Android and iOS smoke flows when supported and reliable, stored under maestro/features/<feature-name>/android.yaml and maestro/features/<feature-name>/ios.yaml. App-level startup smoke checks are optional and do not replace feature-level coverage. Maestro is a smoke validator, not the platform install step: boot or open the target emulator, device, or simulator, install the app with platform tooling, and confirm launch before running maestro test. Start every smoke flow with clearState before launchApp unless the contract explicitly tests persisted state across launches. If the runtime is unavailable or the app is not installed, mark the smoke flow blocked by environment or not run. For iOS single-line text replacement, prefer tapOn, eraseText, inputText, pressKey: Enter, then save when hideKeyboard is unreliable. Detail screens should assert rendered content and full-row regex selectors such as Occurred: .* or Created: .* instead of standalone labels."
     }
   ]
 }

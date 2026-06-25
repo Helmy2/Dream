@@ -227,10 +227,17 @@ The first run proved that Dream can generate a runnable project, but it also exp
 - Require verification reports to separate `passed`, `blocked by environment`, `not run`, and `not applicable` checks.
 - Improve sample cleanup, presentation test setup, readable time-sensitive tests, Maestro scaffolding, and local Room schema recovery guidance.
 
-4. Add a first-run regression checklist.
+4. Apply expense update-flow retrospective learnings.
+- Add editable-form Maestro guidance for `eraseText`, `pressKey: Enter`, keyboard-open save reachability, detail-row regex selectors, and simulator-specific assertion brittleness.
+- Add explicit feature boundary rules for feature reuse, cross-feature data exceptions, and shared extraction triggers.
+- Add multi-word feature path/package naming rules.
+- Add responsive form and IME reachability rules.
+- Add a packaged template retrospective template so future generated-app friction is captured consistently.
+
+5. Add a first-run regression checklist.
 - Re-run the same expense-tracker flow after each major Dream prompt or rule update.
 
-5. Define the initializer rewrite surface clearly.
+6. Define the initializer rewrite surface clearly.
 - Lock the identity rewrite files, expected `.mvp/` outputs, OpenCode handoff behavior, verification behavior, and report locations before adding more generation scope.
 
 ## File Areas To Update Next
@@ -258,6 +265,9 @@ The first run proved that Dream can generate a runnable project, but it also exp
 - presentation-state modeling
 - UI quality and preview-state expectations
 - contract and testing alignment
+- feature boundary and reuse practices
+- responsive form and IME practices
+- Maestro smoke verification practices
 
 ## Status
 

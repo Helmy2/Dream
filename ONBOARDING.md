@@ -105,6 +105,7 @@ Non-negotiable rules:
 - keep domain pure Kotlin
 - keep navigation centralized
 - keep user-visible strings in shared resources
+- use Dream design-system components and `DreamTheme` tokens before raw Material3 or ad hoc feature-local UI primitives
 - validate Android, iOS, and contract-selected Desktop as real product targets
 
 ```mermaid
@@ -131,12 +132,27 @@ Generated features should use this shape:
 - `feature/<name>/data`: Room/network/local implementations, entities, mapping, repository implementations
 - `feature/<name>/presentation`: state, actions, events, ViewModels, UI, feature-owned route keys
 
+For multi-word feature concepts, keep folders, Gradle module names, and Kotlin packages aligned. Prefer package-mirroring directories such as `feature/expense/details` with `feature.expense.details`, or use a single slug consistently everywhere. Avoid mixed conventions such as a `feature/expense-details` folder with `feature.expense.details` packages.
+
 Why this shape:
 
 - domain can be tested without platform dependencies
 - data depends on domain contracts rather than leaking persistence upward
 - presentation maps domain state into UI state and stays testable
 - host apps stay thin and do not accumulate product behavior
+
+Feature reuse rules:
+
+- feature presentation modules should not depend directly on another feature presentation module
+- domain-only reuse can be valid for aggregators or clearly dependent workflows
+- cross-feature data implementation reuse is an explicit MVP exception, not the default
+- extract to `shared/*` when multiple features equally own the same persisted concept or reusable behavior
+
+Design-system rule:
+
+- feature UI should use `shared/designsystem` components for common buttons, text fields, cards, dialogs, sheets, lists, navigation chrome, progress, feedback, and selection controls
+- raw Material3 components are allowed only when no design-system wrapper exists or a wrapper lacks required behavior
+- document raw Material3 exceptions and consider adding a shared wrapper when the need is reusable
 
 ## Navigation
 
@@ -240,12 +256,14 @@ When Desktop is in the app contract and interactive validation is required:
 ./gradlew :desktopApp:hotRunJvm
 ```
 
-Smoke flows live under `maestro/`:
+Feature-owned smoke flows live under `maestro/features/<feature-name>/`:
 
 ```bash
-maestro test maestro/android/smoke.yaml
-maestro test maestro/ios/smoke.yaml
+maestro test maestro/features/sample/android.yaml
+maestro test maestro/features/sample/ios.yaml
 ```
+
+Every user-visible generated feature should have at least one Android smoke flow and one iOS smoke flow when the feature is supported on that platform. App-level startup smoke checks may exist, but they do not replace feature-level coverage.
 
 Verification reports must distinguish:
 

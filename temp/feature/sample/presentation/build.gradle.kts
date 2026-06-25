@@ -9,6 +9,7 @@ dependencies {
     commonMainImplementation(projects.shared.core.presentation)
     commonMainImplementation(projects.shared.core.strings)
     commonMainImplementation(projects.shared.designsystem)
+    commonMainImplementation(projects.shared.navigation)
     commonMainImplementation(libs.compose.runtime)
     commonMainImplementation(libs.compose.foundation)
     commonMainImplementation(libs.compose.components.resources)
