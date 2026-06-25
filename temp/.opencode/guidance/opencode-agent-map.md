@@ -155,7 +155,7 @@ If `inspector` fails at the tool level, `general` must run a manual review fallb
 
 - user request
 - `AGENTS.md`
-- `.knowledge-graph/PRODUCT.md`
+- `.opencode/knowledge-graph/PRODUCT.md`
 - `dream-agent-operating-guide.md`
 - relevant `.mvp/` metadata
 

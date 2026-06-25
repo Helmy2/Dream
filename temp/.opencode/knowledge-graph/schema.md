@@ -12,7 +12,7 @@ Source metadata shape:
 
 ```json
 {
-  "file": ".knowledge-graph/best-practices/03-core-architectural-philosophy.md",
+  "file": ".opencode/knowledge-graph/best-practices/03-core-architectural-philosophy.md",
   "startLine": 15,
   "endLine": 19
 }
@@ -191,7 +191,7 @@ Edge shape:
   "type": "DEPENDS_ON",
   "to": "layer.domain",
   "source": {
-    "file": ".knowledge-graph/best-practices/03-core-architectural-philosophy.md",
+    "file": ".opencode/knowledge-graph/best-practices/03-core-architectural-philosophy.md",
     "startLine": 15,
     "endLine": 19
   }

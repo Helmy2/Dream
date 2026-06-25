@@ -15,7 +15,7 @@ Inputs you must use:
 - `.mvp/app-contract.yaml`
 - `.mvp/decisions.yaml` if present
 - `AGENTS.md`
-- relevant architecture rules from `.knowledge-graph/`
+- relevant architecture rules from `.opencode/knowledge-graph/`
 
 Rules:
 - keep the contract compact

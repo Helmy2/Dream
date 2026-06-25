@@ -14,7 +14,7 @@ Your task:
 Run the required verification flow, diagnose failures, repair them while preserving architecture rules, and produce a final verification result.
 
 Read first:
-- `.knowledge-graph/PRODUCT.md`
+- `.opencode/knowledge-graph/PRODUCT.md`
 - `.opencode/guidance/opencode-agent-map.md`
 - `AGENTS.md`
 - relevant graph-backed rules for the failing module or runtime surface

@@ -29,7 +29,7 @@ flowchart TD
 - `ONBOARDING.md`: this entry-level guide.
 - `temp/`: canonical Kotlin Multiplatform starter project.
 - `temp/.opencode/`: packaged OpenCode config, agents, commands, and prompt guidance.
-- `temp/.knowledge-graph/`: reusable architecture rules and retrieval sources.
+- `temp/.opencode/knowledge-graph/`: reusable architecture rules and retrieval sources.
 - `temp/.mvp/`: generated contracts, decisions, feature reports, and verification reports.
 - `temp/maestro/`: Android and iOS smoke-flow scaffolding.
 - `temp/scripts/dream-preflight.sh`: local readiness check for git, Android SDK, and Maestro.
@@ -43,7 +43,7 @@ flowchart LR
     Temp --> Shared[shared/*]
     Temp --> Features[feature/*]
     Temp --> Agents[.opencode agents and commands]
-    Temp --> Graph[.knowledge-graph rules]
+    Temp --> Graph[.opencode/knowledge-graph rules]
     Temp --> MVP[.mvp generated metadata]
     Temp --> Maestro[maestro smoke flows]
 ```
@@ -308,7 +308,7 @@ When adding or replacing a feature:
 10. Write reports using the templates under `temp/.opencode/guidance/templates/`.
 11. Only commit when verification and review are clean and staging is safe.
 
-Use `temp/NEW-FEATURE-CHECKLIST.md` as the operational checklist.
+Use `temp/.opencode/guidance/new-feature-checklist.md` as the operational checklist.
 
 ## Sample Feature Policy
 
@@ -331,7 +331,7 @@ When changing Dream rather than a generated app:
 
 - update `AI_MVP_BUILDER_PLAN.md` if workflow, priorities, or success criteria change
 - update `temp/.opencode/guidance/prompts/` when generation or verification behavior changes
-- update `temp/.knowledge-graph/best-practices/` when architecture rules change
+- update `temp/.opencode/knowledge-graph/best-practices/` when architecture rules change
 - update `temp/README.md` and `temp/AGENTS.md` when starter structure or validation commands change
 - keep root docs compact and link to detailed guidance rather than duplicating every rule
 

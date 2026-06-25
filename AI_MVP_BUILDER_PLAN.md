@@ -16,7 +16,7 @@ Detailed architecture and generation rules live in:
 
 - `ONBOARDING.md`
 - `temp/.opencode/guidance/`
-- `temp/.knowledge-graph/`
+- `temp/.opencode/knowledge-graph/`
 - `temp/`
 - `docs/first-try-report.md`
 
@@ -50,7 +50,7 @@ This file should stay compact, current, and task-oriented.
 Dream currently builds on:
 
 - a canonical starter project under `temp/`
-- a packaged knowledge graph under `temp/.knowledge-graph/`
+- a packaged knowledge graph under `temp/.opencode/knowledge-graph/`
 - packaged OpenCode guidance under `temp/.opencode/guidance/`
 - packaged Dream agents and commands under `temp/.opencode/`
 
@@ -119,7 +119,7 @@ Final success requires:
 
 ### Foundation
 
-- created `.knowledge-graph/` with schema, graph data, source chunks, product identity, and split best-practice sources
+- created `.opencode/knowledge-graph/` with schema, graph data, source chunks, product identity, and split best-practice sources
 - removed the old monolithic `BEST_PRACTICES.md`
 - created Dream guidance under `.opencode/guidance/`
 - created Dream agents and commands under `.opencode/`
@@ -221,7 +221,7 @@ The first run proved that Dream can generate a runnable project, but it also exp
 - Require a section that states which contract requirements are fully implemented, partial, or deferred.
 
 3. Apply temp workflow learnings.
-- The first-run improvement notes have been folded into `ONBOARDING.md`, `temp/NEW-FEATURE-CHECKLIST.md`, packaged guidance, and this tracker.
+- The first-run improvement notes have been folded into `ONBOARDING.md`, `temp/.opencode/guidance/new-feature-checklist.md`, packaged guidance, and this tracker.
 - Keep feature-owned Navigation 3 `NavKey` routes instead of shared feature-specific `AppRoute` route definitions.
 - Add early git, Android SDK, and Maestro preflights to new-project workflows.
 - Require verification reports to separate `passed`, `blocked by environment`, `not run`, and `not applicable` checks.
@@ -316,4 +316,4 @@ When Dream changes, update:
 - `Next Tasks`
 
 Do not turn this file back into a giant architecture essay.
-Use `temp/.opencode/guidance/` and `temp/.knowledge-graph/` for detailed rules.
+Use `temp/.opencode/guidance/` and `temp/.opencode/knowledge-graph/` for detailed rules.

@@ -7,9 +7,9 @@ This guide defines the default working behavior for OpenCode agents generating, 
 Use this guide together with:
 
 - `.opencode/guidance/opencode-agent-map.md`
-- `.knowledge-graph/PRODUCT.md`
-- `.knowledge-graph/README.md`
-- relevant files in `.knowledge-graph/best-practices/`
+- `.opencode/knowledge-graph/PRODUCT.md`
+- `.opencode/knowledge-graph/README.md`
+- relevant files in `.opencode/knowledge-graph/best-practices/`
 - `AGENTS.md`
 - the selected template README and source files
 
@@ -17,11 +17,11 @@ Use this guide together with:
 
 Unless a narrower task makes some steps irrelevant, use this read order:
 
-1. `.knowledge-graph/PRODUCT.md`
+1. `.opencode/knowledge-graph/PRODUCT.md`
 2. `.opencode/guidance/opencode-agent-map.md`
 3. `AGENTS.md`
-4. `.knowledge-graph/README.md`
-5. relevant `.knowledge-graph/best-practices/*.md` files for the current concern
+4. `.opencode/knowledge-graph/README.md`
+5. relevant `.opencode/knowledge-graph/best-practices/*.md` files for the current concern
 6. selected template README
 7. target project `.mvp/` metadata if it already exists
 

@@ -11,11 +11,11 @@ Your task:
 Implement the requested feature using the existing Dream modular template and the feature contract.
 
 Read first:
-- `.knowledge-graph/PRODUCT.md`
+- `.opencode/knowledge-graph/PRODUCT.md`
 - `.opencode/guidance/opencode-agent-map.md`
 - `.opencode/guidance/templates/implementation-report-template.md`
 - `AGENTS.md`
-- relevant files in `.knowledge-graph/best-practices/`
+- relevant files in `.opencode/knowledge-graph/best-practices/`
 - template README and relevant modules
 - `.mvp/app-contract.yaml`
 - `.mvp/features/<feature-name>/contract.yaml`

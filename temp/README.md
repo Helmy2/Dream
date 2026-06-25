@@ -10,11 +10,11 @@ Packaged Dream context:
 - `.opencode/agents/`: Dream agent definitions
 - `.opencode/commands/`: Dream slash-command workflows
 - `.opencode/guidance/`: operating guidance and prompt scaffolds
-- `.knowledge-graph/`: architecture graph and best-practice rules
+- `.opencode/knowledge-graph/`: architecture graph and best-practice rules
 - `.mvp/`: generated app contracts, decisions, feature contracts, and verification reports
 - `maestro/`: Android and iOS smoke-flow scaffolding for generated feature validation
 - `scripts/dream-preflight.sh`: git, Android SDK, and Maestro readiness check used before verification depends on local tooling
-- `NEW-FEATURE-CHECKLIST.md`: contract-first feature wiring, testing, verification, and git checklist
+- `.opencode/guidance/new-feature-checklist.md`: contract-first feature wiring, testing, verification, and git checklist
 
 Modules:
 

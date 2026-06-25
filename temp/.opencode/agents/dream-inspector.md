@@ -12,8 +12,8 @@ Review against:
 - `.opencode/guidance/opencode-agent-map.md`
 - `.opencode/guidance/dream-agent-operating-guide.md`
 - `AGENTS.md`
-- `.knowledge-graph/README.md`
-- relevant `.knowledge-graph/best-practices/*.md`
+- `.opencode/knowledge-graph/README.md`
+- relevant `.opencode/knowledge-graph/best-practices/*.md`
 - `.mvp/app-contract.yaml`
 - `.mvp/decisions.yaml`
 - relevant feature contracts

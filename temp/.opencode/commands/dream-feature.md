@@ -10,8 +10,8 @@ Treat `$ARGUMENTS` as the feature request.
 Read:
 - `.opencode/guidance/opencode-agent-map.md`
 - `.opencode/guidance/dream-agent-operating-guide.md`
-- relevant `.knowledge-graph/best-practices/*.md`
-- `NEW-FEATURE-CHECKLIST.md`
+- relevant `.opencode/knowledge-graph/best-practices/*.md`
+- `.opencode/guidance/new-feature-checklist.md`
 - `.mvp/app-contract.yaml`
 - `.mvp/decisions.yaml`
 - existing feature contracts if present

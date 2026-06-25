@@ -11,8 +11,8 @@ When working on Dream itself, read in this order:
 3. [temp/AGENTS.md](temp/AGENTS.md)
 4. [temp/.opencode/guidance/opencode-agent-map.md](temp/.opencode/guidance/opencode-agent-map.md)
 5. [temp/.opencode/guidance/dream-agent-operating-guide.md](temp/.opencode/guidance/dream-agent-operating-guide.md)
-6. [temp/.knowledge-graph/README.md](temp/.knowledge-graph/README.md)
-7. Relevant topic files in [temp/.knowledge-graph/best-practices/](temp/.knowledge-graph/best-practices/README.md)
+6. [temp/.opencode/knowledge-graph/README.md](temp/.opencode/knowledge-graph/README.md)
+7. Relevant topic files in [temp/.opencode/knowledge-graph/best-practices/](temp/.opencode/knowledge-graph/best-practices/README.md)
 8. [temp/README.md](temp/README.md) when touching the starter project
 
 Prefer linking to those documents in discussions and change summaries instead of restating them.
@@ -25,7 +25,7 @@ Prefer linking to those documents in discussions and change summaries instead of
 - [temp/.opencode/agents/](temp/.opencode/agents): packaged Dream agents
 - [temp/.opencode/commands/](temp/.opencode/commands): packaged Dream slash-command workflows
 - [temp/.opencode/guidance/](temp/.opencode/guidance): packaged operating guidance and prompt scaffolds
-- [temp/.knowledge-graph/README.md](temp/.knowledge-graph/README.md): packaged reusable architecture rules and source graph
+- [temp/.opencode/knowledge-graph/README.md](temp/.opencode/knowledge-graph/README.md): packaged reusable architecture rules and source graph
 - [docs/first-try-report.md](docs/first-try-report.md): known generation and review gaps
 
 ## Working Rules
@@ -69,7 +69,7 @@ Use the lighter template commands for focused iteration, but do not report final
 ## When Updating Dream
 
 - If you change generation workflow or success criteria, update [AI_MVP_BUILDER_PLAN.md](AI_MVP_BUILDER_PLAN.md) and the relevant files under [temp/.opencode/guidance/prompts/](temp/.opencode/guidance/prompts/).
-- If you change reusable architecture rules, update the corresponding files in [temp/.knowledge-graph/best-practices/](temp/.knowledge-graph/best-practices/README.md).
+- If you change reusable architecture rules, update the corresponding files in [temp/.opencode/knowledge-graph/best-practices/](temp/.opencode/knowledge-graph/best-practices/README.md).
 - If you change starter structure or validation commands, update [temp/README.md](temp/README.md) and [temp/AGENTS.md](temp/AGENTS.md).
 
 ## Existing Agent Layer

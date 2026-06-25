@@ -2,7 +2,7 @@
 
 This folder contains the initial architecture knowledge graph used by Dream, the AI MVP builder.
 
-The first version is sourced from the split files under `.knowledge-graph/best-practices/`.
+The first version is sourced from the split files under `.opencode/knowledge-graph/best-practices/`.
 
 ## Purpose
 

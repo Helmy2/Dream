@@ -14,8 +14,8 @@ Read:
 - `.opencode/guidance/opencode-agent-map.md`
 - `.opencode/guidance/dream-agent-operating-guide.md`
 - `AGENTS.md`
-- `.knowledge-graph/PRODUCT.md`
-- relevant `.knowledge-graph/best-practices/*.md`
+- `.opencode/knowledge-graph/PRODUCT.md`
+- relevant `.opencode/knowledge-graph/best-practices/*.md`
 
 Then:
 - run early preflights before implementation depends on the environment:

@@ -8,8 +8,8 @@ When working in this generated project, read in this order:
 
 1. [.opencode/guidance/opencode-agent-map.md](.opencode/guidance/opencode-agent-map.md)
 2. [.opencode/guidance/dream-agent-operating-guide.md](.opencode/guidance/dream-agent-operating-guide.md)
-3. [.knowledge-graph/README.md](.knowledge-graph/README.md)
-4. Relevant topic files in [.knowledge-graph/best-practices/](.knowledge-graph/best-practices/README.md)
+3. [.opencode/knowledge-graph/README.md](.opencode/knowledge-graph/README.md)
+4. Relevant topic files in [.opencode/knowledge-graph/best-practices/](.opencode/knowledge-graph/best-practices/README.md)
 5. [README.md](README.md)
 6. Existing `.mvp/` metadata when it exists
 
@@ -19,10 +19,10 @@ When working in this generated project, read in this order:
 - [.opencode/agents/](.opencode/agents): Dream agent definitions
 - [.opencode/commands/](.opencode/commands): Dream slash-command workflows
 - [.opencode/guidance/](.opencode/guidance): operating guide and prompt scaffolds
-- [.knowledge-graph/](.knowledge-graph): architecture rules and retrieval sources
+- [.opencode/knowledge-graph/](.opencode/knowledge-graph): architecture rules and retrieval sources
 - [maestro/](maestro): Android and iOS smoke-flow scaffolding for generated feature validation
 - [scripts/dream-preflight.sh](scripts/dream-preflight.sh): git, Android SDK, and Maestro readiness preflight
-- [NEW-FEATURE-CHECKLIST.md](NEW-FEATURE-CHECKLIST.md): contract-first feature wiring, verification, and git checklist
+- [.opencode/guidance/new-feature-checklist.md](.opencode/guidance/new-feature-checklist.md): contract-first feature wiring, verification, and git checklist
 
 ## Working Rules
 

@@ -10,8 +10,8 @@ You orchestrate Dream workflows using:
 - `.opencode/guidance/opencode-agent-map.md`
 - `.opencode/guidance/dream-agent-operating-guide.md`
 - `AGENTS.md`
-- `.knowledge-graph/PRODUCT.md`
-- relevant files under `.knowledge-graph/best-practices/`
+- `.opencode/knowledge-graph/PRODUCT.md`
+- relevant files under `.opencode/knowledge-graph/best-practices/`
 
 Your role:
 

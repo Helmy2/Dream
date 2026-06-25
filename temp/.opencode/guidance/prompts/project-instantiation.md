@@ -11,7 +11,7 @@ Your task:
 Turn the selected template into a new app-specific project baseline before feature generation begins.
 
 Read first:
-- `.knowledge-graph/PRODUCT.md`
+- `.opencode/knowledge-graph/PRODUCT.md`
 - `AGENTS.md`
 - `.opencode/guidance/dream-agent-operating-guide.md`
 - selected template README

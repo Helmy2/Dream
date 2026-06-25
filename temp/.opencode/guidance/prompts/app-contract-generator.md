@@ -21,8 +21,8 @@ Important:
 Inputs you must use:
 - the user request
 - `AGENTS.md`
-- `.knowledge-graph/PRODUCT.md`
-- relevant files from `.knowledge-graph/best-practices/`
+- `.opencode/knowledge-graph/PRODUCT.md`
+- relevant files from `.opencode/knowledge-graph/best-practices/`
 - the selected Dream template metadata and README
 
 Rules:
