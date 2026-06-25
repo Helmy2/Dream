@@ -81,12 +81,14 @@ Repair loop:
 1. `general` runs verification
 2. `general` identifies the failing module or runtime layer
 3. `dream-explore` or `dream-context-scout` gathers additional focused context if needed
-4. `implementer` loads relevant rules from the guidance and graph
-5. `implementer` makes the smallest correct fix
-6. `general` reruns verification
-7. `general` checks skip conditions: iteration ≤ 5? failure count decreased? no regressions? environment blocker repeated?
-8. if a skip condition triggers, stop and report `blocked` with the skip reason (documented in `.mvp/verification-report.md`); otherwise repeat from step 1
-9. `inspector` performs final review for substantial generation or repair work before validated success is reported
+4. `general` persists iteration state to `.mvp/verification-report.md` (current iteration, failures, past attempts, next module to fix)
+5. `general` launches a fresh `dream-implementer` subagent invocation (not the same accumulated conversation)
+6. `implementer` loads relevant rules from the guidance and graph
+7. `implementer` makes the smallest correct fix
+8. `general` reruns verification
+9. `general` checks skip conditions: iteration ≤ 5? failure count decreased? no regressions? environment blocker repeated?
+10. if a skip condition triggers, stop and report `blocked` with the skip reason (documented in `.mvp/verification-report.md`); otherwise repeat from step 1
+11. `inspector` performs final review for substantial generation or repair work before validated success is reported
 
 If `inspector` fails at the tool level:
 1. record the delegated review failure and the error message

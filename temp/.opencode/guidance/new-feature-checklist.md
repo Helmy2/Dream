@@ -105,4 +105,4 @@ Use this checklist when adding or replacing a Dream feature module.
 - [ ] Run `git status`, `git diff`, and `git log --oneline -10`.
 - [ ] Stage only intended feature, wiring, `.mvp/`, and documentation files.
 - [ ] Automatically create a concise feature commit only when verification and review are clean and staging is safe.
-- [ ] Capture template friction or newly learned reliable smoke patterns in `.mvp/template-improvement-retrospective.md` when the feature exposes template gaps.
+- [ ] Write `.mvp/features/<feature-name>/retrospective.md` using `template-improvement-retrospective-template.md`.

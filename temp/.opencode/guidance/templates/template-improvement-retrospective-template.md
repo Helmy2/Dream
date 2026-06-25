@@ -57,6 +57,11 @@ Use this when a generated feature exposes reusable Dream template friction, reli
 
 - `<sample flow, helper, checklist, test pattern, or code pattern>`
 
+## Application Status
+
+- Applied: `<not yet | YYYY-MM-DD>`
+- What was updated: `<summary of template changes made, or not yet>`
+
 ## Bottom Line
 
 `<one concise paragraph describing the top reusable lessons>`

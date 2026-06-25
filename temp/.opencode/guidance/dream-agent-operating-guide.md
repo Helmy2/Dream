@@ -120,6 +120,7 @@ The default OpenCode-first Dream workflow is:
 13. `implementer` repairs failures until green, blocked, or a skip condition is met (see Skip Conditions).
 14. `inspector` reviews substantial generation or repair work before validated success is reported.
 15. `general` writes or coordinates `.mvp/verification-report.md` and feature implementation notes.
+16. `general` writes `.mvp/features/<feature>/retrospective.md` using `.opencode/guidance/templates/template-improvement-retrospective-template.md`.
 
 The user should not need to hand-author an expense tracker contract, app contract, or feature contract before Dream can start.
 Those artifacts are Dream outputs, not Dream prerequisites.
@@ -256,6 +257,61 @@ When a skip condition triggers, `general` must:
 2. record the skip condition, iteration count, and failure history in `.mvp/verification-report.md`
 3. report status as `blocked` with a clear reason string
 
+## Context Management
+
+The LLM context window is a finite resource. Each repair round adds tool calls, file reads, and analysis to the conversation. `general` must actively manage context to prevent degradation before the iteration limit is reached.
+
+### Fresh Subagent Per Round
+
+Each repair round must delegate to a fresh `dream-implementer` subagent invocation. Do not accumulate multiple repair rounds in a single long-running conversation. The subagent reads the current state from `.mvp/` metadata files instead of relying on implicit conversation history.
+
+### State Persistence Before Delegation
+
+Before delegating to any subagent, `general` must write a compact context summary to `.mvp/verification-report.md`. The summary must include:
+
+- current iteration number and total iterations so far
+- failures identified and their module locations
+- past fix attempts and their outcomes (what worked, what didn't, what regressed)
+- what the subagent is expected to do this round
+- relevant architecture rules or graph references for the failing module
+
+The subagent receives the iteration number and a pointer to the state file, not the full conversation history.
+
+### Context Budget Awareness
+
+`general` must monitor for context pressure:
+
+- If the conversation exceeds approximately 3 repair rounds, or earlier if tool-call volume is already high, write the full iteration state to `.mvp/`, then stop the current conversation and start a fresh one with a compact handoff prompt.
+- A fresh-conversation handoff prompt must include: current iteration, what was tried, what still fails, and the next module to fix. It must not include the full tool-call history of previous rounds.
+
+### Subagent Handoff Pattern
+
+When launching a subagent, `general` must provide:
+
+1. the iteration number and round purpose
+2. a reference to `.mvp/verification-report.md` for full context
+3. the specific module or file to fix
+4. the relevant architecture rules — not the entire conversation history
+
+### General's Self-Context Management
+
+After each repair round, `general` must write a compact summary of its own state into `.mvp/verification-report.md`. This ensures that even if the conversation context degrades, the essential state survives in the file system and can be picked up by a fresh conversation or subagent.
+
+## Template Self-Improvement
+
+Each feature generation captures what worked, what didn't, and what should change
+in a retrospective at `.mvp/features/<feature>/retrospective.md`. These retros
+are the template's learning mechanism.
+
+- Retros are written automatically after every feature (step 16 of Generation Workflow).
+- Retros are never applied automatically. Application is user-driven.
+- To apply unapplied retros, use the `dream-improve` command (`/dream-improve`).
+
+When `dream-improve` runs, `general` scans all unapplied retros, collects
+their recommended improvements, and applies actionable changes to the template
+(guidance, best-practices, anti-patterns, prompts, commands, starter code).
+Each retro is then marked as applied with the date and a summary of changes.
+
 ## Stop Conditions
 
 The current agent flow may stop only when one of these is true:
@@ -274,8 +330,10 @@ For generation tasks, Dream should leave behind:
 - `.mvp/features/<feature>/contract.yaml`
 - `.mvp/features/<feature>/test-plan.md`
 - `.mvp/features/<feature>/implementation-report.md`
+- `.mvp/features/<feature>/retrospective.md`
 - `.mvp/verification-report.md`
 
 Use `.opencode/guidance/templates/verification-report-template.md` when writing `.mvp/verification-report.md`.
+Use `.opencode/guidance/templates/template-improvement-retrospective-template.md` when writing `.mvp/features/<feature>/retrospective.md`.
 
 For review or repair tasks, the responsible OpenCode agents should update the relevant report files when they are part of the current flow.

@@ -30,6 +30,7 @@ Then:
 - run verification
 - repair failures until green, blocked, or a skip condition triggers (see Skip Conditions in dream-agent-operating-guide.md)
 - update `.mvp/features/<feature-name>/implementation-report.md`
+- write `.mvp/features/<feature-name>/retrospective.md` using `.opencode/guidance/templates/template-improvement-retrospective-template.md`
 - update `.mvp/verification-report.md` using `.opencode/guidance/templates/verification-report-template.md`
 - run `git status`, `git diff`, and `git log --oneline -10`
 - if verification is green, inspector review passes, and staging is safe, stage only intended feature files and create a concise feature commit automatically
