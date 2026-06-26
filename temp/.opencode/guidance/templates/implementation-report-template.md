@@ -1,6 +1,6 @@
 # Implementation Report Template
 
-Use this template when writing `.mvp/features/<feature-name>/implementation-report.md`.
+Use this template when writing `.features/<feature-name>/implementation-report.md`.
 
 ```md
 # Implementation Report: <feature-name>

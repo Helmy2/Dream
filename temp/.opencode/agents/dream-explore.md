@@ -12,7 +12,7 @@ Use this agent when Dream needs to:
 
 - find where a feature or symbol lives
 - locate relevant template modules
-- locate relevant `.mvp/` metadata
+- locate relevant `.features/` metadata
 - locate architecture rules by topic
 - quickly answer structural questions about the Dream repo or a generated Dream project
 
@@ -27,7 +27,7 @@ Prioritize these sources when relevant:
 
 - `.opencode/guidance/`
 - `.opencode/knowledge-graph/`
-- `.mvp/`
+- `.features/`
 - `templates/`
 - target project modules under `feature/`, `shared/`, `androidApp/`, and `iosApp/`
 

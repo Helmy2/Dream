@@ -11,12 +11,12 @@ When working in this generated project, read in this order:
 3. [.opencode/knowledge-graph/README.md](.opencode/knowledge-graph/README.md)
 4. Relevant topic files in [.opencode/knowledge-graph/best-practices/](.opencode/knowledge-graph/best-practices/README.md)
 5. [README.md](README.md)
-6. Existing `.mvp/` metadata when it exists
+6. Existing `.features/` metadata when it exists
 
 ## Packaged Agent Layer
 
 - [.opencode/opencode.json](.opencode/opencode.json): OpenCode instruction injection and MCP configuration
-- [.opencode/agents/](.opencode/agents): Dream agent definitions
+- [.opencode/agents/](.opencode/agents): Dream agent definitions (dream-general, dream-context-scout, dream-explore, dream-search, dream-designer, dream-implementer, dream-implementer-android, dream-implementer-ios, dream-tester, dream-inspector)
 - [.opencode/commands/](.opencode/commands): Dream slash-command workflows
 - [.opencode/guidance/](.opencode/guidance): operating guide and prompt scaffolds
 - [.opencode/knowledge-graph/](.opencode/knowledge-graph): architecture rules and retrieval sources

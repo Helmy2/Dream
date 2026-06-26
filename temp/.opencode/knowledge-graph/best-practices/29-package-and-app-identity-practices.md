@@ -38,7 +38,7 @@ At minimum, the audit should cover:
 - Kotlin package declarations and package directories where renamed
 - Android manifest labels or other visible app-name surfaces
 - iOS configuration values that carry app identity
-- `.mvp/` metadata and documentation values that still mention template identity
+- `.features/` metadata and documentation values that still mention template identity
 - obvious sample or template-facing display strings
 
 ### 29.4 Do not confuse sample scaffolding with final product identity

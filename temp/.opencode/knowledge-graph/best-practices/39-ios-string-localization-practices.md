@@ -78,3 +78,34 @@ All user-visible strings in the SwiftUI host must come from the xcstrings catalo
 - Accessibility labels and hints (which have their own `accessibilityLabel` modifier)
 - Dynamic content that originates from Kotlin (loaded via the bridge)
 - Debug-only text that is stripped from release builds
+
+### 39.6 Avoid placeholder strings that clash with Form section headers
+
+SwiftUI Form section headers are system-uppercased at runtime (e.g., `Text("Amount")` renders as "AMOUNT"). When a TextField placeholder value partially matches a section header, the header can shadow the placeholder in Maestro text selectors and in accessibility traversal.
+
+Best practice:
+
+- use placeholder values that are semantically distinct from any Form section header or label in the same screen (e.g., `"0.00"` instead of `"Amount"`)
+- when a section header renders a category noun (Amount, Category, Date), the corresponding TextField or Picker placeholder should use a concrete example value rather than repeating the noun
+- verify clashes by inspecting the accessibility tree with `mobile_list_elements_on_screen` (mobile-mcp) or by running Maestro against a test build
+
+### 39.7 Verify xcstrings output with plutil after build
+
+Xcode compiles `.xcstrings` into a binary `.plist` format during build. Syntax or key-reference errors are invisible at compile time and only surface at runtime as missing string lookups.
+
+Best practice:
+
+- after building the iOS target, locate the compiled `.plist` under the build products directory
+- verify its structure with `plutil -p`:
+
+```bash
+plutil -p /path/to/build/Products/Debug-iphonesimulator/iosApp.app/Localizable.plist
+```
+
+- confirm expected keys are present with the correct English values
+- a missing key at runtime is most likely an xcstrings format issue (trailing comma, missing stringUnit wrapper, or encoding) — `plutil` will surface structural errors before the app runs
+- run `plutil -lint` on the source `.xcstrings` file as a pre-build sanity check:
+
+```bash
+plutil -lint iosApp-swiftui/iosApp/Localizable.xcstrings
+```

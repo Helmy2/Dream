@@ -59,6 +59,6 @@ Before running either command, boot or open the target emulator/simulator, insta
 
 Clear app state at the start of every smoke flow so seeded data, first-run UI, and local persistence are deterministic. Add `clearState` before `launchApp` unless a contract explicitly requires testing persisted state across launches.
 
-If Maestro is not installed or a simulator/device is unavailable, record the check as `blocked by environment` in `.mvp/verification-report.md` instead of claiming validation passed.
+If Maestro is not installed or a simulator/device is unavailable, record the check as `blocked by environment` in `.features/verification-report.md` instead of claiming validation passed.
 
 When a flow exposes a reusable template issue or a newly reliable smoke pattern, capture it with `.opencode/guidance/templates/template-improvement-retrospective-template.md`.

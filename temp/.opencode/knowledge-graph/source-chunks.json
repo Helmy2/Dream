@@ -146,7 +146,7 @@
         "endLine": 65
       },
       "summary": "Defines canonical app identity derivation, immediate normalization of package-defining surfaces, explicit rename audits, and feature path/package alignment.",
-      "text": "Dream should derive one canonical app identity before renaming anything, then normalize package roots, namespaces, application ids, and visible app identity from that source of truth. Generated projects should record an explicit rename audit across Gradle names, module namespaces, package declarations, manifests, iOS identity, Desktop app titles when Desktop is included in the app contract, and .mvp metadata. Feature directory names, Gradle module paths, and Kotlin package declarations should tell the same story; avoid mixing feature/expense-details folders with feature.expense.details packages without an explicit convention."
+      "text": "Dream should derive one canonical app identity before renaming anything, then normalize package roots, namespaces, application ids, and visible app identity from that source of truth. Generated projects should record an explicit rename audit across Gradle names, module namespaces, package declarations, manifests, iOS identity, Desktop app titles when Desktop is included in the app contract, and .features metadata. Feature directory names, Gradle module paths, and Kotlin package declarations should tell the same story; avoid mixing feature/expense-details folders with feature.expense.details packages without an explicit convention."
     },
     {
       "id": "chunk.composition_root.practices",
@@ -179,7 +179,7 @@
         "endLine": 52
       },
       "summary": "Defines feature api/impl boundary, cross-feature navigation rules, domain reuse, cross-feature data exceptions, and shared extraction signals.",
-      "text": "Feature impl modules must not depend directly on another feature impl module. Cross-feature navigation goes through the target feature api module, which owns the NavKey route types. Domain-only reuse can be valid for aggregators or dependent workflows when documented. Cross-feature data implementation reuse is a temporary MVP exception and should be recorded in .mvp/decisions.yaml. Extract to shared modules when multiple features equally own the same persisted concept, when three or more features need the same behavior, or when ownership cannot be explained clearly."
+      "text": "Feature impl modules must not depend directly on another feature impl module. Cross-feature navigation goes through the target feature api module, which owns the NavKey route types. Domain-only reuse can be valid for aggregators or dependent workflows when documented. Cross-feature data implementation reuse is a temporary MVP exception and should be recorded in .features/decisions.yaml. Extract to shared modules when multiple features equally own the same persisted concept, when three or more features need the same behavior, or when ownership cannot be explained clearly."
     },
     {
       "id": "chunk.responsive.form_ime",

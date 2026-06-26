@@ -23,7 +23,7 @@ Unless a narrower task makes some steps irrelevant, use this read order:
 4. `.opencode/knowledge-graph/README.md`
 5. relevant `.opencode/knowledge-graph/best-practices/*.md` files for the current concern
 6. selected template README
-7. target project `.mvp/` metadata if it already exists
+7. target project `.features/` metadata if it already exists
 
 ## Default Mission
 
@@ -40,13 +40,29 @@ They should optimize for correct generation plus future repairability.
 
 ## Agent Role Model
 
-Dream should default to these OpenCode roles:
+Dream uses these OpenCode agents, organized by role:
 
-- `general` orchestrates the workflow
-- `dream-explore` performs fast discovery
-- `dream-context-scout` builds focused context packs
-- `implementer` applies code and file changes
-- `inspector` performs the final QA gate
+**Orchestrator:**
+- `dream-general` orchestrates the workflow, interprets requests, breaks work into phases, delegates to subagents
+
+**Read-Only Subagents:**
+- `dream-explore` performs fast codebase discovery
+- `dream-context-scout` builds focused read-only context packs
+- `dream-search` handles external research, API docs, and troubleshooting
+
+**Spec-Generation Subagent:**
+- `dream-designer` translates feature contracts into UI/UX specs (no code)
+
+**Code-Writing Subagents:**
+- `dream-implementer` owns the KMP business layer: domain, data, api
+- `dream-implementer-android` owns the Jetpack Compose presentation layer
+- `dream-implementer-ios` owns the native SwiftUI presentation layer
+
+**Verification Subagent:**
+- `dream-tester` owns the full verification ladder: tests, builds, device, Maestro
+
+**Review Subagent:**
+- `dream-inspector` performs the final QA gate
 
 Use the smallest capable agent for each subtask.
 
@@ -89,7 +105,7 @@ The acting agent should prefer explicit graph rules over vague inference.
 Dream templates are not disposable examples.
 They are the structural baseline for generated projects.
 
-The `implementer` agent should:
+The code-writing agents (`dream-implementer`, `dream-implementer-android`, `dream-implementer-ios`) should:
 
 - preserve valid module boundaries unless the requested product truly requires structural change
 - replace sample feature content with real feature content when appropriate
@@ -97,7 +113,7 @@ The `implementer` agent should:
 - avoid collapsing the modular template into a simpler but less enforceable structure
 - remove the `feature/sample` module from the generated app once the first real feature fully replaces it, unless a temporary scaffolding exception is explicitly documented
 
-The `implementer` agent should not:
+The code-writing agents should not:
 
 - move business logic into host app modules
 - bypass shared infrastructure just to make a feature compile faster
@@ -107,22 +123,25 @@ The `implementer` agent should not:
 
 The default OpenCode-first Dream workflow is:
 
-1. `general` reads the product request.
+1. `dream-general` reads the product request.
 2. Dream starts from the user's plain natural-language request, not from manually precreated app-specific contract files.
-3. `general` infers whether backend is needed.
-4. `general` infers storage choice or asks for it if unclear.
-5. `general` selects the appropriate Dream template.
-6. `general` produces or coordinates `.mvp/app-contract.yaml`.
-7. `general` produces or coordinates `.mvp/decisions.yaml`.
-8. `general` produces or coordinates the first feature contract.
+3. `dream-general` infers whether backend is needed.
+4. `dream-general` infers storage choice or asks for it if unclear.
+5. `dream-general` selects the appropriate Dream template.
+6. `dream-general` produces or coordinates `.features/app-contract.yaml`.
+7. `dream-general` produces or coordinates `.features/decisions.yaml`.
+8. `dream-general` produces or coordinates the first feature contract.
 9. `dream-explore` or `dream-context-scout` gathers exact implementation context when needed.
-10. `implementer` implements the feature inside the template.
-11. `implementer` generates or updates tests.
-12. `general` runs or coordinates verification.
-13. `implementer` repairs failures until green, blocked, or a skip condition is met (see Skip Conditions).
-14. `inspector` reviews substantial generation or repair work before validated success is reported.
-15. `general` writes or coordinates `.mvp/verification-report.md` and feature implementation notes.
-16. `general` writes `.mvp/features/<feature>/retrospective.md` using `.opencode/guidance/templates/template-improvement-retrospective-template.md`.
+10. `dream-search` is called if external research is needed for dependencies, APIs, or troubleshooting.
+11. `dream-designer` produces `.features/<feature>/ui-spec.md` from the feature contract.
+12. `dream-implementer` implements the KMP business layer: domain, data, api, and their tests.
+13. `dream-implementer-android` implements the Jetpack Compose UI layer: screens, ViewModels, Koin navigation, tests.
+14. `dream-implementer-ios` implements the native SwiftUI layer: views, ViewModels, bridge, XCTest.
+15. `dream-tester` runs the full verification ladder: unit tests, platform builds, device install/launch, Maestro flows.
+16. `dream-implementer`, `dream-implementer-android`, or `dream-implementer-ios` repairs failures (per layer) until green, blocked, or a skip condition is met (see Skip Conditions).
+17. `dream-inspector` reviews substantial generation or repair work before validated success is reported.
+18. `dream-general` writes or coordinates `.features/verification-report.md` and feature implementation notes.
+19. `dream-general` writes `.features/<feature>/retrospective.md` using `.opencode/guidance/templates/template-improvement-retrospective-template.md`.
 
 The user should not need to hand-author an expense tracker contract, app contract, or feature contract before Dream can start.
 Those artifacts are Dream outputs, not Dream prerequisites.
@@ -170,13 +189,13 @@ Feature implementation should:
 - keep domain-to-UI mapping in `impl`
 - keep feature screens wired into the centralized shell through `impl` Koin navigation entries
 
-If shared behavior appears across features, move it into the appropriate shared module instead of duplicating it. A feature may reuse another feature's domain contract when it is an explicit aggregator or dependent workflow, but `feature/<name>/impl` must not depend directly on another feature's `impl`. Cross-feature navigation goes through the target feature's `api`. Cross-feature data implementation reuse is a temporary exception for MVP work and must be recorded in `.mvp/decisions.yaml`; extract to shared modules when two features equally own the same persisted concept.
+If shared behavior appears across features, move it into the appropriate shared module instead of duplicating it. A feature may reuse another feature's domain contract when it is an explicit aggregator or dependent workflow, but `feature/<name>/impl` must not depend directly on another feature's `impl`. Cross-feature navigation goes through the target feature's `api`. Cross-feature data implementation reuse is a temporary exception for MVP work and must be recorded in `.features/decisions.yaml`; extract to shared modules when two features equally own the same persisted concept.
 
 Editable forms must be reachable with the software keyboard open. Prefer compact single-column forms on narrow screens, grouped fields on wider screens, adaptive chip wrapping, and primary actions close to active fields. Do not rely on `imePadding()` alone as proof that a save action is reachable.
 
 ## Git Rules
 
-After a completed feature generation flow, Dream must inspect and commit the completed feature automatically.
+After a completed feature generation flow, Dream must inspect the completed feature, prepare the commit summary, and ask the user for explicit approval before committing.
 
 Before the flow depends on git, verify the generated project is a git repository and that `git status`, `git diff`, and `git log --oneline -10` work. If git is unavailable or the project is not initialized, stop early with a precise environment/setup blocker instead of discovering it at commit time.
 
@@ -185,10 +204,10 @@ Required git flow:
 - run `git status`
 - run `git diff`
 - run `git log --oneline -10`
-- stage only the intended files for the generated feature and related `.mvp/` reports
-- create a concise commit message, such as `Add expenses feature`
+- stage only the intended files for the generated feature and related `.features/` reports
+- create a concise commit message proposal, such as `Add expenses feature`
 
-Do not auto-commit when verification is blocked, review is not approved, required reports are missing, or unrelated worktree changes make safe staging unclear. Never amend, force push, reset, or revert unrelated changes unless the user explicitly requests it.
+Do not commit when verification is blocked, review is not approved, required reports are missing, the user has not explicitly approved the commit, or unrelated worktree changes make safe staging unclear. Never amend, force push, reset, or revert unrelated changes unless the user explicitly requests it.
 
 ## Verification Rules
 
@@ -222,12 +241,12 @@ Maestro smoke flows should be feature-owned under `maestro/features/<feature-nam
 
 When verification fails, Dream should use this OpenCode pattern:
 
-1. `general` identifies the failing module or runtime surface
+1. `dream-general` identifies the failing module or runtime surface
 2. `dream-explore` or `dream-context-scout` gathers the relevant context if needed
-3. `implementer` loads the relevant graph rules for that layer
-4. `implementer` prefers minimal fixes over broad rewrites
-5. `implementer` preserves architecture boundaries while fixing the failure
-6. `general` reruns verification
+3. the relevant implementer (`dream-implementer`, `dream-implementer-android`, or `dream-implementer-ios`) loads the relevant graph rules for that layer
+4. the implementer prefers minimal fixes over broad rewrites
+5. the implementer preserves architecture boundaries while fixing the failure
+6. `dream-tester` reruns verification
 
 Dream should keep repairing until:
 
@@ -238,39 +257,39 @@ Dream should keep repairing until:
 
 ## Iteration Tracking
 
-`general` must maintain an implicit iteration counter across repair rounds:
+`dream-general` must maintain an implicit iteration counter across repair rounds:
 
 1. Before the first repair, record the initial failure count and set iteration = 1.
-2. After each repair, run verification and record: iteration number, failure count, list of failing tests or checks, and whether any new failures appeared.
+2. After each repair, delegate `dream-tester` to run verification and record: iteration number, failure count, list of failing tests or checks, and whether any new failures appeared.
 3. Before starting the next repair, check all skip conditions against the tracked data.
-4. When the loop ends (green or blocked), include the iteration history in `.mvp/verification-report.md`.
+4. When the loop ends (green or blocked), include the iteration history in `.features/verification-report.md`.
 
 ## Skip Conditions
 
-To prevent infinite repair loops, `general` must enforce these skip conditions during the repair cycle:
+To prevent infinite repair loops, `dream-general` must enforce these skip conditions during the repair cycle:
 
 - **Max iterations exceeded (5)**: After 5 repair rounds, if verification is still not green, stop and report `blocked: max repair attempts reached` with a summary of what was tried and what failures remain.
 - **No progress detected**: If the total failure count has not decreased after 2 consecutive repair rounds, stop and report `blocked: no progress after N rounds — same failures persist`.
 - **Regression detected**: If a repair introduces new test failures (a previously passing test now fails), stop and report `blocked: regression detected — fix caused new failures`. Do not continue fixing on top of a regression.
 - **Environment loop**: If the same environment blocker (e.g., no Android device, missing SDK) appears in consecutive verification rounds, stop immediately and report the blocker — do not retry the same failing command.
 
-When a skip condition triggers, `general` must:
+When a skip condition triggers, `dream-general` must:
 
 1. stop repairing immediately
-2. record the skip condition, iteration count, and failure history in `.mvp/verification-report.md`
+2. record the skip condition, iteration count, and failure history in `.features/verification-report.md`
 3. report status as `blocked` with a clear reason string
 
 ## Context Management
 
-The LLM context window is a finite resource. Each repair round adds tool calls, file reads, and analysis to the conversation. `general` must actively manage context to prevent degradation before the iteration limit is reached.
+The LLM context window is a finite resource. Each repair round adds tool calls, file reads, and analysis to the conversation. `dream-general` must actively manage context to prevent degradation before the iteration limit is reached.
 
 ### Fresh Subagent Per Round
 
-Each repair round must delegate to a fresh `dream-implementer` subagent invocation. Do not accumulate multiple repair rounds in a single long-running conversation. The subagent reads the current state from `.mvp/` metadata files instead of relying on implicit conversation history.
+Each repair round must delegate to a fresh implementer subagent invocation (`dream-implementer`, `dream-implementer-android`, or `dream-implementer-ios` depending on the failing layer). Do not accumulate multiple repair rounds in a single long-running conversation. The subagent reads the current state from `.features/` metadata files instead of relying on implicit conversation history.
 
 ### State Persistence Before Delegation
 
-Before delegating to any subagent, `general` must write a compact context summary to `.mvp/verification-report.md`. The summary must include:
+Before delegating to any subagent, `dream-general` must write a compact context summary to `.features/verification-report.md`. The summary must include:
 
 - current iteration number and total iterations so far
 - failures identified and their module locations
@@ -282,35 +301,35 @@ The subagent receives the iteration number and a pointer to the state file, not 
 
 ### Context Budget Awareness
 
-`general` must monitor for context pressure:
+`dream-general` must monitor for context pressure:
 
-- If the conversation exceeds approximately 3 repair rounds, or earlier if tool-call volume is already high, write the full iteration state to `.mvp/`, then stop the current conversation and start a fresh one with a compact handoff prompt.
+- If the conversation exceeds approximately 3 repair rounds, or earlier if tool-call volume is already high, write the full iteration state to `.features/`, then stop the current conversation and start a fresh one with a compact handoff prompt.
 - A fresh-conversation handoff prompt must include: current iteration, what was tried, what still fails, and the next module to fix. It must not include the full tool-call history of previous rounds.
 
 ### Subagent Handoff Pattern
 
-When launching a subagent, `general` must provide:
+When launching a subagent, `dream-general` must provide:
 
 1. the iteration number and round purpose
-2. a reference to `.mvp/verification-report.md` for full context
+2. a reference to `.features/verification-report.md` for full context
 3. the specific module or file to fix
 4. the relevant architecture rules — not the entire conversation history
 
 ### General's Self-Context Management
 
-After each repair round, `general` must write a compact summary of its own state into `.mvp/verification-report.md`. This ensures that even if the conversation context degrades, the essential state survives in the file system and can be picked up by a fresh conversation or subagent.
+After each repair round, `dream-general` must write a compact summary of its own state into `.features/verification-report.md`. This ensures that even if the conversation context degrades, the essential state survives in the file system and can be picked up by a fresh conversation or subagent.
 
 ## Template Self-Improvement
 
 Each feature generation captures what worked, what didn't, and what should change
-in a retrospective at `.mvp/features/<feature>/retrospective.md`. These retros
+in a retrospective at `.features/<feature>/retrospective.md`. These retros
 are the template's learning mechanism.
 
-- Retros are written automatically after every feature (step 16 of Generation Workflow).
+- Retros are written automatically after every feature (step 19 of Generation Workflow).
 - Retros are never applied automatically. Application is user-driven.
 - To apply unapplied retros, use the `dream-improve` command (`/dream-improve`).
 
-When `dream-improve` runs, `general` scans all unapplied retros, collects
+When `dream-improve` runs, `dream-general` scans all unapplied retros, collects
 their recommended improvements, and applies actionable changes to the template
 (guidance, best-practices, anti-patterns, prompts, commands, starter code).
 Each retro is then marked as applied with the date and a summary of changes.
@@ -328,15 +347,18 @@ The current agent flow may stop only when one of these is true:
 
 For generation tasks, Dream should leave behind:
 
-- `.mvp/app-contract.yaml`
-- `.mvp/decisions.yaml`
-- `.mvp/features/<feature>/contract.yaml`
-- `.mvp/features/<feature>/test-plan.md`
-- `.mvp/features/<feature>/implementation-report.md`
-- `.mvp/features/<feature>/retrospective.md`
-- `.mvp/verification-report.md`
+- `.features/app-contract.yaml`
+- `.features/decisions.yaml`
+- `.features/<feature>/contract.yaml`
+- `.features/<feature>/ui-spec.md` (authored by `dream-designer`)
+- `.features/<feature>/test-plan.md`
+- `.features/<feature>/implementation-report.md`
+- `.features/<feature>/retrospective.md`
+- `.features/verification-report.md`
+- `maestro/features/<feature-name>/android.yaml` (authored by `dream-tester`)
+- `maestro/features/<feature-name>/ios.yaml` (authored by `dream-tester`)
 
-Use `.opencode/guidance/templates/verification-report-template.md` when writing `.mvp/verification-report.md`.
-Use `.opencode/guidance/templates/template-improvement-retrospective-template.md` when writing `.mvp/features/<feature>/retrospective.md`.
+Use `.opencode/guidance/templates/verification-report-template.md` when writing `.features/verification-report.md`.
+Use `.opencode/guidance/templates/template-improvement-retrospective-template.md` when writing `.features/<feature>/retrospective.md`.
 
 For review or repair tasks, the responsible OpenCode agents should update the relevant report files when they are part of the current flow.

@@ -9,8 +9,11 @@ Dream-generated modules should use the Koin compiler plugin with Koin DSL regist
 Best practice:
 
 - call `startKoin` only from top-level app initialization paths
+- on Android, initialize Koin in a custom `Application.onCreate()`, not in `MainActivity.onCreate()` — this ensures DI is available before any Activity, Service, or BroadcastReceiver starts
 - expose a shared guarded startup helper for host apps so repeated Android, iOS, Desktop, preview, or test entry points do not accidentally start Koin twice
 - let modules contribute registrations, but do not let features bootstrap DI themselves
+
+Rationale for `Application` over `Activity`: navigation graph resolution, Koin ViewModel injection, and early-lifecycle hooks all depend on the Koin container being available before the first Activity's `onCreate`. Starting Koin in an Activity causes non-deterministic failures when navigation is resolved during Activity construction or when a custom `ContentProvider` (e.g., WorkManager init) needs DI before the Activity exists.
 
 ### 17.2 Split DI by layer and platform
 

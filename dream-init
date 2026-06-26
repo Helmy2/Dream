@@ -237,11 +237,11 @@ find "$DEST" -depth -type d -name "com" -empty -delete 2>/dev/null || true
 ok "✓ Directory structure updated."
 
 # ──────────────────────────────────────────────
-# Step 5: Reset .mvp/
+# Step 5: Reset .features/
 # ──────────────────────────────────────────────
-info "📝 Resetting .mvp/ metadata..."
+info "📝 Resetting .features/ metadata..."
 
-cat > "$DEST/.mvp/app-contract.yaml" <<- YAMLEOF
+cat > "$DEST/.features/app-contract.yaml" <<- YAMLEOF
 name: ${DISPLAY_NAME}
 goal: Generated Kotlin Multiplatform MVP application.
 templateArchitecture: modular-hybrid
@@ -253,7 +253,7 @@ backend:
   enabled: false
 YAMLEOF
 
-cat > "$DEST/.mvp/decisions.yaml" <<- YAMLEOF
+cat > "$DEST/.features/decisions.yaml" <<- YAMLEOF
 template: dream-kmp-base
 architecture: modular-hybrid
 iosUi: ${IOS_STRATEGY}
@@ -264,7 +264,7 @@ sampleStarterData:
   userEnteredContent: raw create/update text persisted locally
 YAMLEOF
 
-cat > "$DEST/.mvp/verification-report.md" <<- MDEOF
+cat > "$DEST/.features/verification-report.md" <<- MDEOF
 # Verification Report
 
 ## Status
@@ -283,9 +283,9 @@ cat > "$DEST/.mvp/verification-report.md" <<- MDEOF
 - Reset for a new Dream generation cycle.
 MDEOF
 
-[ -f "$DEST/.mvp/features/.gitkeep" ] && rm "$DEST/.mvp/features/.gitkeep"
+[ -f "$DEST/.features/.gitkeep" ] && rm "$DEST/.features/.gitkeep"
 
-ok "✓ .mvp/ metadata reset."
+ok "✓ .features/ metadata reset."
 
 # ──────────────────────────────────────────────
 # Step 6: Cleanup
@@ -342,10 +342,11 @@ info "  Android ID:    $ANDROID_APP_ID"
 echo ""
 info "Next steps:"
 info "  cd $DEST"
-info "  ./gradlew allTests"
-info "  ./gradlew :androidApp:assembleDebug"
+info "  code .     — open in VS Code / OpenCode"
 echo ""
-info "To build for iOS (${IOS_STRATEGY}), open iosApp/ in Xcode."
-echo ""
-info "Then open in VS Code / OpenCode for Dream's agent workflow."
+info "In OpenCode, use these commands:"
+info "  /dream-init     — initialize project metadata"
+info "  /dream-info     — learn about Dream's tools and implemented features"
+info "  /dream-create   — start building your first feature"
+info "  /dream-feature  — add more features later"
 echo ""

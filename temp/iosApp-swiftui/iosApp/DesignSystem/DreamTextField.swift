@@ -7,6 +7,7 @@ struct DreamTextField: View {
     let errorMessage: LocalizedStringKey?
     let axis: Axis
     let lineLimit: ClosedRange<Int>
+    let accessibilityIdentifier: String?
 
     @Environment(\.dreamColors) private var colors
 
@@ -16,7 +17,8 @@ struct DreamTextField: View {
         isError: Bool = false,
         errorMessage: LocalizedStringKey? = nil,
         axis: Axis = .horizontal,
-        lineLimit: ClosedRange<Int> = 1...1
+        lineLimit: ClosedRange<Int> = 1...1,
+        accessibilityIdentifier: String? = nil
     ) {
         self.placeholder = placeholder
         _text = text
@@ -24,6 +26,7 @@ struct DreamTextField: View {
         self.errorMessage = errorMessage
         self.axis = axis
         self.lineLimit = lineLimit
+        self.accessibilityIdentifier = accessibilityIdentifier
     }
 
     var body: some View {
@@ -31,6 +34,7 @@ struct DreamTextField: View {
             TextField(placeholder, text: $text, axis: axis)
                 .textInputAutocapitalization(.sentences)
                 .lineLimit(lineLimit)
+                .accessibilityIdentifier(accessibilityIdentifier ?? "")
                 .padding(DreamSpacing.sm)
                 .background(colors.surface)
                 .clipShape(RoundedRectangle(cornerRadius: 8))

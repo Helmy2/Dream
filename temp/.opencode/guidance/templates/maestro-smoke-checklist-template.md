@@ -74,4 +74,4 @@ Detail-screen rendered-row assertion examples:
 
 ## Reporting
 
-- [ ] Record smoke results in `.mvp/verification-report.md` as `passed`, `blocked by environment`, `not run`, or `not applicable`.
+- [ ] Record smoke results in `.features/verification-report.md` as `passed`, `blocked by environment`, `not run`, or `not applicable`.

@@ -14,7 +14,7 @@ Read:
 - relevant `.opencode/knowledge-graph/best-practices/*.md`
 
 Then:
-- find all `.mvp/features/*/retrospective.md` files where `Applied: not yet` in the Application Status section
+- find all `.features/*/retrospective.md` files where `Applied: not yet` in the Application Status section
 - if none found, report that all retrospectives are applied and stop
 - collect all recommended improvements across unapplied retros, grouped by target area:
   - guidance changes (`.opencode/guidance/`)

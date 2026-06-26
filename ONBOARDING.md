@@ -13,12 +13,12 @@ The repository centers on `temp/`, which is the canonical starter project copied
 ```mermaid
 flowchart TD
     User[User product request] --> Dream[Dream workflow]
-    Dream --> Contract[.mvp contracts and decisions]
+    Dream --> Contract[.features contracts and decisions]
     Dream --> Template[temp starter copy]
     Template --> Generated[Generated KMP app]
     Contract --> Generated
     Generated --> Verify[Tests, builds, platform launch, smoke flows]
-    Verify --> Report[.mvp/verification-report.md]
+    Verify --> Report[.features/verification-report.md]
 ```
 
 ## Repository Map
@@ -28,11 +28,12 @@ flowchart TD
 - `AGENTS.md`: repository-level working rules for agents and contributors.
 - `ONBOARDING.md`: this entry-level guide.
 - `temp/`: canonical Kotlin Multiplatform starter project.
-- `temp/.opencode/`: packaged OpenCode config, agents, commands, and prompt guidance.
+- `temp/.opencode/`: packaged OpenCode config, agents (10 agents: dream-general, dream-context-scout, dream-explore, dream-search, dream-designer, dream-implementer, dream-implementer-android, dream-implementer-ios, dream-tester, dream-inspector), commands, and prompt guidance.
 - `temp/.opencode/knowledge-graph/`: reusable architecture rules and retrieval sources.
-- `temp/.mvp/`: generated contracts, decisions, feature reports, and verification reports.
+- `temp/.features/`: generated app contracts, feature specs, decisions, reports, and retrospectives.
 - `temp/maestro/`: Android and iOS smoke-flow scaffolding.
 - `temp/scripts/dream-preflight.sh`: local readiness check for git, Android SDK, and Maestro.
+- `temp/scripts/sync-pbxproj.rb`: auto-registers orphaned Swift files in Xcode project.pbxproj.
 
 ```mermaid
 flowchart LR
@@ -44,7 +45,7 @@ flowchart LR
     Temp --> Features[feature/*]
     Temp --> Agents[.opencode agents and commands]
     Temp --> Graph[.opencode/knowledge-graph rules]
-    Temp --> MVP[.mvp generated metadata]
+    Temp --> MVP[.features generated metadata]
     Temp --> Maestro[maestro smoke flows]
 ```
 
@@ -67,31 +68,53 @@ Dream follows a contract-first flow. Code should not be generated before the rel
 sequenceDiagram
     participant User
     participant General as dream-general
-    participant Implementer as dream-implementer
+    participant Scout as dream-context-scout
+    participant Search as dream-search
+    participant Designer as dream-designer
+    participant Impl as dream-implementer
+    participant ImplA as dream-implementer-android
+    participant ImplI as dream-implementer-ios
+    participant Tester as dream-tester
     participant Inspector as dream-inspector
     participant Project as Generated Project
 
     User->>General: Plain product request
-    General->>Project: Write .mvp/app-contract.yaml
-    General->>Project: Write .mvp/decisions.yaml
+    General->>Scout: Gather context pack (on-demand)
+    General->>Search: External research (on-demand)
+    General->>Project: Write .features/app-contract.yaml
+    General->>Project: Write .features/decisions.yaml
     General->>Project: Write feature contract and test plan
-    General->>Implementer: Implement from contract
-    Implementer->>Project: Add feature modules, tests, wiring
-    General->>Project: Run preflight, tests, builds, platform checks
-    Implementer->>Project: Repair failures when needed
+    General->>Designer: Phase 0.5: produce ui-spec.md
+    Designer->>Project: Write .features/&lt;feature&gt;/ui-spec.md
+    General->>Impl: Phase 1: KMP foundation (domain, data, api)
+    Impl->>Project: Add domain entities, repos, data layer, route types, tests
+    par Phase 2: UI in parallel
+        General->>ImplA: Android Compose UI
+        General->>ImplI: iOS SwiftUI
+    end
+    ImplA->>Project: Compose screens, ViewModels, Koin nav, tests
+    ImplI->>Project: SwiftUI views, ViewModels, bridge, XCTest
+    General->>Project: Phase 3: wiring (umbrella, DI, nav)
+    General->>Tester: Phase 4: full verification ladder
+    Tester->>Project: Gradle tests, platform builds, device launch, Maestro flows
+    Tester->>General: Report defects
+    General->>Impl: Repair failures when needed
+    Impl->>Project: Fix issues
     General->>Inspector: Request final QA review
     Inspector->>General: APPROVED or defects
-    General->>Project: Write verification report and commit if safe
+    General->>Project: Write verification report and request commit approval if safe
 ```
 
 Required generated artifacts:
 
-- `.mvp/app-contract.yaml`
-- `.mvp/decisions.yaml`
-- `.mvp/features/<feature>/contract.yaml`
-- `.mvp/features/<feature>/test-plan.md`
-- `.mvp/features/<feature>/implementation-report.md`
-- `.mvp/verification-report.md`
+- `.features/app-contract.yaml`
+- `.features/decisions.yaml`
+- `.features/<feature>/contract.yaml`
+- `.features/<feature>/ui-spec.md`
+- `.features/<feature>/test-plan.md`
+- `.features/<feature>/implementation-report.md`
+- `.features/<feature>/retrospective.md`
+- `.features/verification-report.md`
 
 ## Architecture Rules
 
@@ -106,7 +129,7 @@ Non-negotiable rules:
 - keep navigation centralized
 - keep user-visible strings in shared resources
 - use Dream design-system components and `DreamTheme` tokens before raw Material3 or ad hoc feature-local UI primitives
-- validate Android, iOS, and contract-selected Desktop as real product targets
+- validate Android and iOS as real product targets
 
 ```mermaid
 flowchart TD
@@ -263,7 +286,9 @@ flowchart TD
     AndroidRuntime --> IOSBuild[xcodebuild]
     IOSBuild --> IOSRuntime[xcrun simctl install/launch/log inspection]
     IOSRuntime --> Maestro[Maestro Android/iOS smoke flows]
-    Maestro --> Report[verification-report.md]
+    Maestro --> MCP[mobile-mcp element tree + screenshot on failure]
+    MCP --> Report[verification-report.md]
+    Maestro --> Report
 ```
 
 Run from `temp/` or from a generated copy:
@@ -294,19 +319,18 @@ Use `temp/.opencode/guidance/templates/verification-report-template.md` for the 
 
 ## Working With The Starter
 
-When adding or replacing a feature:
+Dream orchestrates feature work in phases through `dream-general`. When adding or replacing a feature:
 
-1. Create or update the feature contract first.
-2. Add `feature/<name>/domain`, `feature/<name>/data`, `feature/<name>/api`, and `feature/<name>/impl` as needed.
-3. Add feature `NavKey` route types in `api`.
-4. Add screens, ViewModels, and Koin navigation entry installers in `impl`.
-5. Register data/domain dependencies through Koin modules in `impl`; do not put Koin definitions in `api`.
-6. Add shared string resources before writing UI copy.
-7. Add tests by layer.
-8. Update Maestro smoke scaffolding for the user-visible journey.
-9. Run preflight and verification.
-10. Write reports using the templates under `temp/.opencode/guidance/templates/`.
-11. Only commit when verification and review are clean and staging is safe.
+1. **Phase 0 — Research (on-demand):** Use `dream-search` for external library research, API docs, or troubleshooting. Use `dream-context-scout` for focused context packs.
+2. **Create or update the feature contract first.** Write `.features/<feature>/contract.yaml` and `.features/<feature>/test-plan.md`.
+3. **Phase 0.5 — Design:** Use `dream-designer` to produce `.features/<feature>/ui-spec.md` — view states, design-system components, layout, interactions.
+4. **Phase 1 — KMP foundation:** Use `dream-implementer` for `feature/<name>/domain` (entities, repository interfaces, use cases), `feature/<name>/data` (repo implementations, DTOs, mappers), and `feature/<name>/api` (NavKey route types only). No UI.
+5. **Phase 2 — UI in parallel:** Deploy `dream-implementer-android` for Compose screens, ViewModels, Koin navigation installers, and presentation tests in `feature/<name>/impl`. Deploy `dream-implementer-ios` for SwiftUI views, ViewModels, bridge code, and XCTest coverage.
+6. **Phase 3 — Wiring:** Consolidate umbrella module imports, DI registration, and navigation entries.
+7. **Phase 4 — Verification:** Use `dream-tester` for the full verification ladder — Gradle unit tests, platform builds, device install/launch, log inspection, Maestro smoke flows.
+8. Write reports using the templates under `temp/.opencode/guidance/templates/`.
+9. Request `dream-inspector` QA gate for substantial work — architecture violations, contract parity, test coverage, anti-patterns.
+10. Only commit when verification and review are clean and staging is safe.
 
 Use `temp/.opencode/guidance/new-feature-checklist.md` as the operational checklist.
 

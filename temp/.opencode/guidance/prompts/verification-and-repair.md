@@ -4,9 +4,10 @@ Use this prompt scaffold when verifying or repairing a Dream-generated project.
 
 ```text
 Primary OpenCode agents:
-- general for orchestration and reruns
-- implementer for fixes
-- inspector for final QA gate on substantial work
+- dream-general for orchestration and reruns
+- dream-tester for verification execution
+- dream-implementer, dream-implementer-android, or dream-implementer-ios for fixes (per failing layer)
+- dream-inspector for final QA gate on substantial work
 
 You are verifying and repairing a Dream-generated Kotlin Multiplatform project.
 
@@ -18,9 +19,9 @@ Read first:
 - `.opencode/guidance/opencode-agent-map.md`
 - `AGENTS.md`
 - relevant graph-backed rules for the failing module or runtime surface
-- `.mvp/app-contract.yaml`
-- `.mvp/decisions.yaml`
-- `.mvp/features/<feature-name>/contract.yaml` if feature-specific
+- `.features/app-contract.yaml`
+- `.features/decisions.yaml`
+- `.features/<feature-name>/contract.yaml` if feature-specific
 - `.opencode/guidance/templates/verification-report-template.md`
 
 Required verification for local-only MVPs:
@@ -73,26 +74,29 @@ Automated defect scans (run these BEFORE signing off):
 7. **Verify DI setup**: Check that the feature's DI module registers repositories, ViewModels, and navigation entries through Koin DSL (not manual construction). Verify that repositories and ViewModels are not instantiated inside `@Composable` functions.
 8. **Verify date formatting**: Check user-visible date/date-time text in common UI code uses `TimeProvider.formatDate(...)` or `TimeProvider.formatDateTime(...)`. Flag feature-local date formatting helpers.
 9. **Verify Koin compiler DSL setup**: Grep generated feature modules for `@KoinViewModel`, `@Module`, `@ComponentScan`, and `koin.annotations`. Flag any usage unless the user explicitly requested annotation-based DI. Verify modules using compiler DSL registrations apply `libs.plugins.koinCompiler`.
-10. **Verify git completion for feature flows**: After validated feature work, run `git status`, `git diff`, and `git log --oneline -10`; stage only intended files and create a concise feature commit. Do not commit blocked, partial, unreviewed, or unsafe worktree states.
+10. **Verify git completion for feature flows**: After validated feature work, run `git status`, `git diff`, and `git log --oneline -10`; stage only intended files, prepare a concise feature commit, and ask the user for explicit approval before committing. Do not commit blocked, partial, unreviewed, or unsafe worktree states.
 11. **Verify Maestro smoke quality**: Check that every user-visible generated or touched feature has feature-owned smoke files under `maestro/features/<feature-name>/android.yaml` and `maestro/features/<feature-name>/ios.yaml` when supported on those platforms. Do not accept one global smoke file as coverage for multiple features. Run Maestro only after the target emulator/simulator is open, the app is installed, and platform launch has been verified. Start smoke flows with `clearState` before `launchApp` unless the contract explicitly tests persisted state across launches. Prefer `eraseText`, `pressKey: Enter` on iOS single-line fields, full rendered-row regex selectors, and user-outcome assertions over keyboard-state assertions. Flag Android smoke flows that require app/window title text to be visible as the only launch proof.
 12. **Verify design-system usage**: Scan feature Compose code for raw Material3 imports such as `Button`, `OutlinedTextField`, `Card`, `AlertDialog`, `ModalBottomSheet`, `Snackbar`, `TopAppBar`, and progress indicators. If a Dream design-system wrapper exists, using the raw primitive is a defect unless a local exception is documented.
 13. **Verify SwiftUI host wiring**: When the native iOS strategy is SwiftUI, verify the shared Xcode scheme exists, `xcodebuild build` and `xcodebuild test` run against it, the Xcode shell build phase invokes the correct `embedAndSignAppleFrameworkForXcode` task, and `FRAMEWORK_SEARCH_PATHS` points at `shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)` without duplicate entries.
 14. **Verify Swift bridge API correctness**: When Swift uses exported Kotlin types, check for guessed ObjC-shaped names in Swift code such as underscore-suffixed enum cases, missing async wrapper usage, or missing exported framework types that indicate `export(...)` or `api(...)` gaps.
 
 Repair loop:
-1. `general` runs verification
-2. `general` identifies the failing module or runtime layer
+1. `dream-general` delegates verification to `dream-tester`
+2. `dream-general` identifies the failing module or runtime layer from tester output
 3. `dream-explore` or `dream-context-scout` gathers additional focused context if needed
-4. `general` persists iteration state to `.mvp/verification-report.md` (current iteration, failures, past attempts, next module to fix)
-5. `general` launches a fresh `dream-implementer` subagent invocation (not the same accumulated conversation)
-6. `implementer` loads relevant rules from the guidance and graph
-7. `implementer` makes the smallest correct fix
-8. `general` reruns verification
-9. `general` checks skip conditions: iteration ≤ 5? failure count decreased? no regressions? environment blocker repeated?
-10. if a skip condition triggers, stop and report `blocked` with the skip reason (documented in `.mvp/verification-report.md`); otherwise repeat from step 1
-11. `inspector` performs final review for substantial generation or repair work before validated success is reported
+4. `dream-general` persists iteration state to `.features/verification-report.md` (current iteration, failures, past attempts, next module to fix)
+5. `dream-general` launches a fresh implementer subagent invocation based on the failing layer:
+   - `dream-implementer` for domain, data, or api failures
+   - `dream-implementer-android` for Compose UI or `impl` failures
+   - `dream-implementer-ios` for SwiftUI or bridge failures
+6. The implementer loads relevant rules from the guidance and graph
+7. The implementer makes the smallest correct fix
+8. `dream-general` delegates reverification to `dream-tester`
+9. `dream-general` checks skip conditions: iteration ≤ 5? failure count decreased? no regressions? environment blocker repeated?
+10. if a skip condition triggers, stop and report `blocked` with the skip reason (documented in `.features/verification-report.md`); otherwise repeat from step 1
+11. `dream-inspector` performs final review for substantial generation or repair work before validated success is reported
 
-If `inspector` fails at the tool level:
+If `dream-inspector` fails at the tool level:
 1. record the delegated review failure and the error message
 2. run a manual review fallback against the contract, tests, and architecture rules
 3. report status as `partial` or `blocked` if review defects remain
@@ -104,8 +108,8 @@ Output requirements:
 - list commands run
 - state review mode as `delegated` or `manual`
 - list failing areas if blocked
-- write or update `.mvp/verification-report.md`
-- in `.mvp/verification-report.md`, list every check under one of these statuses: `passed`, `blocked by environment`, `not run`, or `not applicable`
+- write or update `.features/verification-report.md`
+- in `.features/verification-report.md`, list every check under one of these statuses: `passed`, `blocked by environment`, `not run`, or `not applicable`
 - follow `.opencode/guidance/templates/verification-report-template.md` unless the orchestrator requests a stricter variant
 - for completed feature flows, state the git commit hash or the precise reason no commit was created
 

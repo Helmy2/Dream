@@ -37,6 +37,10 @@ fi
 
 if [ "$sdk_path" != "" ] && [ -d "$sdk_path" ]; then
   pass "Android SDK found at $sdk_path"
+  if [ ! -f local.properties ] || ! grep -q "^sdk.dir=$sdk_path" local.properties 2>/dev/null; then
+    printf 'sdk.dir=%s\n' "$sdk_path" > local.properties
+    pass "local.properties written with sdk.dir=$sdk_path"
+  fi
 else
   blocker 'Android SDK not found; set ANDROID_HOME, ANDROID_SDK_ROOT, or local.properties sdk.dir'
 fi
@@ -45,6 +49,16 @@ if command -v maestro >/dev/null 2>&1; then
   pass 'Maestro is installed'
 else
   blocker 'Maestro is not installed; install it before smoke validation or record this blocker'
+fi
+
+if command -v xcodebuild >/dev/null 2>&1; then
+  pass 'Xcode is installed'
+fi
+
+if command -v java >/dev/null 2>&1; then
+  pass 'Java is available'
+else
+  blocker 'Java is not available; install JDK 17+'
 fi
 
 exit "$status"

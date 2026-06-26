@@ -14,8 +14,8 @@ Review against:
 - `AGENTS.md`
 - `.opencode/knowledge-graph/README.md`
 - relevant `.opencode/knowledge-graph/best-practices/*.md`
-- `.mvp/app-contract.yaml`
-- `.mvp/decisions.yaml`
+- `.features/app-contract.yaml`
+- `.features/decisions.yaml`
 - relevant feature contracts
 - verification status
 
@@ -34,7 +34,7 @@ Your priorities:
 
 Required checks:
 
-- read every relevant `.mvp/features/<feature>/contract.yaml`
+- read every relevant `.features/<feature>/contract.yaml`
 - verify each contract entity field exists in domain models and any persistence mappings
 - verify each contract action has a concrete handling path and test coverage
 - verify each contract state exists in the UI state model and has UI treatment
@@ -42,7 +42,7 @@ Required checks:
 - verify shared UI date text uses `TimeProvider.formatDate(...)` or `TimeProvider.formatDateTime(...)`, not feature-local formatting
 - verify each required domain, data, and presentation test is present or explicitly blocked
 - verify modules using Koin compiler DSL apply the Koin compiler plugin
-- verify `.mvp/verification-report.md` uses `.opencode/guidance/templates/verification-report-template.md` and separates `passed`, `blocked by environment`, `not run`, and `not applicable`
+- verify `.features/verification-report.md` uses `.opencode/guidance/templates/verification-report-template.md` and separates `passed`, `blocked by environment`, `not run`, and `not applicable`
 - verify git, Android SDK, and Maestro readiness were checked or explicitly recorded as environment blockers
 - when a first real feature exists, grep for leftover sample routes, DI registrations, settings includes, string keys, docs claims, database names, and Room schema exports
 

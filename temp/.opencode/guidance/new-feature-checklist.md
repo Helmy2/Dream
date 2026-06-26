@@ -4,7 +4,7 @@ Use this checklist when adding or replacing a Dream feature module.
 
 ## Contract First
 
-- [ ] Create or update `.mvp/features/<feature-name>/contract.yaml` before implementation starts.
+- [ ] Create or update `.features/<feature-name>/contract.yaml` before implementation starts.
 - [ ] Define entity fields, action inputs, screen states, time-sensitive behavior, design expectations, and tests by layer.
 - [ ] Use meaningful timestamp field names with units, such as `createdAtMillis`, `occurredAtMillis`, or `dueAtMillis`.
 - [ ] Mark `timeSensitiveBehavior.usesTimeProvider: true` for current date, logical period, timestamp, or date-filter behavior.
@@ -19,7 +19,7 @@ Use this checklist when adding or replacing a Dream feature module.
 - [ ] Add feature includes to `settings.gradle.kts`.
 - [ ] Keep repository interfaces in domain and implementations in data.
 - [ ] Keep domain-to-UI mapping in `impl`.
-- [ ] If reusing another feature's domain or data layer, document the reason in `.mvp/decisions.yaml`; extract to shared modules when ownership is equal or repeated.
+- [ ] If reusing another feature's domain or data layer, document the reason in `.features/decisions.yaml`; extract to shared modules when ownership is equal or repeated.
 - [ ] No module outside this feature should depend on `feature/<feature-name>/impl`; callers use `api` only.
 
 ## Wiring
@@ -115,6 +115,6 @@ Apply these items only when `iosUiStrategy` is `swiftui`:
 - [ ] Record verification in explicit buckets: passed, blocked by environment, not run, and not applicable.
 - [ ] Run `dream-inspector` or manual review fallback against contract parity and architecture rules.
 - [ ] Run `git status`, `git diff`, and `git log --oneline -10`.
-- [ ] Stage only intended feature, wiring, `.mvp/`, and documentation files.
-- [ ] Automatically create a concise feature commit only when verification and review are clean and staging is safe.
-- [ ] Write `.mvp/features/<feature-name>/retrospective.md` using `template-improvement-retrospective-template.md`.
+- [ ] Stage only intended feature, wiring, `.features/`, and documentation files.
+- [ ] Prepare a concise feature commit only when verification and review are clean and staging is safe, then ask the user for explicit approval before committing.
+- [ ] Write `.features/<feature-name>/retrospective.md` using `template-improvement-retrospective-template.md`.

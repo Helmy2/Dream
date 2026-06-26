@@ -89,3 +89,42 @@ Presentation mapper rule:
 ### 4.5 Why this template scales
 
 This split keeps the public navigation contract stable and small. Other features and the app shell depend only on `api`. The `impl` can be replaced, refactored, or tested in isolation without affecting callers. Review discussions are clearer because every class has an obvious home and cross-feature coupling is easy to detect from the dependency graph.
+
+### 4.6 Feature DI Module boilerplate
+
+Every feature `impl` module needs a Koin module that registers ViewModels and installs Navigation 3 entry providers. The pattern is identical across features:
+
+```kotlin
+// feature/<name>/impl/src/commonMain/kotlin/.../di/<Name>Module.kt
+@OptIn(KoinExperimentalAPI::class)
+val <name>UiModule = module {
+    factory<PresentationMapper> { PresentationMapper(get()) }
+    viewModel<FeatureViewModel>()
+
+    navigation<FeatureListRoute> {
+        val navigator = koinInject<Navigator>()
+        FeatureListScreen(
+            onNavigateDetail = { id -> navigator.goTo(FeatureDetailRoute(id)) },
+        )
+    }
+
+    navigation<FeatureDetailRoute> { route ->
+        val navigator = koinInject<Navigator>()
+        FeatureDetailScreen(
+            selectedId = route.id,
+            onNavigateBack = { navigator.goBack() },
+        )
+    }
+}
+```
+
+Registration steps for a new feature:
+
+1. Create the DI module file in `feature/<name>/impl/.../di/`
+2. Add `feature/<name>/impl` dependency to `shared/umbrella-ui/build.gradle.kts`:
+   ```kotlin
+   commonMainImplementation(projects.feature.name.impl)
+   commonMainApi(projects.feature.name.api)
+   ```
+3. Import and add `<name>UiModule` to the `modules(...)` call in `UiModule.kt`
+4. Verify with `./gradlew :shared:umbrella-ui:allTests` — the DI graph test confirms all registrations resolve without eager instantiation

@@ -66,7 +66,39 @@ Reusable principle:
 - on iOS simulator, prefer updated summary/list/detail assertions over exact currency-node visibility when rendering is inconsistent
 - distinguish a product failure from a device-driver, simulator, or Maestro issue
 
-### 34.5 Environment fallback reporting
+### 34.5 Platform-specific selector priority and clashes
+
+iOS Form section headers are system-uppercased by SwiftUI and can match Maestro `text:` selectors before TextField placeholder values do.
+
+Reusable principle:
+
+- when a Form section header and a TextField placeholder share overlapping text (e.g., header "AMOUNT" and placeholder "0.00"), the system-uppercased header takes matching priority
+- use a semantically distinct placeholder value (e.g., `"0.00"` instead of `"Amount"`) so that `text:` selectors match the field directly
+- avoid relying on placeholder text that matches or partially overlaps with any section header or label in the same form
+- when in doubt, use `mobile_list_elements_on_screen` (mobile-mcp) to inspect the actual label hierarchy rather than guessing which element Maestro will match
+
+### 34.6 iOS Picker navigation limitation
+
+SwiftUI Pickers with NavigationLink style (the default in Form sections) navigate to a dedicated pick-list detail view when tapped. Maestro `tapOn: "Option"` enters the picker detail rather than selecting the option.
+
+Reusable principle:
+
+- avoid direct Picker selection in Maestro smoke flows when the Picker uses NavigationLink presentation
+- prefer default values or programmatic state injection for picker-driven fields
+- when a picker value must be verified in a smoke flow, set it as the form default so it renders without interaction
+- distinguish a "Picker navigated to detail" failure from a real product defect — the flow limitation is in Maestro, not the app
+
+### 34.7 iOS DreamTextField keyboard dismissal
+
+SwiftUI `hideKeyboard` is unreliable on `DreamTextField` (the iOS design system component). The standard workaround is to dismiss the keyboard by pressing the return key.
+
+Reusable principle:
+
+- use `pressKey: Enter` instead of `hideKeyboard` after `inputText` on iOS DreamTextField instances
+- prefer `eraseText` + `inputText` + `pressKey: Enter` as the canonical text-entry pattern for iOS form fields
+- verify the keyboard is dismissed by asserting the next UI element is tappable, not by checking keyboard state directly
+
+### 34.8 Environment fallback reporting
 
 Environment blockers must be precise.
 

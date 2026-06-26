@@ -9,8 +9,8 @@ Read:
 - `.opencode/guidance/opencode-agent-map.md`
 - `.opencode/guidance/dream-agent-operating-guide.md`
 - `AGENTS.md`
-- `.mvp/app-contract.yaml`
-- `.mvp/decisions.yaml`
+- `.features/app-contract.yaml`
+- `.features/decisions.yaml`
 - relevant feature contracts
 
 Then:
@@ -25,7 +25,7 @@ Then:
 - rerun verification until green, blocked, or a skip condition triggers (see Skip Conditions in dream-agent-operating-guide.md)
 - use `dream-inspector` as the final QA gate for substantial work
 - run `git status`, `git diff`, and `git log --oneline -10` after a completed feature flow
-- if this command is part of a completed feature generation and review is approved, stage only intended feature files and create a concise feature commit automatically
-- update `.mvp/verification-report.md` with the final validated or blocked result using `.opencode/guidance/templates/verification-report-template.md`
+- if this command is part of a completed feature generation and review is approved, present the commit summary to the user and request explicit confirmation before staging and committing intended files
+- update `.features/verification-report.md` with the final validated or blocked result using `.opencode/guidance/templates/verification-report-template.md`
 
-Do not auto-commit blocked, partial, unreviewed, or unsafe worktree states.
+Do not commit blocked, partial, unreviewed, or unsafe worktree states. Do not commit until the user explicitly approves the commit after Dream reports verification and review are green.

@@ -5,15 +5,12 @@
     ".opencode/guidance/dream-agent-operating-guide.md"
   ],
   "mcp": {
-    "compose-hot-reload": {
+    "mobile-mcp": {
       "type": "local",
       "enabled": true,
       "command": [
-        "./gradlew",
-        "--no-daemon",
-        "--quiet",
-        "--console=plain",
-        ":desktopApp:hotMcpServerJvm"
+        "npx",
+        "@mobilenext/mobile-mcp@latest"
       ]
     }
   }

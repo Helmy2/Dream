@@ -3,7 +3,7 @@
 Use this prompt scaffold when instantiating a new Dream project from an existing Dream template.
 
 ```text
-Intended OpenCode agent: implementer
+Intended OpenCode agent: dream-implementer
 
 You are instantiating a new Dream project from a Dream template.
 
@@ -15,8 +15,8 @@ Read first:
 - `AGENTS.md`
 - `.opencode/guidance/dream-agent-operating-guide.md`
 - selected template README
-- selected template `.mvp/` metadata
-- any already-generated `.mvp/app-contract.yaml` or `.mvp/decisions.yaml`
+- selected template `.features/` metadata
+- any already-generated `.features/app-contract.yaml` or `.features/decisions.yaml`
 
 Inputs you must use:
 - destination project name
@@ -57,8 +57,8 @@ Instantiation steps:
 7. Audit all required identity surfaces and record each rename explicitly.
 8. Replace sample-facing display text that should not survive into the generated app baseline.
 9. Preserve reusable shared infrastructure, build logic, and architecture modules.
-10. Reset `.mvp/verification-report.md` to reflect the new generation cycle rather than the source template's prior validation state.
-11. Update `.mvp/decisions.yaml` and `.mvp/app-contract.yaml` to reflect the generated app.
+10. Reset `.features/verification-report.md` to reflect the new generation cycle rather than the source template's prior validation state.
+11. Update `.features/decisions.yaml` and `.features/app-contract.yaml` to reflect the generated app.
 12. Decide whether the sample feature should remain temporarily as scaffolding or be replaced immediately by the first real feature.
 13. Verify git readiness in the destination project before later workflow stages depend on git commands.
 14. Verify Android SDK and Maestro readiness early, or record precise environment blockers.
@@ -79,7 +79,7 @@ Required identity audit surfaces:
 - Kotlin package declarations and directory layout where package roots are renamed
 - Android manifest labels and other visible app identity text
 - iOS configuration values that carry app identity
-- README or `.mvp/` metadata values that still carry template identity
+- README or `.features/` metadata values that still carry template identity
 - obvious sample or template display strings that would misidentify the generated app
 
 Template-specific decisions you must make explicitly:
@@ -109,7 +109,7 @@ What to customize:
 - application id and namespace values
 - package roots that still contain template identity
 - display text such as window title, starter labels, and obvious sample text
-- `.mvp/` metadata for the new project
+- `.features/` metadata for the new project
 
 Required identity audit output:
 - canonical app identity summary
@@ -128,9 +128,9 @@ Rules for the sample feature:
 
 Required outputs:
 - instantiated project on disk
-- updated `.mvp/app-contract.yaml`
-- updated `.mvp/decisions.yaml`
-- reset or regenerated `.mvp/verification-report.md`
+- updated `.features/app-contract.yaml`
+- updated `.features/decisions.yaml`
+- reset or regenerated `.features/verification-report.md`
 - concise summary of all renamed identifiers and structural decisions
 - explicit identity audit summary
 

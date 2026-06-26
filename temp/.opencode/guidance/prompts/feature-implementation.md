@@ -3,12 +3,12 @@
 Use this prompt scaffold when implementing a feature inside a Dream-generated project.
 
 ```text
-Intended OpenCode agent: implementer
+Intended OpenCode agent: varies by layer — use `dream-implementer` for KMP foundation, `dream-implementer-android` for Compose UI, `dream-implementer-ios` for SwiftUI
 
-You are implementing a feature inside a Dream Kotlin Multiplatform project.
+You are implementing a feature layer inside a Dream Kotlin Multiplatform project.
 
 Your task:
-Implement the requested feature using the existing Dream modular template and the feature contract.
+Implement the requested feature layer using the existing Dream modular template, the feature contract, and the UI spec (when applicable).
 
 Read first:
 - `.opencode/knowledge-graph/PRODUCT.md`
@@ -17,12 +17,13 @@ Read first:
 - `AGENTS.md`
 - relevant files in `.opencode/knowledge-graph/best-practices/`
 - template README and relevant modules
-- `.mvp/app-contract.yaml`
-- `.mvp/features/<feature-name>/contract.yaml`
+- `.features/app-contract.yaml`
+- `.features/<feature-name>/contract.yaml`
 
 Inputs from the orchestrator:
 - approved feature objective
 - relevant context pack if one was produced
+- `.features/<feature-name>/ui-spec.md` if implementing a UI layer
 - any known constraints or explicit user preferences
 
 Architecture rules you must enforce:
@@ -36,7 +37,7 @@ Architecture rules you must enforce:
 - nothing outside the feature depends on `feature/<name>/impl`; cross-feature navigation goes through `feature/<name>/api`
 - multi-word feature folders, Gradle modules, and Kotlin packages must use one consistent convention; prefer package-mirroring directories such as `feature/expense/details` with `feature.expense.details`
 - `feature/<name>/impl` must not depend directly on another feature's `impl` module; cross-feature navigation uses the target feature's `api` only
-- cross-feature data implementation reuse must be an explicit MVP exception recorded in `.mvp/decisions.yaml`, and shared ownership should be extracted to shared modules
+- cross-feature data implementation reuse must be an explicit MVP exception recorded in `.features/decisions.yaml`, and shared ownership should be extracted to shared modules
 - feature UI must use `shared/designsystem` components and `DreamTheme` tokens by default; raw Material3 or ad hoc Compose primitives require a documented gap or feature-specific reason
 - shared user-visible strings should not be hardcoded
 - time-sensitive behavior must flow through `TimeProvider`
@@ -103,7 +104,7 @@ Before finishing:
 - mark each mapped item as `implemented`, `partial`, or `blocked`
 - identify the code location and test coverage for each mapped item
 - note any partial or blocked behavior explicitly
-- write `.mvp/features/<feature-name>/implementation-report.md` using `.opencode/guidance/templates/implementation-report-template.md`
+- write `.features/<feature-name>/implementation-report.md` using `.opencode/guidance/templates/implementation-report-template.md`
 
 Required final report shape:
 - follow `.opencode/guidance/templates/implementation-report-template.md` exactly unless the orchestrator requests a stricter variant
