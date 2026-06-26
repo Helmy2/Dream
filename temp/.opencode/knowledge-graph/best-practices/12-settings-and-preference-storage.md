@@ -27,7 +27,7 @@ Best practice:
 
 ### 12.3 KMP DataStore setup in `shared:core:data`
 
-DataStore Preferences is multiplatform (Android and iOS here) using expect/actual:
+DataStore Preferences is multiplatform (Android and iOS here) using expect/actual. The template ships with a working implementation in `shared/core/data/src/.../datastore/`.
 
 **Dependencies** (in `shared:core:data/build.gradle.kts`):
 ```kotlin
@@ -77,3 +77,6 @@ Key points:
 - `PreferenceDataStoreFactory` for the Android implementation
 - `OkioStorage` on iOS native (okio is transitively included by DataStore)
 - Host app passes `Context` on Android; other platforms pass `null`
+- The template provides `createDataStore(context: Any?): DataStore<Preferences>` as an expect/actual factory in `shared/core/data`
+- A `DataStoreSessionStorage` implementation is available in `shared/core/data/src/.../session/` for optional auth/session token persistence
+- Both DataStore and SessionStorage are wired into the Koin DI module in `shared/umbrella-core`

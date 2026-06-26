@@ -12,10 +12,12 @@ class DreamKmpConventionPlugin : Plugin<Project> {
             pluginManager.apply("org.jetbrains.kotlin.multiplatform")
             pluginManager.apply("com.android.kotlin.multiplatform.library")
             pluginManager.apply("dev.mokkery")
+            pluginManager.apply("org.jetbrains.kotlin.plugin.serialization")
 
             val libs = the<org.gradle.accessors.dm.LibrariesForLibs>()
             val coroutinesAndroid = libs.kotlinx.coroutines.android
             val mokkeryCore = libs.mokkery.core
+            val serializationJson = libs.kotlinx.serialization.json
 
             extensions.configure<KotlinMultiplatformExtension> {
                 jvmToolchain(17)
@@ -44,6 +46,10 @@ class DreamKmpConventionPlugin : Plugin<Project> {
 
                 sourceSets.getByName("androidMain").dependencies {
                     implementation(coroutinesAndroid)
+                }
+
+                sourceSets.commonMain.dependencies {
+                    implementation(serializationJson)
                 }
 
                 sourceSets.commonTest.dependencies {

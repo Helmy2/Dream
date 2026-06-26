@@ -20,6 +20,7 @@ dependencies {
     implementation(libs.plugins.androidLibrary.toDependency())
     implementation(libs.plugins.kotlinAndroid.toDependency())
     implementation(libs.plugins.kotlinMultiplatform.toDependency())
+    implementation(libs.plugins.kotlinSerialization.toDependency())
     implementation(libs.plugins.composeMultiplatform.toDependency())
     implementation(libs.plugins.composeCompiler.toDependency())
     implementation(libs.plugins.androidMultiplatformLibrary.toDependency())

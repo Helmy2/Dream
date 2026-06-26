@@ -38,7 +38,7 @@ Reusable lesson:
 
 ### 9.4 Named `HttpClient` instances per feature
 
-A strong network boundary pattern is using a per-feature Ktor client setup.
+A strong network boundary pattern is using a per-feature Ktor client setup. The template provides a shared `HttpClientFactory` in `shared/core/data/src/.../network/` that feature data modules can use to create configured clients.
 
 Why it is smart:
 

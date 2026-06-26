@@ -22,7 +22,7 @@ Modules:
 - `iosApp-compose`: iOS host app using Compose Multiplatform (consumes the exported `Shared` framework from `umbrella-ui`)
 - `iosApp-swiftui`: iOS host app using native SwiftUI (consumes the exported `SharedCore` framework from `umbrella-core` via SKIE)
 - `shared/core/*`: split shared infrastructure modules
-- `shared/core/database`: shared Room builder defaults for bundled SQLite and KMP-safe query dispatch
+- `shared/core/data`: shared Room builder defaults, DataStore key-value storage factory, Ktor HttpClient factory, and session storage
 - `shared/core/strings`: Compose Resources string catalog exported for feature UI
 - `shared/designsystem`: theme, tokens, and reusable components
 - `shared/navigation`: centralized shell, Navigator, and Navigation 3 display infrastructure
@@ -47,8 +47,12 @@ Template baseline:
 - feature route types (`NavKey`) live in `feature/<name>/api`; screens and Koin navigation installers live in `feature/<name>/impl`; shared navigation stays centralized by operating on `NavKey`
 - the shared MVI base processes actions sequentially instead of launching one coroutine per action
 - the sample feature uses Room for local persisted data on Android and iOS
-- common Room builder setup lives in `shared/core/database` and uses a bundled SQLite driver plus `Dispatchers.Default` for KMP-safe query execution
+- common Room builder setup lives in `shared/core/data` and uses a bundled SQLite driver plus `Dispatchers.Default` for KMP-safe query execution
 - common Room builder setup enables destructive migration fallback for first-pass MVP iteration; replace with real migrations when preserving local data matters
+- DataStore Preferences key-value storage is available via `shared/core/data` with expect/actual factory creation for Android and iOS
+- Ktor HTTP client support is wired into feature data modules by default; a shared `HttpClientFactory` in `shared/core/data` provides ContentNegotiation (JSON), Logging, and optional bearer token auth
+- Kotlin serialization is applied globally so `@Serializable` is available across all modules including Navigation 3 route definitions
+- `SessionStorage` domain contract and DataStore-backed implementation provide optional session/auth token persistence
 - user-visible sample copy comes from `shared/core/strings` Compose Resources instead of hardcoded composable text
 - shared result helpers preserve `CancellationException` instead of swallowing structured concurrency
 - `shared/core/testing` is the reusable home for coroutine-aware test helpers
