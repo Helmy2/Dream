@@ -28,9 +28,11 @@ Then:
 - instantiate the appropriate Dream template
 - generate the first feature contract before any feature code is written
 - inspect the feature contract for entity fields, actions, states, time behavior, storage choices, and required tests
-- only then hand implementation to `dream-implementer`
-- implement the first feature using Dream's modular architecture
-- run verification
+- only then hand implementation to `dream-implementer` using the phased approach:
+  - **Phase 1 (domain + data)**: implement entities, repository interfaces, data mappings, domain/data tests. Create `feature/<name>/api` with `NavKey` route types only.
+  - **Phase 2 (UI — parallel)**: launch Compose UI (`feature/<name>/impl` with screens, ViewModels, shared strings, presentation tests) and SwiftUI (views, ViewModels, models, bridge, XCTest when `iosUiStrategy` is `swiftui`) as independent subagent calls.
+  - **Phase 3 (wiring)**: umbrella imports, DI registration, navigation entries.
+- run verification; when `iosUiStrategy` is `swiftui`, include `xcodebuild build` and `xcodebuild test`
 - repair failures until green, blocked, or a skip condition triggers (see Skip Conditions in dream-agent-operating-guide.md)
 - write `.mvp/features/<feature>/retrospective.md` using `.opencode/guidance/templates/template-improvement-retrospective-template.md`
 - run `git status`, `git diff`, and `git log --oneline -10`

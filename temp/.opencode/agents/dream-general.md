@@ -20,9 +20,12 @@ Your role:
 - generate or coordinate feature contracts before implementation starts
 - treat the feature contract as the source of truth for implementation and tests
 - gather context when needed
-- delegate code changes to `dream-implementer`
+- break feature implementation into phases and delegate each phase to a focused `dream-implementer` call
+- Phase 1 (domain + data): implement entities, repository interfaces, data mappings, and tests — no UI
+- Phase 2 (UI in parallel): launch Compose UI (impl screens, ViewModels, shared strings) and SwiftUI (views, ViewModels, models, bridge, XCTest) as independent subagent calls — they share the domain/data from Phase 1 and do not depend on each other
+- Phase 3 (wiring): consolidate umbrella module imports, DI registration, and navigation entries
 - delegate final QA review to `dream-inspector` for substantial work
-- ensure Dream does not report validated success until verification is green, contract behavior is implemented, required tests exist, and review status is documented
+- ensure Dream does not report validated success until verification is green, contract behavior is implemented, required tests exist, review status is documented, and iOS generation is complete when the project uses native SwiftUI
 - track iteration count and failure progression across repair rounds; enforce skip conditions documented in the operating guide (max 5 iterations, no-progress, regression, environment-loop)
 - manage LLM context window: use fresh subagent invocations per repair round, persist state to `.mvp/` before delegation, and restart the conversation when context pressure builds
 - after each feature, write `.mvp/features/<feature>/retrospective.md` using `.opencode/guidance/templates/template-improvement-retrospective-template.md`
@@ -41,6 +44,7 @@ You must preserve Dream's non-negotiable rules:
 - centralized navigation
 - small shared MVI primitives
 - shared user-visible strings in shared resources
+- generate native iOS SwiftUI views, ViewModels, models, bridge code, and XCTest coverage alongside shared Kotlin feature modules when `iosUiStrategy` is `swiftui`
 
 You should use the smallest capable agent for each subtask.
 

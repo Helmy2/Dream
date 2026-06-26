@@ -70,6 +70,18 @@ Use this checklist when adding or replacing a Dream feature module.
 - [ ] Use Turbine or another explicit flow-testing pattern for state transition assertions when it improves readability over direct `state.value` checks.
 - [ ] Use `kotlinx-datetime` helpers for meaningful month, date, or time cases instead of unexplained raw epoch values.
 
+## iOS SwiftUI Host
+
+Apply these items only when `iosUiStrategy` is `swiftui`:
+
+- [ ] Create or update SwiftUI views for each feature screen in `iosApp/<FeatureName>/Views/`, matching the feature contract screens.
+- [ ] Create or update `@Observable` ViewModels in `iosApp/<FeatureName>/ViewModels/` that wrap bridge calls and expose native state.
+- [ ] Create or update Swift models in `iosApp/<FeatureName>/Models/` when the feature needs Swift-side value types or form state.
+- [ ] Extend the bridge layer (`Core/SharedCoreBridge` or equivalent protocol) with methods that expose new shared capabilities to Swift.
+- [ ] Add or update XCTest coverage in `iosAppTests/<FeatureName>/` for native ViewModel state transitions and bridge wiring.
+- [ ] Verify the shared Xcode scheme includes all new files and the test target discovers them.
+- [ ] Run `xcodebuild build` and `xcodebuild test` as part of structural validation for the iOS host.
+
 ## Sample Removal
 
 - [ ] Remove `feature/sample` once a real first feature fully replaces it, unless a temporary exception is documented.

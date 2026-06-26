@@ -44,27 +44,32 @@ Non-negotiable rules:
 
 Instantiation steps:
 1. Copy the selected template into the destination project location.
-2. Derive a canonical app identity before renaming anything.
+2. Resolve the iOS UI strategy from `iosUiStrategy` in the app contract:
+   - If `compose_multiplatform`: delete `iosApp-swiftui/`, rename `iosApp-compose/` to `iosApp/`
+   - If `swiftui`: delete `iosApp-compose/`, rename `iosApp-swiftui/` to `iosApp/`
+    - Note: when using `dream-init`, this step is already handled by the initializer (prompts for iOS choice, removes unused variant, renames kept one). The agent should verify the result and proceed.
+    - Verify the kept iOS variant still has the correct Gradle embed-and-sign build phase, shared Xcode scheme, and framework search path.
+    - After resolving the iOS strategy, run `xcodebuild build` against the kept iOS project to confirm it compiles before proceeding to feature generation.
+3. Derive a canonical app identity before renaming anything.
 3. Rename app-visible template identifiers to app-specific identifiers.
-4. Rename package identifiers from template-specific values to project-specific values.
-5. Update Gradle, application id, namespace, and framework naming where needed.
-6. Audit all required identity surfaces and record each rename explicitly.
-7. Replace sample-facing display text that should not survive into the generated app baseline.
-8. Preserve reusable shared infrastructure, build logic, and architecture modules.
-9. Reset `.mvp/verification-report.md` to reflect the new generation cycle rather than the source template's prior validation state.
-10. Update `.mvp/decisions.yaml` and `.mvp/app-contract.yaml` to reflect the generated app.
-11. Decide whether the sample feature should remain temporarily as scaffolding or be replaced immediately by the first real feature.
-12. Verify git readiness in the destination project before later workflow stages depend on git commands.
-13. Verify Android SDK and Maestro readiness early, or record precise environment blockers.
-14. Run `./scripts/dream-preflight.sh` when it exists and include the result in the instantiation summary.
-15. Choose and document the generated app's feature naming convention before creating multi-word feature modules.
+5. Rename package identifiers from template-specific values to project-specific values.
+6. Update Gradle, application id, namespace, and framework naming where needed.
+7. Audit all required identity surfaces and record each rename explicitly.
+8. Replace sample-facing display text that should not survive into the generated app baseline.
+9. Preserve reusable shared infrastructure, build logic, and architecture modules.
+10. Reset `.mvp/verification-report.md` to reflect the new generation cycle rather than the source template's prior validation state.
+11. Update `.mvp/decisions.yaml` and `.mvp/app-contract.yaml` to reflect the generated app.
+12. Decide whether the sample feature should remain temporarily as scaffolding or be replaced immediately by the first real feature.
+13. Verify git readiness in the destination project before later workflow stages depend on git commands.
+14. Verify Android SDK and Maestro readiness early, or record precise environment blockers.
+15. Run `./scripts/dream-preflight.sh` when it exists and include the result in the instantiation summary.
+16. Choose and document the generated app's feature naming convention before creating multi-word feature modules.
 
 Canonical app identity you must derive and keep consistent:
 - app display name
 - canonical package root
 - Android application id
 - Android namespace values by module
-- desktop app window title, when Desktop is included in the app contract
 - iOS bundle or visible app identity where applicable
 - Gradle root project name and any generated naming derived from the app identity
 
@@ -73,7 +78,6 @@ Required identity audit surfaces:
 - every module `build.gradle.kts` namespace and Android application id values
 - Kotlin package declarations and directory layout where package roots are renamed
 - Android manifest labels and other visible app identity text
-- desktop app window title or launcher-visible identity text, when Desktop is included in the app contract
 - iOS configuration values that carry app identity
 - README or `.mvp/` metadata values that still carry template identity
 - obvious sample or template display strings that would misidentify the generated app
@@ -92,8 +96,7 @@ Identity normalization rules:
 
 What to preserve from the template:
 - `androidApp/`
-- `iosApp/`
-- `desktopApp/` when Desktop is included as a generated app target
+- either `iosApp-compose/` or `iosApp-swiftui/` based on `iosUiStrategy` in the app contract
 - `shared/core/*`
 - `shared/designsystem`
 - `shared/navigation`

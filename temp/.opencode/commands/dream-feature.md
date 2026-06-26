@@ -25,9 +25,13 @@ Then:
 - generate or update `.mvp/features/<feature-name>/contract.yaml`
 - stop and inspect the contract before implementation; confirm entity fields, action names, state names, time behavior, storage choices, design expectations, and required tests are explicit
 - do not let `dream-implementer` write feature code until the contract exists and is the source of truth
-- implement the feature within `feature/<name>/domain`, `feature/<name>/data`, `feature/<name>/api` (route types only, no Koin), and `feature/<name>/impl` (screens, ViewModels, Koin navigation entry installers)
-- add or update tests
-- run verification
+- decompose implementation into phases; delegate each phase to a separate `dream-implementer` call:
+  - **Phase 1 (domain + data)**: implement `feature/<name>/domain` (entities, repository interfaces, domain tests) and `feature/<name>/data` (data sources, entity mapping, repository impl, data tests). Also create `feature/<name>/api` with `NavKey` route types only (no Koin).
+  - **Phase 2 (UI — parallel)**: launch two independent subagent calls simultaneously:
+    - *Compose UI*: implement `feature/<name>/impl` (screens, ViewModels, UI state/actions/events, Koin navigation entry installers, shared strings, presentation tests)
+    - *SwiftUI* (only when `iosUiStrategy` is `swiftui`): update `iosApp/` with native SwiftUI views (`Views/`), `@Observable` ViewModels (`ViewModels/`), Swift models (`Models/` if needed), bridge extension code (`Core/`), and XCTest coverage (`iosAppTests/`)
+  - **Phase 3 (wiring)**: integrate feature modules into umbrella imports, DI registration, and navigation entries
+- run verification; when `iosUiStrategy` is `swiftui`, run `xcodebuild build` and `xcodebuild test` as part of verification
 - repair failures until green, blocked, or a skip condition triggers (see Skip Conditions in dream-agent-operating-guide.md)
 - update `.mvp/features/<feature-name>/implementation-report.md`
 - write `.mvp/features/<feature-name>/retrospective.md` using `.opencode/guidance/templates/template-improvement-retrospective-template.md`
