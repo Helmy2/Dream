@@ -29,7 +29,7 @@ Prioritize these sources when relevant:
 - `.opencode/knowledge-graph/`
 - `.mvp/`
 - `templates/`
-- target project modules under `feature/`, `shared/`, `androidApp/`, `iosApp/`, and `desktopApp/`
+- target project modules under `feature/`, `shared/`, `androidApp/`, and `iosApp/`
 
 Output format:
 

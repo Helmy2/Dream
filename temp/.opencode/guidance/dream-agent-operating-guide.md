@@ -63,11 +63,12 @@ Unless a higher-priority project-specific document explicitly overrides them, al
 - keep shared MVI primitives small
 - keep routing concerns out of feature UI where practical
 - keep user-visible shared UI strings in shared resources
-- treat Android, iOS, and contract-selected Desktop as generated app product targets
+- treat Android and iOS as generated app product targets
 - use Android CLI for Android environment checks, emulator/device setup, APK install, launch, layout/screenshot inspection, logs, and repair loops
 - use `xcodebuild` and `xcrun simctl` for iOS build, simulator install, launch, logs, and crash capture
 - use Maestro for black-box smoke and end-to-end user-flow checks after platform launch is healthy
-- when Desktop is included in the app contract, validate it as a supported target and use `:desktopApp:hotRunJvm` for interactive runs
+- support dual iOS UI strategies: when the project contains both `iosApp-compose` and `iosApp-swiftui`, the agent removes the unused folder and renames the kept one to `iosApp` during project instantiation
+- when the project uses the native SwiftUI iOS strategy, load the dedicated iOS best-practice files for host structure, bridge rules, Xcode configuration, and XCTest packaging before editing native iOS code
 - not report success until verification is green or a blocker is clearly documented
 
 ## Mandatory Graph Usage
@@ -77,6 +78,7 @@ Before generating or reviewing code, the acting OpenCode agent should load the r
 Minimum rule retrieval by task:
 
 - app and feature generation: architecture, domain, data, presentation, navigation, resources, DI
+- app and feature generation with native SwiftUI: also retrieve iOS project structure, KMP bridge, Xcode configuration, and iOS testing rules
 - review: architecture, anti-patterns, exceptions, defaults
 - repair: failing module rules plus any anti-patterns implicated by the failure
 
@@ -205,11 +207,12 @@ Final validation should then exercise the real product targets:
 
 1. Android CLI (`https://developer.android.com/tools/agents/android-cli`) for Android environment checks, emulator/device setup, APK install, launch, layout/screenshot inspection, and log capture.
 2. `xcodebuild` plus `xcrun simctl` for iOS simulator build, install, launch, logs, and crash capture.
-3. Feature-owned Maestro Android smoke flows for every user-visible generated or touched feature after Android launches cleanly.
-4. Feature-owned Maestro iOS smoke flows for every user-visible generated or touched feature where reliable after iOS launches cleanly.
-5. `./gradlew :desktopApp:compileKotlinJvm` plus `./gradlew :desktopApp:hotRunJvm` when `desktop` is included in the app contract.
+ 3. Feature-owned Maestro Android smoke flows for every user-visible generated or touched feature after Android launches cleanly.
+ 4. Feature-owned Maestro iOS smoke flows for every user-visible generated or touched feature where reliable after iOS launches cleanly.
 
-Desktop is a supported target when the app contract includes it, but Desktop validation does not replace Android/iOS readiness checks. Dream must not report final success without the required platform validation, smoke coverage, and contract review, or a documented blocker.
+Dream must not report final success without the required platform validation, smoke coverage, and contract review, or a documented blocker.
+
+When the native SwiftUI iOS host is present, structural validation includes both `xcodebuild build` and `xcodebuild test` against the shared scheme so the packaged XCTest target stays healthy.
 
 Verification reports should use explicit status buckets for each check: `passed`, `blocked by environment`, `not run`, and `not applicable`. Do not blur an unrun smoke flow into a passed build result.
 

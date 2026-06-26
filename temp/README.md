@@ -19,8 +19,8 @@ Packaged Dream context:
 Modules:
 
 - `androidApp`: Android host app
-- `iosApp`: iOS host app that consumes the exported `Shared` framework
-- `desktopApp`: Desktop host app and MCP hot reload integration point; use `:desktopApp:hotRunJvm` when running it interactively
+- `iosApp-compose`: iOS host app using Compose Multiplatform (consumes the exported `Shared` framework from `umbrella-ui`)
+- `iosApp-swiftui`: iOS host app using native SwiftUI (consumes the exported `SharedCore` framework from `umbrella-core` via SKIE)
 - `shared/core/*`: split shared infrastructure modules
 - `shared/core/database`: shared Room builder defaults for bundled SQLite and KMP-safe query dispatch
 - `shared/core/strings`: Compose Resources string catalog exported for feature UI
@@ -56,14 +56,14 @@ Template baseline:
 - `shared/umbrella-core` stays free of Compose and Navigation 3 UI dependencies; `shared/umbrella-ui` owns Compose startup and navigation display wiring
 - the sample UI demonstrates shared loading, empty, content, and error-state components
 - the shared shell applies safe-area padding and token-backed theme styling
-- Android, iOS, and contract-selected Desktop are product runtime targets; Desktop validation does not replace Android/iOS readiness checks
+- Android and iOS are product runtime targets
+- the packaged SwiftUI iOS host includes an `iosAppTests` XCTest target and shared scheme so native host changes are verifiable through `xcodebuild test`
 
 Verification commands:
 
 ```bash
-./gradlew :feature:sample:impl:allTests :feature:sample:data:compileKotlinDesktop :shared:navigation:allTests :shared:umbrella-core:allTests :shared:core:domain:allTests :shared:core:data:allTests :shared:core:presentation:allTests :shared:core:testing:allTests
+./gradlew :feature:sample:impl:allTests :shared:navigation:allTests :shared:umbrella-core:allTests :shared:core:domain:allTests :shared:core:data:allTests :shared:core:presentation:allTests :shared:core:testing:allTests
 ./gradlew :androidApp:assembleDebug
-./gradlew :desktopApp:compileKotlinJvm
-# Interactive Desktop validation when Desktop is selected:
-./gradlew :desktopApp:hotRunJvm
+xcodebuild -project iosApp-swiftui/iosApp.xcodeproj -scheme iosApp -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=18.6' build
+xcodebuild -project iosApp-swiftui/iosApp.xcodeproj -scheme iosApp -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=18.6' test
 ```

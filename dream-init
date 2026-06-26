@@ -15,6 +15,7 @@
 #   - Project name (e.g. "ExpenseTracker")
 #   - App display name (e.g. "Expense Tracker")
 #   - Package root (e.g. "com.example.expensetracker")
+#   - iOS UI framework (Compose Multiplatform or SwiftUI)
 #
 
 set -euo pipefail
@@ -110,12 +111,25 @@ read -r -p "$(info "Android app ID [${PACKAGE_ROOT}]: ")" ANDROID_APP_ID
 ANDROID_APP_ID="${ANDROID_APP_ID:-$PACKAGE_ROOT}"
 
 echo ""
+info "iOS UI framework:"
+info "  1) Compose Multiplatform (shared Compose UI via Kotlin)"
+info "  2) SwiftUI (native iOS, shared Domain/Data only)"
+read -r -p "$(info "Choose [1]: ")" IOS_CHOICE
+IOS_CHOICE="${IOS_CHOICE:-1}"
+case "$IOS_CHOICE" in
+    1) IOS_STRATEGY="compose_multiplatform" ; KEPT_IOS="iosApp-compose" ; REMOVED_IOS="iosApp-swiftui" ;;
+    2) IOS_STRATEGY="swiftui"              ; KEPT_IOS="iosApp-swiftui" ; REMOVED_IOS="iosApp-compose" ;;
+    *) error "Invalid choice" ; exit 1 ;;
+esac
+
+echo ""
 echo "────────────────────────────────────────────"
 info  "Destination:     $DEST"
 info  "Project name:    $PROJECT_NAME"
 info  "Display name:    $DISPLAY_NAME"
 info  "Package root:    $PACKAGE_ROOT"
 info  "Android app ID:  $ANDROID_APP_ID"
+info  "iOS UI:          ${IOS_STRATEGY}"
 echo "────────────────────────────────────────────"
 read -r -p "$(info "Proceed? (Y/n): ")" CONFIRM
 if [ "$CONFIRM" = "n" ] || [ "$CONFIRM" = "N" ]; then
@@ -183,7 +197,15 @@ sed_replace "$ESCAPED_OLD_SAMP" "$ESCAPED_NEW_SAMP"
 ok "✓ Identifiers renamed."
 
 # ──────────────────────────────────────────────
-# Step 3: Directory restructuring
+# Step 3: iOS project resolution
+# ──────────────────────────────────────────────
+info "📁 Resolving iOS project (${IOS_STRATEGY})..."
+rm -rf "$DEST/$REMOVED_IOS"
+mv "$DEST/$KEPT_IOS" "$DEST/iosApp"
+ok "✓ iOS project resolved."
+
+# ──────────────────────────────────────────────
+# Step 4: Directory restructuring
 # ──────────────────────────────────────────────
 info "📁 Restructuring directories..."
 
@@ -215,7 +237,7 @@ find "$DEST" -depth -type d -name "com" -empty -delete 2>/dev/null || true
 ok "✓ Directory structure updated."
 
 # ──────────────────────────────────────────────
-# Step 4: Reset .mvp/
+# Step 5: Reset .mvp/
 # ──────────────────────────────────────────────
 info "📝 Resetting .mvp/ metadata..."
 
@@ -226,7 +248,7 @@ templateArchitecture: modular-hybrid
 platforms:
   - android
   - ios
-  - desktop
+iosUiStrategy: ${IOS_STRATEGY}
 backend:
   enabled: false
 YAMLEOF
@@ -234,9 +256,12 @@ YAMLEOF
 cat > "$DEST/.mvp/decisions.yaml" <<- YAMLEOF
 template: dream-kmp-base
 architecture: modular-hybrid
-ui: compose-multiplatform
-desktopPreview: mcp-driven-hot-reload
-storage: tbd
+iosUi: ${IOS_STRATEGY}
+storage: local-room
+sampleStarterData:
+  persistence: room
+  seedContent: stable resource keys stored in data and resolved by presentation shared string resources
+  userEnteredContent: raw create/update text persisted locally
 YAMLEOF
 
 cat > "$DEST/.mvp/verification-report.md" <<- MDEOF
@@ -263,7 +288,7 @@ MDEOF
 ok "✓ .mvp/ metadata reset."
 
 # ──────────────────────────────────────────────
-# Step 5: Cleanup
+# Step 6: Cleanup
 # ──────────────────────────────────────────────
 info "🧹 Cleaning up..."
 
@@ -318,11 +343,9 @@ echo ""
 info "Next steps:"
 info "  cd $DEST"
 info "  ./gradlew allTests"
-info "  ./gradlew :desktopApp:compileKotlinJvm"
-echo ""
-info "To build for Android, set ANDROID_HOME or create local.properties:"
-info "  echo 'sdk.dir=/path/to/android/sdk' >> $DEST/local.properties"
 info "  ./gradlew :androidApp:assembleDebug"
+echo ""
+info "To build for iOS (${IOS_STRATEGY}), open iosApp/ in Xcode."
 echo ""
 info "Then open in VS Code / OpenCode for Dream's agent workflow."
 echo ""

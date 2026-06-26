@@ -25,7 +25,7 @@ This file should stay compact, current, and task-oriented.
 ## Product
 
 - Name: `Dream`
-- Role: local AI MVP builder
+- Role: local AI app builder
 - Scope: provide an OpenCode-first workflow that can generate, verify, preview, review, and repair Kotlin Multiplatform MVPs from natural-language prompts
 - Style: local-first, template-driven, agent-assisted, verification-gated
 
@@ -39,10 +39,10 @@ This file should stay compact, current, and task-oriented.
 - keep navigation centralized
 - keep shared MVI primitives small
 - keep shared user-visible strings in shared resources
-- treat Android, iOS, and contract-selected Desktop as product runtime targets
+- treat Android and iOS as product runtime targets
 - use Android CLI and iOS command-line tooling for platform install, launch, logs, and repair loops
 - use Maestro for black-box smoke and end-to-end user-flow checks after platform launch is healthy
-- support Desktop when the generated app contract includes it; when Desktop is run interactively, use `:desktopApp:hotRunJvm`
+- support dual iOS UI strategies: Compose Multiplatform (iosApp-compose) or SwiftUI (iosApp-swiftui); the agent removes the unused option during project instantiation
 - do not report success until verification is green and the generated feature matches its contract, or a blocker is clearly documented
 
 ## Current Baseline
@@ -98,9 +98,8 @@ Required platform and smoke ladder:
 3. Use Android CLI (`https://developer.android.com/tools/agents/android-cli`) for Android environment checks, emulator/device management, APK install, app launch, layout/screenshot inspection, and log capture.
 4. Build iOS with `xcodebuild`.
 5. Use `xcrun simctl` to boot a simulator, install the app, launch it, and capture logs or crash output.
-6. Run Maestro Android smoke flows for user-visible behavior after Android launches cleanly.
-7. Run Maestro iOS smoke flows where reliable after iOS launches cleanly.
-8. When `desktop` is included in the generated app contract, build Desktop with `./gradlew :desktopApp:compileKotlinJvm` and run it interactively with `./gradlew :desktopApp:hotRunJvm`.
+ 6. Run Maestro Android smoke flows for user-visible behavior after Android launches cleanly.
+ 7. Run Maestro iOS smoke flows where reliable after iOS launches cleanly.
 
 Green commands alone are not enough for final success.
 
@@ -110,7 +109,6 @@ Final success requires:
 - Android install, launch, and log inspection completed through Android CLI or a documented blocker exists
 - iOS build, simulator install, launch, and log inspection completed through `xcodebuild`/`xcrun simctl` or a documented blocker exists
 - Maestro smoke coverage completed for the relevant platform flows, or a precise tooling/platform blocker is documented
-- Desktop compile and `hotRunJvm` validation completed when `desktop` is in the app contract, or a precise blocker is documented
 - contract behavior implemented
 - required tests present for that behavior
 - final review approved, or manual review recorded if delegated review tooling fails
@@ -148,7 +146,7 @@ The first run proved that Dream can generate a runnable project, but it also exp
 - modular feature generation worked
 - Android build passed
 - shared and feature tests passed
-- desktop app launched during the first run, and Desktop should use `:desktopApp:hotRunJvm` for interactive validation when it is a generated app target
+- desktop app launched during the first run (Desktop target has since been removed from the starter template)
 - sample scaffolding must not remain as a live feature module once the first real feature is generated in the target app
 
 ### What Failed Or Was Weak

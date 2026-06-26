@@ -13,7 +13,6 @@
 - Sample domain/data/presentation focused tests: `passed` — `./gradlew :feature:sample:domain:allTests :feature:sample:data:allTests :feature:sample:presentation:allTests`
 - Shared navigation tests: `passed` — `./gradlew :shared:navigation:allTests`
 - Android debug assemble: `passed` — `./gradlew :androidApp:assembleDebug`
-- Desktop JVM compile: `passed` — `./gradlew :desktopApp:compileKotlinJvm`
 - Android CLI install/launch/log inspection: `passed` — user installed APK via `adb install` and confirmed app launched successfully
 - Maestro Android smoke: `passed` — `maestro test maestro/features/sample/android.yaml` confirmed working by user
 - iOS build/install/simulator launch: `passed` — user built the app, installed on iOS simulator, and confirmed launch
@@ -26,7 +25,6 @@
 ## Not Run
 
 - Full `./gradlew allTests`: `not run` — focused feature verification exercised the relevant sample modules individually.
-- Desktop hot run: `not run` — `./gradlew :desktopApp:hotRunJvm` was not run during final smoke validation; desktop is a supported target but the user-requested validation focused on the Android and iOS Maestro flows.
 
 ## Not Applicable
 
@@ -39,7 +37,6 @@
 ./gradlew :feature:sample:domain:allTests :feature:sample:data:allTests :feature:sample:presentation:allTests
 ./gradlew :shared:navigation:allTests
 ./gradlew :androidApp:assembleDebug
-./gradlew :desktopApp:compileKotlinJvm
 # user then ran on attached device/simulator:
 adb install -r path/to/androidApp-debug.apk
 maestro test maestro/features/sample/android.yaml

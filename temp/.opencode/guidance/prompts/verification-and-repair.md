@@ -33,12 +33,10 @@ Required verification for local-only MVPs:
 - Android CLI install, launch, layout/screenshot inspection, and log capture for Android (`https://developer.android.com/tools/agents/android-cli`)
 - `xcodebuild` plus `xcrun simctl` build, install, launch, log, and crash capture for iOS
 - Feature-owned Maestro smoke flows for every user-visible generated or touched Android feature after an Android emulator/device is open, the APK is installed, and Android launches cleanly
-- Feature-owned Maestro smoke flows for every user-visible generated or touched iOS feature where reliable after the target simulator is booted, the app is installed, and iOS launches cleanly
-- `./gradlew :desktopApp:compileKotlinJvm` plus `./gradlew :desktopApp:hotRunJvm` when `desktop` is included in the app contract
+ - Feature-owned Maestro smoke flows for every user-visible generated or touched iOS feature where reliable after the target simulator is booted, the app is installed, and iOS launches cleanly
 
 Required behavior:
-- do not report validated success until verification is green, contract behavior is implemented, required tests exist, and review status is documented
-- treat Desktop as a supported product target when the app contract includes it, but do not use Desktop success as proof of Android/iOS runtime readiness
+ - do not report validated success until verification is green, contract behavior is implemented, required tests exist, and review status is documented
 - preserve `Presentation -> Domain <- Data`
 - do not fix failures by collapsing module boundaries
 - do not move business logic into host apps as a shortcut
@@ -62,6 +60,8 @@ Required parity checks before validated success:
 - repositories, use cases, and ViewModels are not instantiated inside recomposing composables
 - generated feature DI uses Koin compiler plugin DSL registration, not annotation-based DI such as `@KoinViewModel`, `@Module`, or `@ComponentScan`
 - feature-specific Navigation 3 route types are owned by `feature/<name>/api` and implement `NavKey`; Navigation 3 entry providers are installed in the Koin module inside `feature/<name>/impl`; shared navigation should not regain a shared `AppRoute` hierarchy without a concrete reason
+- when `iosUiStrategy` is `swiftui`, the native host keeps bridge code in `Core`, native state holders in `ViewModels`, and XCTest coverage in `iosAppTests`
+- when `iosUiStrategy` is `swiftui`, exported shared types needed by Swift are visible through framework `export(...)` plus transitive `api(...)` chains instead of hidden behind `implementation(...)`
 
 Automated defect scans (run these BEFORE signing off):
 1. **Grep for `Clock.System.now()`** in feature source files. The ONLY allowed occurrence is in `TimeProvider` implementations (e.g., `shared/core/domain/TimeProvider.kt` or an `expect/actual` platform time provider). Any other usage is a defect — flag it.
@@ -76,6 +76,8 @@ Automated defect scans (run these BEFORE signing off):
 10. **Verify git completion for feature flows**: After validated feature work, run `git status`, `git diff`, and `git log --oneline -10`; stage only intended files and create a concise feature commit. Do not commit blocked, partial, unreviewed, or unsafe worktree states.
 11. **Verify Maestro smoke quality**: Check that every user-visible generated or touched feature has feature-owned smoke files under `maestro/features/<feature-name>/android.yaml` and `maestro/features/<feature-name>/ios.yaml` when supported on those platforms. Do not accept one global smoke file as coverage for multiple features. Run Maestro only after the target emulator/simulator is open, the app is installed, and platform launch has been verified. Start smoke flows with `clearState` before `launchApp` unless the contract explicitly tests persisted state across launches. Prefer `eraseText`, `pressKey: Enter` on iOS single-line fields, full rendered-row regex selectors, and user-outcome assertions over keyboard-state assertions. Flag Android smoke flows that require app/window title text to be visible as the only launch proof.
 12. **Verify design-system usage**: Scan feature Compose code for raw Material3 imports such as `Button`, `OutlinedTextField`, `Card`, `AlertDialog`, `ModalBottomSheet`, `Snackbar`, `TopAppBar`, and progress indicators. If a Dream design-system wrapper exists, using the raw primitive is a defect unless a local exception is documented.
+13. **Verify SwiftUI host wiring**: When the native iOS strategy is SwiftUI, verify the shared Xcode scheme exists, `xcodebuild build` and `xcodebuild test` run against it, the Xcode shell build phase invokes the correct `embedAndSignAppleFrameworkForXcode` task, and `FRAMEWORK_SEARCH_PATHS` points at `shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)` without duplicate entries.
+14. **Verify Swift bridge API correctness**: When Swift uses exported Kotlin types, check for guessed ObjC-shaped names in Swift code such as underscore-suffixed enum cases, missing async wrapper usage, or missing exported framework types that indicate `export(...)` or `api(...)` gaps.
 
 Repair loop:
 1. `general` runs verification

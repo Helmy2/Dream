@@ -74,8 +74,8 @@ class RoomSampleRepository(
     private fun defaultSampleEntities(): List<SampleItemEntity> = listOf(
         SampleItemEntity(
             id = "contract-first",
-            title = "sample.seed.contract_first.title",
-            description = "sample.seed.contract_first.description",
+            title = "Contract-first features",
+            description = "Generate features from compact contracts stored in .mvp/features/.",
             category = SampleCategory.Contract.name,
             occurredAtMillis = 1_720_000_000_000,
             updatedAtMillis = 1_720_000_000_000,
@@ -83,8 +83,8 @@ class RoomSampleRepository(
         ),
         SampleItemEntity(
             id = "shared-architecture",
-            title = "sample.seed.shared_architecture.title",
-            description = "sample.seed.shared_architecture.description",
+            title = "Shared architecture",
+            description = "Keep domain, data, presentation, and UI code in stable modules.",
             category = SampleCategory.Architecture.name,
             occurredAtMillis = 1_720_086_400_000,
             updatedAtMillis = 1_720_086_400_000,
@@ -92,8 +92,8 @@ class RoomSampleRepository(
         ),
         SampleItemEntity(
             id = "desktop-preview",
-            title = "sample.seed.desktop_preview.title",
-            description = "sample.seed.desktop_preview.description",
+            title = "Desktop preview loop",
+            description = "Use the desktop target as the fastest preview and repair surface.",
             category = SampleCategory.Preview.name,
             occurredAtMillis = 1_720_172_800_000,
             updatedAtMillis = 1_720_172_800_000,

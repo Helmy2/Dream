@@ -30,4 +30,3 @@ appId: com.dream.template.android
 - tapOn: "Save changes"
 - assertVisible: "Updated"
 - assertVisible: "Occurred: .*"
-- takeScreenshot: sample-android-smoke

@@ -35,4 +35,3 @@ appId: com.dream.template.ios
 - tapOn: "Save changes"
 - assertVisible: "Updated"
 - assertVisible: "Occurred: .*"
-- takeScreenshot: sample-ios-smoke

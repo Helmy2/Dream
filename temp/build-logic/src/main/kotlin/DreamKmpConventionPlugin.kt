@@ -15,7 +15,6 @@ class DreamKmpConventionPlugin : Plugin<Project> {
 
             val libs = the<org.gradle.accessors.dm.LibrariesForLibs>()
             val coroutinesAndroid = libs.kotlinx.coroutines.android
-            val coroutinesSwing = libs.kotlinx.coroutines.swing
             val mokkeryCore = libs.mokkery.core
 
             extensions.configure<KotlinMultiplatformExtension> {
@@ -38,8 +37,6 @@ class DreamKmpConventionPlugin : Plugin<Project> {
                     withHostTest {}
                 }
 
-                jvm("desktop")
-
                 listOf(
                     iosArm64(),
                     iosSimulatorArm64()
@@ -47,10 +44,6 @@ class DreamKmpConventionPlugin : Plugin<Project> {
 
                 sourceSets.getByName("androidMain").dependencies {
                     implementation(coroutinesAndroid)
-                }
-
-                sourceSets.getByName("desktopMain").dependencies {
-                    implementation(coroutinesSwing)
                 }
 
                 sourceSets.commonTest.dependencies {

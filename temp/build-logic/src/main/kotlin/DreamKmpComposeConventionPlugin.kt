@@ -40,9 +40,7 @@ class DreamKmpComposeConventionPlugin : Plugin<Project> {
                 sourceSets.getByName("androidMain").dependencies {
                     implementation(libs.compose.uiTooling)
                 }
-                sourceSets.getByName("desktopMain").dependencies {
-                    implementation(libs.compose.uiTooling)
-                }
+
             }
         }
     }

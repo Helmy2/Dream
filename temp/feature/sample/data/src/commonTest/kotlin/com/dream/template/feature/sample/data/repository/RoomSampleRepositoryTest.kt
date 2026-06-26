@@ -13,7 +13,7 @@ import kotlin.test.assertIs
 
 class RoomSampleRepositoryTest {
     @Test
-    fun seedsStableStarterResourceKeysWhenRoomIsEmpty() = runTest {
+    fun seedsStableStarterEnglishValuesWhenRoomIsEmpty() = runTest {
         val dao = FakeSampleItemDao()
         val repository = RoomSampleRepository(
             dao = dao,
@@ -24,14 +24,14 @@ class RoomSampleRepositoryTest {
 
         assertEquals(3, loaded.size)
         assertEquals("contract-first", dao.items[0].id)
-        assertEquals("sample.seed.contract_first.title", dao.items[0].title)
-        assertEquals("sample.seed.contract_first.description", dao.items[0].description)
+        assertEquals("Contract-first features", dao.items[0].title)
+        assertEquals("Generate features from compact contracts stored in .mvp/features/.", dao.items[0].description)
         assertEquals("shared-architecture", dao.items[1].id)
-        assertEquals("sample.seed.shared_architecture.title", dao.items[1].title)
-        assertEquals("sample.seed.shared_architecture.description", dao.items[1].description)
+        assertEquals("Shared architecture", dao.items[1].title)
+        assertEquals("Keep domain, data, presentation, and UI code in stable modules.", dao.items[1].description)
         assertEquals("desktop-preview", dao.items[2].id)
-        assertEquals("sample.seed.desktop_preview.title", dao.items[2].title)
-        assertEquals("sample.seed.desktop_preview.description", dao.items[2].description)
+        assertEquals("Desktop preview loop", dao.items[2].title)
+        assertEquals("Use the desktop target as the fastest preview and repair surface.", dao.items[2].description)
     }
 
     @Test

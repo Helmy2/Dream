@@ -89,18 +89,8 @@ class SampleViewModel(
     private fun startCreate() {
         updateState { current ->
             current.copy(
-                detailState = SampleDetailState(
-                    item = SampleItem(
-                        id = "new",
-                        title = "",
-                        description = "",
-                        category = SampleCategory.Contract,
-                        occurredAtMillis = timeProvider.nowMillis(),
-                        updatedAtMillis = timeProvider.nowMillis(),
-                    ).let(mapper::toItemUi),
-                    isEditing = true,
-                ),
                 formState = SampleFormState(),
+                showCreateSheet = true,
             )
         }
     }
@@ -114,11 +104,18 @@ class SampleViewModel(
 
     private fun cancelEdit() {
         updateState { current ->
-            val detail = current.detailState ?: return@updateState current
-            current.copy(
-                detailState = detail.copy(isEditing = false),
-                formState = current.formState.copy(titleError = false, descriptionError = false),
-            )
+            if (current.showCreateSheet) {
+                current.copy(
+                    showCreateSheet = false,
+                    formState = current.formState.copy(titleError = false, descriptionError = false),
+                )
+            } else {
+                val detail = current.detailState ?: return@updateState current
+                current.copy(
+                    detailState = detail.copy(isEditing = false),
+                    formState = current.formState.copy(titleError = false, descriptionError = false),
+                )
+            }
         }
     }
 
@@ -165,6 +162,7 @@ class SampleViewModel(
                         isSaving = false,
                         detailState = SampleDetailState(item = ui, isEditing = false),
                         formState = mapper.toFormState(result.value),
+                        showCreateSheet = false,
                     )
                 }
                 load(force = true)

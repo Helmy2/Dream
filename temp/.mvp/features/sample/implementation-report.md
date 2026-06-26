@@ -19,7 +19,7 @@
 ## Verification Status
 
 - Sample domain/data/presentation focused tests passed after this repair.
-- Shared navigation tests, Android assemble, desktop compile, and preflight are recorded as previously passed in the verification report supplied for this repair.
+- Shared navigation tests, Android assemble, and preflight are recorded as previously passed in the verification report supplied for this repair.
 - Maestro Android and iOS smoke checks remain blocked by environment because 0 devices were connected after flow syntax repair.
 
 ## Review Status

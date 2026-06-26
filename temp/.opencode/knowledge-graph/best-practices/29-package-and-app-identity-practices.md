@@ -10,7 +10,6 @@ Before renaming project files or package roots, derive a canonical identity that
 - canonical package root
 - Android application id
 - Android namespace values
-- desktop app window title, when Desktop is included in the app contract
 - iOS bundle or visible app identity where applicable
 - Gradle root project name
 
@@ -38,7 +37,6 @@ At minimum, the audit should cover:
 - Android application id values
 - Kotlin package declarations and package directories where renamed
 - Android manifest labels or other visible app-name surfaces
-- desktop app launcher or window title text, when Desktop is included in the app contract
 - iOS configuration values that carry app identity
 - `.mvp/` metadata and documentation values that still mention template identity
 - obvious sample or template-facing display strings

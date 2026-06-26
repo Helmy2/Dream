@@ -1,6 +1,6 @@
 # Dream Onboarding
 
-Dream is a local-first AI MVP builder for Kotlin Multiplatform apps. It packages a reusable starter project, OpenCode agents, architecture guidance, verification rules, and smoke-test scaffolding so a natural-language product request can become a modular Android, iOS, and optional Desktop MVP.
+Dream is a local-first AI production-app builder for Kotlin Multiplatform apps. It packages a reusable starter project, OpenCode agents, architecture guidance, verification rules, and smoke-test scaffolding so a natural-language product request can become a modular Android and iOS app.
 
 Use this document when you are new to the repository and need to understand how Dream is built, how the workflow runs, and why the template is shaped this way.
 
@@ -39,7 +39,7 @@ flowchart LR
     Root[Dream repo root] --> Init[dream-init]
     Root --> Plan[AI_MVP_BUILDER_PLAN.md]
     Root --> Temp[temp/ canonical starter]
-    Temp --> Apps[androidApp / iosApp / desktopApp]
+    Temp --> Apps[androidApp / iosApp-compose / iosApp-swiftui]
     Temp --> Shared[shared/*]
     Temp --> Features[feature/*]
     Temp --> Agents[.opencode agents and commands]
@@ -117,10 +117,15 @@ flowchart TD
     Presentation --> Design[shared/designsystem]
     Data --> SharedData[shared/core/data]
     Data --> SharedDomain[shared/core/domain]
-    Host[androidApp / iosApp / desktopApp] --> UmbrellaUI[shared/umbrella-ui]
-    UmbrellaUI --> Navigation[shared/navigation]
-    UmbrellaUI --> FeatureUI[feature presentation modules]
-    UmbrellaUI --> UmbrellaCore[shared/umbrella-core]
+    subgraph Compose Flow
+        HostC[androidApp / iosApp-compose] --> UmbrellaUI[shared/umbrella-ui]
+        UmbrellaUI --> Navigation[shared/navigation]
+        UmbrellaUI --> FeatureUI[feature presentation modules]
+    end
+    subgraph Native Flow
+        HostS[iosApp-swiftui] --> UmbrellaCore[shared/umbrella-core]
+    end
+    UmbrellaUI --> UmbrellaCore
     UmbrellaCore --> FeatureData[feature data modules]
 ```
 
@@ -208,10 +213,15 @@ Rules:
 
 ```mermaid
 flowchart TD
-    Android[androidApp MainActivity] --> Init[shared/umbrella-ui initKoin]
-    IOS[iOS MainViewController] --> Init
-    Desktop[desktopApp main] --> Init
-    Init --> Guard[one-time startup guard]
+    subgraph Compose Flow
+        Android[androidApp MainActivity] --> InitUI[shared/umbrella-ui initKoin]
+        IOSC[iosApp-compose MainViewController] --> InitUI
+    end
+    subgraph Native Flow
+        IOSS[iosApp-swiftui] --> InitNative[Native Swift initKoin]
+    end
+    InitUI --> Guard[one-time startup guard]
+    InitNative --> Guard
     Guard --> Modules[Koin modules]
     Modules --> Core[shared/umbrella-core data/domain]
     Modules --> UI[feature impl Koin modules]
@@ -253,10 +263,7 @@ flowchart TD
     AndroidRuntime --> IOSBuild[xcodebuild]
     IOSBuild --> IOSRuntime[xcrun simctl install/launch/log inspection]
     IOSRuntime --> Maestro[Maestro Android/iOS smoke flows]
-    Maestro --> Desktop{Desktop selected?}
-    Desktop -->|yes| DesktopBuild[compileKotlinJvm and hotRunJvm]
-    Desktop -->|no| Report[verification-report.md]
-    DesktopBuild --> Report
+    Maestro --> Report[verification-report.md]
 ```
 
 Run from `temp/` or from a generated copy:
@@ -265,13 +272,6 @@ Run from `temp/` or from a generated copy:
 ./scripts/dream-preflight.sh
 ./gradlew allTests
 ./gradlew :androidApp:assembleDebug
-./gradlew :desktopApp:compileKotlinJvm
-```
-
-When Desktop is in the app contract and interactive validation is required:
-
-```bash
-./gradlew :desktopApp:hotRunJvm
 ```
 
 Feature-owned smoke flows live under `maestro/features/<feature-name>/`:

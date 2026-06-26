@@ -39,6 +39,11 @@ This folder contains the best-practices source material in small, section-focuse
 - `32-feature-boundary-and-reuse-practices.md`
 - `33-responsive-form-and-ime-practices.md`
 - `34-maestro-smoke-verification-practices.md`
+- `35-ios-project-structure-practices.md`
+- `36-ios-kmp-bridge-practices.md`
+- `37-ios-xcode-configuration-practices.md`
+- `38-ios-testing-practices.md`
+- `39-ios-string-localization-practices.md`
 
 ## Notes
 

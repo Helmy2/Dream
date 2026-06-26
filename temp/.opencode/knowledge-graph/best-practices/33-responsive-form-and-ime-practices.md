@@ -1,6 +1,6 @@
 # 33. Responsive Form And IME Practices
 
-Editable forms must work with software keyboards, small screens, tablets, and desktop-like widths.
+Editable forms must work with software keyboards, small screens, and tablets.
 
 ### 33.1 Keep primary actions reachable
 

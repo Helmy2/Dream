@@ -64,6 +64,9 @@ Implementation rules:
 - when the contract marks time-sensitive behavior, inject `TimeProvider`; use `nowMillis()` for persisted timestamps, `today()` for current-date behavior, `currentYearMonth()` for period filters, and `formatDate(...)` or `formatDateTime(...)` for shared UI display
 - include loading, empty, content, and error state handling when the contract requires them
 - do not rename contract fields during implementation; if a field name is wrong, update the contract first and then implement from the updated contract
+- when `iosUiStrategy` is `swiftui`, keep native iOS files organized under `Core`, `Models`, `ViewModels`, and `Views`; keep the Swift-to-Kotlin bridge in `Core` and keep Kotlin-to-Swift mapping out of views
+- when `iosUiStrategy` is `swiftui`, expose new shared capabilities to Swift through the bridge layer or narrow iOS-facing factory APIs instead of starting shared Compose-oriented DI from native views
+- when `iosUiStrategy` is `swiftui`, prefer bridge protocols or other narrow seams that let XCTest exercise native ViewModels without mocking SKIE internals directly
 
 Mandatory checks before writing any Compose code:
 1. **Shared strings**: Create or update `shared/core/strings/src/commonMain/composeResources/values/strings.xml` with ALL user-visible strings for the feature BEFORE writing Compose UI. Every label, title, button, and message must use `stringResource(R.string.key)` in Compose code. No hardcoded text literals.
@@ -75,6 +78,7 @@ Mandatory checks before writing any Compose code:
 7. **Feature naming and boundaries**: Verify multi-word feature paths and packages use one convention, verify `feature/<name>/api` contains only route types and minimal public contracts (no Koin definitions), and verify no module outside the feature imports `feature/<name>/impl`.
 8. **Editable form reachability**: For create/update forms, plan for keyboard-open action reachability and responsive compact/wide layout behavior before writing the composables.
 9. **Design-system components first**: Before importing raw Material3 UI primitives, check `shared/designsystem/components`. Use the design-system wrapper when it exists; document any raw Material3 exception.
+10. **SwiftUI bridge correctness**: When the native iOS strategy is SwiftUI, verify the exported framework surface after shared changes. Check SKIE-generated Swift names for enum cases, async wrappers, constructor labels, and exported types before finishing the implementation.
 
 Test requirements:
 - **Domain tests**: Create `feature/<name>/domain/src/commonTest/.../ModelTest.kt` — verify entity construction, enum values, default factory methods. Create `RepositoryContractTest.kt` — verify the repository interface contract is defined and documented.
@@ -85,6 +89,7 @@ Test requirements:
 - **Presentation tests**: Use reusable main dispatcher setup with `@BeforeTest` and `@AfterTest` when `Dispatchers.Main` is needed. Prefer Turbine or an explicit flow-testing pattern for ordered state transition assertions.
 - **Time-sensitive tests**: Use `FakeTimeProvider` from `shared/core/testing` or an equivalent fixed-time fake for behavior involving current time, date filters, timestamps, formatting, or logical periods. Use `kotlinx-datetime` helpers for readable date and month construction instead of unexplained raw epoch values.
 - **Test dependencies**: Ensure every module's `build.gradle.kts` declares the dependencies required by its tests, including `kotlin("test")` and `shared/core/testing` where reusable fakes are needed. Add these BEFORE writing tests.
+- **SwiftUI host tests**: When `iosUiStrategy` is `swiftui` and the host app gains native ViewModel or bridge logic, add or update XCTest coverage in `iosAppTests` and keep the shared Xcode scheme runnable through `xcodebuild test`.
 
 Output requirements:
 - implement the code directly

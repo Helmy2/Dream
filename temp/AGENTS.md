@@ -29,11 +29,12 @@ When working in this generated project, read in this order:
 - Preserve Dream's architecture rules: thin app shells, centralized navigation, split shared core, and `Presentation -> Domain <- Data`.
 - Keep domain logic pure Kotlin and keep product behavior in feature modules, not host app modules.
 - Do not simplify the template by collapsing modules just to make a task faster.
-- Treat Android, iOS, and contract-selected Desktop as generated app product targets.
+- Treat Android and iOS as generated app product targets.
+- `iosApp-compose` is the Compose Multiplatform iOS variant; `iosApp-swiftui` is the native SwiftUI variant. The agent removes the unused option during project instantiation.
+- When working on the native SwiftUI variant, load the iOS best-practice files covering project structure, KMP bridge rules, Xcode configuration, and XCTest packaging.
 - Use Android CLI for Android device/emulator setup, install, launch, inspection, logs, and repair loops.
 - Use `xcodebuild` and `xcrun simctl` for iOS build, simulator install, launch, logs, and crash capture.
 - Use Maestro for black-box smoke flows after platform launch is healthy.
-- When Desktop is included in the app contract, validate it as a supported target and use `:desktopApp:hotRunJvm` for interactive runs.
 - Do not claim success from green commands alone; match the contract, tests, and review expectations in [.opencode/guidance/dream-agent-operating-guide.md](.opencode/guidance/dream-agent-operating-guide.md).
 
 ## Validation
@@ -44,7 +45,7 @@ Run commands from this project root:
 ./scripts/dream-preflight.sh
 ./gradlew :feature:sample:impl:allTests :shared:navigation:allTests :shared:core:domain:allTests :shared:core:data:allTests :shared:core:presentation:allTests :shared:core:testing:allTests
 ./gradlew :androidApp:assembleDebug
-./gradlew :desktopApp:compileKotlinJvm
+xcodebuild -project iosApp-swiftui/iosApp.xcodeproj -scheme iosApp -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=18.6' build
 ```
 
 Dream's stricter final verification includes:
@@ -55,9 +56,6 @@ Dream's stricter final verification includes:
 # Android CLI install/launch/log inspection
 # xcodebuild plus xcrun simctl build/install/launch/log inspection
 # Maestro smoke flows for relevant Android and iOS user journeys
-# Desktop target validation when desktop is in the app contract:
-./gradlew :desktopApp:compileKotlinJvm
-./gradlew :desktopApp:hotRunJvm
 ```
 
 Use focused commands for iteration, but do not report final success without the required verification behavior or a documented blocker.

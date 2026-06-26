@@ -9,7 +9,7 @@ You are generating the top-level Dream app contract for a Kotlin Multiplatform M
 
 Product:
 - Name: Dream
-- Role: local AI MVP builder
+- Role: local AI app builder
 
 Your task:
 Create `.mvp/app-contract.yaml` from the user's product request.
@@ -56,16 +56,12 @@ architecture: <architecture mode>
 platforms:
   - android
   - ios
-  - desktop
+iosUiStrategy: <compose_multiplatform|swiftui>
 validationTargets:
   - android-cli
   - ios-cli
   - maestro-android
   - maestro-ios
-  - desktop-hot-run
-desktop:
-  enabled: <true|false>
-  interactiveCommand: ./gradlew :desktopApp:hotRunJvm
 backend:
   enabled: <true|false>
   type: <none|ktor|mock>

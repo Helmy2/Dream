@@ -202,6 +202,61 @@
       },
       "summary": "Defines feature-owned Maestro coverage, editable form patterns, detail assertions, platform brittleness, and environment fallback reporting.",
       "text": "Maestro smoke flows should prove user-visible outcomes without depending on brittle internals. Smoke coverage is owned by features, not by one global app file. Every user-visible generated or touched feature should have Android and iOS smoke flows when supported and reliable, stored under maestro/features/<feature-name>/android.yaml and maestro/features/<feature-name>/ios.yaml. App-level startup smoke checks are optional and do not replace feature-level coverage. Maestro is a smoke validator, not the platform install step: boot or open the target emulator, device, or simulator, install the app with platform tooling, and confirm launch before running maestro test. Start every smoke flow with clearState before launchApp unless the contract explicitly tests persisted state across launches. If the runtime is unavailable or the app is not installed, mark the smoke flow blocked by environment or not run. For iOS single-line text replacement, prefer tapOn, eraseText, inputText, pressKey: Enter, then save when hideKeyboard is unreliable. Detail screens should assert rendered content and full-row regex selectors such as Occurred: .* or Created: .* instead of standalone labels."
+    },
+    {
+      "id": "chunk.ios.project_structure",
+      "title": "iOS Project Structure Practices",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/35-ios-project-structure-practices.md",
+        "startLine": 1,
+        "endLine": 47
+      },
+      "summary": "Defines the packaged iOS folder structure for native SwiftUI and the intentionally thin Compose iOS host.",
+      "text": "The native SwiftUI iOS host should keep bridge code in Core, native UI models in Models, state holders in ViewModels, and SwiftUI screens in Views. The Compose Multiplatform iOS host should remain intentionally tiny, with the app entry point and a UIViewControllerRepresentable wrapper only. Test files should live in a sibling iosAppTests directory, and packaged starter copy should be clearly replaceable during project instantiation."
+    },
+    {
+      "id": "chunk.ios.kmp_bridge",
+      "title": "iOS KMP Bridge Practices",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/36-ios-kmp-bridge-practices.md",
+        "startLine": 1,
+        "endLine": 43
+      },
+      "summary": "Defines the native bridge boundary, Swift-friendly async throws interop, SKIE naming rules, and export/api visibility requirements.",
+      "text": "Use one dedicated bridge such as SharedCoreBridge as the native host's entry point into shared Kotlin repositories and keep Kotlin-to-Swift mapping inside that boundary. Prefer Swift-friendly async throws APIs over raw Kotlin Result wrappers. Trust SKIE's generated Swift surface for enum cases, initializer labels, and async wrappers instead of guessing ObjC names. If Swift should see transitive shared types, the framework must export those modules and the dependency chain must use api rather than implementation."
+    },
+    {
+      "id": "chunk.ios.xcode_configuration",
+      "title": "iOS Xcode Configuration Practices",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/37-ios-xcode-configuration-practices.md",
+        "startLine": 1,
+        "endLine": 36
+      },
+      "summary": "Defines Gradle-driven framework embedding, deterministic framework search paths, xcconfig-based identity, and shared Xcode schemes.",
+      "text": "Xcode should run the appropriate embedAndSignAppleFrameworkForXcode Gradle task for the chosen iOS host. FRAMEWORK_SEARCH_PATHS should point at shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME) without duplicate entries. TEAM_ID, BUNDLE_ID, and APP_NAME should live in Config.xcconfig. Packaged templates should use shared schemes in xcshareddata/xcschemes and should not depend on user-specific xcuserdata schemes."
+    },
+    {
+      "id": "chunk.ios.testing",
+      "title": "iOS Testing Practices",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/38-ios-testing-practices.md",
+        "startLine": 1,
+        "endLine": 35
+      },
+      "summary": "Defines XCTest packaging for the SwiftUI host, bridge-protocol mocking, and validation through xcodebuild plus runtime smoke checks.",
+      "text": "The native SwiftUI host should package an iosAppTests target with sample ViewModel tests and a shared Xcode scheme so xcodebuild test works out of the box. Mock the native bridge protocol instead of SKIE internals directly. Keep XCTest focused on native orchestration while shared business logic stays covered by Kotlin tests. Validate native hosts with xcodebuild build, xcodebuild test, and then runtime smoke flows after simulator launch is healthy."
+    },
+    {
+      "id": "chunk.ios.string_localization",
+      "title": "iOS String Localization Practices",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/39-ios-string-localization-practices.md",
+        "startLine": 1,
+        "endLine": 49
+      },
+      "summary": "Defines xcstrings-to-xml key/value sync rule, iOS-only string conventions, localized SwiftUI usage, and the verification workflow.",
+      "text": "Every shared xcstrings key must match a strings.xml name, and every English value must match. Format specifiers convert from %1$s to %@. iOS-only strings use an ios_ infix and exist only in the xcstrings. Use Text(\"key_name\") for localized lookup in SwiftUI views and String(localized:) for computed property return values. When adding or changing a string, update strings.xml first, then xcstrings, then verify both xcodebuild and Gradle still pass. No hardcoded user-visible strings in SwiftUI views."
     }
   ]
 }

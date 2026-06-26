@@ -1,6 +1,6 @@
 # Knowledge Graph
 
-This folder contains the initial architecture knowledge graph used by Dream, the AI MVP builder.
+This folder contains the initial architecture knowledge graph used by Dream, the AI app builder.
 
 The first version is sourced from the split files under `.opencode/knowledge-graph/best-practices/`.
 
@@ -45,6 +45,7 @@ The initial graph covers:
 - package and app identity normalization
 - stable composition roots
 - UI quality and state design
+- iOS host structure, KMP bridge rules, Xcode configuration, and XCTest packaging
 
 ## Next Extensions
 
@@ -57,4 +58,4 @@ Future iterations can add:
 ## Product Identity
 
 - product codename: `Dream`
-- product role: local AI MVP builder
+- product role: local AI app builder

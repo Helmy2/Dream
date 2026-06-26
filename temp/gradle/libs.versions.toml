@@ -15,11 +15,11 @@ koin-plugin = "1.0.1"
 kotlin = "2.4.0"
 ksp = "2.3.9"
 kotlinx-coroutines = "1.11.0"
-kotlinx-datetime = "0.7.1"
+kotlinx-datetime = "0.8.0"
 room = "2.8.4"
 sqlite = "2.6.2"
 datastore = "1.2.1"
-composeHotReload = "1.2.0-alpha02"
+skie = "0.10.13"
 mokkery = "3.4.1"
 splashscreen = "1.2.0"
 turbine = "1.2.1"
@@ -48,7 +48,7 @@ kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
-kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+
 navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "navigation3-runtime" }
 navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
 mokkery-core = { module = "dev.mokkery:mokkery-core", version.ref = "mokkery" }
@@ -62,7 +62,7 @@ androidMultiplatformLibrary = { id = "com.android.kotlin.multiplatform.library",
 androidxRoom = { id = "androidx.room", version.ref = "room" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
-composeHotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "composeHotReload" }
+skie = { id = "co.touchlab.skie", version.ref = "skie" }
 koinCompiler = { id = "io.insert-koin.compiler.plugin", version.ref = "koin-plugin" }
 kmpAndroidApp = { id = "app.kmp.android-app", version = "unspecified" }
 kmpCompose = { id = "app.kmp.compose", version = "unspecified" }

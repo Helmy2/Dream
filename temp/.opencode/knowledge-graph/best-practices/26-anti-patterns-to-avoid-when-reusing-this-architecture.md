@@ -19,3 +19,7 @@ These are the main things to avoid in future projects, even if traces of them ex
 - do not leave `Clock.System.now()` calls in feature code — always inject `TimeProvider`
 - do not add feature-local date/date-time formatting in common code — use `TimeProvider.formatDate(...)` or `TimeProvider.formatDateTime(...)`
 - do not use annotation-based Koin DI such as `@KoinViewModel`, `@Module`, or `@ComponentScan` in generated feature modules by default; use Koin compiler plugin DSL registrations instead
+- do not expose SwiftUI hosts to `implementation(...)`-hidden Kotlin types and assume they will appear in Swift — exported framework dependencies must be `export(...)`-ed and transitively `api(...)`
+- do not spread Kotlin-to-Swift mapping logic across SwiftUI views — keep it in a dedicated bridge boundary
+- do not make native SwiftUI hosts start shared Compose-oriented DI if a narrow iOS factory function is sufficient
+- do not rely on ObjC-shaped API guesses in Swift when SKIE provides a native Swift surface — verify the generated Swift names for enum cases, async wrappers, and constructor labels

@@ -49,16 +49,6 @@ actual fun createDataStore(context: Any?): DataStore<Preferences> {
 }
 ```
 
-**Desktop** (`desktopMain`):
-```kotlin
-actual fun createDataStore(context: Any?): DataStore<Preferences> {
-    val appDir = File(System.getProperty("user.home"), ".app").apply { mkdirs() }
-    return PreferenceDataStoreFactory.create {
-        File(appDir, "settings.pb")
-    }
-}
-```
-
 **iOS** (`iosMain`):
 ```kotlin
 actual fun createDataStore(context: Any?): DataStore<Preferences> {

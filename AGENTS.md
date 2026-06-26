@@ -1,6 +1,6 @@
 # Dream Agent Instructions
 
-Dream is a local-first AI MVP builder for Kotlin Multiplatform apps. This repository now centers on [temp](temp): the self-contained starter project that the initializer copies and renames.
+Dream is a local-first AI app builder for Kotlin Multiplatform apps. This repository now centers on [temp](temp): the self-contained starter project that the initializer copies and renames.
 
 ## Start Here
 
@@ -33,11 +33,10 @@ Prefer linking to those documents in discussions and change summaries instead of
 - Preserve Dream's architecture rules: thin app shells, centralized navigation, split shared core, and `Presentation -> Domain <- Data`.
 - Keep domain logic pure Kotlin and keep product behavior in feature modules, not host app modules.
 - Do not simplify the template by collapsing modules just to make a task faster.
-- Treat Android, iOS, and contract-selected Desktop as generated app product targets.
+- Treat Android and iOS as generated app product targets.
 - Use Android CLI for Android device/emulator setup, install, launch, inspection, logs, and repair loops.
 - Use `xcodebuild` and `xcrun simctl` for iOS build, simulator install, launch, logs, and crash capture.
 - Use Maestro for black-box smoke flows after platform launch is healthy.
-- When Desktop is included in the app contract, validate it as a supported target and use `:desktopApp:hotRunJvm` for interactive runs.
 - Do not claim success from green commands alone; match the contract, tests, and review expectations in [AI_MVP_BUILDER_PLAN.md](AI_MVP_BUILDER_PLAN.md).
 
 ## Validation
@@ -46,9 +45,8 @@ The repository root is not the main Gradle execution surface. For starter valida
 
 ```bash
 cd temp
-./gradlew :feature:sample:presentation:allTests :shared:core:domain:allTests :shared:core:data:allTests :shared:core:presentation:allTests :shared:core:testing:allTests
+./gradlew :feature:sample:impl:allTests :shared:navigation:allTests :shared:core:domain:allTests :shared:core:data:allTests :shared:core:presentation:allTests :shared:core:testing:allTests
 ./gradlew :androidApp:assembleDebug
-./gradlew :desktopApp:compileKotlinJvm
 ```
 
 Dream's stricter final verification target is documented in [AI_MVP_BUILDER_PLAN.md](AI_MVP_BUILDER_PLAN.md):
@@ -59,9 +57,6 @@ Dream's stricter final verification target is documented in [AI_MVP_BUILDER_PLAN
 # Android CLI install/launch/log inspection
 # xcodebuild plus xcrun simctl build/install/launch/log inspection
 # Maestro smoke flows for relevant Android and iOS user journeys
-# Desktop target validation when desktop is in the app contract:
-./gradlew :desktopApp:compileKotlinJvm
-./gradlew :desktopApp:hotRunJvm
 ```
 
 Use the lighter template commands for focused iteration, but do not report final success without the required verification behavior or a documented blocker.

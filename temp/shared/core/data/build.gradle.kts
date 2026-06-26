@@ -11,7 +11,6 @@ dependencies {
     commonMainImplementation(projects.shared.core.domain)
 
     add("kspAndroid", libs.androidx.room.compiler)
-    add("kspDesktop", libs.androidx.room.compiler)
     add("kspIosArm64", libs.androidx.room.compiler)
     add("kspIosSimulatorArm64", libs.androidx.room.compiler)
 }

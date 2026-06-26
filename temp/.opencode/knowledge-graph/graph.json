@@ -194,6 +194,54 @@
       }
     },
     {
+      "id": "section.ios_project_structure",
+      "type": "Section",
+      "title": "iOS Project Structure Practices",
+      "sectionNumber": "35",
+      "documentId": "document.best_practices",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/35-ios-project-structure-practices.md",
+        "startLine": 1,
+        "endLine": 47
+      }
+    },
+    {
+      "id": "section.ios_kmp_bridge",
+      "type": "Section",
+      "title": "iOS KMP Bridge Practices",
+      "sectionNumber": "36",
+      "documentId": "document.best_practices",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/36-ios-kmp-bridge-practices.md",
+        "startLine": 1,
+        "endLine": 43
+      }
+    },
+    {
+      "id": "section.ios_xcode_configuration",
+      "type": "Section",
+      "title": "iOS Xcode Configuration Practices",
+      "sectionNumber": "37",
+      "documentId": "document.best_practices",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/37-ios-xcode-configuration-practices.md",
+        "startLine": 1,
+        "endLine": 36
+      }
+    },
+    {
+      "id": "section.ios_testing",
+      "type": "Section",
+      "title": "iOS Testing Practices",
+      "sectionNumber": "38",
+      "documentId": "document.best_practices",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/38-ios-testing-practices.md",
+        "startLine": 1,
+        "endLine": 35
+      }
+    },
+    {
       "id": "layer.domain",
       "type": "Layer",
       "name": "domain",
@@ -403,6 +451,101 @@
         "file": ".opencode/knowledge-graph/best-practices/19-android-and-ios-boundary-practices.md",
         "startLine": 1,
         "endLine": 23
+      }
+    },
+    {
+      "id": "practice.ios_host_structure",
+      "type": "Practice",
+      "name": "Keep iOS hosts structurally obvious",
+      "statement": "Native SwiftUI hosts should organize code under Core, Models, ViewModels, and Views, while Compose iOS hosts should remain intentionally thin.",
+      "classification": "project_specific",
+      "strength": "recommended",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/35-ios-project-structure-practices.md",
+        "startLine": 5,
+        "endLine": 37
+      }
+    },
+    {
+      "id": "practice.swift_bridge_boundary",
+      "type": "Practice",
+      "name": "Use a dedicated Swift bridge boundary",
+      "statement": "Expose shared Kotlin capabilities to the native host through one dedicated bridge and keep Kotlin-to-Swift mapping inside that boundary.",
+      "classification": "kmp_oriented",
+      "strength": "recommended",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/36-ios-kmp-bridge-practices.md",
+        "startLine": 5,
+        "endLine": 11
+      }
+    },
+    {
+      "id": "practice.shared_xcode_schemes",
+      "type": "Practice",
+      "name": "Use shared Xcode schemes in packaged templates",
+      "statement": "Commit shared Xcode schemes under xcshareddata and do not depend on user-specific xcuserdata schemes in packaged templates.",
+      "classification": "project_specific",
+      "strength": "recommended",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/37-ios-xcode-configuration-practices.md",
+        "startLine": 30,
+        "endLine": 36
+      }
+    },
+    {
+      "id": "rule.ios_export_requires_api_and_export",
+      "type": "Rule",
+      "name": "Swift-visible shared types require export plus api",
+      "statement": "If Swift should see types from dependent shared modules, the framework must export those modules and the dependency chain must use api instead of implementation.",
+      "scope": "platform",
+      "classification": "kmp_oriented",
+      "strength": "non_negotiable",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/36-ios-kmp-bridge-practices.md",
+        "startLine": 29,
+        "endLine": 35
+      }
+    },
+    {
+      "id": "rule.ios_framework_search_path",
+      "type": "Rule",
+      "name": "Keep iOS framework search paths deterministic",
+      "statement": "FRAMEWORK_SEARCH_PATHS should point at shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME) without duplicate or corrupted entries.",
+      "scope": "platform",
+      "classification": "project_specific",
+      "strength": "recommended",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/37-ios-xcode-configuration-practices.md",
+        "startLine": 14,
+        "endLine": 20
+      }
+    },
+    {
+      "id": "rule.ios_xctest_packaging",
+      "type": "Rule",
+      "name": "Package XCTest with the native SwiftUI host",
+      "statement": "The native SwiftUI host should include an iosAppTests target and shared scheme so xcodebuild test works in the packaged template.",
+      "scope": "platform",
+      "classification": "project_specific",
+      "strength": "recommended",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/38-ios-testing-practices.md",
+        "startLine": 5,
+        "endLine": 11
+      }
+    },
+    {
+      "id": "antipattern.swift_guessing_objc_api",
+      "type": "AntiPattern",
+      "name": "Guessing ObjC-shaped Swift API names",
+      "statement": "Do not guess underscore-suffixed enum cases, constructor labels, or other ObjC-shaped names in Swift when SKIE provides a native Swift surface.",
+      "replacementGuidance": "Verify the generated Swift API after shared changes and update Swift code to use the real enum cases, async wrappers, and initializer labels.",
+      "classification": "kmp_oriented",
+      "strength": "caution",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/36-ios-kmp-bridge-practices.md",
+        "startLine": 21,
+        "endLine": 27
       }
     },
     {
@@ -835,6 +978,32 @@
         "startLine": 3,
         "endLine": 12
       }
+    },
+    {
+      "id": "section.ios_string_localization",
+      "type": "Section",
+      "title": "iOS String Localization Practices",
+      "sectionNumber": "39",
+      "documentId": "document.best_practices",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/39-ios-string-localization-practices.md",
+        "startLine": 1,
+        "endLine": 49
+      }
+    },
+    {
+      "id": "rule.ios_xcstrings_xml_sync",
+      "type": "Rule",
+      "name": "Keep xcstrings keys and values in sync with shared strings.xml",
+      "statement": "Every xcstrings key must match a strings.xml name, and every English value must match the XML value, with %1$s converted to %@. iOS-only strings use an ios_ infix.",
+      "scope": "resources",
+      "classification": "kmp_oriented",
+      "strength": "non_negotiable",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/39-ios-string-localization-practices.md",
+        "startLine": 5,
+        "endLine": 26
+      }
     }
   ],
   "edges": [
@@ -986,6 +1155,46 @@
         "file": ".opencode/knowledge-graph/best-practices/31-ui-quality-and-state-design-practices.md",
         "startLine": 1,
         "endLine": 31
+      }
+    },
+    {
+      "from": "document.best_practices",
+      "type": "CONTAINS",
+      "to": "section.ios_project_structure",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/35-ios-project-structure-practices.md",
+        "startLine": 1,
+        "endLine": 47
+      }
+    },
+    {
+      "from": "document.best_practices",
+      "type": "CONTAINS",
+      "to": "section.ios_kmp_bridge",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/36-ios-kmp-bridge-practices.md",
+        "startLine": 1,
+        "endLine": 43
+      }
+    },
+    {
+      "from": "document.best_practices",
+      "type": "CONTAINS",
+      "to": "section.ios_xcode_configuration",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/37-ios-xcode-configuration-practices.md",
+        "startLine": 1,
+        "endLine": 36
+      }
+    },
+    {
+      "from": "document.best_practices",
+      "type": "CONTAINS",
+      "to": "section.ios_testing",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/38-ios-testing-practices.md",
+        "startLine": 1,
+        "endLine": 35
       }
     },
     {
@@ -1319,6 +1528,76 @@
       }
     },
     {
+      "from": "practice.ios_host_structure",
+      "type": "APPLIES_TO",
+      "to": "section.ios_project_structure",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/35-ios-project-structure-practices.md",
+        "startLine": 5,
+        "endLine": 37
+      }
+    },
+    {
+      "from": "practice.swift_bridge_boundary",
+      "type": "APPLIES_TO",
+      "to": "section.ios_kmp_bridge",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/36-ios-kmp-bridge-practices.md",
+        "startLine": 5,
+        "endLine": 11
+      }
+    },
+    {
+      "from": "rule.ios_export_requires_api_and_export",
+      "type": "APPLIES_TO",
+      "to": "section.ios_kmp_bridge",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/36-ios-kmp-bridge-practices.md",
+        "startLine": 29,
+        "endLine": 35
+      }
+    },
+    {
+      "from": "rule.ios_framework_search_path",
+      "type": "APPLIES_TO",
+      "to": "section.ios_xcode_configuration",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/37-ios-xcode-configuration-practices.md",
+        "startLine": 14,
+        "endLine": 20
+      }
+    },
+    {
+      "from": "practice.shared_xcode_schemes",
+      "type": "APPLIES_TO",
+      "to": "section.ios_xcode_configuration",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/37-ios-xcode-configuration-practices.md",
+        "startLine": 30,
+        "endLine": 36
+      }
+    },
+    {
+      "from": "rule.ios_xctest_packaging",
+      "type": "APPLIES_TO",
+      "to": "section.ios_testing",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/38-ios-testing-practices.md",
+        "startLine": 5,
+        "endLine": 11
+      }
+    },
+    {
+      "from": "antipattern.swift_guessing_objc_api",
+      "type": "APPLIES_TO",
+      "to": "section.ios_kmp_bridge",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/36-ios-kmp-bridge-practices.md",
+        "startLine": 21,
+        "endLine": 27
+      }
+    },
+    {
       "from": "exception.aggregator_feature_domain_only",
       "type": "EXCEPTION_TO",
       "to": "rule.dependency_direction",
@@ -1426,6 +1705,36 @@
         "file": ".opencode/knowledge-graph/best-practices/30-stable-composition-root-practices.md",
         "startLine": 36,
         "endLine": 44
+      }
+    },
+    {
+      "from": "document.best_practices",
+      "type": "CONTAINS",
+      "to": "section.ios_string_localization",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/39-ios-string-localization-practices.md",
+        "startLine": 1,
+        "endLine": 49
+      }
+    },
+    {
+      "from": "rule.ios_xcstrings_xml_sync",
+      "type": "APPLIES_TO",
+      "to": "section.ios_string_localization",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/39-ios-string-localization-practices.md",
+        "startLine": 5,
+        "endLine": 26
+      }
+    },
+    {
+      "from": "rule.ios_xcstrings_xml_sync",
+      "type": "REQUIRES",
+      "to": "practice.shared_strings",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/39-ios-string-localization-practices.md",
+        "startLine": 5,
+        "endLine": 26
       }
     }
   ]

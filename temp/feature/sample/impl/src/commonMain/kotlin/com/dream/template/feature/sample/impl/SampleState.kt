@@ -8,6 +8,7 @@ data class SampleState(
     val detailState: SampleDetailState? = null,
     val formState: SampleFormState = SampleFormState(),
     val isSaving: Boolean = false,
+    val showCreateSheet: Boolean = false,
 )
 
 sealed interface SampleContentState {
@@ -27,16 +28,6 @@ data class SampleItemUi(
 
 sealed interface SampleTextUi {
     data class Raw(val value: String) : SampleTextUi
-    data class Resource(val resource: SampleTextResource) : SampleTextUi
-}
-
-enum class SampleTextResource {
-    SeedContractFirstTitle,
-    SeedContractFirstDescription,
-    SeedSharedArchitectureTitle,
-    SeedSharedArchitectureDescription,
-    SeedDesktopPreviewTitle,
-    SeedDesktopPreviewDescription,
 }
 
 data class SampleDetailState(
