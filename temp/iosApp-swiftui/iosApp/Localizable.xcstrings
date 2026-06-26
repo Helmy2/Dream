@@ -265,28 +265,6 @@
         }
       }
     },
-    "sample_seed_desktop_preview_description" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Use the desktop target as the fastest preview and repair surface."
-          }
-        }
-      }
-    },
-    "sample_seed_desktop_preview_title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Desktop preview loop"
-          }
-        }
-      }
-    },
     "sample_seed_shared_architecture_description" : {
       "extractionState" : "manual",
       "localizations" : {

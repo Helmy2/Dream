@@ -55,5 +55,5 @@ Workflow:
 
 Reusable principle:
 
-- shared strings are the single source of truth for user-facing text across all platforms (Android, iOS, Desktop)
+- shared strings are the single source of truth for user-facing text across supported platforms (Android and iOS)
 - hardcoded strings in Compose code will not be translated, cannot be reviewed centrally, and violate the template's localization strategy

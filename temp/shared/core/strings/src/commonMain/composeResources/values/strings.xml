@@ -28,6 +28,4 @@
     <string name="sample_seed_contract_first_description">Generate features from compact contracts stored in .features/.</string>
     <string name="sample_seed_shared_architecture_title">Shared architecture</string>
     <string name="sample_seed_shared_architecture_description">Keep domain, data, presentation, and UI code in stable modules.</string>
-    <string name="sample_seed_desktop_preview_title">Desktop preview loop</string>
-    <string name="sample_seed_desktop_preview_description">Use the desktop target as the fastest preview and repair surface.</string>
 </resources>

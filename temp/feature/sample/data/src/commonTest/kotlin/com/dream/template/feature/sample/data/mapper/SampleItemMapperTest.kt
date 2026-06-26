@@ -49,9 +49,9 @@ class SampleItemMapperTest {
     @Test
     fun mapsDomainItemToEntity() {
         val item = SampleItem(
-            id = "desktop-preview",
-            title = "Desktop preview loop",
-            description = "Use desktop for fast previews.",
+            id = "preview-workflow",
+            title = "Preview workflow",
+            description = "Use fast mobile runs for previews.",
             category = SampleCategory.Preview,
             occurredAtMillis = 300L,
             updatedAtMillis = 400L,
@@ -59,9 +59,9 @@ class SampleItemMapperTest {
 
         val entity = item.toEntity(position = 2)
 
-        assertEquals("desktop-preview", entity.id)
-        assertEquals("Desktop preview loop", entity.title)
-        assertEquals("Use desktop for fast previews.", entity.description)
+        assertEquals("preview-workflow", entity.id)
+        assertEquals("Preview workflow", entity.title)
+        assertEquals("Use fast mobile runs for previews.", entity.description)
         assertEquals("Preview", entity.category)
         assertEquals(300L, entity.occurredAtMillis)
         assertEquals(400L, entity.updatedAtMillis)

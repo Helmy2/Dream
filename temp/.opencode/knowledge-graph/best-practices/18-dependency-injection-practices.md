@@ -10,7 +10,7 @@ Best practice:
 
 - call `startKoin` only from top-level app initialization paths
 - on Android, initialize Koin in a custom `Application.onCreate()`, not in `MainActivity.onCreate()` — this ensures DI is available before any Activity, Service, or BroadcastReceiver starts
-- expose a shared guarded startup helper for host apps so repeated Android, iOS, Desktop, preview, or test entry points do not accidentally start Koin twice
+- expose a shared guarded startup helper for host apps so repeated Android, iOS, preview, or test entry points do not accidentally start Koin twice
 - let modules contribute registrations, but do not let features bootstrap DI themselves
 
 Rationale for `Application` over `Activity`: navigation graph resolution, Koin ViewModel injection, and early-lifecycle hooks all depend on the Koin container being available before the first Activity's `onCreate`. Starting Koin in an Activity causes non-deterministic failures when navigation is resolved during Activity construction or when a custom `ContentProvider` (e.g., WorkManager init) needs DI before the Activity exists.
@@ -22,7 +22,7 @@ Good reusable pattern:
 - non-Compose shared modules provide domain/data registrations
 - feature `impl` modules provide ViewModel and Navigation 3 entry-provider registrations
 - feature `api` modules contain no Koin definitions; they are pure public contracts
-- Android, iOS, and contract-selected Desktop provide product runtime platform factories or implementations through dedicated startup paths
+- Android and iOS provide product runtime platform factories or implementations through dedicated startup paths
 - composition roots assemble everything together without making exported core modules depend on Compose
 
 ### 17.3 Constructor injection everywhere possible

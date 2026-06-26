@@ -214,7 +214,7 @@ class SampleViewModelTest {
 private fun sampleItems(): List<SampleItem> = listOf(
     SampleItem("contract-first", "Contract-first features", "Generate compact contracts.", SampleCategory.Contract, 0L, 0L),
     SampleItem("shared-architecture", "Shared architecture", "Keep feature logic split.", SampleCategory.Architecture, 1_000L, 1_000L),
-    SampleItem("desktop-preview", "Desktop preview loop", "Use desktop previews.", SampleCategory.Preview, 2_000L, 2_000L),
+    SampleItem("preview-workflow", "Preview workflow", "Use mobile previews.", SampleCategory.Preview, 2_000L, 2_000L),
 )
 
 private fun fakeRepository(items: List<SampleItem>): FakeSampleRepository = FakeSampleRepository(items)

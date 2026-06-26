@@ -107,7 +107,7 @@ Apply these items only when `iosUiStrategy` is `swiftui`:
 - [ ] For iOS single-line text replacement in Maestro, prefer `tapOn`, `eraseText`, `inputText`, `pressKey: Enter`, then the save action.
 - [ ] For detail smoke assertions, prefer full rendered-row regex selectors such as `Occurred: .*` and `Created: .*` instead of standalone labels.
 - [ ] If Android physical-device Maestro fails at `launchApp` while `adb install` and `adb shell am start` work, record a Maestro/device-driver blocker and try emulator-backed Maestro when feasible.
-- [ ] For first-pass local Room schema changes, either provide a real migration or document/apply destructive recovery for MVP iteration on Android, iOS, and Desktop.
+- [ ] For first-pass local Room schema changes, either provide a real migration or document/apply destructive recovery for MVP iteration on Android and iOS.
 
 ## Verification And Git
 

@@ -46,7 +46,7 @@ Template baseline:
 - app navigation uses Navigation 3 typed routes, a Koin-provided `Navigator`, `NavDisplay`, and Koin `navigation<Route>` entry providers installed by feature `impl` Koin modules
 - feature route types (`NavKey`) live in `feature/<name>/api`; screens and Koin navigation installers live in `feature/<name>/impl`; shared navigation stays centralized by operating on `NavKey`
 - the shared MVI base processes actions sequentially instead of launching one coroutine per action
-- the sample feature uses Room for local persisted data on Android, iOS, and Desktop
+- the sample feature uses Room for local persisted data on Android and iOS
 - common Room builder setup lives in `shared/core/database` and uses a bundled SQLite driver plus `Dispatchers.Default` for KMP-safe query execution
 - common Room builder setup enables destructive migration fallback for first-pass MVP iteration; replace with real migrations when preserving local data matters
 - user-visible sample copy comes from `shared/core/strings` Compose Resources instead of hardcoded composable text

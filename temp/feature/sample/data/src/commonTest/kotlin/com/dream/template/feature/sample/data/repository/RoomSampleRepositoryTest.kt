@@ -29,9 +29,9 @@ class RoomSampleRepositoryTest {
         assertEquals("shared-architecture", dao.items[1].id)
         assertEquals("Shared architecture", dao.items[1].title)
         assertEquals("Keep domain, data, presentation, and UI code in stable modules.", dao.items[1].description)
-        assertEquals("desktop-preview", dao.items[2].id)
-        assertEquals("Desktop preview loop", dao.items[2].title)
-        assertEquals("Use the desktop target as the fastest preview and repair surface.", dao.items[2].description)
+        assertEquals("preview-workflow", dao.items[2].id)
+        assertEquals("Preview workflow", dao.items[2].title)
+        assertEquals("Use fast Android and iOS runs as the main preview and repair surface.", dao.items[2].description)
     }
 
     @Test

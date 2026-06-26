@@ -91,9 +91,9 @@ class RoomSampleRepository(
             position = 1,
         ),
         SampleItemEntity(
-            id = "desktop-preview",
-            title = "Desktop preview loop",
-            description = "Use the desktop target as the fastest preview and repair surface.",
+            id = "preview-workflow",
+            title = "Preview workflow",
+            description = "Use fast Android and iOS runs as the main preview and repair surface.",
             category = SampleCategory.Preview.name,
             occurredAtMillis = 1_720_172_800_000,
             updatedAtMillis = 1_720_172_800_000,

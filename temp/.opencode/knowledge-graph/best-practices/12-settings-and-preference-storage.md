@@ -27,7 +27,7 @@ Best practice:
 
 ### 12.3 KMP DataStore setup in `shared:core:data`
 
-DataStore Preferences is multiplatform (Android, iOS, Desktop) using expect/actual:
+DataStore Preferences is multiplatform (Android and iOS here) using expect/actual:
 
 **Dependencies** (in `shared:core:data/build.gradle.kts`):
 ```kotlin
@@ -74,6 +74,6 @@ single { createDataStore(appContext) } // appContext = Context on Android, null 
 
 Key points:
 - `datastore-preferences-core` (not `datastore-preferences`) for platform-agnostic API
-- `FileStorage` via `PreferenceDataStoreFactory` on JVM targets
+- `PreferenceDataStoreFactory` for the Android implementation
 - `OkioStorage` on iOS native (okio is transitively included by DataStore)
 - Host app passes `Context` on Android; other platforms pass `null`

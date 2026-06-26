@@ -11,7 +11,7 @@ Best practice:
 - put bundled SQLite driver setup in the shared data core module
 - use KMP-safe coroutine dispatchers directly, such as `Dispatchers.Default`, instead of a template-specific dispatcher provider abstraction
 - keep feature-specific databases, DAOs, entities, and factories in the feature data module unless multiple features truly share one schema
-- for first-pass MVP iteration, destructive migration fallback is acceptable to recover from stale local test schemas across Android, iOS, and Desktop
+- for first-pass MVP iteration, destructive migration fallback is acceptable to recover from stale local test schemas across Android and iOS
 - replace destructive fallback with real Room migrations when the app contract requires preserving existing local data
 
 ### 11.2 Single shared Room database
