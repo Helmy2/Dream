@@ -42,11 +42,14 @@ You must:
 - inspect platform logs after launch to detect crashes or errors
 - generate Maestro smoke flows for every user-visible feature under `maestro/features/<feature-name>/`
 - start every Maestro flow with `clearState` before `launchApp` unless testing persistence
-- on Maestro failure, use mobile-mcp tools to capture the failure state:
+- after Maestro flows, use mobile-mcp tools to capture and verify the UI state:
   - call `mobile_take_screenshot` to capture the current screen
   - call `mobile_list_elements_on_screen` to inspect the element tree
-  - include the screenshot description and element tree in the failure report — this gives dream-general visual context for diagnosis without relying on a vision model
-- report clear failure output — pass logs, error messages, screenshots, and element tree back to `dream-general`
+  - if mobile-mcp is not available, fall back to `mobilecli screenshot --device <id> -o <file>` and `mobilecli dump ui --device <id>`
+  - if mobilecli is also unavailable, fall back to Android CLI (`adb exec-out screencap -p`, `adb shell uiautomator dump`)
+  - if none of MCP, mobilecli, or device CLI are available, skip UI inspection and record it as `not run`
+  - include the screenshot description and element tree in the verification report — this gives dream-general visual context for diagnosis without relying on a vision model
+- report clear verification output — pass logs, error messages, screenshots, and element tree back to `dream-general`
 - run `dream-tester` as a fresh invocation per repair round; do not accumulate state
 
 You must not:

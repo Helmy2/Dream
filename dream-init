@@ -300,6 +300,71 @@ find "$DEST" -name "*.iml" -delete 2>/dev/null || true
 ok "✓ Cleanup done."
 
 # ──────────────────────────────────────────────
+# Step 7: Install dependencies
+# ──────────────────────────────────────────────
+echo ""
+info "╔══════════════════════════════════════════════╗"
+info "║      Development dependency check            ║"
+info "╚══════════════════════════════════════════════╝"
+echo ""
+info "Checking required tools for the generated project..."
+echo ""
+
+INSTALLED_ANY=0
+
+check_install() {
+    local tool_name="$1" check_cmd="$2" install_cmd="$3"
+    local label="${tool_name}:"
+    printf "  %-30s" "$label"
+    if eval "$check_cmd" >/dev/null 2>&1; then
+        ok "found"
+        return 0
+    else
+        warn "missing"
+        read -r -p "$(info "    Install ${tool_name}? (Y/n): ")" CONFIRM
+        if [ "$CONFIRM" = "n" ] || [ "$CONFIRM" = "N" ]; then
+            warn "    Skipped."
+            return 1
+        fi
+        echo ""
+        info "    Installing ${tool_name}..."
+        if eval "$install_cmd" >/dev/null 2>&1; then
+            ok "    ✓ Installed ${tool_name}"
+            INSTALLED_ANY=1
+            return 0
+        else
+            warn "    ⚠ Failed to install ${tool_name}. You may need to install it manually."
+            return 1
+        fi
+    fi
+}
+
+# mobilecli
+check_install "mobilecli" \
+    "command -v mobilecli" \
+    "npm install -g @mobilenext/mobilecli"
+
+# Maestro
+check_install "maestro" \
+    "command -v maestro" \
+    "curl -Ls https://get.maestro.mobile.dev | bash"
+
+# xcodeproj Ruby gem
+check_install "xcodeproj (Ruby gem)" \
+    "gem list -i xcodeproj" \
+    "gem install xcodeproj"
+
+# Java (check only — system-level install)
+printf "  %-30s" "Java (JDK 17+):"
+if java -version 2>&1 | grep -q 'version'; then
+    ok "found"
+else
+    warn "missing — install JDK 17+ manually from https://adoptium.net"
+fi
+
+echo ""
+
+# ──────────────────────────────────────────────
 # Final audit
 # ──────────────────────────────────────────────
 info "🔎 Running final audit..."

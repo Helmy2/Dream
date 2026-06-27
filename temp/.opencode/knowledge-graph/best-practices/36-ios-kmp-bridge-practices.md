@@ -162,7 +162,7 @@ Xcode does not automatically register new `.swift` files added outside the Xcode
 
 Best practice:
 
-- run `ruby scripts/sync-pbxproj.rb` from the project root after adding or removing any `.swift` files under `iosApp-swiftui/` — this uses the `xcodeproj` Ruby gem to auto-register orphaned files in `project.pbxproj`
+- run `ruby scripts/sync-pbxproj.rb` from the project root after adding or removing any `.swift` files under `iosApp-swiftui/` — this uses the `xcodeproj` Ruby gem to auto-register orphaned Swift files and remove deleted file references in `project.pbxproj`
 - the script finds targets and groups by name, so it works regardless of UUID changes
 - verify the registration with `xcodebuild build` — a missing PBXBuildFile causes the compiler to silently skip the file
 - if the script reports warnings, inspect the pbxproj manually; the gem API handles PBXFileReference, PBXBuildFile, and PBXSourcesBuildPhase entries automatically

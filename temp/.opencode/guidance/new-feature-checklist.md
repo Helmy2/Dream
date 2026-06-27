@@ -83,7 +83,6 @@ Apply these items only when `iosUiStrategy` is `swiftui`:
 - [ ] Add all user-visible SwiftUI string keys to `iosApp-swiftui/iosApp/Localizable.xcstrings` with matching English values from `strings.xml`. Use `ios_` infix for iOS-only strings.
 - [ ] Verify the shared Xcode scheme includes all new files and the test target discovers them.
 - [ ] Run `ruby scripts/sync-pbxproj.rb` from the project root after adding or removing `.swift` files to register them in `project.pbxproj`.
-- [ ] After installing and launching the app, use mobile-mcp tools (`mobile_take_screenshot`, `mobile_list_elements_on_screen`) to verify the UI renders correctly and accessibility labels match string keys.
 - [ ] Run `xcodebuild build` and `xcodebuild test` as part of structural validation for the iOS host.
 
 ## Sample Removal
@@ -113,7 +112,7 @@ Apply these items only when `iosUiStrategy` is `swiftui`:
 
 ## Verification And Git
 
-- [ ] Run required Gradle, platform, and smoke verification for the selected product targets or document precise blockers.
+- [ ] Run required Gradle, platform, Maestro smoke verification, and UI inspection (prefer mobile-mcp tools `mobile_take_screenshot`/`mobile_list_elements_on_screen`; fall back to `mobilecli screenshot --device <id>`/`mobilecli dump ui --device <id>`; then to Android CLI `adb exec-out screencap -p`/`adb shell uiautomator dump`) for the selected product targets or document precise blockers.
 - [ ] Record verification in explicit buckets: passed, blocked by environment, not run, and not applicable.
 - [ ] Run `dream-inspector` or manual review fallback against contract parity and architecture rules.
 - [ ] Run `git status`, `git diff`, and `git log --oneline -10`.

@@ -126,7 +126,7 @@ The code-writing agents (`dream-implementer`, `dream-implementer-android`, `drea
 - replace sample feature content with real feature content when appropriate
 - reuse shared core, design system, navigation, and build-logic modules where possible
 - avoid collapsing the modular template into a simpler but less enforceable structure
-- remove the `feature/sample` module from the generated app once the first real feature fully replaces it, unless a temporary scaffolding exception is explicitly documented
+- remove the `feature/sample` module from the generated app once the first real feature fully replaces it (run `./scripts/remove-sample.sh`), unless a temporary scaffolding exception is explicitly documented
 
 The code-writing agents should not:
 
@@ -151,7 +151,7 @@ The default OpenCode-first Dream workflow is:
 11. `dream-designer` produces `.features/<feature>/ui-spec.md` from the feature contract.
 12. `dream-implementer` implements the KMP business layer: domain, data, api, and their tests, then wires feature modules into umbrella imports and DI registration.
 13. `dream-implementer-android` implements the Jetpack Compose UI layer: screens, ViewModels, Koin navigation, tests.
-14. `dream-implementer-ios` implements the native SwiftUI layer: views, ViewModels, bridge, XCTest.
+14. `dream-implementer-ios` implements the native SwiftUI layer: views, ViewModels, bridge, XCTest. After adding or removing any Swift files, runs `ruby scripts/sync-pbxproj.rb` to sync the Xcode project file.
 15. `dream-tester` runs the full verification ladder: unit tests, platform builds, device install/launch, Maestro flows.
 16. `dream-implementer`, `dream-implementer-android`, or `dream-implementer-ios` repairs failures (per layer) until green, blocked, or a skip condition is met (see Skip Conditions).
 17. `dream-inspector` reviews substantial generation or repair work before validated success is reported.
