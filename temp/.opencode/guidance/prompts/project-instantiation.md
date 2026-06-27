@@ -63,7 +63,13 @@ Instantiation steps:
 13. Verify git readiness in the destination project before later workflow stages depend on git commands.
 14. Verify Android SDK and Maestro readiness early, or record precise environment blockers.
 15. Run `./scripts/dream-preflight.sh` when it exists and include the result in the instantiation summary.
-16. Choose and document the generated app's feature naming convention before creating multi-word feature modules.
+16. Check and install development dependencies interactively:
+    - `mobilecli` (`command -v mobilecli`; install via `npm install -g @mobilenext/mobilecli`)
+    - `maestro` (`command -v maestro`; install via `curl -Ls https://get.maestro.mobile.dev | bash`)
+    - `xcodeproj` Ruby gem (`gem list -i xcodeproj`; install via `gem install xcodeproj`)
+    - Java JDK 17+ (`java -version`; check only — instruct manual install from https://adoptium.net if missing)
+    - Ask the user before each install and respect their choice. If a tool is already installed, confirm and move on.
+17. Choose and document the generated app's feature naming convention before creating multi-word feature modules.
 
 Canonical app identity you must derive and keep consistent:
 - app display name
