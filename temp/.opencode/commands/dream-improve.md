@@ -24,8 +24,9 @@ Then:
   - prompt or workflow changes (`.opencode/guidance/prompts/`, commands)
 - for each group, apply the recommended changes to the corresponding template files
 - update each retro: set `Applied:` to the current date and `What was updated:` to a summary of changes made
+- run `./gradlew :androidApp:assembleDebug` and `./gradlew allTests` (or at minimum `./gradlew projects`) to verify the template is still structurally valid after changes
 - run `git status`, `git diff`, and `git log --oneline -10`
-- stage only template improvement files and create a concise commit
+- present the commit summary to the user and request explicit confirmation before staging and committing template improvement files
 
 Do not apply changes that would break the current project. If a recommendation
-is ambiguous, skip it and note why in the retro.
+is ambiguous, skip it and note why in the retro. Do not commit until the user explicitly approves.

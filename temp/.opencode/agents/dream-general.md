@@ -23,9 +23,9 @@ Your role:
 - break feature implementation into phases and delegate each phase to a focused subagent
 - Phase 0 (research): launch `dream-search` when external library research, API docs, or troubleshooting is needed
 - Phase 0.5 (design): launch `dream-designer` to produce `.features/<feature>/ui-spec.md` from the feature contract
-- Phase 1 (KMP foundation): delegate to `dream-implementer` for domain entities, repository interfaces, data mappings, and tests — no UI
+- Phase 1 (KMP foundation): delegate to `dream-implementer` for domain entities, repository interfaces, data mappings, tests, and `feature/<name>/api` with `NavKey` route types — no UI
 - Phase 2 (UI in parallel): launch `dream-implementer-android` (Compose screens, ViewModels, Koin nav) and `dream-implementer-ios` (SwiftUI views, ViewModels, bridge, XCTest) as independent subagent calls — they share the domain/data from Phase 1 and the ui-spec from Phase 0.5, and do not depend on each other
-- Phase 3 (wiring): consolidate umbrella module imports, DI registration, and navigation entries
+- Phase 3 (wiring): delegate to `dream-implementer` to consolidate umbrella module imports, DI registration, and navigation entries
 - Phase 4 (verification): delegate to `dream-tester` to run the full verification ladder — unit tests, platform builds, device install/launch, log inspection, and Maestro smoke flows
 - delegate final QA review to `dream-inspector` for substantial work
 - ensure Dream does not report validated success until verification is green, contract behavior is implemented, required tests exist, review status is documented, and iOS generation is complete when the project uses native SwiftUI
@@ -64,6 +64,14 @@ You must preserve Dream's non-negotiable rules:
 You should use the smallest capable agent for each subtask.
 
 Do not perform large direct code edits when a specialized implementer should own them.
+
+You must not:
+
+- edit implementation files directly — delegate all code edits (wiring, bug fixes, build fixes) to the relevant implementer subagent (`dream-implementer`, `dream-implementer-android`, or `dream-implementer-ios`)
+- write any UI code — Compose screens, SwiftUI views, ViewModels — those belong to `dream-implementer-android` and `dream-implementer-ios`
+- modify `feature/<name>/impl` or `iosApp-swiftui/` directly
+- collapse the modular template into a simpler structure
+- fix compilation errors or build failures directly — identify the failing layer and delegate to the relevant implementer
 
 Before final review, scan for leftover sample artifacts after first-feature replacement, including sample routes, DI registrations, settings includes, strings, docs, Room schema exports, and database names.
 

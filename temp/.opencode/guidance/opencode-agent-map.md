@@ -60,6 +60,8 @@ Should do:
 Should not do by default:
 
 - large direct code edits when a specialized implementer should own them
+- edit implementation files directly — delegate wiring to `dream-implementer`, Compose UI fixes to `dream-implementer-android`, SwiftUI fixes to `dream-implementer-ios`
+- fix compilation errors or build failures directly — identify the failing layer and delegate to the relevant implementer
 - final QA signoff without `dream-inspector` for substantial generation or repair work
 - run verification directly — delegate to `dream-tester`
 
@@ -157,11 +159,13 @@ Owns:
 - domain entities, repository interfaces, data source implementations, DTOs and mappers
 - NavKey route types in api
 - domain, data, and api test coverage
+- wiring feature modules into the app shell: umbrella imports (`shared/umbrella-ui`, `shared/umbrella-core`), DI registration, and Navigation 3 entry aggregation
 
 Use when:
 
 - the KMP business layer for a feature needs to be created or repaired
 - entity definitions, repository contracts, or data mappings need changes
+- feature modules need to be wired into umbrella imports, DI registration, or navigation entries
 
 Must preserve:
 
@@ -360,7 +364,7 @@ If `dream-inspector` fails at the tool level, `general` must run a manual review
 - approved objective
 - UI spec from `.features/<feature>/ui-spec.md`
 - feature contract (domain entities, actions, states)
-- iOS best-practice files (`35` through `38`)
+- iOS best-practice files (`35` through `39`)
 - verification expectations
 
 ### `dream-tester`

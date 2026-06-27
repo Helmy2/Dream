@@ -34,6 +34,7 @@ flowchart TD
 - `temp/maestro/`: Android and iOS smoke-flow scaffolding.
 - `temp/scripts/dream-preflight.sh`: local readiness check for git, Android SDK, and Maestro.
 - `temp/scripts/sync-pbxproj.rb`: auto-registers orphaned Swift files in Xcode project.pbxproj.
+- `temp/scripts/remove-sample.sh`: removes sample feature files, strips sample deps, and checks for leftovers.
 
 ```mermaid
 flowchart LR

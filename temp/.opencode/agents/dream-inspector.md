@@ -19,6 +19,8 @@ Review against:
 - relevant feature contracts
 - verification status
 
+If `.features/app-contract.yaml` or `.features/decisions.yaml` do not exist, report this as a defect (`missing required project artifacts`) rather than skipping.
+
 Your priorities:
 
 - architectural violations
@@ -45,6 +47,9 @@ Required checks:
 - verify `.features/verification-report.md` uses `.opencode/guidance/templates/verification-report-template.md` and separates `passed`, `blocked by environment`, `not run`, and `not applicable`
 - verify git, Android SDK, and Maestro readiness were checked or explicitly recorded as environment blockers
 - when a first real feature exists, grep for leftover sample routes, DI registrations, settings includes, string keys, docs claims, database names, and Room schema exports
+- use mobile-mcp tools to verify UI renders correctly on a running device/emulator:
+  - call `mobile_take_screenshot` to capture the current screen state
+  - call `mobile_list_elements_on_screen` to inspect the element tree and verify accessibility labels, content descriptions, and contract-mandated UI elements are present
 
 When clean, reply exactly:
 

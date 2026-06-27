@@ -54,17 +54,32 @@ Dream uses these OpenCode agents, organized by role:
 - `dream-designer` translates feature contracts into UI/UX specs (no code)
 
 **Code-Writing Subagents:**
-- `dream-implementer` owns the KMP business layer: domain, data, api
+- `dream-implementer` owns the KMP business layer: domain, data, api, and wiring (umbrella imports, DI registration, navigation entries)
 - `dream-implementer-android` owns the Jetpack Compose presentation layer
 - `dream-implementer-ios` owns the native SwiftUI presentation layer
 
 **Verification Subagent:**
-- `dream-tester` owns the full verification ladder: tests, builds, device, Maestro
+- `dream-tester` owns the full verification ladder: tests, builds, device, Maestro, and test-plan.md creation
 
 **Review Subagent:**
 - `dream-inspector` performs the final QA gate
 
 Use the smallest capable agent for each subtask.
+
+`dream-general` must not edit implementation files directly. It delegates all code edits (wiring, bug fixes, build fixes) to the relevant implementer subagent:
+- `dream-implementer` for domain, data, api, and wiring (umbrella imports, DI registration, navigation entries)
+- `dream-implementer-android` for Compose UI and `impl` failures
+- `dream-implementer-ios` for SwiftUI and bridge failures
+
+## Substantial Work Threshold
+
+Dream-inspector review is required for substantial work. Substantial work includes:
+- any new feature generation
+- any repair that changes more than 2 files
+- any change to shared modules (`shared/core/*`, `shared/designsystem`, `shared/navigation`, `shared/umbrella-*`)
+- any change that modifies contracts, specs, or architecture rules
+
+Non-substantial work (inspector optional): single-line corrections, documentation updates, or typo fixes that do not affect behavior.
 
 ## Non-Negotiable Rules
 
@@ -134,7 +149,7 @@ The default OpenCode-first Dream workflow is:
 9. `dream-explore` or `dream-context-scout` gathers exact implementation context when needed.
 10. `dream-search` is called if external research is needed for dependencies, APIs, or troubleshooting.
 11. `dream-designer` produces `.features/<feature>/ui-spec.md` from the feature contract.
-12. `dream-implementer` implements the KMP business layer: domain, data, api, and their tests.
+12. `dream-implementer` implements the KMP business layer: domain, data, api, and their tests, then wires feature modules into umbrella imports and DI registration.
 13. `dream-implementer-android` implements the Jetpack Compose UI layer: screens, ViewModels, Koin navigation, tests.
 14. `dream-implementer-ios` implements the native SwiftUI layer: views, ViewModels, bridge, XCTest.
 15. `dream-tester` runs the full verification ladder: unit tests, platform builds, device install/launch, Maestro flows.

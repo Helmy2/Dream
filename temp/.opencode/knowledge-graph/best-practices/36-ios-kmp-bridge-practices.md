@@ -156,14 +156,50 @@ final class AppDependencies {
 }
 ```
 
-### 36.9 Adding new Swift files requires manual pbxproj edits
+### 36.9 Adding new Swift files requires pbxproj registration
 
-Xcode does not automatically register new `.swift` files added outside the Xcode GUI. The agent must edit the `.pbxproj` file when introducing new source files to the iOS host.
+Xcode does not automatically register new `.swift` files added outside the Xcode GUI. The agent must register new source files in the Xcode project when introducing them to the iOS host.
 
 Best practice:
 
-- add a `PBXBuildFile` entry for the new file referencing its `PBXFileReference`
-- add the same `PBXBuildFile` reference to the `Sources` build phase of the `iosApp` target
-- mirror the UUID format used by existing entries (the hex-string convention is stable across Xcode 15/16)
-- verify the addition with `xcodebuild build` — a missing PBXBuildFile causes the compiler to silently skip the file
-- consider keeping a "Sources phase inventory" comment block at the top of the project file if the file list grows long enough that manual tracking becomes error-prone
+- run `ruby scripts/sync-pbxproj.rb` from the project root after adding or removing any `.swift` files under `iosApp-swiftui/` — this uses the `xcodeproj` Ruby gem to auto-register orphaned files in `project.pbxproj`
+- the script finds targets and groups by name, so it works regardless of UUID changes
+- verify the registration with `xcodebuild build` — a missing PBXBuildFile causes the compiler to silently skip the file
+- if the script reports warnings, inspect the pbxproj manually; the gem API handles PBXFileReference, PBXBuildFile, and PBXSourcesBuildPhase entries automatically
+
+### 36.10 OrThrow bridge extensions for Kotlin Result unwrapping
+
+The Dream template uses Kotlin-side `OrThrow` extension functions instead of calling `.get()` directly in Swift. This keeps error throwing on the Kotlin side and avoids exposing SKIE result types to Swift.
+
+Best practice:
+
+- create `suspend fun Repository.methodNameOrThrow(...): ReturnType` extensions in `shared/umbrella-core` for each repository method that Swift needs
+- unwrap `Result<T>` in the extension: return `result.value` on `Result.Success`, throw on `Result.Failure`
+- place the extensions in a file named `<Feature>RepositoryExtensions.kt` under `shared/umbrella-core/src/commonMain/`
+- the bridge calls `try await repository.methodNameOrThrow()` instead of `try await repository.methodName().get()`
+
+Template for new features:
+
+```kotlin
+// shared/umbrella-core/.../FeatureRepositoryExtensions.kt
+package com.dream.template.shared.di
+
+import com.dream.template.feature.<name>.domain.model.<Type>
+import com.dream.template.feature.<name>.domain.repository.<Feature>Repository
+import com.dream.template.shared.core.domain.Result
+
+suspend fun <Feature>Repository.loadItemsOrThrow(): List<<Type>> = when (val result = loadItems()) {
+    is Result.Success -> result.value
+    is Result.Failure -> throw RuntimeException(result.error.toString())
+}
+```
+
+When to prefer `.get()` in Swift instead:
+
+- when the Swift bridge needs to handle the error locally without throwing
+- when SKIE generates a Swift-friendly result type that can be pattern-matched
+
+Error fidelity note:
+
+- `RuntimeException(result.error.toString())` loses typed `DomainError` information
+- for MVP this is acceptable; for production, consider mapping domain errors to typed Swift enums at the bridge boundary

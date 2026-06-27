@@ -28,6 +28,7 @@ Prefer linking to those documents in discussions and change summaries instead of
 - [temp/.opencode/knowledge-graph/README.md](temp/.opencode/knowledge-graph/README.md): packaged reusable architecture rules and source graph
 - [temp/scripts/dream-preflight.sh](temp/scripts/dream-preflight.sh): local readiness check for git, Android SDK, and Maestro
 - [temp/scripts/sync-pbxproj.rb](temp/scripts/sync-pbxproj.rb): auto-registers orphaned Swift files in Xcode project.pbxproj
+- [temp/scripts/remove-sample.sh](temp/scripts/remove-sample.sh): removes sample feature files, strips sample deps, and checks for leftovers
 - [docs/first-try-report.md](docs/first-try-report.md): known generation and review gaps
 
 ## Working Rules

@@ -55,7 +55,8 @@ Use this checklist when adding or replacing a Dream feature module.
 ## Storage And Time
 
 - [ ] Keep shared Room builder policy in shared core modules.
-- [ ] Put feature-specific entities, DAOs, and mappings in the feature data layer unless the schema is intentionally shared.
+- [ ] Add new feature entities and DAOs to the shared database class in `shared/core/data` unless the schema is intentionally isolated.
+- [ ] Put feature-specific mappers and repository implementations in the feature data layer.
 - [ ] Inject `TimeProvider` and call the appropriate API: `nowMillis()` for timestamps, `today()` for current date, `currentYearMonth()` for period filters, and `formatDate(...)` or `formatDateTime(...)` for shared UI display.
 - [ ] Use `FakeTimeProvider` or an equivalent fixed-time fake in time-sensitive tests.
 - [ ] Do not add feature-local date/date-time formatting helpers in common code.
@@ -79,18 +80,19 @@ Apply these items only when `iosUiStrategy` is `swiftui`:
 - [ ] Create or update Swift models in `iosApp/<FeatureName>/Models/` when the feature needs Swift-side value types or form state.
 - [ ] Extend the bridge layer (`Core/SharedCoreBridge` or equivalent protocol) with methods that expose new shared capabilities to Swift.
 - [ ] Add or update XCTest coverage in `iosAppTests/<FeatureName>/` for native ViewModel state transitions and bridge wiring.
+- [ ] Add all user-visible SwiftUI string keys to `iosApp-swiftui/iosApp/Localizable.xcstrings` with matching English values from `strings.xml`. Use `ios_` infix for iOS-only strings.
 - [ ] Verify the shared Xcode scheme includes all new files and the test target discovers them.
+- [ ] Run `ruby scripts/sync-pbxproj.rb` from the project root after adding or removing `.swift` files to register them in `project.pbxproj`.
+- [ ] After installing and launching the app, use mobile-mcp tools (`mobile_take_screenshot`, `mobile_list_elements_on_screen`) to verify the UI renders correctly and accessibility labels match string keys.
 - [ ] Run `xcodebuild build` and `xcodebuild test` as part of structural validation for the iOS host.
 
 ## Sample Removal
 
-- [ ] Remove `feature/sample` once a real first feature fully replaces it, unless a temporary exception is documented.
-- [ ] Remove sample includes from `settings.gradle.kts`.
-- [ ] Remove sample DI registrations from umbrella modules.
-- [ ] Remove sample route keys, navigation entries, and strings when no longer used.
-- [ ] Remove sample Room schema exports from `shared/core/data/schemas` unless intentionally retained for a migration test.
-- [ ] Update `README.md` and `AGENTS.md` verification commands and module listings.
-- [ ] Grep for leftover sample names, route names, module names, string keys, database names, schema paths, and docs claims before review.
+- [ ] Run `./scripts/remove-sample.sh --dry-run` first to preview what will be removed.
+- [ ] Run `./scripts/remove-sample.sh` to delete sample files, strip sample deps from build configs, and check for leftovers.
+- [ ] Complete the manual edits listed in the script's "Next Steps" output (CoreModule, UiModule, host entry points, ContentView, AppDependencies, SharedCoreBridge, string resources).
+- [ ] Update `AGENTS.md`, `README.md`, and `maestro/README.md` verification commands and module listings.
+- [ ] Run `./scripts/remove-sample.sh --dry-run` again to confirm no leftovers remain.
 
 ## Preflight
 

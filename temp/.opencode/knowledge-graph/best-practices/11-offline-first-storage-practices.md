@@ -10,19 +10,32 @@ Best practice:
 
 - put bundled SQLite driver setup in the shared data core module
 - use KMP-safe coroutine dispatchers directly, such as `Dispatchers.Default`, instead of a template-specific dispatcher provider abstraction
-- keep feature-specific databases, DAOs, entities, and factories in the feature data module unless multiple features truly share one schema
 - for first-pass MVP iteration, destructive migration fallback is acceptable to recover from stale local test schemas across Android and iOS
 - replace destructive fallback with real Room migrations when the app contract requires preserving existing local data
 
-### 11.2 Single shared Room database
+### 11.2 Single shared Room database (default pattern)
 
-The app can use one shared database for multiple features.
+The Dream template uses one shared database class in `shared/core/data` for all features. This is the default pattern.
+
+Where database classes live:
+
+- `shared/core/data` owns the `@Database` class, entity definitions, DAO interfaces, platform-specific factories, and schema exports
+- `shared/core/data` owns the `RoomDatabase.Builder` extension (`buildBundledRoomDatabase`)
+- feature `data` modules own repository implementations, mappers, and DAO usage — they import DAOs from `shared/core/data`
+- each feature adds its tables to the shared database class; new entities and DAOs are registered in the same `@Database` annotation
 
 Why this is useful:
 
 - one persistence entry point
-- feature-specific tables can still live together cleanly
+- feature-specific tables coexist cleanly
 - easier migrations and schema export management
+- shared builder policy (driver, dispatchers, destructive fallback) stays in one place
+
+When to use a per-feature database instead:
+
+- only when a feature has a genuinely isolated schema that no other feature will ever share
+- keep the database class, entity, and DAO in the feature `data` module in that case
+- document the exception in `.features/decisions.yaml`
 
 ### 11.3 Entity design follows feature boundaries
 

@@ -22,6 +22,8 @@ When working in this generated project, read in this order:
 - [.opencode/knowledge-graph/](.opencode/knowledge-graph): architecture rules and retrieval sources
 - [maestro/](maestro): Android and iOS smoke-flow scaffolding for generated feature validation
 - [scripts/dream-preflight.sh](scripts/dream-preflight.sh): git, Android SDK, and Maestro readiness preflight
+- [scripts/sync-pbxproj.rb](scripts/sync-pbxproj.rb): auto-registers orphaned Swift files in Xcode project.pbxproj
+- [scripts/remove-sample.sh](scripts/remove-sample.sh): removes sample feature files, strips sample deps, and checks for leftovers
 - [.opencode/guidance/new-feature-checklist.md](.opencode/guidance/new-feature-checklist.md): contract-first feature wiring, verification, and git checklist
 
 ## Working Rules

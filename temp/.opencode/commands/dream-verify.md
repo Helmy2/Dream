@@ -6,6 +6,7 @@ agent: dream-general
 Use Dream's verification and repair workflow on the current project.
 
 Read:
+- `.opencode/knowledge-graph/PRODUCT.md`
 - `.opencode/guidance/opencode-agent-map.md`
 - `.opencode/guidance/dream-agent-operating-guide.md`
 - `AGENTS.md`
@@ -19,10 +20,15 @@ Then:
 - verify the project is a git repository and `git status`, `git diff`, and `git log --oneline -10` work, or record a precise git blocker
 - verify Android SDK readiness through `ANDROID_HOME` or the configured SDK path, or record a precise Android environment blocker
 - verify Maestro is installed for smoke-flow validation, or record a precise Maestro environment blocker
-- run the required verification commands
-- diagnose any failures
-- use `dream-implementer` for minimal architecture-safe fixes
-- rerun verification until green, blocked, or a skip condition triggers (see Skip Conditions in dream-agent-operating-guide.md)
+- delegate to `dream-tester` for the verification ladder: unit tests, platform builds, device install/launch, log inspection, Maestro flows
+- diagnose any failures from tester output
+- before each repair round, write iteration state to `.features/verification-report.md` (current iteration, failures, past attempts, next module to fix)
+- delegate fixes to the layer-appropriate implementer based on the failing surface:
+  - `dream-implementer` for domain, data, api, or wiring failures
+  - `dream-implementer-android` for Compose UI or `impl` failures
+  - `dream-implementer-ios` for SwiftUI or bridge failures
+- delegate reverification to `dream-tester` after each repair
+- check skip conditions after each round: iteration ≤ 5? failure count decreased? no regressions? environment blocker repeated? (see Skip Conditions in dream-agent-operating-guide.md)
 - use `dream-inspector` as the final QA gate for substantial work
 - run `git status`, `git diff`, and `git log --oneline -10` after a completed feature flow
 - if this command is part of a completed feature generation and review is approved, present the commit summary to the user and request explicit confirmation before staging and committing intended files

@@ -12,7 +12,7 @@ You own:
 - Jetpack Compose screens, ViewModels, UI state models, and UI events inside `feature/<name>/impl`
 - UI state mappings from domain models to presentation models
 - Koin compiler plugin DSL navigation entry providers inside `feature/<name>/impl`
-- shared string resources for user-visible text
+- use `stringResource(R.string.key)` for all user-visible text — string resources live in `shared/core/strings` (owned by `dream-implementer`)
 - Compose previews for screens
 
 You must:
@@ -24,7 +24,7 @@ You must:
 - use Koin compiler plugin DSL for ViewModels and Navigation 3 entry providers — no `@KoinViewModel`, `@Module`, or `@ComponentScan`
 - use `TimeProvider.formatDate(...)` and `TimeProvider.formatDateTime(...)` for shared UI date formatting
 - keep navigation routes in `feature/<name>/api` via `NavKey`
-- wire screens into the centralized shell through `impl` Koi n navigation entry providers
+- wire screens into the centralized shell through `impl` Koin navigation entry providers
 - add Compose previews for every screen
 - add presentation-layer unit tests covering state transitions and user actions
 

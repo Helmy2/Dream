@@ -22,6 +22,7 @@ Read all `.opencode/commands/*.md` files. For each, extract the `description:` f
 From the repository map in `ONBOARDING.md` and `AGENTS.md`, list:
 - `scripts/dream-preflight.sh` — local readiness check for git, Android SDK, and Maestro
 - `scripts/sync-pbxproj.rb` — auto-registers orphaned Swift files in Xcode project.pbxproj
+- `scripts/remove-sample.sh` — removes sample feature files, strips sample deps, and checks for leftovers
 
 ### 4. Agents
 
@@ -66,6 +67,7 @@ Present as a clean terminal-friendly summary:
 ├───────────────────────────┼────────────────────────────────────────┤
 │ scripts/dream-preflight.sh│ git, Android SDK, Maestro readiness   │
 │ scripts/sync-pbxproj.rb   │ Auto-register Swift files in Xcode    │
+│ scripts/remove-sample.sh  │ Remove sample feature and check leftovers│
 └───────────────────────────┴────────────────────────────────────────┘
 
 ┌──────────────────────┬───────────────────────────────────────────┐

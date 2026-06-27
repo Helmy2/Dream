@@ -14,6 +14,8 @@ Packaged Dream context:
 - `.features/`: generated app contracts, decisions, feature contracts, and verification reports
 - `maestro/`: Android and iOS smoke-flow scaffolding for generated feature validation
 - `scripts/dream-preflight.sh`: git, Android SDK, and Maestro readiness check used before verification depends on local tooling
+- `scripts/sync-pbxproj.rb`: auto-registers orphaned Swift files in Xcode project.pbxproj
+- `scripts/remove-sample.sh`: removes sample feature files, strips sample deps, and checks for leftovers
 - `.opencode/guidance/new-feature-checklist.md`: contract-first feature wiring, testing, verification, and git checklist
 
 Modules:
