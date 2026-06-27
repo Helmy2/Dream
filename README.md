@@ -17,7 +17,7 @@ Dream is a local-first AI app builder for Kotlin Multiplatform. It packages a re
 
 # Or work directly in the template
 cd temp
-./scripts/dream-preflight.sh
+./.opencode/scripts/dream-preflight.sh
 ```
 
 ## Documentation

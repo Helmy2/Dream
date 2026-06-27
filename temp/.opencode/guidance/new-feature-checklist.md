@@ -82,21 +82,21 @@ Apply these items only when `iosUiStrategy` is `swiftui`:
 - [ ] Add or update XCTest coverage in `iosAppTests/<FeatureName>/` for native ViewModel state transitions and bridge wiring.
 - [ ] Add all user-visible SwiftUI string keys to `iosApp-swiftui/iosApp/Localizable.xcstrings` with matching English values from `strings.xml`. Use `ios_` infix for iOS-only strings.
 - [ ] Verify the shared Xcode scheme includes all new files and the test target discovers them.
-- [ ] Run `ruby scripts/sync-pbxproj.rb` from the project root after adding or removing `.swift` files to register them in `project.pbxproj`.
+- [ ] Run `ruby .opencode/scripts/sync-pbxproj.rb` from the project root after adding or removing `.swift` files to register them in `project.pbxproj`.
 - [ ] Run `xcodebuild build` and `xcodebuild test` as part of structural validation for the iOS host.
 
 ## Sample Removal
 
-- [ ] Run `./scripts/remove-sample.sh --dry-run` first to preview what will be removed.
-- [ ] Run `./scripts/remove-sample.sh` to delete sample files, strip sample deps from build configs, and check for leftovers.
+- [ ] Run `./.opencode/scripts/remove-sample.sh --dry-run` first to preview what will be removed.
+- [ ] Run `./.opencode/scripts/remove-sample.sh` to delete sample files, strip sample deps from build configs, and check for leftovers.
 - [ ] Complete the manual edits listed in the script's "Next Steps" output (CoreModule, UiModule, host entry points, ContentView, AppDependencies, SharedCoreBridge, string resources).
 - [ ] Update `AGENTS.md`, `README.md`, and `maestro/README.md` verification commands and module listings.
-- [ ] Run `./scripts/remove-sample.sh --dry-run` again to confirm no leftovers remain.
+- [ ] Run `./.opencode/scripts/remove-sample.sh --dry-run` again to confirm no leftovers remain.
 
 ## Preflight
 
 - [ ] Verify the generated project is a git repository before feature work depends on git commands.
-- [ ] Run `./scripts/dream-preflight.sh` from the project root and record any blockers.
+- [ ] Run `./.opencode/scripts/dream-preflight.sh` from the project root and record any blockers.
 - [ ] Verify `git status`, `git diff`, and `git log --oneline -10` work before the commit stage.
 - [ ] Verify Android SDK readiness early with `ANDROID_HOME` or the configured SDK path before Android verification is treated as code-ready.
 - [ ] Verify Maestro is installed or document it as an environment blocker before smoke validation.

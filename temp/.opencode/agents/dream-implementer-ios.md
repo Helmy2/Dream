@@ -26,7 +26,7 @@ You must:
 - use native SwiftUI navigation patterns consistent with the existing project structure
 - create or update `iosApp-swiftui/iosApp/Localizable.xcstrings` entries for every user-visible string key used in SwiftUI views; keys and English values must match `shared/core/strings/strings.xml`; iOS-only keys use `ios_` infix
 - no hardcoded user-visible strings in SwiftUI views — all must come from the xcstrings catalog
-- run `ruby scripts/sync-pbxproj.rb` from the project root after adding or removing any `.swift` files to register them in `project.pbxproj`
+- run `ruby .opencode/scripts/sync-pbxproj.rb` from the project root after adding or removing any `.swift` files to register them in `project.pbxproj`
 
 You must not:
 

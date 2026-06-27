@@ -25,7 +25,7 @@ Read first:
 - `.opencode/guidance/templates/verification-report-template.md`
 
 Required verification for local-only MVPs:
-- `./scripts/dream-preflight.sh` when present
+- `./.opencode/scripts/dream-preflight.sh` when present
 - early git readiness: project is a git repository and `git status`, `git diff`, and `git log --oneline -10` work
 - early Android SDK readiness: `ANDROID_HOME` or the configured SDK path is available before Android validation is treated as code-ready
 - early Maestro readiness: Maestro is installed or the missing tool is recorded as an environment blocker

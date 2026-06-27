@@ -32,9 +32,9 @@ flowchart TD
 - `temp/.opencode/knowledge-graph/`: reusable architecture rules and retrieval sources.
 - `temp/.features/`: generated app contracts, feature specs, decisions, reports, and retrospectives.
 - `temp/maestro/`: Android and iOS smoke-flow scaffolding.
-- `temp/scripts/dream-preflight.sh`: local readiness check for git, Android SDK, and Maestro.
-- `temp/scripts/sync-pbxproj.rb`: auto-registers orphaned Swift files in Xcode project.pbxproj.
-- `temp/scripts/remove-sample.sh`: removes sample feature files, strips sample deps, and checks for leftovers.
+- `temp/.opencode/scripts/dream-preflight.sh`: local readiness check for git, Android SDK, and Maestro.
+- `temp/.opencode/scripts/sync-pbxproj.rb`: auto-registers orphaned Swift files in Xcode project.pbxproj.
+- `temp/.opencode/scripts/remove-sample.sh`: removes sample feature files, strips sample deps, and checks for leftovers.
 
 ```mermaid
 flowchart LR
@@ -281,7 +281,7 @@ Dream treats verification as a ladder, not a single build command.
 
 ```mermaid
 flowchart TD
-    Preflight[./scripts/dream-preflight.sh] --> Tests[./gradlew allTests]
+    Preflight[./.opencode/scripts/dream-preflight.sh] --> Tests[./gradlew allTests]
     Tests --> AndroidBuild[./gradlew :androidApp:assembleDebug]
     AndroidBuild --> AndroidRuntime[Android CLI install/launch/log inspection]
     AndroidRuntime --> IOSBuild[xcodebuild]
@@ -295,7 +295,7 @@ flowchart TD
 Run from `temp/` or from a generated copy:
 
 ```bash
-./scripts/dream-preflight.sh
+./.opencode/scripts/dream-preflight.sh
 ./gradlew allTests
 ./gradlew :androidApp:assembleDebug
 ```

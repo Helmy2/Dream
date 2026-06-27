@@ -26,9 +26,9 @@ Prefer linking to those documents in discussions and change summaries instead of
 - [temp/.opencode/commands/](temp/.opencode/commands): packaged Dream slash-command workflows
 - [temp/.opencode/guidance/](temp/.opencode/guidance): packaged operating guidance and prompt scaffolds
 - [temp/.opencode/knowledge-graph/README.md](temp/.opencode/knowledge-graph/README.md): packaged reusable architecture rules and source graph
-- [temp/scripts/dream-preflight.sh](temp/scripts/dream-preflight.sh): local readiness check for git, Android SDK, and Maestro
-- [temp/scripts/sync-pbxproj.rb](temp/scripts/sync-pbxproj.rb): auto-registers orphaned Swift files in Xcode project.pbxproj
-- [temp/scripts/remove-sample.sh](temp/scripts/remove-sample.sh): removes sample feature files, strips sample deps, and checks for leftovers
+- [temp/.opencode/scripts/dream-preflight.sh](temp/.opencode/scripts/dream-preflight.sh): local readiness check for git, Android SDK, and Maestro
+- [temp/.opencode/scripts/sync-pbxproj.rb](temp/.opencode/scripts/sync-pbxproj.rb): auto-registers orphaned Swift files in Xcode project.pbxproj
+- [temp/.opencode/scripts/remove-sample.sh](temp/.opencode/scripts/remove-sample.sh): removes sample feature files, strips sample deps, and checks for leftovers
 - [docs/first-try-report.md](docs/first-try-report.md): known generation and review gaps
 
 ## Working Rules
@@ -69,7 +69,7 @@ Use the lighter template commands for focused iteration, but do not report final
 - If you change generation workflow or success criteria, update [AI_MVP_BUILDER_PLAN.md](AI_MVP_BUILDER_PLAN.md) and the relevant files under [temp/.opencode/guidance/prompts/](temp/.opencode/guidance/prompts/).
 - If you change reusable architecture rules, update the corresponding files in [temp/.opencode/knowledge-graph/best-practices/](temp/.opencode/knowledge-graph/best-practices/README.md).
 - If you change starter structure or validation commands, update [temp/README.md](temp/README.md) and [temp/AGENTS.md](temp/AGENTS.md).
-- If you add or change scripts, update the relevant files under [temp/scripts/](temp/scripts/) and document them in root [ONBOARDING.md](ONBOARDING.md) and [AGENTS.md](AGENTS.md).
+- If you add or change scripts, update the relevant files under [temp/.opencode/scripts/](temp/.opencode/scripts/) and document them in root [ONBOARDING.md](ONBOARDING.md) and [AGENTS.md](AGENTS.md).
 
 ## Existing Agent Layer
 

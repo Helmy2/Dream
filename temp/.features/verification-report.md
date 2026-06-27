@@ -9,7 +9,7 @@
 
 ## Passed
 
-- Preflight: `passed` — `./scripts/dream-preflight.sh`
+- Preflight: `passed` — `./.opencode/scripts/dream-preflight.sh`
 - Sample domain/data/presentation focused tests: `passed` — `./gradlew :feature:sample:domain:allTests :feature:sample:data:allTests :feature:sample:presentation:allTests`
 - Shared navigation tests: `passed` — `./gradlew :shared:navigation:allTests`
 - Android debug assemble: `passed` — `./gradlew :androidApp:assembleDebug`
@@ -33,7 +33,7 @@
 ## Commands Run
 
 ```bash
-./scripts/dream-preflight.sh
+./.opencode/scripts/dream-preflight.sh
 ./gradlew :feature:sample:domain:allTests :feature:sample:data:allTests :feature:sample:presentation:allTests
 ./gradlew :shared:navigation:allTests
 ./gradlew :androidApp:assembleDebug
