@@ -2,7 +2,7 @@
 
 A shared design system provides reusable UI primitives for all feature modules.
 
-### 15.1 Shared tokens beyond colors and typography
+### 16.1 Shared tokens beyond colors and typography
 
 A shared theme can expose composition locals for:
 
@@ -18,7 +18,7 @@ Best practice:
 - avoid scattering raw `dp` values everywhere
 - use `DreamTheme` tokens for spacing, shape, size, and color decisions in feature UI unless a documented exception is required
 
-### 15.2 Reusable app-wide components
+### 16.2 Reusable app-wide components
 
 All shared components live under `designsystem/components/`. Each component or component family has its own file. The library is organized by category:
 
@@ -65,7 +65,7 @@ Key patterns:
 - `ComponentSize` enum (Small/Medium/Large) for size variants
 - Variant enums (`ButtonVariant`, `CardVariant`) map to different M3 implementations internally
 
-### 15.3 Prefer design-system components in features
+### 16.3 Prefer design-system components in features
 
 Feature UI should use Dream design-system components before raw Material or ad hoc Compose components.
 
@@ -77,7 +77,9 @@ Default rule:
 - do not build one-off local button/card/text-field styles inside feature modules when an existing design-system component covers the need
 - keep screen-specific layout in the feature, but keep reusable visual primitives in `shared/designsystem`
 
-### 15.4 Keep design-system components layout-agnostic where possible
+> **See also:** [31. UI Quality And State Design Practices](31-ui-quality-and-state-design-practices.md) for state-specific UX expectations.
+
+### 16.4 Keep design-system components layout-agnostic where possible
 
 Components define surface behavior and semantics, not screen-specific layout.
 
@@ -85,7 +87,7 @@ Best practice:
 - slot-based APIs (leading, trailing, content, action) let callers supply layout
 - avoid hardcoding outer padding or fixed widths
 
-### 15.5 Preview every component
+### 16.5 Preview every component
 
 Every public composable in the design system has a `private` preview annotated with `@PreviewLightDark`. This ensures visual coverage across light/dark modes without polluting the public API.
 

@@ -49,3 +49,6 @@ This folder contains the best-practices source material in small, section-focuse
 
 - Each file preserves the original section heading and content.
 - These files now act as the primary best-practices source.
+- Section numbering follows the file number (e.g., file `05` uses sections `5.1`, `5.2`, etc.).
+- Cross-references between related files use relative links (e.g., `[13. Time And Logical Date Practices](13-time-and-logical-date-practices.md)`).
+- Code blocks use explicit language tags: `kotlin`, `swift`, `yaml`, `json`, `xml`, `bash`, `text`.

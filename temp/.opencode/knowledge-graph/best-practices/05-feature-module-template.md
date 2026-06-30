@@ -12,7 +12,7 @@ feature/<name>/
 
 Multi-word features must use one consistent naming convention across folders, Gradle module names, and Kotlin packages. Prefer a folder path that mirrors package segments for multi-word concepts, such as `feature/expense/details/...` with `com.example.feature.expense.details...`, or use a single slug consistently everywhere. Do not mix a hyphenated folder such as `feature/expense-details` with package segments such as `feature.expense.details` unless a documented migration reason exists.
 
-### 4.1 Domain module responsibilities
+### 5.1 Domain module responsibilities
 
 `domain` should contain:
 
@@ -31,7 +31,7 @@ Multi-word features must use one consistent naming convention across folders, Gr
 - Ktor clients
 - DataStore (setup lives in `shared:core:data` with expect/actual)
 
-### 4.2 Data module responsibilities
+### 5.2 Data module responsibilities
 
 `data` should contain:
 
@@ -43,7 +43,7 @@ Multi-word features must use one consistent naming convention across folders, Gr
 - local caching logic
 - exception-to-domain-error mapping
 
-### 4.3 API module responsibilities
+### 5.3 API module responsibilities
 
 `api` defines the public surface of the feature. Other modules navigate to this feature through its `api` without knowing anything about its implementation.
 
@@ -61,7 +61,7 @@ Multi-word features must use one consistent naming convention across folders, Gr
 
 Dependency rule: any module that needs to navigate to this feature depends on `feature/<name>/api`, never on `feature/<name>/impl`.
 
-### 4.4 Impl module responsibilities
+### 5.4 Impl module responsibilities
 
 `impl` provides the full feature implementation. Nothing outside this feature should depend on it directly.
 
@@ -80,17 +80,29 @@ Presentation mapper rule:
 - implement presentation mappers as classes, not extension functions
 - keep mapping logic explicit so it is easy to inject, test, replace, and review
 
+Mapper invocation rule:
+
+- inject PresentationMapper into ViewModels via Koin `factory` — do not create mappers in composables via `remember { }`
+- ViewModels must use the injected mapper to convert domain models into UI models before exposing them in state
+- composable views must receive already-mapped UI models and perform zero domain-to-UI transformation
+
+UI state rule:
+
+- ViewModel state fields must use UI model types, not domain types
+- domain models must not appear in state classes — they must be stopped at the ViewModel boundary
+- UI model classes live in `feature/<name>/impl` alongside state, action, and event definitions
+
 `impl` depends on:
 
 - `feature/<name>/api`
 - `feature/<name>/domain`
 - shared presentation helpers and design system
 
-### 4.5 Why this template scales
+### 5.5 Why this template scales
 
 This split keeps the public navigation contract stable and small. Other features and the app shell depend only on `api`. The `impl` can be replaced, refactored, or tested in isolation without affecting callers. Review discussions are clearer because every class has an obvious home and cross-feature coupling is easy to detect from the dependency graph.
 
-### 4.6 Feature DI Module boilerplate
+### 5.6 Feature DI Module boilerplate
 
 Every feature `impl` module needs a Koin module that registers ViewModels and installs Navigation 3 entry providers. The pattern is identical across features:
 
@@ -99,7 +111,7 @@ Every feature `impl` module needs a Koin module that registers ViewModels and in
 @OptIn(KoinExperimentalAPI::class)
 val <name>UiModule = module {
     factory<PresentationMapper> { PresentationMapper(get()) }
-    viewModel<FeatureViewModel>()
+    viewModel<FeatureViewModel> { FeatureViewModel(get(), get()) }
 
     navigation<FeatureListRoute> {
         val navigator = koinInject<Navigator>()

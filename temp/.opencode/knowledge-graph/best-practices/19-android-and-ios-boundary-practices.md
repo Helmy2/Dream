@@ -2,7 +2,7 @@
 
 A strong KMP architecture does not need to force the same UI stack on both platforms.
 
-### 18.1 Share business logic, not UI by default
+### 19.1 Share business logic, not UI by default
 
 Current strong pattern:
 
@@ -12,7 +12,7 @@ Current strong pattern:
 
 This is an excellent model for product teams that want shared logic without sacrificing native iOS UX.
 
-### 18.2 Export pure business logic to iOS
+### 19.2 Export pure business logic to iOS
 
 A dedicated iOS export module can aggregate domain and data modules for iOS.
 
@@ -22,7 +22,7 @@ Best practice:
 - keep SwiftUI-facing shared core modules free of Compose, Navigation 3 UI, and Koin Compose dependencies
 - export domain/data capabilities cleanly to Swift
 
-### 18.3 Use provider classes for Swift access
+### 19.3 Use provider classes for Swift access
 
 A useful interop pattern is exposing feature use cases to Swift through dedicated Koin-backed provider classes.
 
@@ -32,7 +32,7 @@ Why this works well:
 - feature ownership remains clear
 - interop API stays smaller than exposing every class directly
 
-### 18.4 Split the exported iOS surface by UI strategy
+### 19.4 Split the exported iOS surface by UI strategy
 
 Dream uses two different umbrella modules for iOS because the consumers are different:
 
@@ -45,7 +45,7 @@ Best practice:
 - keep Compose-based iOS hosts dependent on `umbrella-ui`, not on native Swift bridge code
 - do not make the SwiftUI export framework pull in Compose, Navigation 3 UI, or Koin Compose dependencies just to simplify one host app
 
-### 18.5 Export transitive shared types deliberately
+### 19.5 Export transitive shared types deliberately
 
 Kotlin Multiplatform frameworks do not automatically expose every transitive dependency type to Swift.
 
@@ -55,7 +55,7 @@ Best practice:
 - the exported dependency chain must use `api(...)`, not `implementation(...)`, or Swift will not see the transitive types cleanly
 - verify the exported header and Swift module after changes instead of assuming Gradle dependency visibility matches Swift visibility
 
-### 18.6 Keep the native host thin even when iOS is fully native
+### 19.6 Keep the native host thin even when iOS is fully native
 
 Native SwiftUI does not mean business logic belongs in Swift.
 

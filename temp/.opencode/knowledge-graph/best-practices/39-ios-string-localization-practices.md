@@ -31,6 +31,8 @@ Example — matching xcstrings entries:
 }
 ```
 
+> **See also:** [17. Resource And Localization Practices](17-resource-and-localization-practices.md) for the shared strings workflow and [31.5 All user-visible strings must come from shared resources](31-ui-quality-and-state-design-practices.md) for the Compose string resource pattern.
+
 ### 39.2 iOS-only strings belong only in xcstrings
 
 Strings that are specific to the native SwiftUI host (instructional text, platform labels) do not need an XML counterpart. Document them with an `ios_` infix in the key:

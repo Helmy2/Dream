@@ -2,13 +2,13 @@
 
 Strong process documentation adds long-term value.
 
-### 23.1 Keep architecture docs in the repo
+### 24.1 Keep architecture docs in the repo
 
 Reusable rule:
 
 - keep living technical documents beside the code
 
-### 23.2 Let docs define non-negotiable rules
+### 24.2 Let docs define non-negotiable rules
 
 Good architecture docs do more than explain; they enforce constraints such as:
 

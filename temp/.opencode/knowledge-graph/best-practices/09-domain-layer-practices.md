@@ -2,7 +2,7 @@
 
 The domain layer in this architecture style contains some of the most reusable patterns.
 
-### 8.1 Pure Kotlin domain
+### 9.1 Pure Kotlin domain
 
 The domain layer should remain platform-agnostic and framework-light.
 
@@ -12,7 +12,7 @@ Good rules to preserve:
 - use cases express user or system actions clearly
 - repository interfaces live in domain, implementations live in data
 
-### 8.2 Explicit result modeling
+### 9.2 Explicit result modeling
 
 One effective approach uses:
 
@@ -32,7 +32,7 @@ Best practice to copy:
 - use typed result wrappers for domain-facing operations
 - define domain-specific error hierarchies per feature
 
-### 8.3 Cancellation-safe suspend result helpers
+### 9.3 Cancellation-safe suspend result helpers
 
 If a shared helper wraps suspend infrastructure work into a typed result, it must preserve structured concurrency.
 
@@ -42,7 +42,7 @@ Best practice:
 - always rethrow `CancellationException`
 - map only real failures into domain or app errors
 
-### 8.4 Use case naming
+### 9.4 Use case naming
 
 Good use case names are generally action-oriented and readable:
 
@@ -56,7 +56,7 @@ Best practice:
 - name use cases after clear business intent
 - prefer `ObserveX`, `SetX`, `ToggleX`, `MarkX`, `ComputeX`, `AdvanceX`
 
-### 8.5 Time access through a contract
+### 9.5 Time access through a contract
 
 This is one of the strongest rules in the repository:
 
@@ -69,3 +69,5 @@ Why it matters:
 - deterministic logic
 - centralized rollover behavior
 - easier support for religious or product-specific day boundaries
+
+> **See also:** [13. Time And Logical Date Practices](13-time-and-logical-date-practices.md) for the full `TimeProvider` API and verification rules.

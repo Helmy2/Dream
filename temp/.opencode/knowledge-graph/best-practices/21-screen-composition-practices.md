@@ -2,7 +2,7 @@
 
 From the feature screens and shared components, a few UI composition rules stand out.
 
-### 20.1 Build screens from focused sections
+### 21.1 Build screens from focused sections
 
 Examples in the codebase include:
 
@@ -16,7 +16,7 @@ Best practice:
 - move repeated visual sections into named composables
 - keep them close to the feature unless shared broadly
 
-### 20.2 Split every screen into a Screen/Content pair
+### 21.2 Split every screen into a Screen/Content pair
 
 Each screen has two composable responsibilities:
 
@@ -25,7 +25,7 @@ Each screen has two composable responsibilities:
 
 This follows a pattern similar to "smart" and "dumb" components:
 
-```
+```text
 Screen (smart container)
   ├── collects viewModel.state
   ├── observes viewModel.eventFlow (navigation, snackbar, etc.)
@@ -46,7 +46,7 @@ Best practice:
 - wrap every `XxxContent` in a `Scaffold` with a `TopAppBar` and back navigation
 - add a `@PreviewScreenSizes` annotated wrapper to `XxxContent` with sample data for IDE preview
 
-### 20.3 Use bottom sheets for bounded editing flows
+### 21.3 Use bottom sheets for bounded editing flows
 
 Bottom sheets work well for actions such as:
 

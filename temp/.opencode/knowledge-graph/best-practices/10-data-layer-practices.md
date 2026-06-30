@@ -2,7 +2,7 @@
 
 The data layer is designed to translate external systems into domain-safe behavior.
 
-### 9.1 Repository implementations own translation
+### 10.1 Repository implementations own translation
 
 Repositories should:
 
@@ -11,7 +11,7 @@ Repositories should:
 - convert infrastructure failures into domain errors
 - expose domain-friendly return types
 
-### 9.2 Use `safeCall` for local writes and exception mapping
+### 10.2 Use `safeCall` for local writes and exception mapping
 
 One good pattern is using `safeCall` to catch non-cancellation exceptions and map them into typed failures.
 
@@ -26,7 +26,7 @@ Rule to copy exactly:
 - always rethrow `CancellationException`
 - never swallow coroutine cancellation in repository helpers
 
-### 9.3 Cache before network when appropriate
+### 10.3 Cache before network when appropriate
 
 A repository implementation can check cached data first, then fetch remote data only if needed.
 
@@ -36,7 +36,7 @@ Reusable lesson:
 - persist normalized data after remote fetch
 - return domain models, not raw remote objects
 
-### 9.4 Named `HttpClient` instances per feature
+### 10.4 Named `HttpClient` instances per feature
 
 A strong network boundary pattern is using a per-feature Ktor client setup. The template provides a shared `HttpClientFactory` in `shared/core/data/src/.../network/` that feature data modules can use to create configured clients.
 
@@ -50,7 +50,7 @@ Best practice:
 
 - each data module that talks to a backend should own its own named client unless there is a strong reason to share one
 
-### 9.5 Mappers belong near their boundary
+### 10.5 Mappers belong near their boundary
 
 The repository uses dedicated mapper files for DTO/entity conversion.
 
@@ -62,8 +62,10 @@ Best practice:
 
 Recommended mapper placement:
 
-- data layer: DTO <-> entity <-> domain mapping stays in data
+- data layer: DTO <-> entity <-> domain mapping stays in the **feature's** data layer, not the shared data layer
 - presentation layer: domain -> UI mapping stays in presentation
+
+Anti-example: mappers that convert `Entity → FeatureDomainModel` belong in `feature/<name>/data/.../mapper/`, not in `shared/core/data/mapper/`. The shared data module owns entities and DAOs, not domain-bound mappers. Placing feature mappers in shared data creates unnecessary coupling and breaks the feature boundary.
 
 Recommended mapper style:
 

@@ -21,6 +21,9 @@ You must:
 - use `DreamTheme` design-system components and design tokens — not raw Material3 primitives unless no design-system component exists
 - implement every view state defined in the spec: Loading, Empty, Content, Error
 - keep domain-to-UI mapping inside `impl`
+- inject PresentationMapper into ViewModels via Koin `factory` — do not instantiate mappers in composables via `remember { }`
+- ViewModels must use the injected mapper to convert domain models to UI models before exposing them in state
+- composable views must receive already-mapped UI models and perform zero domain-to-UI transformation
 - use Koin compiler plugin DSL for ViewModels and Navigation 3 entry providers — no `@KoinViewModel`, `@Module`, or `@ComponentScan`
 - use `TimeProvider.formatDate(...)` and `TimeProvider.formatDateTime(...)` for shared UI date formatting
 - keep navigation routes in `feature/<name>/api` via `NavKey`

@@ -2,15 +2,17 @@
 
 Even without reviewing the full test suite, the architecture already exposes several good testing practices.
 
-### 22.1 Inject time
+### 23.1 Inject time
 
 This is the single highest-value testing rule in the app.
 
-### 22.2 Keep domain pure
+> **See also:** [13. Time And Logical Date Practices](13-time-and-logical-date-practices.md) for the full `TimeProvider` API and `FakeTimeProvider` usage.
+
+### 23.2 Keep domain pure
 
 Pure domain modules are easier to unit test and easier to port.
 
-### 22.3 Keep repository boundaries explicit
+### 23.3 Keep repository boundaries explicit
 
 Typed results and repository interfaces reduce mocking complexity.
 
@@ -28,24 +30,25 @@ The sample feature includes copyable test examples:
 - `feature/sample/domain/src/commonTest/.../SampleRepositoryContractTest.kt` for repository contract expectations
 - `feature/sample/data/src/commonTest/.../SampleItemMapperTest.kt` for data/entity mapping tests
 
-### 22.4 Prefer flows for observable state sources
+### 23.4 Prefer flows for observable state sources
 
 Flows make settings, logs, and derived state easier to observe consistently in both production and tests.
 
-### 22.5 Keep shared test utilities in shared/core/testing
+### 23.5 Keep shared test utilities in shared/core/testing
 
 Reusable fake providers and coroutine-aware helpers should live in a shared testing module instead of being recreated in each feature.
 
 Best practice:
 
 - keep fake time and dispatcher providers in `shared/core/testing`
+- declare test helper classes (fakes, builders, fixtures) as `internal` rather than `private` when they may be shared across test files in the same module
 - add coroutine test dependencies once in the shared testing module and reuse them from feature tests
 - test feature behavior at the feature layer and queue semantics at the shared presentation layer
 - use `@BeforeTest` and `@AfterTest` for repeated main dispatcher setup in ViewModel tests instead of inlining `Dispatchers.setMain(...)` in every test
 - prefer explicit flow/state testing such as Turbine where transition order matters
 - construct meaningful date, month, and time cases with `kotlinx-datetime` helpers instead of unexplained raw epoch values
 
-### 22.6 Use Mokkery for mocks
+### 23.6 Use Mokkery for mocks
 
 The project bundles [Mokkery](https://mokkery.dev) 3.4.1 as the KMP-native mocking library. It uses a Kotlin compiler plugin (not reflection), so it works on all targets including iOS and Wasm.
 

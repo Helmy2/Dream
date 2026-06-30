@@ -19,7 +19,7 @@ Read:
 
 Then:
 - run early preflights before implementation depends on the environment:
-- run `./.opencode/scripts/dream-preflight.sh` from the project root when it exists
+- run `./scripts/dream-preflight.sh` from the project root when it exists
 - verify the destination project is a git repository and `git status`, `git diff`, and `git log --oneline -10` work, or record a precise git blocker
 - verify Android SDK readiness through `ANDROID_HOME` or the configured SDK path, or record a precise Android environment blocker
 - verify Maestro is installed for smoke-flow validation, or record a precise Maestro environment blocker

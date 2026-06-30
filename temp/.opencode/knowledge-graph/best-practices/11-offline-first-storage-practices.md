@@ -71,3 +71,69 @@ Why it helps:
 - repositories depend only on the DAO they need
 - fewer broad dependencies
 - easier test replacement
+
+### 11.6 Room KMP setup reference
+
+**Dependencies** (in `shared/core/data/build.gradle.kts`):
+```kotlin
+commonMainApi(libs.androidx.room.runtime)
+commonMainApi(libs.androidx.room.ktx)
+annotationProcessor(libs.androidx.room.compiler)
+```
+
+**Database class** (`commonMain`):
+```kotlin
+@Database(
+    entities = [SampleEntity::class],
+    version = 1,
+    exportSchema = true
+)
+@ConstructedBy(AppDatabaseConstructor::class)
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun sampleDao(): SampleDao
+}
+
+expect object AppDatabaseConstructor : RoomDatabaseConstructor<AppDatabase> {
+    override fun initialize(): AppDatabase
+}
+```
+
+**Android factory** (`androidMain`):
+```kotlin
+fun getRoomDatabase(context: Context): AppDatabase {
+    return Room.databaseBuilder(
+        context.applicationContext,
+        AppDatabase::class.java,
+        "app_database"
+    ).build()
+}
+```
+
+**iOS factory** (`iosMain`):
+```kotlin
+fun getRoomDatabase(): AppDatabase {
+    val dbFile = NSFileManager.defaultManager
+        .URLForDirectory(NSDocumentDirectory, NSUserDomainMask, null, false, null)
+        ?.path?.let { "$it/app_database" } ?: "app_database"
+    return Room.databaseBuilder<AppDatabase>(
+        name = dbFile,
+        factory = { BundledSQLiteDriver() }
+    ).build()
+}
+```
+
+**Schema export** (in `build.gradle.kts`):
+```kotlin
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+```
+
+Best practice:
+
+- export schema files to version control for migration verification
+- use `BundledSQLiteDriver` for iOS (not the Android-only SQLite driver)
+- keep the database class in `shared/core/data`, not in feature modules
+- add new entities and DAOs to the existing `@Database` annotation
+
+> **Reference:** [Android Room KMP documentation](https://developer.android.com/kotlin/multiplatform/room)

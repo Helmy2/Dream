@@ -4,7 +4,7 @@ This approach uses Koin with a composition-root mindset.
 
 Dream-generated modules should use the Koin compiler plugin with Koin DSL registrations for compile-time safety. Do not use annotation-based DI such as `@KoinViewModel`, `@Module`, or `@ComponentScan` in generated feature code unless the user explicitly requests annotation style.
 
-### 17.1 DI starts at the top
+### 18.1 DI starts at the top
 
 Best practice:
 
@@ -15,7 +15,7 @@ Best practice:
 
 Rationale for `Application` over `Activity`: navigation graph resolution, Koin ViewModel injection, and early-lifecycle hooks all depend on the Koin container being available before the first Activity's `onCreate`. Starting Koin in an Activity causes non-deterministic failures when navigation is resolved during Activity construction or when a custom `ContentProvider` (e.g., WorkManager init) needs DI before the Activity exists.
 
-### 17.2 Split DI by layer and platform
+### 18.2 Split DI by layer and platform
 
 Good reusable pattern:
 
@@ -25,13 +25,13 @@ Good reusable pattern:
 - Android and iOS provide product runtime platform factories or implementations through dedicated startup paths
 - composition roots assemble everything together without making exported core modules depend on Compose
 
-### 17.3 Constructor injection everywhere possible
+### 18.3 Constructor injection everywhere possible
 
 Most of the codebase follows constructor injection for repositories, use cases, and view models.
 
 That remains the cleanest default.
 
-### 17.4 Prefer DI-managed ViewModel creation
+### 18.4 Prefer DI-managed ViewModel creation
 
 If a screen state holder is a lifecycle `ViewModel`, register it with the DI container through the dedicated view-model DSL instead of a plain factory.
 
@@ -44,7 +44,7 @@ Best practice:
 - use compiler-plugin DSL imports from `org.koin.plugin.module.dsl.*` when using compile-safe registrations such as `viewModel<FeatureViewModel>()`
 - do not use annotation-based DI such as `@KoinViewModel`, `@Module`, or `@ComponentScan` unless the user explicitly requests annotation style
 
-### 17.5 Feature impl installs Navigation 3 entry providers
+### 18.5 Feature impl installs Navigation 3 entry providers
 
 The feature `impl` Koin module uses the Navigation 3 DSL to register entry provider installers for the feature's screens.
 
@@ -55,7 +55,9 @@ Best practice:
 - `shared/umbrella-ui` imports feature `impl` Koin modules so all navigation installers are available before `NavDisplay` renders
 - do not register navigation entry providers in shared core, app shells, or feature `api` modules
 
-### 17.6 iOS bridge injection is explicit
+> **See also:** [15. Navigation Practices](15-navigation-practices.md) for the full Navigation 3 architecture and [5.6 Feature DI Module boilerplate](05-feature-module-template.md) for the Koin module template.
+
+### 18.6 iOS bridge injection is explicit
 
 `initializeKoin(...)` accepts Swift-provided implementations such as:
 
@@ -66,3 +68,72 @@ Best practice:
 Best practice:
 
 - inject platform services through shared interfaces instead of reaching across boundaries directly
+
+### 18.7 Koin compiler plugin setup reference
+
+**Plugin setup** (in `build-logic/convention/src/main/kotlin/DreamKmpConventionPlugin.kt`):
+```kotlin
+plugins.apply("com.google.devtools.ksp")
+dependencies {
+    add("kspCommonMainMetadata", libs.koin.compiler)
+}
+```
+
+**Module build file** (in `feature/<name>/impl/build.gradle.kts`):
+```kotlin
+plugins {
+    id("app.kmp.koin")
+}
+
+dependencies {
+    commonMainImplementation(libs.koin.core)
+    commonMainImplementation(libs.koin.compose)
+    commonMainImplementation(libs.koin.navigation3)
+}
+```
+
+**Compiler DSL registrations** (in `feature/<name>/impl/src/commonMain/kotlin/.../di/FeatureModule.kt`):
+```kotlin
+import org.koin.dsl.module
+import org.koin.core.module.dsl.viewModel
+import org.koin.core.module.dsl.factory
+import org.koin.compose.navigation.koinNavViewModel
+
+@OptIn(KoinExperimentalAPI::class)
+val featureModule = module {
+    // Repository (singleton)
+    single<FeatureRepository> { FeatureRepositoryImpl(get(), get()) }
+
+    // ViewModel (lifecycle-backed)
+    viewModel { FeatureViewModel(get(), get()) }
+
+    // PresentationMapper (factory — new instance per injection)
+    factory { FeaturePresentationMapper(get()) }
+
+    // Navigation 3 entry providers
+    navigation<FeatureListRoute> {
+        val navigator = koinInject<Navigator>()
+        FeatureListScreen(
+            onNavigateDetail = { id -> navigator.goTo(FeatureDetailRoute(id)) }
+        )
+    }
+}
+```
+
+**Umbrella import** (in `shared/umbrella-ui/src/commonMain/kotlin/.../UiModule.kt`):
+```kotlin
+val UiModule = module {
+    includes(featureModule)
+}
+```
+
+Best practice:
+
+- use `viewModel { }` for ViewModels (provides lifecycle-aware scoping)
+- use `factory { }` for stateless helpers like mappers (new instance per injection)
+- use `single { }` for repositories and shared services (one instance per app)
+- import from `org.koin.plugin.module.dsl.*` for compile-safe registrations
+- do not use `@KoinViewModel`, `@Module`, `@ComponentScan`, or `@ComponentWithoutAnnotation` unless the user explicitly requests annotation style
+- verify DI graph resolves with `./gradlew :shared:umbrella-ui:allTests`
+
+> **Reference:** [Koin KMP documentation](https://insert-koin.io/docs/reference/koin-mp/kmp/)

@@ -26,7 +26,7 @@ Rules:
 - only include states, actions, and tests that Dream is expected to implement in this generation pass
 - mark time-sensitive behavior explicitly when the feature depends on current date, time, or logical period behavior — this is REQUIRED, not optional
 - define minimum design expectations for loading, empty, content, and error states so UI quality is not left implicit — all four states must be defined
-- require test coverage for each architecture layer: domain (model construction, repository contract), data (entity mapping, DAO queries, repository impl), and presentation (ViewModel state transitions)
+- require test coverage for each architecture layer: domain (model construction, repository contract), data (entity mapping, DAO queries, repository impl), and presentation (ViewModel state transitions, PresentationMapper output validation)
 - do not generate a contract with `usesTimeProvider: false` if the feature involves current date, logical month, or any time-derived filter — those are time-sensitive by nature
 - timestamp fields must be named by meaning and unit, such as `createdAtMillis`, `occurredAtMillis`, or `dueAtMillis`; avoid ambiguous names like `date`, `dateTime`, or `dateMillis`
 - choose entity field names before implementation and treat them as stable contract requirements

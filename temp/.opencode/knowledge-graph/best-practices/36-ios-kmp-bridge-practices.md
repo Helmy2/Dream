@@ -26,6 +26,8 @@ Best practice:
 - use the Swift-native enum cases produced by SKIE instead of guessing underscore-suffixed ObjC names
 - verify property and initializer differences when Kotlin symbols collide with NSObject names such as `description`
 
+> **See also:** [37. iOS Xcode Configuration Practices](37-ios-xcode-configuration-practices.md) for framework search path setup and [36.9 Adding new Swift files requires pbxproj registration](36-ios-kmp-bridge-practices.md) for Xcode project file management.
+
 ### 36.4 Export transitive shared types intentionally
 
 Best practice:
@@ -162,7 +164,7 @@ Xcode does not automatically register new `.swift` files added outside the Xcode
 
 Best practice:
 
-- run `ruby .opencode/scripts/sync-pbxproj.rb` from the project root after adding or removing any `.swift` files under `iosApp-swiftui/` — this uses the `xcodeproj` Ruby gem to auto-register orphaned Swift files and remove deleted file references in `project.pbxproj`
+- run `ruby scripts/sync-pbxproj.rb` from the project root after adding or removing any `.swift` files under `iosApp-swiftui/` — this uses the `xcodeproj` Ruby gem to auto-register orphaned Swift files and remove deleted file references in `project.pbxproj`
 - the script finds targets and groups by name, so it works regardless of UUID changes
 - verify the registration with `xcodebuild build` — a missing PBXBuildFile causes the compiler to silently skip the file
 - if the script reports warnings, inspect the pbxproj manually; the gem API handles PBXFileReference, PBXBuildFile, and PBXSourcesBuildPhase entries automatically
@@ -203,3 +205,48 @@ Error fidelity note:
 
 - `RuntimeException(result.error.toString())` loses typed `DomainError` information
 - for MVP this is acceptable; for production, consider mapping domain errors to typed Swift enums at the bridge boundary
+
+### 36.11 SKIE setup reference
+
+**Plugin setup** (in `build-logic/convention/src/main/kotlin/DreamKmpConventionPlugin.kt`):
+```kotlin
+plugins.apply("co.touchlab.skie")
+```
+
+**What SKIE provides:**
+
+- Swift-native enum cases (no underscore-suffixed ObjC names)
+- Async/await wrappers for Kotlin suspend functions
+- Default parameter values in Swift
+- Swift-friendly error handling for Kotlin exceptions
+- Extension function visibility in Swift
+
+**Configuration** (in `shared/umbrella-core/build.gradle.kts`):
+```kotlin
+skie {
+    // Enable Swift-friendly enum bridging
+    enableSwiftEnumFeature()
+    // Enable async/await wrappers for suspend functions
+    enableCoroutineBridgeFeature()
+}
+```
+
+**Verifying generated Swift names:**
+
+After building, inspect the generated Swift header:
+```bash
+# Build the framework
+./gradlew :shared:umbrella-core:linkDebugFrameworkIosArm64
+
+# Inspect generated Swift names
+cat shared/build/xcode-frameworks/Debug-iphonesimulator/SharedCore.framework/Headers/SharedCore-Swift.h
+```
+
+Best practice:
+
+- verify enum case names after adding or renaming Kotlin enums
+- verify async wrapper signatures after changing suspend function parameters
+- check for naming collisions with NSObject properties (e.g., `description`, `debugDescription`)
+- if Swift cannot find a Kotlin type, check the framework export configuration and SKIE output
+
+> **Reference:** [SKIE documentation](https://skie.touchlab.co/)

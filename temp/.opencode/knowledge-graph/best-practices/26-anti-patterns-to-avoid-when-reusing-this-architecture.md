@@ -23,3 +23,6 @@ These are the main things to avoid in future projects, even if traces of them ex
 - do not spread Kotlin-to-Swift mapping logic across SwiftUI views — keep it in a dedicated bridge boundary
 - do not make native SwiftUI hosts start shared Compose-oriented DI if a narrow iOS factory function is sufficient
 - do not rely on ObjC-shaped API guesses in Swift when SKIE provides a native Swift surface — verify the generated Swift names for enum cases, async wrappers, and constructor labels
+- do not place feature-specific mappers (Entity → DomainModel) in `shared/core/data/mapper/` — they belong in `feature/<name>/data/.../mapper/`; the shared data module owns entities and DAOs, not domain-bound mappers
+- do not use `viewModel { }` lambda syntax in Koin compiler plugin DSL — use `viewModel<T>()` syntax exclusively; the lambda form is unsupported and produces cryptic compilation errors
+- do not create mappers with hardcoded `SystemTimeProvider()` in composable functions — inject `TimeProvider` via Koin `factory` into the ViewModel and pass it to the mapper

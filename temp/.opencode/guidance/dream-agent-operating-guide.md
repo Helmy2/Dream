@@ -126,7 +126,7 @@ The code-writing agents (`dream-implementer`, `dream-implementer-android`, `drea
 - replace sample feature content with real feature content when appropriate
 - reuse shared core, design system, navigation, and build-logic modules where possible
 - avoid collapsing the modular template into a simpler but less enforceable structure
-- remove the `feature/sample` module from the generated app once the first real feature fully replaces it (run `./.opencode/scripts/remove-sample.sh`), unless a temporary scaffolding exception is explicitly documented
+- remove the `feature/sample` module from the generated app once the first real feature fully replaces it (run `./scripts/remove-sample.sh`), unless a temporary scaffolding exception is explicitly documented
 
 The code-writing agents should not:
 
@@ -151,7 +151,7 @@ The default OpenCode-first Dream workflow is:
 11. `dream-designer` produces `.features/<feature>/ui-spec.md` from the feature contract.
 12. `dream-implementer` implements the KMP business layer: domain, data, api, and their tests, then wires feature modules into umbrella imports and DI registration.
 13. `dream-implementer-android` implements the Jetpack Compose UI layer: screens, ViewModels, Koin navigation, tests.
-14. `dream-implementer-ios` implements the native SwiftUI layer: views, ViewModels, bridge, XCTest. After adding or removing any Swift files, runs `ruby .opencode/scripts/sync-pbxproj.rb` to sync the Xcode project file.
+14. `dream-implementer-ios` implements the native SwiftUI layer: views, ViewModels, bridge, XCTest. After adding or removing any Swift files, runs `ruby scripts/sync-pbxproj.rb` to sync the Xcode project file.
 15. `dream-tester` runs the full verification ladder: unit tests, platform builds, device install/launch, Maestro flows.
 16. `dream-implementer`, `dream-implementer-android`, or `dream-implementer-ios` repairs failures (per layer) until green, blocked, or a skip condition is met (see Skip Conditions).
 17. `dream-inspector` reviews substantial generation or repair work before validated success is reported.
@@ -185,7 +185,7 @@ If backend is enabled, contracts should also define:
 
 Implementation must map each contract action, state, entity field, and required test to code and test coverage explicitly. Green commands alone are not sufficient stop conditions. Dream should confirm contract-to-code parity, required test coverage, and final review status before reporting validated success.
 
-Dependency assembly must stay in stable composition roots. Generated feature modules should use Koin compiler plugin DSL registration for repositories, ViewModels, and Navigation 3 entries. Do not use annotation-based Koin DI such as `@KoinViewModel`, `@Module`, or `@ComponentScan` by default.
+Dependency assembly must stay in stable composition roots. Generated feature modules should use Koin compiler plugin DSL registration for repositories, ViewModels, and Navigation 3 entries. Do not use annotation-based Koin DI such as `@KoinViewModel`, `@Module`, or `@ComponentScan` by default. Koin compiler plugin DSL requires `viewModel<T>()` syntax — the `viewModel { }` lambda syntax is not supported and will cause cryptic compilation errors.
 
 Navigation must stay centralized while route ownership stays local. Shared navigation should operate on `androidx.navigation3.runtime.NavKey`, and concrete destination route types should live in `feature/<name>/api`. Screens, ViewModels, and Koin Navigation 3 entry providers should live in `feature/<name>/impl`. Other features or the app shell navigate to this feature by depending only on `feature/<name>/api`; nothing outside the feature depends on `feature/<name>/impl`.
 
@@ -201,7 +201,8 @@ Feature implementation should:
 - create or update `feature/<name>/data`
 - create or update `feature/<name>/api` with `NavKey` route types; no Koin definitions in `api`
 - create or update `feature/<name>/impl` with screens, ViewModels, UI state/actions/events, and the Koin module that installs Navigation 3 entry providers
-- keep domain-to-UI mapping in `impl`
+- keep domain-to-UI mapping in `impl`: inject PresentationMapper into ViewModels via Koin `factory`, not into composable views via `remember { }`
+- expose UI models (not domain types) in ViewModel state; composable views receive already-mapped data and perform zero domain-to-UI transformation
 - keep feature screens wired into the centralized shell through `impl` Koin navigation entries
 
 If shared behavior appears across features, move it into the appropriate shared module instead of duplicating it. A feature may reuse another feature's domain contract when it is an explicit aggregator or dependent workflow, but `feature/<name>/impl` must not depend directly on another feature's `impl`. Cross-feature navigation goes through the target feature's `api`. Cross-feature data implementation reuse is a temporary exception for MVP work and must be recorded in `.features/decisions.yaml`; extract to shared modules when two features equally own the same persisted concept.
@@ -239,8 +240,8 @@ Before implementation is treated as verification-ready, run environment prefligh
 
 Final validation should then exercise the real product targets:
 
-1. Android CLI (`https://developer.android.com/tools/agents/android-cli`) for Android environment checks, emulator/device setup, APK install, launch, layout/screenshot inspection, and log capture.
-2. `xcodebuild` plus `xcrun simctl` for iOS simulator build, install, launch, logs, and crash capture.
+1. Android CLI (`https://developer.android.com/tools/agents/android-cli`) for Android environment checks, emulator/device setup, APK install, launch, layout/screenshot inspection, and log capture. Uninstall the app before installing a new build (`adb uninstall <package>`) to avoid stale on-device data interfering with schema or migration changes.
+2. `xcodebuild` plus `xcrun simctl` for iOS simulator build, install, launch, logs, and crash capture. Uninstall the app before installing a new build (`xcrun simctl uninstall <device> <bundle-id>`) to avoid stale on-device data interfering with schema or migration changes.
  3. Feature-owned Maestro Android smoke flows for every user-visible generated or touched feature after Android launches cleanly.
  4. Feature-owned Maestro iOS smoke flows for every user-visible generated or touched feature where reliable after iOS launches cleanly.
 

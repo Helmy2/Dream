@@ -31,7 +31,7 @@ Architecture rules you must enforce:
 - domain stays pure Kotlin
 - repository interfaces live in domain
 - repository implementations and transport or persistence mapping live in data
-- domain-to-UI mapping lives in presentation
+- domain-to-UI mapping lives in presentation — inject PresentationMapper into ViewModels via Koin `factory`, not into composable views via `remember { }`
 - navigation stays centralized
 - concrete Navigation 3 route types live in `feature/<name>/api` as `NavKey` types; screens, ViewModels, and Koin navigation entry installers live in `feature/<name>/impl`
 - nothing outside the feature depends on `feature/<name>/impl`; cross-feature navigation goes through `feature/<name>/api`
@@ -49,7 +49,7 @@ Implementation rules:
 - create or update `feature/<name>/domain`
 - create or update `feature/<name>/data`
 - create or update `feature/<name>/api` with `NavKey` route types; no Koin definitions in `api`
-- create or update `feature/<name>/impl` with screens, ViewModels, UI state/actions/events, and the Koin module that installs Navigation 3 entry providers
+- create or update `feature/<name>/impl` with screens, ViewModels, UI models (state/actions/events/items), UI state must hold UI models not domain types, and the Koin module that installs Navigation 3 entry providers
 - add or update tests for the feature
 - prefer minimal correct changes
 - keep shared infrastructure in shared modules
@@ -87,7 +87,8 @@ Test requirements:
 - **Data tests**: When Room is the storage layer, create `feature/<name>/data/src/commonTest/.../EntityMappingTest.kt` — verify entity-to-domain and domain-to-entity mapping. Do not require Android-only in-memory Room from `commonTest`; use fake DAO/database interfaces for repository behavior unless a real KMP Room test setup is already proven in the template.
 - **Repository tests**: Create `feature/<name>/data/src/commonTest/.../RepositoryImplTest.kt` — verify the repository implementation(s) using fake DAO/database boundaries or reliable KMP in-memory storage.
 - **Room migrations**: For first-pass local MVP iteration, the shared Room builder may use destructive migration fallback to recover from stale local test schemas. If the contract requires preserving existing local data, add real migrations and document why destructive recovery is not acceptable.
-- **Presentation tests**: Create `feature/<name>/impl/src/commonTest/.../ViewModelTest.kt` — verify loading → content, loading → empty, loading → error transitions, action handling, and event emission.
+- **Presentation mapper tests**: Create `feature/<name>/impl/src/commonTest/.../PresentationMapperTest.kt` — verify each format/map method produces the expected UI output. Test edge cases (zero values, negative values, locale-independent formatting).
+- **Presentation tests**: Create `feature/<name>/impl/src/commonTest/.../ViewModelTest.kt` — verify loading → content, loading → empty, loading → error transitions, action handling, and event emission. Verify that ViewModel state exposes UI model types (not domain types) in content states.
 - **Presentation tests**: Use reusable main dispatcher setup with `@BeforeTest` and `@AfterTest` when `Dispatchers.Main` is needed. Prefer Turbine or an explicit flow-testing pattern for ordered state transition assertions.
 - **Time-sensitive tests**: Use `FakeTimeProvider` from `shared/core/testing` or an equivalent fixed-time fake for behavior involving current time, date filters, timestamps, formatting, or logical periods. Use `kotlinx-datetime` helpers for readable date and month construction instead of unexplained raw epoch values.
 - **Test dependencies**: Ensure every module's `build.gradle.kts` declares the dependencies required by its tests, including `kotlin("test")` and `shared/core/testing` where reusable fakes are needed. Add these BEFORE writing tests.

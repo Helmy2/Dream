@@ -25,6 +25,8 @@ Why this is good:
 - less stringly-typed navigation
 - a direct path to serializable route keys when destinations need arguments or saved back stacks
 
+> **See also:** [18.5 Feature impl installs Navigation 3 entry providers](18-dependency-injection-practices.md) for the Koin navigation entry pattern.
+
 ### 15.3 Navigator owns the back stack
 
 Shared navigation should expose a small `Navigator` with a mutable back stack and intent-level operations such as `goTo()` and `goBack()`.
@@ -48,7 +50,7 @@ Best practice:
 
 ### 15.5 Dependency direction for navigation
 
-```
+```text
 other modules  -->  feature/<name>/api  (route types only)
 feature/<name>/impl  -->  feature/<name>/api  (installs navigation entry)
 shared/umbrella-ui  -->  feature/<name>/impl  (aggregates Koin navigation installers)
@@ -63,3 +65,78 @@ A well-structured app should clearly separate:
 - push destinations without persistent navigation chrome
 
 This app-shell rule improves consistency as the graph grows.
+
+### 15.7 Navigation 3 setup reference
+
+**Dependencies** (in `shared/navigation/build.gradle.kts`):
+```kotlin
+commonMainApi(libs.androidx.navigation3.runtime)
+commonMainApi(libs.androidx.navigation3.ui)
+commonMainApi(libs.androidx.navigation3.koin)
+```
+
+**Route definition** (in `feature/<name>/api`):
+```kotlin
+import androidx.navigation3.runtime.NavKey
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object SampleListRoute : NavKey
+
+@Serializable
+data class SampleDetailRoute(val id: String) : NavKey
+```
+
+**Navigator** (in `shared/navigation`):
+```kotlin
+class Navigator {
+    private val _backStack = mutableStateListOf<NavKey>(SampleListRoute)
+    val backStack: List<NavKey> = _backStack
+
+    fun goTo(route: NavKey) { _backStack.add(route) }
+    fun goBack() { if (_backStack.size > 1) _backStack.removeLast() }
+}
+```
+
+**NavDisplay** (in `shared/navigation` or app shell):
+```kotlin
+@Composable
+fun AppNavigation(navigator: Navigator) {
+    NavDisplay(
+        backStack = navigator.backStack,
+        onBack = { navigator.goBack() },
+        entryProvider = entryProvider {
+            // Entry providers are installed by feature Koin modules
+        }
+    )
+}
+```
+
+**Koin navigation entry** (in `feature/<name>/impl`):
+```kotlin
+@OptIn(KoinExperimentalAPI::class)
+val sampleUiModule = module {
+    navigation<SampleListRoute> {
+        val navigator = koinInject<Navigator>()
+        SampleListScreen(
+            onNavigateDetail = { id -> navigator.goTo(SampleDetailRoute(id)) }
+        )
+    }
+    navigation<SampleDetailRoute> { route ->
+        val navigator = koinInject<Navigator>()
+        SampleDetailScreen(
+            sampleId = route.id,
+            onNavigateBack = { navigator.goBack() }
+        )
+    }
+}
+```
+
+Best practice:
+
+- keep route types serializable for saved state support
+- keep `NavKey` implementations as `data object` (no args) or `data class` (with args)
+- install navigation entries in feature `impl` Koin modules, not in shared core
+- aggregate all feature Koin modules in `shared/umbrella-ui` before `NavDisplay` renders
+
+> **Reference:** [Android Navigation 3 documentation](https://developer.android.com/develop/ui/compose/navigation/navigation3)

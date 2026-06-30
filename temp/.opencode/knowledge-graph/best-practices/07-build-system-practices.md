@@ -7,7 +7,7 @@ Key practice:
 - centralize plugin and toolchain setup
 - keep feature dependencies explicit inside each module
 
-### 6.1 Convention plugin philosophy
+### 7.1 Convention plugin philosophy
 
 The convention plugins are most useful when they stay narrow:
 
@@ -22,7 +22,7 @@ Best practice to copy:
 
 This makes module contracts readable during code review.
 
-### 6.2 Typesafe project accessors
+### 7.2 Typesafe project accessors
 
 `settings.gradle.kts` enables `TYPESAFE_PROJECT_ACCESSORS`.
 
@@ -32,7 +32,7 @@ Why it is good:
 - improves autocompletion
 - makes refactors safer
 
-### 6.3 Module build files should stay small
+### 7.3 Module build files should stay small
 
 Good example from this project:
 

@@ -18,7 +18,9 @@ Use this checklist when adding or replacing a Dream feature module.
 - [ ] For multi-word features, keep folder paths, Gradle module names, and Kotlin packages aligned; prefer package-mirroring directories such as `feature/expense/details` with `feature.expense.details`.
 - [ ] Add feature includes to `settings.gradle.kts`.
 - [ ] Keep repository interfaces in domain and implementations in data.
-- [ ] Keep domain-to-UI mapping in `impl`.
+- [ ] Keep domain-to-UI mapping in `impl`: inject PresentationMapper into ViewModels via Koin `factory` — do not create mappers in composables via `remember { }`.
+- [ ] Expose UI models (not domain types) in ViewModel state; composable views receive already-mapped data and perform zero domain-to-UI transformation.
+- [ ] Add unit tests for PresentationMapper — verify each format/map method produces the expected UI output.
 - [ ] If reusing another feature's domain or data layer, document the reason in `.features/decisions.yaml`; extract to shared modules when ownership is equal or repeated.
 - [ ] No module outside this feature should depend on `feature/<feature-name>/impl`; callers use `api` only.
 
@@ -29,7 +31,7 @@ Use this checklist when adding or replacing a Dream feature module.
 - [ ] Keep shared navigation centralized in `shared/navigation`; it must not depend on feature `api` or `impl` modules.
 - [ ] Import feature `impl` Koin modules in `shared/umbrella-ui` so that navigation entry providers are registered before `NavDisplay` renders.
 - [ ] Register data/domain dependencies in `shared/umbrella-core` or the appropriate non-Compose composition root.
-- [ ] Use Koin compiler plugin DSL registrations; do not use annotation-based DI such as `@KoinViewModel`, `@Module`, or `@ComponentScan`.
+- [ ] Use Koin compiler plugin DSL registrations; do not use annotation-based DI such as `@KoinViewModel`, `@Module`, or `@ComponentScan`. Use `viewModel<T>()` syntax — the `viewModel { }` lambda syntax is not supported.
 - [ ] Apply `libs.plugins.koinCompiler` in modules that use compiler DSL registrations.
 - [ ] Call shared guarded Koin startup from host apps; do not call `startKoin` directly from multiple platform entry points.
 - [ ] Keep repositories, use cases, and ViewModels out of recomposing composable bodies.
@@ -82,21 +84,21 @@ Apply these items only when `iosUiStrategy` is `swiftui`:
 - [ ] Add or update XCTest coverage in `iosAppTests/<FeatureName>/` for native ViewModel state transitions and bridge wiring.
 - [ ] Add all user-visible SwiftUI string keys to `iosApp-swiftui/iosApp/Localizable.xcstrings` with matching English values from `strings.xml`. Use `ios_` infix for iOS-only strings.
 - [ ] Verify the shared Xcode scheme includes all new files and the test target discovers them.
-- [ ] Run `ruby .opencode/scripts/sync-pbxproj.rb` from the project root after adding or removing `.swift` files to register them in `project.pbxproj`.
+- [ ] Run `ruby scripts/sync-pbxproj.rb` from the project root after adding or removing `.swift` files to register them in `project.pbxproj`.
 - [ ] Run `xcodebuild build` and `xcodebuild test` as part of structural validation for the iOS host.
 
 ## Sample Removal
 
-- [ ] Run `./.opencode/scripts/remove-sample.sh --dry-run` first to preview what will be removed.
-- [ ] Run `./.opencode/scripts/remove-sample.sh` to delete sample files, strip sample deps from build configs, and check for leftovers.
+- [ ] Run `./scripts/remove-sample.sh --dry-run` first to preview what will be removed.
+- [ ] Run `./scripts/remove-sample.sh` to delete sample files, strip sample deps from build configs, and check for leftovers.
 - [ ] Complete the manual edits listed in the script's "Next Steps" output (CoreModule, UiModule, host entry points, ContentView, AppDependencies, SharedCoreBridge, string resources).
 - [ ] Update `AGENTS.md`, `README.md`, and `maestro/README.md` verification commands and module listings.
-- [ ] Run `./.opencode/scripts/remove-sample.sh --dry-run` again to confirm no leftovers remain.
+- [ ] Run `./scripts/remove-sample.sh --dry-run` again to confirm no leftovers remain.
 
 ## Preflight
 
 - [ ] Verify the generated project is a git repository before feature work depends on git commands.
-- [ ] Run `./.opencode/scripts/dream-preflight.sh` from the project root and record any blockers.
+- [ ] Run `./scripts/dream-preflight.sh` from the project root and record any blockers.
 - [ ] Verify `git status`, `git diff`, and `git log --oneline -10` work before the commit stage.
 - [ ] Verify Android SDK readiness early with `ANDROID_HOME` or the configured SDK path before Android verification is treated as code-ready.
 - [ ] Verify Maestro is installed or document it as an environment blocker before smoke validation.

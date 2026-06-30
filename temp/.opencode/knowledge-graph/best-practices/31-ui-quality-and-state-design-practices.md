@@ -57,3 +57,5 @@ Reusable principle:
 
 - shared strings are the single source of truth for user-facing text across supported platforms (Android and iOS)
 - hardcoded strings in Compose code will not be translated, cannot be reviewed centrally, and violate the template's localization strategy
+
+> **See also:** [17. Resource And Localization Practices](17-resource-and-localization-practices.md) for the strings-first workflow and [39. iOS String Localization Practices](39-ios-string-localization-practices.md) for iOS xcstrings sync.

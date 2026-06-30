@@ -2,7 +2,7 @@
 
 These are among the most valuable practices to carry into another project.
 
-### 5.1 Strict dependency direction
+### 6.1 Strict dependency direction
 
 - `feature:x:domain` should depend only on shared pure core modules such as `shared:core:domain`
 - `feature:x:data` should depend on its own `domain` plus shared runtime infrastructure
@@ -11,7 +11,7 @@ These are among the most valuable practices to carry into another project.
 - no module outside a feature should depend on `feature:x:impl`
 - other features that navigate to feature X depend on `feature:x:api` only
 
-### 5.2 Aggregator exception pattern
+### 6.2 Aggregator exception pattern
 
 A useful exception pattern is allowing one aggregator-style feature:
 
@@ -23,7 +23,7 @@ Best rule to copy:
 
 - if a feature aggregates other features, let it depend only on their pure domain contracts
 
-### 5.3 Project-specific exception to review before copying
+### 6.3 Project-specific exception to review before copying
 
 In some codebases, one feature data module may end up depending on another feature's data and domain modules.
 
