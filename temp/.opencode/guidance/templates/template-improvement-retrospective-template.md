@@ -39,6 +39,10 @@ Use this when a generated feature exposes reusable Dream template friction, reli
 
 - `<feature boundary, reuse, extraction, DI, navigation, or data ownership lesson>`
 
+### Token Optimization Lessons
+
+- `<context loading, verification efficiency, output structure, or agent workflow lesson>`
+
 ## Recommended Template Improvements
 
 ### High Priority
@@ -52,6 +56,29 @@ Use this when a generated feature exposes reusable Dream template friction, reli
 ### Low Priority
 
 - `<nice-to-have or documentation-only improvement>`
+
+## Token Optimization Recommendations
+
+### Agent Efficiency
+
+- `<recommendation for improving agent context loading>`
+- `<recommendation for reducing redundant file reads>`
+- `<recommendation for better tiered loading>`
+
+### Verification Efficiency
+
+- `<recommendation for incremental verification>`
+- `<recommendation for skipping unnecessary checks>`
+
+### Output Structure
+
+- `<recommendation for streamlining outputs>`
+- `<recommendation for combining related files>`
+
+### Context Management
+
+- `<recommendation for context compaction>`
+- `<recommendation for fresh subagent invocation>`
 
 ## Suggested Template Defaults To Add
 
