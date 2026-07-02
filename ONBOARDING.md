@@ -86,7 +86,7 @@ sequenceDiagram
     General->>Project: Write .features/decisions.yaml
     General->>Project: Write feature contract and test plan
     General->>Designer: Phase 0.5: produce ui-spec.md
-    Designer->>Project: Write .features/&lt;feature&gt;/ui-spec.md
+    Designer->>Project: Write .features/<feature>/ui-spec.md
     General->>Impl: Phase 1: KMP foundation (domain, data, api)
     Impl->>Project: Add domain entities, repos, data layer, route types, tests
     par Phase 2: UI in parallel
