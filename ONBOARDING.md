@@ -24,11 +24,10 @@ flowchart TD
 ## Repository Map
 
 - `dream-init`: initializer entry point that copies and renames `temp/`.
-- `AI_MVP_BUILDER_PLAN.md`: compact product tracker and current priorities.
 - `AGENTS.md`: repository-level working rules for agents and contributors.
 - `ONBOARDING.md`: this entry-level guide.
 - `temp/`: canonical Kotlin Multiplatform starter project.
-- `temp/.opencode/`: packaged OpenCode config, agents (10 agents: dream-general, dream-context-scout, dream-explore, dream-search, dream-designer, dream-implementer, dream-implementer-android, dream-implementer-ios, dream-tester, dream-inspector), commands, and prompt guidance.
+- `temp/.opencode/`: packaged OpenCode config, agents (7 agents: dream-general, dream-research, dream-designer, dream-implementer, dream-implementer-ui, dream-tester, dream-inspector), commands, and prompt guidance.
 - `temp/.opencode/knowledge-graph/`: reusable architecture rules and retrieval sources.
 - `temp/.features/`: generated app contracts, feature specs, decisions, reports, and retrospectives.
 - `temp/maestro/`: Android and iOS smoke-flow scaffolding.
@@ -39,7 +38,6 @@ flowchart TD
 ```mermaid
 flowchart LR
     Root[Dream repo root] --> Init[dream-init]
-    Root --> Plan[AI_MVP_BUILDER_PLAN.md]
     Root --> Temp[temp/ canonical starter]
     Temp --> Apps[androidApp / iosApp-compose / iosApp-swiftui]
     Temp --> Shared[shared/*]
@@ -69,19 +67,19 @@ Dream follows a contract-first flow. Code should not be generated before the rel
 sequenceDiagram
     participant User
     participant General as dream-general
-    participant Scout as dream-context-scout
-    participant Search as dream-search
+    participant Research as dream-research
     participant Designer as dream-designer
     participant Impl as dream-implementer
-    participant ImplA as dream-implementer-android
-    participant ImplI as dream-implementer-ios
+    participant ImplUI as dream-implementer-ui
     participant Tester as dream-tester
     participant Inspector as dream-inspector
     participant Project as Generated Project
 
     User->>General: Plain product request
-    General->>Scout: Gather context pack (on-demand)
-    General->>Search: External research (on-demand)
+    General->>Research: Gather context (on-demand)
+    General->>Project: Phase 0: Write .features/<feature>/plan.md
+    General->>User: Present plan for review
+    User->>General: Confirm, edit, or deny
     General->>Project: Write .features/app-contract.yaml
     General->>Project: Write .features/decisions.yaml
     General->>Project: Write feature contract and test plan
@@ -90,11 +88,9 @@ sequenceDiagram
     General->>Impl: Phase 1: KMP foundation (domain, data, api)
     Impl->>Project: Add domain entities, repos, data layer, route types, tests
     par Phase 2: UI in parallel
-        General->>ImplA: Android Compose UI
-        General->>ImplI: iOS SwiftUI
+        General->>ImplUI: Android Compose + iOS SwiftUI (platform: both)
     end
-    ImplA->>Project: Compose screens, ViewModels, Koin nav, tests
-    ImplI->>Project: SwiftUI views, ViewModels, bridge, XCTest
+    ImplUI->>Project: Compose screens, SwiftUI views, ViewModels, bridge, tests
     General->>Project: Phase 3: wiring (umbrella, DI, nav)
     General->>Tester: Phase 4: full verification ladder
     Tester->>Project: Gradle tests, platform builds, device launch, Maestro flows
@@ -110,6 +106,7 @@ Required generated artifacts:
 
 - `.features/app-contract.yaml`
 - `.features/decisions.yaml`
+- `.features/<feature>/plan.md`
 - `.features/<feature>/contract.yaml`
 - `.features/<feature>/ui-spec.md`
 - `.features/<feature>/test-plan.md`
@@ -322,16 +319,17 @@ Use `temp/.opencode/guidance/templates/verification-report-template.md` for the 
 
 Dream orchestrates feature work in phases through `dream-general`. When adding or replacing a feature:
 
-1. **Phase 0 — Research (on-demand):** Use `dream-search` for external library research, API docs, or troubleshooting. Use `dream-context-scout` for focused context packs.
-2. **Create or update the feature contract first.** Write `.features/<feature>/contract.yaml` and `.features/<feature>/test-plan.md`.
-3. **Phase 0.5 — Design:** Use `dream-designer` to produce `.features/<feature>/ui-spec.md` — view states, design-system components, layout, interactions.
-4. **Phase 1 — KMP foundation:** Use `dream-implementer` for `feature/<name>/domain` (entities, repository interfaces, use cases), `feature/<name>/data` (repo implementations, DTOs, mappers), and `feature/<name>/api` (NavKey route types only). No UI.
-5. **Phase 2 — UI in parallel:** Deploy `dream-implementer-android` for Compose screens, ViewModels, Koin navigation installers, and presentation tests in `feature/<name>/impl`. Deploy `dream-implementer-ios` for SwiftUI views, ViewModels, bridge code, and XCTest coverage.
-6. **Phase 3 — Wiring:** Consolidate umbrella module imports, DI registration, and navigation entries.
-7. **Phase 4 — Verification:** Use `dream-tester` for the full verification ladder — Gradle unit tests, platform builds, device install/launch, log inspection, Maestro smoke flows.
-8. Write reports using the templates under `temp/.opencode/guidance/templates/`.
-9. Request `dream-inspector` QA gate for substantial work — architecture violations, contract parity, test coverage, anti-patterns.
-10. Only commit when verification and review are clean and staging is safe.
+1. **Phase 0 — Plan & User Review:** `dream-general` produces `.features/<feature>/plan.md`, presents it to the user, and gets explicit confirmation before proceeding.
+2. **Phase 1 — Research (on-demand):** Use `dream-research` for codebase discovery, external library research, API docs, or troubleshooting.
+3. **Phase 2 — Contract:** Create or update the feature contract. Write `.features/<feature>/contract.yaml` and `.features/<feature>/test-plan.md`.
+4. **Phase 3 — Design:** Use `dream-designer` to produce `.features/<feature>/ui-spec.md` — view states, design-system components, layout, interactions.
+5. **Phase 4 — KMP foundation:** Use `dream-implementer` for `feature/<name>/domain` (entities, repository interfaces, use cases), `feature/<name>/data` (repo implementations, DTOs, mappers), and `feature/<name>/api` (NavKey route types only). No UI.
+6. **Phase 5 — UI:** Deploy `dream-implementer-ui` for cross-platform UI — Compose screens, ViewModels, Koin navigation installers, presentation tests, SwiftUI views, bridge code, and XCTest coverage.
+7. **Phase 6 — Wiring:** Consolidate umbrella module imports, DI registration, and navigation entries.
+8. **Phase 7 — Verification:** Use `dream-tester` for the full verification ladder — Gradle unit tests, platform builds, device install/launch, log inspection, Maestro smoke flows.
+9. Write reports using the templates under `temp/.opencode/guidance/templates/`.
+10. Request `dream-inspector` QA gate for substantial work — architecture violations, contract parity, test coverage, anti-patterns.
+11. Only commit when verification and review are clean and staging is safe.
 
 Use `temp/.opencode/guidance/new-feature-checklist.md` as the operational checklist.
 
@@ -354,10 +352,10 @@ The current template guidance explicitly calls out these cleanup checks because 
 
 When changing Dream rather than a generated app:
 
-- update `AI_MVP_BUILDER_PLAN.md` if workflow, priorities, or success criteria change
+- update `temp/.opencode/guidance/dream-agent-operating-guide.md` if workflow, priorities, or success criteria change
 - update `temp/.opencode/guidance/prompts/` when generation or verification behavior changes
 - update `temp/.opencode/knowledge-graph/best-practices/` when architecture rules change
-- update `temp/README.md` and `temp/AGENTS.md` when starter structure or validation commands change
+- update `temp/AGENTS.md` when starter structure or validation commands change
 - keep root docs compact and link to detailed guidance rather than duplicating every rule
 
 ## Current Follow-Ups

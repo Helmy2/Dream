@@ -5,6 +5,8 @@ Dream is a local-first AI app builder for Kotlin Multiplatform. It packages a re
 ## Repository Structure
 
 - `temp/` — Canonical Kotlin Multiplatform starter project copied by the initializer
+- `temp/.features/` — Generated app contracts, feature specs, decisions, reports, and retrospectives
+- `temp/maestro/` — Android and iOS smoke-flow scaffolding
 - `dream-init` — Initializer script that copies and renames `temp/` into a new project
 - `ONBOARDING.md` — Human-readable guide to the project architecture, workflow, and validation model
 - `AGENTS.md` — Repository-level working rules for agents and contributors
@@ -24,11 +26,11 @@ cd temp
 
 Read in order:
 
-1. `AI_MVP_BUILDER_PLAN.md` — Product tracker and current priorities
-2. `ONBOARDING.md` — Architecture, workflow, and validation model
-3. `temp/AGENTS.md` — Starter project agent instructions
-4. `temp/.opencode/guidance/opencode-agent-map.md` — Agent roles
-5. `temp/.opencode/guidance/dream-agent-operating-guide.md` — Operating workflow
+1. `ONBOARDING.md` — Architecture, workflow, and validation model
+2. `temp/AGENTS.md` — Starter project agent instructions
+3. `temp/.opencode/guidance/opencode-agent-map.md` — Agent roles
+4. `temp/.opencode/guidance/dream-agent-operating-guide.md` — Operating workflow
+5. `temp/.opencode/knowledge-graph/README.md` — Architecture rules and source graph
 
 ## Status
 
