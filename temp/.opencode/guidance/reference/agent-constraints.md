@@ -9,34 +9,30 @@
 - Do not fix compilation errors directly — identify the failing layer and delegate
 - Do not commit blocked, partial, unreviewed, or unsafe worktree states
 - Never amend, force push, reset, or revert unrelated changes unless user explicitly requests
+- **Do not skip Phase 0 (Plan & User Review)** — the plan must be written and user-confirmed before any implementation, research, or design begins
+- **Do not commit directly to main** — create a feature branch after Phase 0, commit to the branch, and only merge to main after user confirmation
+- **Do not merge without user approval** — present merge summary and get explicit confirmation before squash-merging
 
 ## dream-implementer
 
-- Do not write UI code — delegate to `dream-implementer-android` and `dream-implementer-ios`
-- Do not modify `feature/<name>/impl` — owned by `dream-implementer-android`
-- Do not modify `iosApp-swiftui/` — owned by `dream-implementer-ios`
+- Do not write UI code — delegate to `dream-implementer-ui`
+- Do not modify `feature/<name>/impl` — owned by `dream-implementer-ui`
+- Do not modify `iosApp-swiftui/` — owned by `dream-implementer-ui`
 - Do not collapse the modular template
 - Do not move business logic into host app modules
 - Do not introduce cross-feature coupling by default
 - Do not claim verified unless `dream-general` coordinated verification
 - Do not commit directly unless `dream-general` completed verification and review
 
-## dream-implementer-android
+## dream-implementer-ui
 
 - Do not modify domain, data, or api modules — owned by `dream-implementer`
-- Do not modify iOS files — owned by `dream-implementer-ios`
 - Do not introduce cross-feature `impl`-to-`impl` coupling
-- Do not claim complete without iOS surface
+- Do not claim complete without both platform surfaces (when platform=both)
 - Do not commit directly
-
-## dream-implementer-ios
-
-- Do not modify Kotlin source files — owned by `dream-implementer` or `dream-implementer-android`
-- Do not modify shared domain or data logic
-- Do not introduce cross-feature coupling
-- Do not commit directly
+- When platform=android: do not modify iOS files
+- When platform=ios: do not modify Kotlin source files, do not modify shared domain or data logic
 - Do not use hardcoded string literals for user-visible text
-- Do not claim complete without Android surface
 
 ## dream-tester
 
@@ -56,7 +52,7 @@
 - Do not write any code
 - Do not act as final reviewer
 
-## dream-explore, dream-context-scout, dream-search
+## dream-research
 
 - Do not edit files
 - Do not perform repair

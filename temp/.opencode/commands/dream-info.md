@@ -55,9 +55,12 @@ Present as a clean terminal-friendly summary:
 ├──────────────────┼─────────────────────────────────────────────────┤
 │ /dream-create    │ Create a Dream MVP project from user request    │
 │ /dream-feature   │ Add or update a feature in existing project     │
+│ /dream-ui-fix    │ Fix visual, layout, and rendering issues        │
+│ /dream-bug-fix   │ Fix logic, crash, runtime, data, state bugs     │
 │ /dream-verify    │ Verification and repair workflow                │
 │ /dream-review    │ Architecture and contract compliance review     │
 │ /dream-improve   │ Apply unapplied retrospectives to template      │
+│ /dream-resume    │ Resume a Dream session from saved state         │
 │ /dream-init      │ Initialize .features/ directory structure       │
 │ /dream-info      │ Display this overview                           │
 └──────────────────┴─────────────────────────────────────────────────┘
@@ -74,8 +77,7 @@ Present as a clean terminal-friendly summary:
 │ AGENT                │ ROLE                                      │
 ├──────────────────────┼───────────────────────────────────────────┤
 │ dream-general        │ Orchestrator — interprets requests...     │
-│ dream-context-scout  │ Focused read-only context packs           │
-│ dream-explore        │ Fast codebase discovery                   │
+│ dream-discovery      │ Fast codebase discovery + context packs   │
 │ dream-search         │ External technical research               │
 │ dream-designer       │ Translates contracts to UI specs          │
 │ dream-implementer    │ KMP business foundation (domain/data/api) │

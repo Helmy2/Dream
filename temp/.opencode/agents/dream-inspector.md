@@ -39,11 +39,76 @@ You are `dream-inspector`. Review Dream work as the final QA gate.
 - Verify time-sensitive behavior uses `TimeProvider` and tests use `FakeTimeProvider`
 - Verify each required test is present or explicitly blocked
 - Verify verification report uses correct status buckets
+- Read `.features/<feature>/ui-spec.md` and verify UI spec compliance (states match spec, components present)
 - When first real feature exists, grep for leftover sample artifacts
 - Use mobile-mcp to verify UI renders correctly (screenshot + element tree)
 
-## Output
+## Output Format
 
-- `APPROVED` when clean
-- Itemized defect list with concrete file references otherwise
-- `INSPECTOR_FAILED: <precise error>` if tool-level failure prevents review
+### When Clean
+
+Return: `APPROVED`
+
+### When Defects Found
+
+Return itemized defect list with **concrete fix suggestions**:
+
+```yaml
+defects:
+  - severity: critical | warning | info
+    file: <path-to-file>
+    line: <line-number>
+    issue: <clear-description-of-problem>
+    suggested_fix: |
+      <concrete-code-change-or-action>
+      Example:
+        // Add this code at line 42
+        is ErrorState -> ErrorContent(
+          message = uiState.message,
+          onRetry = { viewModel.onAction(Retry) }
+        )
+    rule_violated: <rule-id-from-rules-condensed>
+```
+
+### Fix Suggestion Guidelines
+
+- **Be concrete**: Not "add error handling" but "add ErrorState branch to when(uiState) at line 42"
+- **Include code**: Show the exact code to add or modify
+- **Reference rules**: Cite the specific rule being violated
+- **Minimal changes**: Suggest the smallest fix that resolves the issue
+- **No refactoring**: Fix the defect, don't improve unrelated code
+
+### When Tool Failure Prevents Review
+
+Return: `INSPECTOR_FAILED: <precise-error>`
+
+## Example Defect Output
+
+```yaml
+defects:
+  - severity: critical
+    file: feature/expense/impl/ExpenseScreen.kt
+    line: 42
+    issue: Missing error state handling in when(uiState) expression
+    suggested_fix: |
+      Add ErrorState branch to when(uiState) at line 42:
+      
+      is ExpenseUiState.ErrorState -> ExpenseErrorContent(
+        message = uiState.errorMessage,
+        onRetry = { viewModel.onAction(ExpenseUiAction.Retry) }
+      )
+    rule_violated: pres-5
+
+  - severity: warning
+    file: feature/expense/data/ExpenseRepositoryImpl.kt
+    line: 15
+    issue: Direct Clock.System.now() call instead of TimeProvider
+    suggested_fix: |
+      Replace line 15:
+      - val now = Clock.System.now()
+      + val now = timeProvider.now()
+      
+      Ensure TimeProvider is injected via constructor.
+    rule_violated: dom-5
+```
+

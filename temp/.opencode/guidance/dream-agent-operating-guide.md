@@ -27,12 +27,10 @@ Optimize for correct generation + future repairability, not just speed.
 | Role | Agent | Owns |
 |------|-------|------|
 | Orchestrator | `dream-general` | Workflow, contracts, delegation, verification coordination |
-| Discovery | `dream-discovery` | Fast codebase search + focused context packs |
-| Research | `dream-search` | External docs, troubleshooting |
+| Research | `dream-research` | Fast codebase search + external research + focused context packs |
 | Design | `dream-designer` | UI/UX specs (no code) |
 | KMP Business | `dream-implementer` | Domain, data, api, wiring |
-| Android UI | `dream-implementer-android` | Compose screens, ViewModels, Koin nav |
-| iOS UI | `dream-implementer-ios` | SwiftUI views, ViewModels, bridge, XCTest |
+| UI Implementation | `dream-implementer-ui` | Cross-platform UI — Compose (Android) + SwiftUI (iOS) |
 | Verification | `dream-tester` | Tests, builds, device, Maestro |
 | Review | `dream-inspector` | Final QA gate |
 
@@ -65,33 +63,54 @@ Should not: move logic to app shells, bypass shared infrastructure, introduce cr
 
 ## Generation Workflow
 
-1. `dream-general` reads product request → infers backend/storage → produces contracts
-2. `dream-discovery` gathers context, `dream-search` for external research (if needed)
+1. `dream-general` reads product request → produces `.features/<feature>/plan.md` → presents plan to user → gets explicit confirmation
+2. `dream-research` gathers context, external research (if needed)
 3. `dream-designer` produces UI spec
 4. `dream-implementer` implements KMP business layer + tests + wiring
-5. `dream-implementer-android` + `dream-implementer-ios` implement platform UI
+5. `dream-implementer-ui` implements UI layer (platform: both)
 6. `dream-tester` runs verification; implementers repair until green/blocked/skip
 7. `dream-inspector` reviews substantial work
 8. `dream-general` writes report and retrospective
 
+## UI Fix Workflow
+
+1. `dream-general` interprets the UI issue → produces fix plan → user confirms.
+2. `dream-tester` captures screenshot + element tree via mobile-mcp (Phase 1: Capture).
+3. `dream-research` identifies affected UI source files (Phase 2: Diagnose).
+4. `dream-implementer-ui` applies fix (Phase 3: Fix).
+5. `dream-tester` re-captures screenshot + element tree for before/after comparison (Phase 4: Verify).
+6. `dream-general` presents before/after evidence to user; repair loop until fixed or skip condition triggers.
+
+**Scope**: UI layer only — Compose screens, SwiftUI views, ViewModels, UI state models. Never domain, data, or api.
+
+## Bug Fix Workflow
+
+1. `dream-general` interprets the bug or crash log → produces fix plan with suspected root-cause layer → user confirms.
+2. `dream-tester` gathers diagnostics (crash logs, logcat, build output) + `dream-research` for error research (Phase 1: Diagnostics).
+3. `dream-research` narrows to affected files; `dream-general` identifies failing layer (Phase 2: Root Cause).
+4. Layer-appropriate implementer applies fix (Phase 3: Fix).
+5. `dream-tester` runs targeted re-verification per fixed layer (Phase 4: Verify).
+6. Repair loop until green, blocked, or skip condition triggers (max 5 iterations).
+
+**Scope**: Any layer — domain, data, api, presentation, bridge, or wiring. Fix is minimal: fix the bug, don't refactor.
+
+## Plan Rules
+
+Plans must exist and be confirmed by the user before any implementation phase begins. Every plan defines: feature summary, modules to create/modify, screens with states, architecture decisions, dependencies, and phased implementation order.
+
+The plan file `.features/<feature>/plan.md` is the user-facing contract for "what Dream will do." It must be written in Phase 0 and approved before Phase 1.
+
 ## Contract Rules
 
-Feature contracts must exist before implementation. Every contract defines: feature name, goal, entities/fields (with timestamp names), actions/inputs, screens, loading/empty/content/error states, time-sensitive behavior (using `TimeProvider`), design expectations, required tests by layer.
+Feature contracts must exist before implementation. See `.opencode/knowledge-graph/rules-condensed.md` for contract structure rules ([feat-1] through [feat-7]) and architecture rules ([arch-1] through [arch-5]).
 
 Implementation must map each contract item to code and tests explicitly. Green commands alone are not sufficient stop conditions.
 
-**Key rules**:
-- Koin compiler plugin DSL for DI (no `@KoinViewModel`, `@Module`, `@ComponentScan`)
-- `viewModel<T>()` syntax (not `viewModel { }` lambda)
-- Navigation: `NavKey` routes in `feature/<name>/api`, screens in `feature/<name>/impl`
-- `TimeProvider` for all time behavior (no direct `Clock.System.now()`)
-- Design-system components over raw Material3
-
 ## Git Rules
 
-Before flow depends on git, verify repo is initialized. Required flow: `git status`, `git diff`, `git log --oneline -10`, stage intended files, propose commit message.
+See `.opencode/knowledge-graph/rules-condensed.md` for the full Git & Workflow rules ([git-1] through [git-7], [cmt-1] through [cmt-5]).
 
-Do not commit when: verification blocked, review not approved, reports missing, user hasn't approved, unrelated changes present.
+**Summary**: Create a feature branch after Phase 0, commit to the branch (not main), present merge summary to user, get explicit confirmation before squash-merging to main.
 
 ## Verification Rules
 
@@ -112,11 +131,63 @@ See `.opencode/guidance/reference/verification-commands.md` for commands.
 ## Repair Rules
 
 1. `dream-general` identifies failing module
-2. `dream-discovery` gathers context if needed
+2. `dream-research` gathers context if needed
 3. Relevant implementer loads graph rules, applies minimal fix
 4. `dream-tester` reruns verification
 
 Repair until: green, real blocker identified, behavior impossible, or skip condition triggers.
+
+## Git Branching Strategy
+
+See `.opencode/knowledge-graph/rules-condensed.md` for full rules ([git-1] through [git-7]).
+
+### Branch Naming
+
+| Workflow | Branch Pattern | Example |
+|----------|---------------|---------|
+| Feature | `dream/feature/<name>` | `dream/feature/expense-tracker` |
+| UI Fix | `dream/ui-fix/<desc>` | `dream/ui-fix/card-spacing` |
+| Bug Fix | `dream/bug-fix/<desc>` | `dream/bug-fix/crash-on-empty` |
+| Repair | `dream/repair/<desc>` | `dream/repair/di-resolution` |
+
+### Workflow
+
+1. After Phase 0 (plan confirmed), create feature branch from main
+2. All commits go to the feature branch — never directly to main
+3. After verification + review are green, present merge summary to user
+4. User explicitly confirms: **merge? edit message? deny?**
+5. On confirm: squash merge to main, delete feature branch
+6. On deny: keep branch, document reason in report
+
+## Phase Checkpoints
+
+See `.opencode/knowledge-graph/rules-condensed.md` for full rules ([ckpt-1] through [ckpt-4]).
+
+After each phase completes successfully, append to `.features/<feature>/checkpoints.md`:
+
+```markdown
+## Phase <N>: <name>
+- Status: completed
+- Git hash: <hash>
+- Timestamp: <ISO-8601>
+- Context usage: ~<N>% (estimated)
+- Notes: <what was accomplished>
+```
+
+If a later phase fails, offer to roll back to the last good checkpoint via `git checkout <hash>`.
+
+## Inspector Repair Loop
+
+See `.opencode/knowledge-graph/rules-condensed.md` for full rules ([insp-1] through [insp-5]).
+
+When `dream-inspector` returns an itemized defect list:
+
+1. Present defects to user with severity: **critical** / **warning** / **info**
+2. Ask: **repair? accept with defects? deny?**
+3. On **repair**: delegate to appropriate implementer, re-run inspector
+4. On **accept**: document defects in report, proceed to merge
+5. On **deny**: stop workflow, document reason
+6. Max 2 inspector repair rounds — if still failing after 2 rounds, escalate to user
 
 ## Skip Conditions & Iteration Tracking
 
@@ -174,10 +245,11 @@ Flow stops when: work implemented and verified, real blocker documented, skip co
 
 | File | Author | Template |
 |------|--------|----------|
+| `.features/<feature>/plan.md` | dream-general | `plan-template.md` |
 | `.features/<feature>/contract.yaml` | dream-general | `feature-contract-template.md` |
 | `.features/<feature>/spec.md` | dream-designer | `feature-spec-template.md` |
 | `.features/<feature>/report.md` | dream-general | `feature-report-template.md` |
 | `maestro/features/<feature>/android.yaml` | dream-tester | |
 | `maestro/features/<feature>/ios.yaml` | dream-tester | |
 
-Use templates from `.opencode/guidance/templates/` for reports.
+Use templates from `.opencode/guidance/templates/` for reports. Plans must be user-approved before implementation proceeds.

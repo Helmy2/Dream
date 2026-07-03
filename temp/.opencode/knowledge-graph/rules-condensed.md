@@ -133,3 +133,55 @@ Quick-reference rules for Dream agents. Load specific files for details.
 - [anti-9] No `String.format`/`java.text.*`/`java.util.*` in `commonMain`
 - [anti-10] No `viewModel { }` lambda in Koin compiler plugin DSL
 - [anti-11] No hardcoded `SystemTimeProvider()` in composables — inject via Koin
+
+## Git & Workflow
+
+### Branching
+
+- [git-1] Create a feature branch after Phase 0 (plan confirmed), before any code changes
+- [git-2] Branch naming: `dream/feature/<name>`, `dream/ui-fix/<desc>`, `dream/bug-fix/<desc>`, `dream/repair/<desc>`
+- [git-3] All commits go to the feature branch, never directly to main
+- [git-4] After verification + review are green, present merge summary to user
+- [git-5] User must explicitly confirm merge before merging to main
+- [git-6] On merge: squash merge to main, delete feature branch
+- [git-7] On deny: keep branch for manual review, document reason in report
+
+### Phase Checkpoints
+
+- [ckpt-1] After each phase completes, write checkpoint to `.features/<feature>/checkpoints.md`
+- [ckpt-2] Checkpoint includes: phase name, git commit hash, status, timestamp, context usage
+- [ckpt-3] If a later phase fails, offer to roll back to last good checkpoint
+- [ckpt-4] Checkpoints are append-only — never overwrite previous entries
+
+### Context Management
+
+- [ctx-1] Track context usage continuously (estimate based on files read, tool calls, file sizes)
+- [ctx-2] At 50% context: warn user in conversation
+- [ctx-3] At 70% context: compact automatically (write state to .features/, start fresh subagent)
+- [ctx-4] At 90% context: force compaction with minimal handoff
+- [ctx-5] Compact proactively after 3 repair rounds (even if context < 70%)
+- [ctx-6] Include context usage estimate in phase checkpoints
+- [ctx-7] Do not wait for context overflow or skip conditions — compact early
+
+### Priority
+
+- [pri-1] Plans include a priority field: `hotfix`, `high`, `normal`, `low`
+- [pri-2] `hotfix` skips Phase 0 — go straight to diagnostics, plan after root cause
+- [pri-3] `low` may skip Maestro flows on first pass (document in verification report)
+- [pri-4] `normal` and `high` follow the full workflow
+
+### Commit Workflow
+
+- [cmt-1] Run `git status`, `git diff`, `git log --oneline -10` before committing
+- [cmt-2] Stage only intended files — never commit unrelated changes
+- [cmt-3] Do not commit when: verification blocked, review not approved, reports missing, user hasn't approved
+- [cmt-4] Use conventional commit format: `feat:`, `fix:`, `chore:`, `docs:`
+- [cmt-5] Present commit summary to user and get explicit approval before committing
+
+### Inspector Repair Loop
+
+- [insp-1] When inspector returns defects, present to user with severity (critical/warning/info)
+- [insp-2] If user confirms, delegate back to appropriate implementer
+- [insp-3] Re-run inspector after repair
+- [insp-4] Max 2 inspector repair rounds before escalating to user
+- [insp-5] If user declines repair, document defects in report and proceed
