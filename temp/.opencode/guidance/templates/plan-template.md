@@ -2,6 +2,8 @@
 
 Use this template when generating `.features/<feature>/plan.md` during Phase 0 (Plan & User Review).
 
+**Note:** This template applies to `/dream-create` and `/dream-feature` workflows (COMPLEX complexity). For trivial and simple workflows, see `.opencode/guidance/reference/complexity-routing.md`.
+
 ## Phase 0 Depth
 
 Choose the appropriate depth based on change scope:
@@ -16,16 +18,18 @@ Choose the appropriate depth based on change scope:
 - Skip: Architecture Decisions, Dependencies sections
 - Example: "Add expense list screen with 3 states"
 
-### `full` (Complex: multi-feature, >5 screens, new shared modules)
+### `full` (Complex: complete feature requiring domain/data/api/impl, tests, both platforms)
 - Full plan.md with all sections below
-- Example: "Build expense tracker with 6 screens, new Room database, shared date formatter"
+- Example: "Add expense tracker with list, detail, add screens — domain/data/api/impl, Room persistence, tests, both platforms"
 
 ## Auto-Detection Logic
 
 `dream-general` evaluates change scope and selects depth:
+- **Command-triggered**: If `/dream-create` or `/dream-feature` is invoked, always use `full` depth regardless of scope
 - Count files to change
 - Count new screens
 - Check if new shared modules needed
+- Check if complete feature (domain/data/api/impl + tests + both platforms)
 - Apply auto-detection, but user can override
 
 ## Structure (for `standard` and `full` depth)

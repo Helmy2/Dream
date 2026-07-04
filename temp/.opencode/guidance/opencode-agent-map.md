@@ -39,7 +39,8 @@ Owns: workflow orchestration, contracts, **plan generation**, delegation, verifi
 
 Should do:
 - Interpret user request
-- **Create the plan (`.features/<feature>/plan.md`) and present it to the user during Phase 0**
+- **Evaluate complexity** (trivial/simple/complex) and select appropriate workflow
+- **Create the plan** (`.features/<feature>/plan.md` for complex, conversation plan for simple/trivial) and present it to the user during Phase 0
 - **Ask for questions, edits, or confirmation before proceeding**
 - Launch appropriate subagent per phase
 - Ensure Dream doesn't report success before verification is green
@@ -114,15 +115,22 @@ Output: `APPROVED` or itemized defect list.
 ### Feature Generation
 
 1. `dream-general` selects feature to generate.
-2. `dream-research` gathers context (deep mode).
-3. **Phase 0: `dream-general` produces `.features/<feature>/plan.md`, presents it to the user, and gets explicit confirmation.**
-4. `dream-general` produces feature contract.
-5. `dream-research` if external research needed.
-6. `dream-designer` produces UI spec.
-7. `dream-implementer` generates KMP business layer.
-8. `dream-implementer-ui` generates UI layer (platform: both).
-9. `dream-tester` runs verification ladder.
-10. `dream-inspector` reviews substantial work.
+2. `dream-general` checks for command trigger:
+   - If `/dream-create` or `/dream-feature` → COMPLEX (skip evaluation)
+   - Otherwise: `dream-general` **evaluates complexity** (trivial/simple/complex).
+3. Workflow selected based on complexity:
+   - **Trivial**: `/dream-quick-fix` (2-line plan, no artifacts except verification-report.md)
+   - **Simple**: Lightweight workflow (brief conversation plan, minimal artifacts)
+   - **Complex**: Full `/dream-feature` workflow
+4. For complex: `dream-research` gathers context (deep mode).
+5. For complex: **Phase 0: `dream-general` produces `.features/<feature>/plan.md`, presents it to the user, and gets explicit confirmation.**
+6. For complex: `dream-general` produces feature contract.
+7. For complex: `dream-research` if external research needed.
+8. For complex: `dream-designer` produces UI spec.
+9. For complex: `dream-implementer` generates KMP business layer.
+10. For complex: `dream-implementer-ui` generates UI layer (platform: both).
+11. `dream-tester` runs verification ladder.
+12. For complex: `dream-inspector` reviews substantial work.
 
 ### UI Fix
 

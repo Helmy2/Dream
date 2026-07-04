@@ -6,28 +6,41 @@ Defines default behavior for OpenCode agents generating, reviewing, verifying, o
 
 **Use with**: `opencode-agent-map.md`, `PRODUCT.md`, `README.md`, `best-practices/`, `AGENTS.md`, `.features/` metadata.
 
-## Required Read Order
-
-1. `.opencode/knowledge-graph/PRODUCT.md`
-2. `.opencode/guidance/opencode-agent-map.md`
-3. `AGENTS.md`
-4. `.opencode/knowledge-graph/README.md`
-5. Relevant `best-practices/*.md` for current concern
-6. Selected template README
-7. Target project `.features/` metadata
-
 ## Default Mission
 
 Produce KMP MVPs that are: runnable, verifiable, readable, repairable, aligned with Dream architecture.
 
 Optimize for correct generation + future repairability, not just speed.
 
+## Complexity-Based Workflow Routing
+
+**Before starting any workflow, `dream-general` evaluates complexity to select the right level of ceremony.**
+
+### Command-Triggered COMPLEX
+
+**If the user invoked `/dream-create` or `/dream-feature`, always use the COMPLEX workflow regardless of scope.**
+
+These commands explicitly request a complete Dream feature with full artifacts, so skip the complexity evaluation and proceed directly to the COMPLEX workflow.
+
+### Complexity Levels
+
+| Level | Criteria | Workflow | Phase 0 | Artifacts | Inspector |
+|-------|----------|----------|---------|-----------|-----------|
+| **Trivial** | 1-3 files, <50 lines, no new modules/screens | `/dream-quick-fix` | 2-line conversation | 1 | No |
+| **Simple** | 1 feature, <5 screens, no new shared modules | Lightweight feature | Brief conversation | 2-3 | No (unless >2 files) |
+| **Complex** | Complete feature requiring domain/data/api/impl, tests, both platforms | Full `/dream-feature` | Full plan.md | 8+ | Yes |
+
+**Evaluation criteria**: Files to change, new screens, new modules, new dependencies, architectural changes, complete feature (domain/data/api/impl + tests + both platforms).
+
+See `.opencode/guidance/reference/complexity-routing.md` for full details and examples.
+
 ## Agent Role Model
 
 | Role | Agent | Owns |
 |------|-------|------|
 | Orchestrator | `dream-general` | Workflow, contracts, delegation, verification coordination |
-| Research | `dream-research` | Fast codebase search + external research + focused context packs |
+| Discovery | `dream-discovery` | Fast codebase exploration + context building |
+| Research | `dream-research` | External research + focused context packs |
 | Design | `dream-designer` | UI/UX specs (no code) |
 | KMP Business | `dream-implementer` | Domain, data, api, wiring |
 | UI Implementation | `dream-implementer-ui` | Cross-platform UI — Compose (Android) + SwiftUI (iOS) |
@@ -61,10 +74,12 @@ Code-writing agents should:
 
 Should not: move logic to app shells, bypass shared infrastructure, introduce cross-feature `impl` coupling.
 
-## Generation Workflow
+## Workflows
+
+### Generation Workflow
 
 1. `dream-general` reads product request → produces `.features/<feature>/plan.md` → presents plan to user → gets explicit confirmation
-2. `dream-research` gathers context, external research (if needed)
+2. `dream-discovery` gathers codebase context
 3. `dream-designer` produces UI spec
 4. `dream-implementer` implements KMP business layer + tests + wiring
 5. `dream-implementer-ui` implements UI layer (platform: both)
@@ -72,37 +87,31 @@ Should not: move logic to app shells, bypass shared infrastructure, introduce cr
 7. `dream-inspector` reviews substantial work
 8. `dream-general` writes report and retrospective
 
-## UI Fix Workflow
+### UI Fix Workflow
 
 1. `dream-general` interprets the UI issue → produces fix plan → user confirms.
 2. `dream-tester` captures screenshot + element tree via mobile-mcp (Phase 1: Capture).
-3. `dream-research` identifies affected UI source files (Phase 2: Diagnose).
+3. `dream-discovery` identifies affected UI source files (Phase 2: Diagnose).
 4. `dream-implementer-ui` applies fix (Phase 3: Fix).
 5. `dream-tester` re-captures screenshot + element tree for before/after comparison (Phase 4: Verify).
 6. `dream-general` presents before/after evidence to user; repair loop until fixed or skip condition triggers.
 
 **Scope**: UI layer only — Compose screens, SwiftUI views, ViewModels, UI state models. Never domain, data, or api.
 
-## Bug Fix Workflow
+### Bug Fix Workflow
 
 1. `dream-general` interprets the bug or crash log → produces fix plan with suspected root-cause layer → user confirms.
 2. `dream-tester` gathers diagnostics (crash logs, logcat, build output) + `dream-research` for error research (Phase 1: Diagnostics).
-3. `dream-research` narrows to affected files; `dream-general` identifies failing layer (Phase 2: Root Cause).
+3. `dream-discovery` narrows to affected files; `dream-general` identifies failing layer (Phase 2: Root Cause).
 4. Layer-appropriate implementer applies fix (Phase 3: Fix).
 5. `dream-tester` runs targeted re-verification per fixed layer (Phase 4: Verify).
 6. Repair loop until green, blocked, or skip condition triggers (max 5 iterations).
 
 **Scope**: Any layer — domain, data, api, presentation, bridge, or wiring. Fix is minimal: fix the bug, don't refactor.
 
-## Plan Rules
+## Plan & Contract Rules
 
-Plans must exist and be confirmed by the user before any implementation phase begins. Every plan defines: feature summary, modules to create/modify, screens with states, architecture decisions, dependencies, and phased implementation order.
-
-The plan file `.features/<feature>/plan.md` is the user-facing contract for "what Dream will do." It must be written in Phase 0 and approved before Phase 1.
-
-## Contract Rules
-
-Feature contracts must exist before implementation. See `.opencode/knowledge-graph/rules-condensed.md` for contract structure rules ([feat-1] through [feat-7]) and architecture rules ([arch-1] through [arch-5]).
+Plans must exist and be confirmed by the user before any implementation phase begins. Feature contracts must exist before implementation. See `.opencode/knowledge-graph/rules-condensed.md` for contract structure rules ([feat-1] through [feat-7]) and architecture rules ([arch-1] through [arch-5]).
 
 Implementation must map each contract item to code and tests explicitly. Green commands alone are not sufficient stop conditions.
 
@@ -131,63 +140,11 @@ See `.opencode/guidance/reference/verification-commands.md` for commands.
 ## Repair Rules
 
 1. `dream-general` identifies failing module
-2. `dream-research` gathers context if needed
+2. `dream-discovery` gathers context if needed
 3. Relevant implementer loads graph rules, applies minimal fix
 4. `dream-tester` reruns verification
 
 Repair until: green, real blocker identified, behavior impossible, or skip condition triggers.
-
-## Git Branching Strategy
-
-See `.opencode/knowledge-graph/rules-condensed.md` for full rules ([git-1] through [git-7]).
-
-### Branch Naming
-
-| Workflow | Branch Pattern | Example |
-|----------|---------------|---------|
-| Feature | `dream/feature/<name>` | `dream/feature/expense-tracker` |
-| UI Fix | `dream/ui-fix/<desc>` | `dream/ui-fix/card-spacing` |
-| Bug Fix | `dream/bug-fix/<desc>` | `dream/bug-fix/crash-on-empty` |
-| Repair | `dream/repair/<desc>` | `dream/repair/di-resolution` |
-
-### Workflow
-
-1. After Phase 0 (plan confirmed), create feature branch from main
-2. All commits go to the feature branch — never directly to main
-3. After verification + review are green, present merge summary to user
-4. User explicitly confirms: **merge? edit message? deny?**
-5. On confirm: squash merge to main, delete feature branch
-6. On deny: keep branch, document reason in report
-
-## Phase Checkpoints
-
-See `.opencode/knowledge-graph/rules-condensed.md` for full rules ([ckpt-1] through [ckpt-4]).
-
-After each phase completes successfully, append to `.features/<feature>/checkpoints.md`:
-
-```markdown
-## Phase <N>: <name>
-- Status: completed
-- Git hash: <hash>
-- Timestamp: <ISO-8601>
-- Context usage: ~<N>% (estimated)
-- Notes: <what was accomplished>
-```
-
-If a later phase fails, offer to roll back to the last good checkpoint via `git checkout <hash>`.
-
-## Inspector Repair Loop
-
-See `.opencode/knowledge-graph/rules-condensed.md` for full rules ([insp-1] through [insp-5]).
-
-When `dream-inspector` returns an itemized defect list:
-
-1. Present defects to user with severity: **critical** / **warning** / **info**
-2. Ask: **repair? accept with defects? deny?**
-3. On **repair**: delegate to appropriate implementer, re-run inspector
-4. On **accept**: document defects in report, proceed to merge
-5. On **deny**: stop workflow, document reason
-6. Max 2 inspector repair rounds — if still failing after 2 rounds, escalate to user
 
 ## Skip Conditions & Iteration Tracking
 
@@ -199,19 +156,19 @@ See `.opencode/guidance/reference/skip-conditions.md`
 
 **State persistence**: Before delegating, write to `.features/<feature>/report.md`: iteration number, failures, past fixes, expected action, relevant rules.
 
-**Context budget**: If conversation exceeds ~3 repair rounds, write state to `.features/`, start fresh conversation with compact handoff (iteration, what was tried, what fails, next module).
+**Context budget**: If conversation exceeds ~3 repair rounds, write state to `.features/`, start fresh conversation with compact handoff.
 
 ### Context Compaction Workflow
 
 When context window approaches limit or after 3 repair rounds:
 
-1. **Write state to file** `.features/<feature>/report.md` — include iteration number, failures, past fixes, next action.
-2. **Create compact handoff prompt** with: iteration, what was tried, what fails, next module, relevant rules, pointer to full state file.
-3. **Start fresh conversation** with handoff prompt only — do not include full tool-call history.
+1. **Write state to file** `.features/<feature>/report.md`
+2. **Create compact handoff prompt** with: iteration, what was tried, what fails, next module, relevant rules
+3. **Start fresh conversation** with handoff prompt only
 
 ### Fresh Subagent Invocation
 
-Each repair round must use a fresh subagent invocation. Subagent reads current state from `.features/` files, not conversation history. Pass iteration number and pointer to state file. Include relevant rules in task prompt, not entire knowledge graph.
+Each repair round must use a fresh subagent invocation. Subagent reads current state from `.features/` files, not conversation history. Pass iteration number and pointer to state file.
 
 ## Context Caching (Token Optimization)
 
@@ -220,16 +177,11 @@ Each repair round must use a fresh subagent invocation. Subagent reads current s
 - **Tier 2** (load before work): Layer-specific best-practice files
 - **Tier 3** (load only if needed): Detailed files per `rules-index.md`
 
-**Orchestrator caching**: `dream-general` should read frequently-needed files once and pass content to subagents in task prompts:
-- `AGENTS.md`
-- `.opencode/knowledge-graph/PRODUCT.md`
-- `.opencode/knowledge-graph/rules-condensed.md`
-- Current feature contract
-- Current verification report
+**Orchestrator caching**: `dream-general` should read frequently-needed files once and pass content to subagents in task prompts.
 
-**Subagent handoff**: When launching subagents, include relevant file content in the task prompt instead of pointing to files. This avoids redundant reads.
+**Subagent handoff**: When launching subagents, include relevant file content in the task prompt instead of pointing to files.
 
-**Condensed rules**: Use `.opencode/knowledge-graph/rules-condensed.md` as the default rules reference. Load specific best-practice files only when the task requires detailed guidance.
+**Condensed rules**: Use `.opencode/knowledge-graph/rules-condensed.md` as the default rules reference.
 
 **Rules index**: Use `.opencode/knowledge-graph/rules-index.md` to find which file contains specific rules.
 

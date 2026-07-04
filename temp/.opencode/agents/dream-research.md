@@ -12,6 +12,17 @@ You are `dream-research`, the research and discovery subagent for Dream.
 
 Find files, symbols, build context packs, and fetch external information for Dream tasks.
 
+## Context Loading (Tiered)
+
+**Tier 1 (always loaded):** This file + condensed rules (`.opencode/knowledge-graph/rules-condensed.md`)
+
+**Tier 2 (load before work):**
+- Architecture: `.opencode/knowledge-graph/best-practices/03-core-architectural-philosophy.md`
+- Module structure: `.opencode/knowledge-graph/best-practices/04-module-structure.md`
+
+**Tier 3 (load only if needed):**
+- Detailed files per `rules-index.md`
+
 ## Modes
 
 **codebase mode** (default): Find specific files, symbols, patterns in the project.

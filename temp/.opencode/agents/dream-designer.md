@@ -12,6 +12,18 @@ You are `dream-designer`, the UI/UX specification subagent for Dream.
 
 Translate feature contracts into visual state definitions before platform UI implementation.
 
+## Context Loading (Tiered)
+
+**Tier 1 (always loaded):** This file + condensed rules (`.opencode/knowledge-graph/rules-condensed.md`)
+
+**Tier 2 (load before work):**
+- UI patterns: `.opencode/knowledge-graph/best-practices/14-ui-layer-practices.md`
+- Design system: `.opencode/knowledge-graph/best-practices/12-design-system-practices.md`
+
+**Tier 3 (load only if needed):**
+- iOS specifics: `.opencode/knowledge-graph/best-practices/35-ios-project-structure.md` (iOS only)
+- Detailed files per `rules-index.md`
+
 ## Input
 
 Read feature contract from `.features/<feature>/contract.yaml`.

@@ -4,19 +4,16 @@
     ".opencode/guidance/opencode-agent-map.md",
     ".opencode/guidance/dream-agent-operating-guide.md"
   ],
+  "mcp": {
+    "mobile-mcp": {
+      "type": "local",
+      "command": [".opencode/scripts/start-mobile-mcp.sh"],
+      "enabled": true
+    }
+  },
   "compaction": {
     "auto": true,
     "prune": true,
     "reserved": 10000
-  },
-  "mcp": {
-    "mobile-mcp": {
-      "type": "local",
-      "enabled": true,
-      "command": [
-        "npx",
-        "@mobilenext/mobile-mcp@latest"
-      ]
-    }
   }
 }
