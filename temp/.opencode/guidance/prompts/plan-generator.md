@@ -18,7 +18,7 @@ Inputs you must use:
 - `.features/decisions.yaml` if present
 - `AGENTS.md`
 - relevant architecture rules from `.opencode/knowledge-graph/`
-- `dream-discovery` (deep mode) output for project structure context
+- `dream-discovery` (deep mode) output for project structure context (uses codebase-memory-mcp for efficient code intelligence queries)
 
 Rules:
 - Keep the plan concise but complete — the user needs to understand scope before approving

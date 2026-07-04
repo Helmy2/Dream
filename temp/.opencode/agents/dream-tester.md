@@ -41,6 +41,18 @@ You are `dream-tester`. Run the full Dream verification ladder.
 - Use mobile-mcp for UI verification: `mobile_take_screenshot`, `mobile_list_elements_on_screen`
 - Fresh invocation per repair round; do not accumulate state
 
+## MCP Tools (codebase-memory-mcp)
+
+For verification scope decisions:
+
+1. `detect_changes` — map git diff to affected symbols + blast radius with risk classification
+2. `search_graph` — find related test files when deciding verification scope
+3. `trace_path` — understand call chains to identify integration points that need testing
+
+**Priority**: Always try MCP tools first. Fall back to grep/glob only when searching string literals, non-code files, or when MCP returns insufficient results.
+
+See `.opencode/guidance/reference/codebase-memory-mcp-tools.md` for full reference.
+
 ## Parallel Verification
 
 When both Android and iOS platforms changed, use parallel verification:

@@ -87,6 +87,18 @@ Present as a clean terminal-friendly summary:
 │ dream-inspector      │ Final QA and architecture review gate     │
 └──────────────────────┴───────────────────────────────────────────┘
 
+┌───────────────────────────┬────────────────────────────────────────┐
+│ MCP SERVER                │ PURPOSE                                │
+├───────────────────────────┼────────────────────────────────────────┤
+│ mobile-mcp                │ Device interaction for verification    │
+│                           │ and UI inspection (screenshots,        │
+│                           │ element trees, crash logs)             │
+├───────────────────────────┼────────────────────────────────────────┤
+│ codebase-memory-mcp       │ Code intelligence via persistent       │
+│                           │ knowledge graph (symbol search, call   │
+│                           │ tracing, impact analysis)              │
+└───────────────────────────┴────────────────────────────────────────┘
+
 Implemented Template Improvements:
   • <feature-name> — <short description> [Applied/Not Applied]
   ...

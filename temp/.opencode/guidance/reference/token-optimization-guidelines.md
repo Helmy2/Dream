@@ -150,6 +150,20 @@ In `opencode.json`:
 }
 ```
 
+## 9. MCP Code Intelligence
+
+codebase-memory-mcp provides code-level intelligence via MCP, replacing file-by-file exploration:
+
+- **99% token reduction** vs grep/read exploration
+- `search_graph` replaces grep for finding symbols
+- `trace_path` replaces reading multiple files to understand call chains
+- `detect_changes` replaces manual git diff analysis
+- `get_architecture` replaces reading multiple files for project overview
+
+**Priority**: Agents should always try MCP tools first. Fall back to grep/glob only when searching string literals, non-code files, or when MCP returns insufficient results.
+
+See `.opencode/guidance/reference/codebase-memory-mcp-tools.md` for full tool reference.
+
 ## Checklist
 
 Use this checklist when applying token optimization:

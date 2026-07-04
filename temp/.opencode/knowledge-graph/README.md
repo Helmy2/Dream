@@ -55,6 +55,20 @@ Future iterations can add:
 - generated query presets for the builder
 - automated validation scripts for graph completeness
 
+## Complementary Tools
+
+This folder contains the **prescriptive** knowledge graph — architecture rules, constraints, and anti-patterns that define what agents *should* do.
+
+For **descriptive** code intelligence — what code *actually* does — Dream uses `codebase-memory-mcp`, a separate MCP server that builds a persistent knowledge graph of the codebase:
+
+- Functions, classes, call chains, dependencies
+- Symbol search, call tracing, impact analysis
+- Architecture overview, dead code detection
+
+The two work together: the prescriptive graph enforces rules, while codebase-memory-mcp provides code-level understanding. Agents should prefer MCP queries over grep/read for codebase exploration.
+
+See `.opencode/guidance/reference/codebase-memory-mcp-tools.md` for the full tool reference.
+
 ## Product Identity
 
 - product codename: `Dream`

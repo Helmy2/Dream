@@ -24,6 +24,7 @@ Prefer linking to those documents in discussions and change summaries instead of
 - [temp/.opencode/opencode.json](temp/.opencode/opencode.json): packaged OpenCode instruction injection and MCP config
 - [temp/.opencode/agents/](temp/.opencode/agents): Dream agent definitions (dream-general, dream-research, dream-designer, dream-implementer, dream-implementer-ui, dream-tester, dream-inspector)
 - [temp/.opencode/commands/](temp/.opencode/commands): Dream slash-command workflows
+- [temp/.cbmignore](temp/.cbmignore): excludes files from codebase-memory-mcp indexing (build artifacts, generated files, Dream metadata)
   - `dream-init` — Initialize a Dream project (git, Android SDK, tooling check)
   - `dream-create` — Create a Dream MVP project
   - `dream-feature` — Generate or update a Dream feature
@@ -42,6 +43,30 @@ Prefer linking to those documents in discussions and change summaries instead of
 - [temp/.opencode/scripts/dream-preflight.sh](temp/.opencode/scripts/dream-preflight.sh): local readiness check for git, Android SDK, and Maestro
 - [temp/.opencode/scripts/sync-pbxproj.rb](temp/.opencode/scripts/sync-pbxproj.rb): auto-registers orphaned Swift files in Xcode project.pbxproj
 - [temp/.opencode/scripts/remove-sample.sh](temp/.opencode/scripts/remove-sample.sh): removes sample feature files, strips sample deps, and checks for leftovers
+- [temp/.opencode/scripts/start-codebase-memory-mcp.sh](temp/.opencode/scripts/start-codebase-memory-mcp.sh): launches codebase-memory-mcp binary for code intelligence via persistent knowledge graph
+
+## MCP Servers
+
+Two MCP servers are configured in `opencode.json`:
+
+### mobile-mcp
+
+Device interaction for verification and UI inspection.
+
+- **Used by**: `dream-tester`, `dream-inspector`
+- **Key tools**: `mobile_take_screenshot`, `mobile_list_elements_on_screen`, `mobile_list_crashes`, `mobile_get_crash`
+- **Launcher**: `.opencode/scripts/start-mobile-mcp.sh`
+
+### codebase-memory-mcp
+
+Code intelligence via persistent knowledge graph. Complements the prescriptive knowledge graph (rules/constraints) with descriptive code intelligence (what code actually does).
+
+- **Used by**: `dream-discovery`, `dream-research`, `dream-implementer`, `dream-implementer-ui`, `dream-inspector`, `dream-tester`
+- **Key tools**: `search_graph`, `trace_path`, `get_code_snippet`, `detect_changes`, `get_architecture`, `query_graph`
+- **Launcher**: `.opencode/scripts/start-codebase-memory-mcp.sh`
+- **Reference**: `.opencode/guidance/reference/codebase-memory-mcp-tools.md`
+
+**Rule**: Agents should prefer MCP queries over grep/read for codebase exploration. Fall back to grep/glob only for string literals, non-code files, or when MCP returns insufficient results.
 
 ## Working Rules
 

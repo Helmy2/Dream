@@ -63,6 +63,29 @@ Edit `opencode.json` to change any agent's model:
 
 Run `opencode models` to see all available models.
 
+## MCP Tools
+
+Two MCP servers are configured in `opencode.json`:
+
+### mobile-mcp
+
+Device interaction for verification and UI inspection.
+
+- **Used by**: `dream-tester`, `dream-inspector`
+- **Key tools**: `mobile_take_screenshot`, `mobile_list_elements_on_screen`, `mobile_list_crashes`, `mobile_get_crash`
+- **Launcher**: `.opencode/scripts/start-mobile-mcp.sh`
+
+### codebase-memory-mcp
+
+Code intelligence via persistent knowledge graph. Complements the prescriptive knowledge graph (rules/constraints) with descriptive code intelligence (what code actually does).
+
+- **Used by**: `dream-discovery`, `dream-research`, `dream-implementer`, `dream-implementer-ui`, `dream-inspector`
+- **Key tools**: `search_graph`, `trace_path`, `get_code_snippet`, `detect_changes`, `get_architecture`, `query_graph`
+- **Launcher**: `.opencode/scripts/start-codebase-memory-mcp.sh`
+- **Reference**: `.opencode/guidance/reference/codebase-memory-mcp-tools.md`
+
+**Rule**: Agents should prefer MCP queries over grep/read for codebase exploration. Fall back to grep/glob only for string literals, non-code files, or when MCP returns insufficient results.
+
 ## Default Ownership
 
 ### `dream-general`

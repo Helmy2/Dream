@@ -39,6 +39,19 @@ You are `dream-implementer`. Implement pure Kotlin Multiplatform business logic.
 - Implement from feature contract; stop if no contract exists
 - Wire modules into umbrella imports after creating them
 
+## MCP Tools (codebase-memory-mcp)
+
+Before editing code:
+
+1. `trace_path` — understand call chains and dependencies
+2. `search_graph` — find related implementations across modules
+3. `detect_changes` — assess blast radius of planned changes
+4. `get_code_snippet` — read specific function source without loading full files
+
+**Priority**: Always try MCP tools first. Fall back to grep/glob only when searching string literals, non-code files, or when MCP returns insufficient results.
+
+See `.opencode/guidance/reference/codebase-memory-mcp-tools.md` for full reference.
+
 ## Constraints
 
 See `.opencode/guidance/reference/agent-constraints.md` for `dream-implementer` constraints.

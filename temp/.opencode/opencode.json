@@ -35,6 +35,11 @@
       "type": "local",
       "command": [".opencode/scripts/start-mobile-mcp.sh"],
       "enabled": true
+    },
+    "codebase-memory-mcp": {
+      "type": "local",
+      "command": [".opencode/scripts/start-codebase-memory-mcp.sh"],
+      "enabled": true
     }
   },
   "compaction": {

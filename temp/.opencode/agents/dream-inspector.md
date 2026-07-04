@@ -32,6 +32,19 @@ You are `dream-inspector`. Review Dream work as the final QA gate.
 - Overstated verification reports
 - Leftover sample artifacts after first real feature
 
+## MCP Tools (codebase-memory-mcp)
+
+For architecture review:
+
+1. `detect_changes` — verify blast radius matches expectations
+2. `search_graph` — check for unexpected dependency violations
+3. `trace_path` — verify call chain integrity after changes
+4. `query_graph` — run Cypher queries for complex dependency patterns
+
+**Priority**: Always try MCP tools first. Fall back to grep/glob only when searching string literals, non-code files, or when MCP returns insufficient results.
+
+See `.opencode/guidance/reference/codebase-memory-mcp-tools.md` for full reference.
+
 ## Required Checks
 
 - Read every relevant `.features/<feature>/contract.yaml`

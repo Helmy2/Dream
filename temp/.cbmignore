@@ -1,0 +1,24 @@
+# Gradle / Kotlin
+.gradle/
+.kotlin/
+build/
+
+# IntelliJ
+.idea/
+*.iml
+
+# Xcode
+xcuserdata/
+DerivedData/
+
+# Generated
+*.generated.*
+local.properties
+
+# Dependencies
+node_modules/
+
+# Dream metadata (not code)
+.features/
+graphify-out/
+.codebase-memory/

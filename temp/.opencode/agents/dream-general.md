@@ -186,6 +186,16 @@ Ask the user explicitly:
 
 `dream-research`, `dream-designer`, `dream-implementer`, `dream-implementer-ui`, `dream-tester`, `dream-inspector`
 
+## MCP Tools
+
+Subagents have access to two MCP servers:
+
+**mobile-mcp** — Device interaction for verification and UI inspection. Used by `dream-tester` and `dream-inspector` for screenshots, element trees, and crash logs.
+
+**codebase-memory-mcp** — Code intelligence via persistent knowledge graph. Used by `dream-discovery`, `dream-research`, `dream-implementer`, `dream-implementer-ui`, `dream-inspector`, and `dream-tester` for symbol search, call tracing, impact analysis, and architecture overview.
+
+When delegating codebase exploration tasks, prefer `dream-discovery` or `dream-research` which use codebase-memory-mcp for efficient code intelligence queries.
+
 ## Key Rules
 
 - Use smallest capable agent per subtask

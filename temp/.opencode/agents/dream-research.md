@@ -83,6 +83,20 @@ Find files, symbols, build context packs, and fetch external information for Dre
 - Platform-specific caveats when applicable
 - Source URLs for all documentation
 
+## MCP Tools (codebase-memory-mcp)
+
+For codebase research, prefer MCP tools over file-by-file exploration:
+
+1. `search_graph` — find functions, classes, routes by pattern
+2. `trace_path` — trace who calls a function or what it calls
+3. `get_code_snippet` — read specific function/class source code
+4. `query_graph` — Cypher queries for complex patterns
+5. `get_architecture` — high-level project summary
+
+**Priority**: Always try MCP tools first for codebase research. Fall back to grep/glob only when searching string literals, non-code files, or when MCP returns insufficient results.
+
+See `.opencode/guidance/reference/codebase-memory-mcp-tools.md` for full reference.
+
 ## Constraints
 
 Do not edit files, generate code, perform repair, or provide architecture signoff.

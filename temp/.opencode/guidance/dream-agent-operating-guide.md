@@ -70,6 +70,22 @@ Users can customize model assignments during `/dream-init` or by editing `openco
 
 Optional for: single-line corrections, documentation updates, typo fixes.
 
+## Tooling
+
+### MCP Servers
+
+Two MCP servers are configured in `opencode.json`:
+
+**mobile-mcp** — Device interaction for verification and UI inspection. Used by `dream-tester` and `dream-inspector` for screenshots, element trees, and crash logs.
+
+**codebase-memory-mcp** — Code intelligence via persistent knowledge graph. Used by `dream-discovery`, `dream-research`, `dream-implementer`, `dream-implementer-ui`, and `dream-inspector` for symbol search, call tracing, impact analysis, and architecture overview.
+
+**Rule**: Agents should prefer MCP queries over grep/read for codebase exploration. See `.opencode/guidance/reference/codebase-memory-mcp-tools.md` for tool reference and priority order.
+
+### Ignore Files
+
+- `.cbmignore` — Excludes files from codebase-memory-mcp indexing (build artifacts, generated files, Dream metadata)
+
 ## Non-Negotiable Rules
 
 See `.opencode/guidance/reference/non-negotiable-rules.md`

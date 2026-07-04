@@ -34,6 +34,8 @@ flowchart TD
 - `temp/.opencode/scripts/dream-preflight.sh`: local readiness check for git, Android SDK, and Maestro.
 - `temp/.opencode/scripts/sync-pbxproj.rb`: auto-registers orphaned Swift files in Xcode project.pbxproj.
 - `temp/.opencode/scripts/remove-sample.sh`: removes sample feature files, strips sample deps, and checks for leftovers.
+- `temp/.opencode/scripts/start-codebase-memory-mcp.sh`: launches codebase-memory-mcp binary for code intelligence via persistent knowledge graph.
+- `temp/.cbmignore`: excludes files from codebase-memory-mcp indexing (build artifacts, generated files, Dream metadata).
 
 ```mermaid
 flowchart LR
@@ -332,6 +334,16 @@ Dream orchestrates feature work in phases through `dream-general`. When adding o
 11. Only commit when verification and review are clean and staging is safe.
 
 Use `temp/.opencode/guidance/new-feature-checklist.md` as the operational checklist.
+
+## MCP Tools
+
+Dream agents have access to two MCP servers for enhanced capabilities:
+
+**mobile-mcp** provides device interaction for verification and UI inspection. Used by `dream-tester` and `dream-inspector` for screenshots, element trees, and crash logs.
+
+**codebase-memory-mcp** provides code intelligence via a persistent knowledge graph. Used by `dream-discovery`, `dream-research`, `dream-implementer`, `dream-implementer-ui`, `dream-inspector`, and `dream-tester` for symbol search, call tracing, impact analysis, and architecture overview.
+
+Agents should prefer MCP queries over grep/read for codebase exploration. See `temp/.opencode/guidance/reference/codebase-memory-mcp-tools.md` for the full tool reference.
 
 ## Sample Feature Policy
 

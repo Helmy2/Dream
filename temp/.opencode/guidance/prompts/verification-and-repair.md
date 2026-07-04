@@ -83,7 +83,7 @@ Automated defect scans (run these BEFORE signing off):
 Repair loop:
 1. `dream-general` delegates verification to `dream-tester`
 2. `dream-general` identifies the failing module or runtime layer from tester output
-3. `dream-explore` or `dream-context-scout` gathers additional focused context if needed
+3. `dream-discovery` gathers additional focused context if needed (uses codebase-memory-mcp for efficient code intelligence queries)
 4. `dream-general` persists iteration state to `.features/verification-report.md` (current iteration, failures, past attempts, next module to fix)
 5. `dream-general` launches a fresh implementer subagent invocation based on the failing layer:
    - `dream-implementer` for domain, data, or api failures

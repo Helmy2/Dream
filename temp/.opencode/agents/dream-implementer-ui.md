@@ -79,6 +79,19 @@ You receive a `platform` parameter: `android`, `ios`, or `both`.
 - No hardcoded user-visible strings in SwiftUI views
 - Run `ruby scripts/sync-pbxproj.rb` after adding/removing `.swift` files
 
+## MCP Tools (codebase-memory-mcp)
+
+For UI implementation:
+
+1. `search_graph` — find related screens, ViewModels, and UI code
+2. `trace_path` — understand ViewModel-to-Repository call chains
+3. `get_code_snippet` — read specific UI component source
+4. `detect_changes` — assess impact of UI changes on dependents
+
+**Priority**: Always try MCP tools first. Fall back to grep/glob only when searching string literals, non-code files, or when MCP returns insufficient results.
+
+See `.opencode/guidance/reference/codebase-memory-mcp-tools.md` for full reference.
+
 ## Constraints
 
 See `.opencode/guidance/reference/agent-constraints.md` for `dream-implementer-ui` constraints.

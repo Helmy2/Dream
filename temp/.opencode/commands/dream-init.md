@@ -23,11 +23,12 @@ Treat `$ARGUMENTS` as optional override hints (e.g., app name, package name).
    - Report "Android SDK: <path>" or "blocked: Android SDK not found"
 
 3. **Platform tooling verification**:
-   - Check `java -version` (JDK 17+ required)
-   - Check `maestro --version` (Maestro CLI)
-   - Check `xcodebuild -version` (macOS only)
-   - Check `xcrun simctl list` (macOS only)
-   - Report each as "passed" or "blocked by environment"
+    - Check `java -version` (JDK 17+ required)
+    - Check `maestro --version` (Maestro CLI)
+    - Check `xcodebuild -version` (macOS only)
+    - Check `xcrun simctl list` (macOS only)
+    - Check `codebase-memory-mcp --version` (optional, for code intelligence)
+    - Report each as "passed" or "blocked by environment"
 
 4. **`.features/` directory structure**:
    - Create `.features/` if missing
@@ -50,18 +51,19 @@ Treat `$ARGUMENTS` as optional override hints (e.g., app name, package name).
    - Report "build: passed" or "build: <error summary>"
 
 6. **Readiness report** — Output a summary table:
-   ```
-   | Check              | Status        |
-   |--------------------|---------------|
-   | git                | initialized   |
-   | Android SDK        | /path         |
-   | Maestro            | passed        |
-   | Xcode              | passed        |
-   | JDK                | 17.0.x        |
-   | .features/              | initialized   |
-   | Gradle projects    | passed        |
-   | Models             | configured    |
-   ```
+    ```
+    | Check                    | Status        |
+    |--------------------------|---------------|
+    | git                      | initialized   |
+    | Android SDK              | /path         |
+    | Maestro                  | passed        |
+    | Xcode                    | passed        |
+    | JDK                      | 17.0.x        |
+    | codebase-memory-mcp      | passed        |
+    | .features/               | initialized   |
+    | Gradle projects          | passed        |
+    | Models                   | configured    |
+    ```
 
 7. **Model configuration** — Ask the user if they want to customize model assignments:
    - Present the default model mapping (see Model Assignments below)
