@@ -23,7 +23,6 @@ Then:
   - what test suites will be run
   - what platform builds will be attempted
   - what device launch/log inspection steps will be performed
-  - what Maestro flows exist
 - present the verification plan to the user
 - ask: **does this verification plan match your expectations?**
 - get explicit confirmation before running the verification ladder
@@ -34,10 +33,9 @@ Then:
 - run `./scripts/dream-preflight.sh` from the project root when it exists
 - verify the project is a git repository and `git status`, `git diff`, and `git log --oneline -10` work, or record a precise git blocker
 - verify Android SDK readiness through `ANDROID_HOME` or the configured SDK path, or record a precise Android environment blocker
-- verify Maestro is installed for smoke-flow validation, or record a precise Maestro environment blocker
 
 ### Verification Ladder
-- delegate to `dream-tester` for the verification ladder: unit tests, platform builds, device install/launch, log inspection, Maestro flows
+- delegate to `dream-tester` for the verification ladder: unit tests, platform builds, device install/launch, log inspection
 - diagnose any failures from tester output
 - before each repair round, write iteration state to `.features/verification-report.md` (current iteration, failures, past attempts, next module to fix)
 - delegate fixes to the layer-appropriate implementer based on the failing surface:

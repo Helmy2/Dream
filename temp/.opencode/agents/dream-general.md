@@ -204,7 +204,7 @@ When delegating codebase exploration tasks, prefer `dream-discovery` or `dream-r
 - Track iteration count across repair rounds; enforce skip conditions (max 5 iterations)
 - Persist state to `.features/` before delegation; use fresh subagent per repair round
 - After each feature, write `.features/<feature>/retrospective.md`
-- Run early preflights: git, Android SDK, Maestro
+- Run early preflights: git, Android SDK, tooling
 - Write `.features/verification-report.md` with explicit status buckets
 - Write `.features/<feature>/plan.md` during Phase 0 before any implementation code is written
 - Create feature branch after Phase 0 confirmation; commit to branch, not main

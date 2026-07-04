@@ -60,7 +60,7 @@ When a phase fails or skip condition triggers, present these options:
 
 #### 3. **Skip**
 - Document blocker in `verification-report.md`
-- Proceed to next phase (e.g., skip Maestro if environment blocked)
+- Proceed to next phase
 - Mark skipped checks as `blocked by environment` or `not run`
 
 #### 4. **Stop**

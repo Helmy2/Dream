@@ -37,8 +37,6 @@ Then:
 - run `./scripts/dream-preflight.sh` from the project root when it exists
 - verify the destination project is a git repository and `git status`, `git diff`, and `git log --oneline -10` work, or record a precise git blocker
 - verify Android SDK readiness through `ANDROID_HOME` or the configured SDK path, or record a precise Android environment blocker
-- verify Maestro is installed for smoke-flow validation, or record a precise Maestro environment blocker
-
 ### Contract & Implementation
 - generate or update `.features/app-contract.yaml` (do not overwrite if it already exists with content)
 - generate or update `.features/decisions.yaml`
@@ -51,7 +49,7 @@ Then:
   - **Phase 1 (domain + data)**: delegate to `dream-implementer` for entities, repository interfaces, data mappings, domain/data tests, and `feature/<name>/api` with `NavKey` route types only.
   - **Phase 2 (UI — parallel)**: launch Compose UI (delegate to `dream-implementer-android` for `feature/<name>/impl` with screens, ViewModels, presentation tests) and SwiftUI (delegate to `dream-implementer-ios` for views, ViewModels, models, bridge, XCTest when `iosUiStrategy` is `swiftui`) as independent subagent calls.
   - **Phase 3 (wiring)**: delegate to `dream-implementer` for umbrella imports, DI registration, navigation entries.
-- delegate to `dream-tester` for the verification ladder: unit tests, platform builds, device install/launch, log inspection, Maestro flows; when `iosUiStrategy` is `swiftui`, include `xcodebuild build` and `xcodebuild test`
+- delegate to `dream-tester` for the verification ladder: unit tests, platform builds, device install/launch, log inspection; when `iosUiStrategy` is `swiftui`, include `xcodebuild build` and `xcodebuild test`
 - repair failures until green, blocked, or a skip condition triggers (see Skip Conditions in dream-agent-operating-guide.md)
 - update `.features/<feature-name>/implementation-report.md`
 - write `.features/<feature>/retrospective.md` using `.opencode/guidance/templates/template-improvement-retrospective-template.md`

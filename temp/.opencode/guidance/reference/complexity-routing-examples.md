@@ -136,7 +136,6 @@ Add expense tracker with list, detail, add screens — domain/data/api/impl, Roo
 - [x] retrospective.md
 - [x] verification-report.md
 - [x] checkpoints.md
-- [x] Maestro flows (android.yaml, ios.yaml)
 
 **Proceeding with full /dream-feature workflow...**
 ```
@@ -216,8 +215,7 @@ Build a complete expense tracking feature with 3 screens, Room database persiste
 - retrospective.md
 - verification-report.md
 - checkpoints.md
-- Maestro flows (android.yaml, ios.yaml)
-- Total: 8 artifacts
+- Total: 7 artifacts
 
 ---
 

@@ -26,7 +26,7 @@ Defines which OpenCode agent owns each Dream workflow stage.
 
 ### Verification Subagent
 
-- `dream-tester`: Full verification ladder — tests, builds, device, Maestro.
+- `dream-tester`: Full verification ladder — tests, builds, device, logs.
 
 ### Review Subagent
 

@@ -87,9 +87,9 @@ These commands explicitly request a complete Dream feature with full artifacts, 
 - Full ui-spec.md
 - Feature branch created
 - Inspector review required
-- All artifacts created (plan, contract, spec, report, retrospective, verification-report, Maestro flows)
+- All artifacts created (plan, contract, spec, report, retrospective, verification-report, checkpoints)
 
-**Artifacts:** 8+ (plan.md, contract.yaml, ui-spec.md, report.md, retrospective.md, verification-report.md, checkpoints.md, Maestro flows)
+**Artifacts:** 7+ (plan.md, contract.yaml, ui-spec.md, report.md, retrospective.md, verification-report.md, checkpoints.md)
 
 ## Evaluation Algorithm
 
@@ -158,7 +158,6 @@ When evaluating complexity, `dream-general` outputs:
 - [ ] verification-report.md
 - [ ] retrospective.md
 - [ ] checkpoints.md
-- [ ] Maestro flows
 
 **Proceeding with workflow...**
 ```

@@ -12,9 +12,6 @@ git log --oneline -10
 
 # Android SDK readiness
 adb devices
-
-# Maestro availability
-maestro --version
 ```
 
 ## Gradle Tests
@@ -74,16 +71,6 @@ xcrun simctl launch <device-id> <bundle-id>
 
 # Uninstall (before fresh install)
 xcrun simctl uninstall <device-id> <bundle-id>
-```
-
-## Maestro Smoke Flows
-
-```bash
-# Android smoke flow
-maestro test maestro/features/<feature-name>/android.yaml
-
-# iOS smoke flow
-maestro test maestro/features/<feature-name>/ios.yaml
 ```
 
 ## UI Inspection (via mobile-mcp)

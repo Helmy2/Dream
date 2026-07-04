@@ -31,6 +31,7 @@ Prefer linking to those documents in discussions and change summaries instead of
   - `dream-bug-fix` — Fix logic, crash, runtime, data, and state bugs in any layer
   - `dream-ui-fix` — Fix visual, layout, and rendering issues in Compose and SwiftUI screens
   - `dream-quick-fix` — Quick fix for trivial changes (1-3 files, <50 lines, no new modules)
+  - `dream-e2e` — Run Maestro end-to-end smoke flows for features
   - `dream-verify` — Verify and repair a Dream project
   - `dream-review` — Review a Dream project against Dream rules
   - `dream-resume` — Resume a Dream session from saved state
@@ -40,7 +41,7 @@ Prefer linking to those documents in discussions and change summaries instead of
 - [temp/.opencode/guidance/reference/](temp/.opencode/guidance/reference): agent constraints, non-negotiable rules, verification commands/patterns, skip conditions, and token optimization guidelines
 - [temp/.opencode/guidance/templates/](temp/.opencode/guidance/templates): feature contract, feature report, feature spec, plan, maestro smoke checklist, retrospective, and verification report templates
 - [temp/.opencode/knowledge-graph/README.md](temp/.opencode/knowledge-graph/README.md): packaged reusable architecture rules and source graph
-- [temp/.opencode/scripts/dream-preflight.sh](temp/.opencode/scripts/dream-preflight.sh): local readiness check for git, Android SDK, and Maestro
+- [temp/.opencode/scripts/dream-preflight.sh](temp/.opencode/scripts/dream-preflight.sh): local readiness check for git, Android SDK, and tooling
 - [temp/.opencode/scripts/sync-pbxproj.rb](temp/.opencode/scripts/sync-pbxproj.rb): auto-registers orphaned Swift files in Xcode project.pbxproj
 - [temp/.opencode/scripts/remove-sample.sh](temp/.opencode/scripts/remove-sample.sh): removes sample feature files, strips sample deps, and checks for leftovers
 - [temp/.opencode/scripts/start-codebase-memory-mcp.sh](temp/.opencode/scripts/start-codebase-memory-mcp.sh): launches codebase-memory-mcp binary for code intelligence via persistent knowledge graph
@@ -76,7 +77,6 @@ Code intelligence via persistent knowledge graph. Complements the prescriptive k
 - Treat Android and iOS as generated app product targets.
 - Use Android CLI for Android device/emulator setup, install, launch, inspection, logs, and repair loops.
 - Use `xcodebuild` and `xcrun simctl` for iOS build, simulator install, launch, logs, and crash capture.
-- Use Maestro for black-box smoke flows after platform launch is healthy.
 - Do not claim success from green commands alone; match the contract, tests, and review expectations in [temp/.opencode/guidance/dream-agent-operating-guide.md](temp/.opencode/guidance/dream-agent-operating-guide.md).
 
 ## Validation
@@ -98,7 +98,6 @@ Dream's stricter final verification target is documented in [temp/.opencode/guid
 ./gradlew :androidApp:assembleDebug
 # Android CLI install/launch/log inspection
 # xcodebuild plus xcrun simctl build/install/launch/log inspection
-# Maestro smoke flows for relevant Android and iOS user journeys
 ```
 
 Use the lighter template commands for focused iteration, but do not report final success without the required verification behavior or a documented blocker.

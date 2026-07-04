@@ -32,4 +32,3 @@ Best practice:
 
 - use `xcodebuild build` and `xcodebuild test` for structural validation of the native iOS host
 - use `xcrun simctl` for install, launch, and log inspection
-- use feature-owned Maestro iOS flows only after the simulator build and launch path is already healthy

@@ -24,10 +24,10 @@ Treat `$ARGUMENTS` as optional override hints (e.g., app name, package name).
 
 3. **Platform tooling verification**:
     - Check `java -version` (JDK 17+ required)
-    - Check `maestro --version` (Maestro CLI)
     - Check `xcodebuild -version` (macOS only)
     - Check `xcrun simctl list` (macOS only)
     - Check `codebase-memory-mcp --version` (optional, for code intelligence)
+    - Check Maestro via `/dream-e2e` preflight when needed
     - Report each as "passed" or "blocked by environment"
 
 4. **`.features/` directory structure**:
@@ -56,7 +56,7 @@ Treat `$ARGUMENTS` as optional override hints (e.g., app name, package name).
     |--------------------------|---------------|
     | git                      | initialized   |
     | Android SDK              | /path         |
-    | Maestro                  | passed        |
+    | Maestro (via `/dream-e2e`) | available/blocked | |
     | Xcode                    | passed        |
     | JDK                      | 17.0.x        |
     | codebase-memory-mcp      | passed        |

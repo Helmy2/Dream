@@ -45,12 +45,6 @@ else
   blocker 'Android SDK not found; set ANDROID_HOME, ANDROID_SDK_ROOT, or local.properties sdk.dir'
 fi
 
-if command -v maestro >/dev/null 2>&1; then
-  pass 'Maestro is installed'
-else
-  blocker 'Maestro is not installed; install it before smoke validation or record this blocker'
-fi
-
 if command -v xcodebuild >/dev/null 2>&1; then
   pass 'Xcode is installed'
 fi

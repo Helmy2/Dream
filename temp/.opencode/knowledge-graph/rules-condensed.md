@@ -167,7 +167,7 @@ Quick-reference rules for Dream agents. Load specific files for details.
 
 - [pri-1] Plans include a priority field: `hotfix`, `high`, `normal`, `low`
 - [pri-2] `hotfix` skips Phase 0 — go straight to diagnostics, plan after root cause
-- [pri-3] `low` may skip Maestro flows on first pass (document in verification report)
+- [pri-3] `low` may skip on first pass (document in verification report)
 - [pri-4] `normal` and `high` follow the full workflow
 
 ### Commit Workflow

@@ -31,7 +31,7 @@ flowchart TD
 - `temp/.opencode/knowledge-graph/`: reusable architecture rules and retrieval sources.
 - `temp/.features/`: generated app contracts, feature specs, decisions, reports, and retrospectives.
 - `temp/maestro/`: Android and iOS smoke-flow scaffolding.
-- `temp/.opencode/scripts/dream-preflight.sh`: local readiness check for git, Android SDK, and Maestro.
+- `temp/.opencode/scripts/dream-preflight.sh`: local readiness check for git, Android SDK, and tooling.
 - `temp/.opencode/scripts/sync-pbxproj.rb`: auto-registers orphaned Swift files in Xcode project.pbxproj.
 - `temp/.opencode/scripts/remove-sample.sh`: removes sample feature files, strips sample deps, and checks for leftovers.
 - `temp/.opencode/scripts/start-codebase-memory-mcp.sh`: launches codebase-memory-mcp binary for code intelligence via persistent knowledge graph.
@@ -47,7 +47,7 @@ flowchart LR
     Temp --> Agents[.opencode agents and commands]
     Temp --> Graph[.opencode/knowledge-graph rules]
     Temp --> MVP[.features generated metadata]
-    Temp --> Maestro[maestro smoke flows]
+    Temp --> Smoke[maestro smoke flows]
 ```
 
 ## Why `temp/` Exists
@@ -95,7 +95,7 @@ sequenceDiagram
     ImplUI->>Project: Compose screens, SwiftUI views, ViewModels, bridge, tests
     General->>Project: Phase 3: wiring (umbrella, DI, nav)
     General->>Tester: Phase 4: full verification ladder
-    Tester->>Project: Gradle tests, platform builds, device launch, Maestro flows
+    Tester->>Project: Gradle tests, platform builds, device launch, logs
     Tester->>General: Report defects
     General->>Impl: Repair failures when needed
     Impl->>Project: Fix issues
@@ -285,10 +285,8 @@ flowchart TD
     AndroidBuild --> AndroidRuntime[Android CLI install/launch/log inspection]
     AndroidRuntime --> IOSBuild[xcodebuild]
     IOSBuild --> IOSRuntime[xcrun simctl install/launch/log inspection]
-    IOSRuntime --> Maestro[Maestro Android/iOS smoke flows]
-    Maestro --> MCP[mobile-mcp element tree + screenshot on failure]
+    IOSRuntime --> MCP[mobile-mcp element tree + screenshot on failure]
     MCP --> Report[verification-report.md]
-    Maestro --> Report
 ```
 
 Run from `temp/` or from a generated copy:
@@ -299,11 +297,10 @@ Run from `temp/` or from a generated copy:
 ./gradlew :androidApp:assembleDebug
 ```
 
-Feature-owned smoke flows live under `maestro/features/<feature-name>/`:
+Feature-owned smoke flows live under `maestro/features/<feature-name>/`. Run them via `/dream-e2e`:
 
 ```bash
-maestro test maestro/features/sample/android.yaml
-maestro test maestro/features/sample/ios.yaml
+/dream-e2e <feature-name>
 ```
 
 Every user-visible generated feature should have at least one Android smoke flow and one iOS smoke flow when the feature is supported on that platform. App-level startup smoke checks may exist, but they do not replace feature-level coverage.
@@ -328,7 +325,7 @@ Dream orchestrates feature work in phases through `dream-general`. When adding o
 5. **Phase 4 — KMP foundation:** Use `dream-implementer` for `feature/<name>/domain` (entities, repository interfaces, use cases), `feature/<name>/data` (repo implementations, DTOs, mappers), and `feature/<name>/api` (NavKey route types only). No UI.
 6. **Phase 5 — UI:** Deploy `dream-implementer-ui` for cross-platform UI — Compose screens, ViewModels, Koin navigation installers, presentation tests, SwiftUI views, bridge code, and XCTest coverage.
 7. **Phase 6 — Wiring:** Consolidate umbrella module imports, DI registration, and navigation entries.
-8. **Phase 7 — Verification:** Use `dream-tester` for the full verification ladder — Gradle unit tests, platform builds, device install/launch, log inspection, Maestro smoke flows.
+8. **Phase 7 — Verification:** Use `dream-tester` for the full verification ladder — Gradle unit tests, platform builds, device install/launch, log inspection. Run Maestro end-to-end flows separately via `/dream-e2e`.
 9. Write reports using the templates under `temp/.opencode/guidance/templates/`.
 10. Request `dream-inspector` QA gate for substantial work — architecture violations, contract parity, test coverage, anti-patterns.
 11. Only commit when verification and review are clean and staging is safe.

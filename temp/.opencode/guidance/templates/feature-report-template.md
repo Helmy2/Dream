@@ -46,7 +46,7 @@
 |-------|--------|-------|
 | Git readiness | passed/blocked/not run | |
 | Android SDK | passed/blocked/not run | |
-| Maestro | passed/blocked/not run | |
+| Maestro (run via `/dream-e2e`) | passed/blocked/not run | |
 
 ### Test Results
 
@@ -65,15 +65,6 @@
 | iOS simulator | passed/blocked/not run | |
 
 ### Device Validation
-
-| Platform | Status | Notes |
-|----------|--------|-------|
-| Android install/launch | passed/blocked/not run | |
-| iOS install/launch | passed/blocked/not run | |
-| Android logs | passed/blocked/not run | |
-| iOS logs | passed/blocked/not run | |
-
-### Maestro Smoke Flows
 
 | Platform | Status | Notes |
 |----------|--------|-------|

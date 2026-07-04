@@ -87,7 +87,7 @@ For detailed rules, see `.opencode/knowledge-graph/rules-condensed.md`.
 
 ## Verification And Commit (Always)
 
-- [ ] Run required Gradle, platform, Maestro smoke verification, and UI inspection or document precise blockers.
+- [ ] Run required Gradle, platform builds, and UI inspection or document precise blockers.
 - [ ] Record verification in explicit buckets: passed, blocked by environment, not run, not applicable.
 - [ ] Run `dream-inspector` or manual review fallback against contract parity and architecture rules.
 - [ ] Run `git status`, `git diff`, and `git log --oneline -10`.
@@ -98,9 +98,8 @@ For detailed rules, see `.opencode/knowledge-graph/rules-condensed.md`.
 ## Preflight (Always)
 
 - [ ] Run `./scripts/dream-preflight.sh` and record any blockers.
-- [ ] Verify git, Android SDK, and Maestro readiness before verification.
-- [ ] Create feature-owned Maestro smoke files under `maestro/features/<feature-name>/`.
-- [ ] Start each Maestro flow with `clearState` before `launchApp`.
+- [ ] Verify git and Android SDK readiness before verification.
+
 
 ---
 

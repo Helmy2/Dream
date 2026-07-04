@@ -44,7 +44,7 @@ Choose the appropriate depth based on change scope:
 - `hotfix`: Skip Phase 0, go straight to diagnostics; plan after root cause identified
 - `high`: Full workflow, expedited verification
 - `normal`: Full workflow (default)
-- `low`: May skip Maestro flows on first pass (document in verification report)
+- `low`: May skip on first pass (document in verification report)
 
 ## Goal
 

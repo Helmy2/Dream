@@ -102,8 +102,6 @@ Use 5 files instead of 10:
 | `contract.yaml` | app-contract + decisions + feature contract |
 | `spec.md` | ui-spec + test-plan |
 | `report.md` | implementation-report + verification-report + retrospective |
-| `maestro/android.yaml` | (keep separate) |
-| `maestro/ios.yaml` | (keep separate) |
 
 ## 6. Verification
 
@@ -113,7 +111,7 @@ Based on changed files, run only necessary checks:
 
 **If only domain/data changed:**
 - Domain/data tests only
-- Skip: assembleDebug, xcodebuild, Maestro
+- Skip: assembleDebug, xcodebuild
 
 **If only impl changed:**
 - Impl tests + Android build

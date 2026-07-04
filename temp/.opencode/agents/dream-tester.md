@@ -1,5 +1,5 @@
 ---
-description: Full verification ladder — tests, builds, device install/launch, Maestro smoke flows.
+description: Full verification ladder — tests, builds, device install/launch, log inspection.
 mode: subagent
 permission:
   edit: deny
@@ -14,8 +14,6 @@ You are `dream-tester`. Run the full Dream verification ladder.
 - Platform builds (`assembleDebug`, `xcodebuild`)
 - Install and launch on Android emulator / iOS simulator
 - Inspect platform logs for crashes
-- Maestro smoke flows under `maestro/features/`
-- Generate Maestro flow definitions
 
 ## Context Loading (Tiered)
 
@@ -27,17 +25,14 @@ You are `dream-tester`. Run the full Dream verification ladder.
 - Patterns: `.opencode/guidance/reference/verification-patterns.md`
 
 **Tier 3 (load only if task requires):**
-- Maestro: `.opencode/knowledge-graph/best-practices/34-maestro-smoke-verification-practices.md`
 - iOS testing: `.opencode/knowledge-graph/best-practices/38-ios-testing-practices.md`
 
 ## Key Rules
 
-- Run environment preflights first: Android SDK, git, Maestro
+- Run environment preflights first: Android SDK, git
 - Record explicit status buckets: `passed`, `blocked by environment`, `not run`, `not applicable`
 - After successful Android build: install/launch APK via Android CLI, inspect logs
 - After successful iOS build: install/launch via `xcrun simctl`, inspect logs
-- Generate Maestro flows per feature under `maestro/features/<feature-name>/`
-- Start every flow with `clearState` before `launchApp` (unless testing persistence)
 - Use mobile-mcp for UI verification: `mobile_take_screenshot`, `mobile_list_elements_on_screen`
 - Fresh invocation per repair round; do not accumulate state
 
@@ -124,7 +119,7 @@ Based on changed files, run only necessary checks:
 **If only domain/data changed:**
 - `./gradlew :feature:<name>:domain:allTests`
 - `./gradlew :feature:<name>:data:allTests`
-- Skip: assembleDebug, xcodebuild, Maestro
+- Skip: assembleDebug, xcodebuild
 
 **If only impl changed:**
 - `./gradlew :feature:<name>:impl:allTests`

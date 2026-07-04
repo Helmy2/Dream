@@ -20,13 +20,13 @@ Read all `.opencode/commands/*.md` files. For each, extract the `description:` f
 ### 3. Available Scripts
 
 From the repository map in `ONBOARDING.md` and `AGENTS.md`, list:
-- `scripts/dream-preflight.sh` — local readiness check for git, Android SDK, and Maestro
+- `scripts/dream-preflight.sh` — local readiness check for git, Android SDK, and tooling
 - `scripts/sync-pbxproj.rb` — auto-registers orphaned Swift files and removes deleted file references in Xcode project.pbxproj
 - `scripts/remove-sample.sh` — removes sample feature files, strips sample deps, and checks for leftovers
 
 ### 4. Agents
 
-Read `.opencode/guidance/opencode-agent-map.md` to list all 10 agents with their one-line role summary. Present as a table.
+Read `.opencode/guidance/opencode-agent-map.md` to list all agents with their one-line role summary. Present as a table.
 
 ### 5. Implemented Features
 
@@ -58,6 +58,7 @@ Present as a clean terminal-friendly summary:
 │ /dream-ui-fix    │ Fix visual, layout, and rendering issues        │
 │ /dream-bug-fix   │ Fix logic, crash, runtime, data, state bugs     │
 │ /dream-verify    │ Verification and repair workflow                │
+│ /dream-e2e       │ Run Maestro end-to-end smoke flows for features │
 │ /dream-review    │ Architecture and contract compliance review     │
 │ /dream-improve   │ Apply unapplied retrospectives to template      │
 │ /dream-resume    │ Resume a Dream session from saved state         │
@@ -68,7 +69,7 @@ Present as a clean terminal-friendly summary:
 ┌───────────────────────────┬────────────────────────────────────────┐
 │ SCRIPT                    │ PURPOSE                                │
 ├───────────────────────────┼────────────────────────────────────────┤
-│ scripts/dream-preflight.sh│ git, Android SDK, Maestro readiness   │
+│ scripts/dream-preflight.sh│ git, Android SDK, tooling readiness   │
 │ scripts/sync-pbxproj.rb   │ Sync Swift files in Xcode (add/remove)│
 │ scripts/remove-sample.sh  │ Remove sample feature and check leftovers│
 └───────────────────────────┴────────────────────────────────────────┘

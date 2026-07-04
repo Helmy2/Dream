@@ -44,7 +44,7 @@ See `.opencode/guidance/reference/complexity-routing.md` for full details and ex
 | Design | `dream-designer` | UI/UX specs (no code) |
 | KMP Business | `dream-implementer` | Domain, data, api, wiring |
 | UI Implementation | `dream-implementer-ui` | Cross-platform UI — Compose (Android) + SwiftUI (iOS) |
-| Verification | `dream-tester` | Tests, builds, device, Maestro |
+| Verification | `dream-tester` | Tests, builds, device, logs |
 | Review | `dream-inspector` | Final QA gate |
 
 **Rule**: Use smallest capable agent per subtask. `dream-general` must not edit implementation files directly.
@@ -155,12 +155,8 @@ See `.opencode/knowledge-graph/rules-condensed.md` for the full Git & Workflow r
 **Final validation**:
 1. Android CLI: env check, emulator setup, APK install/launch, logs
 2. `xcodebuild` + `xcrun simctl`: build, install, launch, logs
-3. Maestro Android smoke flows per feature
-4. Maestro iOS smoke flows per feature
 
 **Status buckets**: `passed`, `blocked by environment`, `not run`, `not applicable`
-
-**Maestro rules**: Feature-owned flows under `maestro/features/<feature>/`, `clearState` before `launchApp`, stable selectors, run after platform launch is healthy.
 
 See `.opencode/guidance/reference/verification-commands.md` for commands.
 
@@ -228,7 +224,5 @@ Flow stops when: work implemented and verified, real blocker documented, skip co
 | `.features/<feature>/contract.yaml` | dream-general | `feature-contract-template.md` |
 | `.features/<feature>/spec.md` | dream-designer | `feature-spec-template.md` |
 | `.features/<feature>/report.md` | dream-general | `feature-report-template.md` |
-| `maestro/features/<feature>/android.yaml` | dream-tester | |
-| `maestro/features/<feature>/ios.yaml` | dream-tester | |
 
 Use templates from `.opencode/guidance/templates/` for reports. Plans must be user-approved before implementation proceeds.
