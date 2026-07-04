@@ -12,6 +12,7 @@ Defines which OpenCode agent owns each Dream workflow stage.
 
 ### Read-Only Subagents
 
+- `dream-discovery`: Fast codebase exploration and context building — locates files, symbols, builds focused context packs. Modes: `explore` (quick/deep), `context`.
 - `dream-research`: Fast codebase discovery and external research — locates modules, files, symbols, builds context packs, and fetches external documentation/APIs. Modes: `codebase` (quick/deep), `external` (docs/APIs/troubleshooting), `combined`.
 
 ### Spec-Generation Subagent
@@ -30,6 +31,37 @@ Defines which OpenCode agent owns each Dream workflow stage.
 ### Review Subagent
 
 - `dream-inspector`: Final QA and architecture review gate.
+
+## Model Assignments
+
+Each agent is configured with a model optimized for its role. Configuration lives in `opencode.json` under the `agent` key. Users can customize during `/dream-init` or by editing `opencode.json` directly.
+
+| Agent | Model | Model ID | Rationale |
+|---|---|---|---|
+| `dream-general` | DeepSeek V4 Pro | `opencode-go/deepseek-v4-pro` | 1M context + strongest reasoning for orchestration |
+| `dream-designer` | Qwen3.7 Plus | `opencode-go/qwen3.7-plus` | Image support for visual understanding |
+| `dream-discovery` | Big Pickle | `opencode/big-pickle` | Free, 200K context for fast exploration |
+| `dream-implementer` | DeepSeek V4 Pro | `opencode-go/deepseek-v4-pro` | Strongest reasoning for complex KMP code |
+| `dream-implementer-ui` | Qwen3.7 Plus | `opencode-go/qwen3.7-plus` | Image support for UI spec interpretation |
+| `dream-research` | Big Pickle | `opencode/big-pickle` | Free, 200K context for research |
+| `dream-tester` | MiMo V2.5 | `opencode-go/mimo-v2.5` | Low cost, image support for screenshot comparison |
+| `dream-inspector` | DeepSeek V4 Pro | `opencode-go/deepseek-v4-pro` | Strongest reasoning for QA gate |
+
+### Overriding Models
+
+Edit `opencode.json` to change any agent's model:
+
+```json
+{
+  "agent": {
+    "dream-general": {
+      "model": "opencode-go/deepseek-v4-pro"
+    }
+  }
+}
+```
+
+Run `opencode models` to see all available models.
 
 ## Default Ownership
 

@@ -49,6 +49,17 @@ See `.opencode/guidance/reference/complexity-routing.md` for full details and ex
 
 **Rule**: Use smallest capable agent per subtask. `dream-general` must not edit implementation files directly.
 
+## Model Selection
+
+Each agent uses a model optimized for its role. The default mapping balances cost, context window, and capability:
+
+- **Orchestration & Implementation** (dream-general, dream-implementer, dream-inspector): DeepSeek V4 Pro — strongest reasoning, 1M context
+- **UI & Design** (dream-designer, dream-implementer-ui): Qwen3.7 Plus — image support for visual tasks
+- **Exploration & Research** (dream-discovery, dream-research): Big Pickle — free, sufficient for read-only tasks
+- **Verification** (dream-tester): MiMo V2.5 — low cost with image support for screenshot comparison
+
+Users can customize model assignments during `/dream-init` or by editing `opencode.json`. See `opencode-agent-map.md` for the full mapping and override instructions.
+
 ## Substantial Work Threshold
 
 `dream-inspector` review required for:

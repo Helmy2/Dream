@@ -4,6 +4,32 @@
     ".opencode/guidance/opencode-agent-map.md",
     ".opencode/guidance/dream-agent-operating-guide.md"
   ],
+  "agent": {
+    "dream-general": {
+      "model": "opencode-go/deepseek-v4-pro"
+    },
+    "dream-designer": {
+      "model": "opencode-go/qwen3.7-plus"
+    },
+    "dream-discovery": {
+      "model": "opencode/big-pickle"
+    },
+    "dream-implementer": {
+      "model": "opencode-go/deepseek-v4-pro"
+    },
+    "dream-implementer-ui": {
+      "model": "opencode-go/qwen3.7-plus"
+    },
+    "dream-research": {
+      "model": "opencode/big-pickle"
+    },
+    "dream-tester": {
+      "model": "opencode-go/mimo-v2.5"
+    },
+    "dream-inspector": {
+      "model": "opencode-go/deepseek-v4-pro"
+    }
+  },
   "mcp": {
     "mobile-mcp": {
       "type": "local",
