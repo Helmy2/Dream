@@ -25,7 +25,7 @@ class RoomSampleRepositoryTest {
         assertEquals(3, loaded.size)
         assertEquals("contract-first", dao.items[0].id)
         assertEquals("Contract-first features", dao.items[0].title)
-        assertEquals("Generate features from compact contracts stored in .features/.", dao.items[0].description)
+        assertEquals("Generate features from compact contracts stored in features/.", dao.items[0].description)
         assertEquals("shared-architecture", dao.items[1].id)
         assertEquals("Shared architecture", dao.items[1].title)
         assertEquals("Keep domain, data, presentation, and UI code in stable modules.", dao.items[1].description)

@@ -15,8 +15,8 @@ Read first:
 - `AGENTS.md`
 - `.opencode/guidance/dream-agent-operating-guide.md`
 - selected template README
-- selected template `.features/` metadata
-- any already-generated `.features/app-contract.yaml` or `.features/decisions.yaml`
+- selected template `features/` metadata
+- any already-generated `features/app-contract.yaml` or `features/decisions.yaml`
 
 Inputs you must use:
 - destination project name
@@ -57,15 +57,14 @@ Instantiation steps:
 7. Audit all required identity surfaces and record each rename explicitly.
 8. Replace sample-facing display text that should not survive into the generated app baseline.
 9. Preserve reusable shared infrastructure, build logic, and architecture modules.
-10. Reset `.features/verification-report.md` to reflect the new generation cycle rather than the source template's prior validation state.
-11. Update `.features/decisions.yaml` and `.features/app-contract.yaml` to reflect the generated app.
+10. Reset `features/verification-report.md` to reflect the new generation cycle rather than the source template's prior validation state.
+11. Update `features/decisions.yaml` and `features/app-contract.yaml` to reflect the generated app.
 12. Decide whether the sample feature should remain temporarily as scaffolding or be replaced immediately by the first real feature.
 13. Verify git readiness in the destination project before later workflow stages depend on git commands.
-14. Verify Android SDK and Maestro readiness early, or record precise environment blockers.
+14. Verify Android SDK readiness early, or record precise environment blockers.
 15. Run `./scripts/dream-preflight.sh` when it exists and include the result in the instantiation summary.
 16. Check and install development dependencies interactively:
     - `mobilecli` (`command -v mobilecli`; install via `npm install -g @mobilenext/mobilecli`)
-    - `maestro` (`command -v maestro`; install via `curl -Ls https://get.maestro.mobile.dev | bash`)
     - `xcodeproj` Ruby gem (`gem list -i xcodeproj`; install via `gem install xcodeproj`)
     - Java JDK 17+ (`java -version`; check only — instruct manual install from https://adoptium.net if missing)
     - Ask the user before each install and respect their choice. If a tool is already installed, confirm and move on.
@@ -85,7 +84,7 @@ Required identity audit surfaces:
 - Kotlin package declarations and directory layout where package roots are renamed
 - Android manifest labels and other visible app identity text
 - iOS configuration values that carry app identity
-- README or `.features/` metadata values that still carry template identity
+- README or `features/` metadata values that still carry template identity
 - obvious sample or template display strings that would misidentify the generated app
 
 Template-specific decisions you must make explicitly:
@@ -115,7 +114,7 @@ What to customize:
 - application id and namespace values
 - package roots that still contain template identity
 - display text such as window title, starter labels, and obvious sample text
-- `.features/` metadata for the new project
+- `features/` metadata for the new project
 
 Required identity audit output:
 - canonical app identity summary
@@ -134,9 +133,9 @@ Rules for the sample feature:
 
 Required outputs:
 - instantiated project on disk
-- updated `.features/app-contract.yaml`
-- updated `.features/decisions.yaml`
-- reset or regenerated `.features/verification-report.md`
+- updated `features/app-contract.yaml`
+- updated `features/decisions.yaml`
+- reset or regenerated `features/verification-report.md`
 - concise summary of all renamed identifiers and structural decisions
 - explicit identity audit summary
 

@@ -69,7 +69,6 @@ Implementer applies minimal fix. No contract.yaml, no ui-spec.md.
 - If only iOS changed: `xcodebuild build`
 - If shared/* changed: Full verification ladder
 
-**No Maestro flows** unless the change affects user-facing behavior.
 
 ### Step 5: Done
 
@@ -87,7 +86,6 @@ If verification fails:
 - **No contract.yaml** created
 - **No ui-spec.md** created
 - **No plan.md** created (plan exists in conversation only)
-- **No Maestro flows** unless user-facing behavior changed
 - **No feature branch** (commit to current branch)
 
 ## Artifacts Created

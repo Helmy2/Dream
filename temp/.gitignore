@@ -14,3 +14,12 @@ local.properties
 
 # Xcode user data
 xcuserdata/
+*.pbxproj.bak
+
+# Dream AI agent scaffolding
+.opencode/
+AGENTS.md
+
+# Dream metadata (not code)
+graphify-out/
+.codebase-memory/

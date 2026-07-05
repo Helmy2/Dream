@@ -38,7 +38,7 @@ Quickly locate files, symbols, and build focused context packs for Dream tasks. 
 ## Use When
 
 - Locating a feature, symbol, or module in the codebase
-- Finding relevant template modules or `.features/` metadata
+- Finding relevant template modules or `features/` metadata
 - Answering structural questions about the project
 - Building context before implementation or repair
 - Quick lookups for file paths, class names, or function signatures
@@ -48,7 +48,7 @@ Quickly locate files, symbols, and build focused context packs for Dream tasks. 
 ### Explore Mode
 - Search quickly, return precise paths
 - Keep explanations short, avoid speculation
-- Prioritize: `.opencode/guidance/`, `.opencode/knowledge-graph/`, `.features/`, `templates/`, `feature/`, `shared/`, `androidApp/`, `iosApp/`
+- Prioritize: `.opencode/guidance/`, `.opencode/knowledge-graph/`, `features/`, `templates/`, `feature/`, `shared/`, `androidApp/`, `iosApp/`
 - In deep mode: identify which graph rules apply, return context that helps implementers work with minimal drift
 
 ### Context Mode
@@ -76,6 +76,20 @@ Quickly locate files, symbols, and build focused context packs for Dream tasks. 
 - Applicable rules (condensed)
 - Dependencies and coupling points
 - Risks or warnings
+
+## MCP Tools (codebase-memory-mcp)
+
+Use these before falling back to grep/read:
+
+1. `search_graph` — find functions, classes, routes by pattern
+2. `trace_path` — trace who calls a function or what it calls
+3. `get_code_snippet` — read specific function/class source code
+4. `query_graph` — Cypher queries for complex patterns
+5. `get_architecture` — high-level project summary
+
+**Priority**: Always try MCP tools first. Fall back to grep/glob only when searching string literals, non-code files, or when MCP returns insufficient results.
+
+See `.opencode/guidance/reference/codebase-memory-mcp-tools.md` for full reference.
 
 ## Constraints
 

@@ -11,15 +11,16 @@ Read:
 - `.opencode/guidance/dream-agent-operating-guide.md`
 - `.opencode/knowledge-graph/README.md`
 - relevant `.opencode/knowledge-graph/best-practices/*.md`
-- `.features/app-contract.yaml`
-- `.features/decisions.yaml`
+- `features/app-contract.yaml`
+- `features/decisions.yaml`
 - relevant feature contracts
 
 Focus on:
-- architectural violations
+- architectural violations (Clean Architecture, SOLID)
 - regressions
 - contract mismatches
 - missing verification coverage
+- clean-code violations: hardcoded values, dead code, unsafe production patterns, locale gaps, import hygiene
 - field-level contract integrity: every entity field, action signature, state field, time-sensitive behavior, and required test in each feature contract must map to code and tests
 - generated-feature DI must use Koin compiler plugin DSL registrations, not annotation-based DI such as `@KoinViewModel`, `@Module`, or `@ComponentScan`
 

@@ -35,7 +35,7 @@ When to use a per-feature database instead:
 
 - only when a feature has a genuinely isolated schema that no other feature will ever share
 - keep the database class, entity, and DAO in the feature `data` module in that case
-- document the exception in `.features/decisions.yaml`
+- document the exception in `features/decisions.yaml`
 
 ### 11.3 Entity design follows feature boundaries
 

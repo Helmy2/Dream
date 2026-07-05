@@ -1,6 +1,6 @@
 # Template Improvement Retrospective Template
 
-Use this when a generated feature exposes reusable Dream template friction, reliable verification patterns, or agent workflow gaps. Save generated-app retrospectives as `.features/template-improvement-retrospective.md` or under `.features/<feature-name>/` when the feedback is feature-specific.
+Use this when a generated feature exposes reusable Dream template friction, reliable verification patterns, or agent workflow gaps. Save generated-app retrospectives as `features/template-improvement-retrospective.md` or under `features/<feature-name>/` when the feedback is feature-specific.
 
 ## Context
 

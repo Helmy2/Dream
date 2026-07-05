@@ -74,7 +74,7 @@ After Maestro flows complete, validate the rendered UI against the contract. Pre
 - [ ] Verify contract-mandated UI elements appear in the element tree with matching accessibility labels.
 - [ ] Cross-reference visible text content against `shared/core/strings` string resources.
 - [ ] Verify that form save/output actions produce expected success-state content in the element tree.
-- [ ] Include screenshot descriptions and element tree excerpts in `.features/verification-report.md`.
+- [ ] Include screenshot descriptions and element tree excerpts in `features/verification-report.md`.
 - [ ] If none of MCP, mobilecli, or device CLI are available, skip UI inspection and record it as `not run`.
 
 ## Environment Fallbacks
@@ -86,4 +86,4 @@ After Maestro flows complete, validate the rendered UI against the contract. Pre
 
 ## Reporting
 
-- [ ] Record smoke results in `.features/verification-report.md` as `passed`, `blocked by environment`, `not run`, or `not applicable`.
+- [ ] Record smoke results in `features/verification-report.md` as `passed`, `blocked by environment`, `not run`, or `not applicable`.

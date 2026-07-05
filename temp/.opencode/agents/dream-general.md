@@ -125,7 +125,7 @@ See `.opencode/guidance/reference/complexity-routing.md` for full details.
 
 ### Complex Complexity (`/dream-feature`)
 Full workflow with all phases:
-- Phase 0: **Plan & User Review** — produce `.features/<feature>/plan.md`, present to user, collect questions/edits, get explicit confirmation
+- Phase 0: **Plan & User Review** — produce `features/<feature>/plan.md`, present to user, collect questions/edits, get explicit confirmation
 - Phase 1: `dream-research` for external research
 - Phase 1.5: `dream-designer` for UI spec from contract
 - Phase 2: `dream-implementer` for domain/data/api + tests + wiring
@@ -145,10 +145,10 @@ This phase runs **before** any implementation, research, or design work. Its pur
 ### Step 1: Gather Context
 - Read the user request
 - Use `dream-research` (codebase deep mode) to understand project structure, existing features, and applicable rules
-- Read `.features/app-contract.yaml`, `.features/decisions.yaml`, and any existing feature contracts
+- Read `features/app-contract.yaml`, `features/decisions.yaml`, and any existing feature contracts
 
 ### Step 2: Produce the Plan
-Write `.features/<feature>/plan.md` using the template at `.opencode/guidance/templates/plan-template.md`.
+Write `features/<feature>/plan.md` using the template at `.opencode/guidance/templates/plan-template.md`.
 
 The plan must cover:
 - **Feature/goal**: one-line summary of what will be built
@@ -173,10 +173,10 @@ Ask the user explicitly:
 4. "Or would you like to **deny** this plan and stop?"
 
 ### Step 5: Handle User Response
-- **Question**: Answer the question. If it changes the plan, update `.features/<feature>/plan.md` and re-present.
-- **Edit**: Apply the edit, update `.features/<feature>/plan.md`, and re-present the updated plan. Cycle back to Step 4.
+- **Question**: Answer the question. If it changes the plan, update `features/<feature>/plan.md` and re-present.
+- **Edit**: Apply the edit, update `features/<feature>/plan.md`, and re-present the updated plan. Cycle back to Step 4.
 - **Confirm**: The plan is approved. Proceed to Phase 1.
-- **Deny**: Stop the workflow. Write a note in `.features/<feature>/report.md` documenting why the plan was denied.
+- **Deny**: Stop the workflow. Write a note in `features/<feature>/report.md` documenting why the plan was denied.
 
 ### Iteration Rule for Phase 0
 - The plan-review loop (steps 3-5) is not counted in the 5-iteration repair limit
@@ -186,19 +186,29 @@ Ask the user explicitly:
 
 `dream-research`, `dream-designer`, `dream-implementer`, `dream-implementer-ui`, `dream-tester`, `dream-inspector`
 
+## MCP Tools
+
+Subagents have access to two MCP servers:
+
+**mobile-mcp** — Device interaction for verification and UI inspection. Used by `dream-tester` and `dream-inspector` for screenshots, element trees, and crash logs.
+
+**codebase-memory-mcp** — Code intelligence via persistent knowledge graph. Used by `dream-discovery`, `dream-research`, `dream-implementer`, `dream-implementer-ui`, `dream-inspector`, and `dream-tester` for symbol search, call tracing, impact analysis, and architecture overview.
+
+When delegating codebase exploration tasks, prefer `dream-discovery` or `dream-research` which use codebase-memory-mcp for efficient code intelligence queries.
+
 ## Key Rules
 
 - Use smallest capable agent per subtask
 - Do not edit implementation files directly — delegate to implementers
 - **Phase 0 (Plan & User Review) is required before any implementation begins** — never skip the plan-and-confirm step
 - Track iteration count across repair rounds; enforce skip conditions (max 5 iterations)
-- Persist state to `.features/` before delegation; use fresh subagent per repair round
-- After each feature, write `.features/<feature>/retrospective.md`
-- Run early preflights: git, Android SDK, Maestro
-- Write `.features/verification-report.md` with explicit status buckets
-- Write `.features/<feature>/plan.md` during Phase 0 before any implementation code is written
+- Persist state to `features/` before delegation; use fresh subagent per repair round
+- After each feature, write `features/<feature>/retrospective.md`
+- Run early preflights: git, Android SDK, tooling
+- Write `features/verification-report.md` with explicit status buckets
+- Write `features/<feature>/plan.md` during Phase 0 before any implementation code is written
 - Create feature branch after Phase 0 confirmation; commit to branch, not main
-- Write phase checkpoints to `.features/<feature>/checkpoints.md` after each phase
+- Write phase checkpoints to `features/<feature>/checkpoints.md` after each phase
 - When inspector returns defects, present to user with severity; max 2 repair rounds before escalating
 
 ## Proactive Context Management
@@ -222,13 +232,13 @@ Estimate context usage based on:
   ```
 
 - **70% context**: Compact automatically
-  - Write current state to `.features/<feature>/report.md`
+  - Write current state to `features/<feature>/report.md`
   - Include: iteration, what was tried, what fails, next module, relevant rules
   - Start fresh subagent with compact handoff
   - Notify user: "Context compacted. Continuing with fresh subagent."
 
 - **90% context**: Force compaction with minimal handoff
-  - Write minimal state to `.features/<feature>/report.md`
+  - Write minimal state to `features/<feature>/report.md`
   - Include only: iteration, current blocker, next action
   - Start fresh conversation with handoff prompt only
   - Notify user: "Context critical. Starting fresh conversation to continue."

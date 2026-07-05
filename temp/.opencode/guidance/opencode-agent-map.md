@@ -26,7 +26,7 @@ Defines which OpenCode agent owns each Dream workflow stage.
 
 ### Verification Subagent
 
-- `dream-tester`: Full verification ladder — tests, builds, device, Maestro.
+- `dream-tester`: Full verification ladder — tests, builds, device, logs.
 
 ### Review Subagent
 
@@ -63,6 +63,29 @@ Edit `opencode.json` to change any agent's model:
 
 Run `opencode models` to see all available models.
 
+## MCP Tools
+
+Two MCP servers are configured in `opencode.json`:
+
+### mobile-mcp
+
+Device interaction for verification and UI inspection.
+
+- **Used by**: `dream-tester`, `dream-inspector`
+- **Key tools**: `mobile_take_screenshot`, `mobile_list_elements_on_screen`, `mobile_list_crashes`, `mobile_get_crash`
+- **Launcher**: `.opencode/scripts/start-mobile-mcp.sh`
+
+### codebase-memory-mcp
+
+Code intelligence via persistent knowledge graph. Complements the prescriptive knowledge graph (rules/constraints) with descriptive code intelligence (what code actually does).
+
+- **Used by**: `dream-discovery`, `dream-research`, `dream-implementer`, `dream-implementer-ui`, `dream-inspector`
+- **Key tools**: `search_graph`, `trace_path`, `get_code_snippet`, `detect_changes`, `get_architecture`, `query_graph`
+- **Launcher**: `.opencode/scripts/start-codebase-memory-mcp.sh`
+- **Reference**: `.opencode/guidance/reference/codebase-memory-mcp-tools.md`
+
+**Rule**: Agents should prefer MCP queries over grep/read for codebase exploration. Fall back to grep/glob only for string literals, non-code files, or when MCP returns insufficient results.
+
 ## Default Ownership
 
 ### `dream-general`
@@ -72,7 +95,7 @@ Owns: workflow orchestration, contracts, **plan generation**, delegation, verifi
 Should do:
 - Interpret user request
 - **Evaluate complexity** (trivial/simple/complex) and select appropriate workflow
-- **Create the plan** (`.features/<feature>/plan.md` for complex, conversation plan for simple/trivial) and present it to the user during Phase 0
+- **Create the plan** (`features/<feature>/plan.md` for complex, conversation plan for simple/trivial) and present it to the user during Phase 0
 - **Ask for questions, edits, or confirmation before proceeding**
 - Launch appropriate subagent per phase
 - Ensure Dream doesn't report success before verification is green
@@ -97,7 +120,7 @@ Owns: UI/UX specification generation.
 
 Use when: feature contract exists and UI implementation is about to start.
 
-Output: `.features/<feature>/ui-spec.md`
+Output: `features/<feature>/ui-spec.md`
 
 ### `dream-implementer`
 
@@ -139,7 +162,7 @@ Output: `APPROVED` or itemized defect list.
 
 1. `dream-general` interprets the request.
 2. `dream-research` gathers relevant context if needed.
-3. **Phase 0: `dream-general` produces `.features/<feature>/plan.md`, presents it to the user, and gets explicit confirmation before proceeding.**
+3. **Phase 0: `dream-general` produces `features/<feature>/plan.md`, presents it to the user, and gets explicit confirmation before proceeding.**
 4. `dream-general` generates contracts.
 5. `dream-implementer` instantiates template.
 6. `dream-implementer` removes `feature/sample` after first real feature.
@@ -155,7 +178,7 @@ Output: `APPROVED` or itemized defect list.
    - **Simple**: Lightweight workflow (brief conversation plan, minimal artifacts)
    - **Complex**: Full `/dream-feature` workflow
 4. For complex: `dream-research` gathers context (deep mode).
-5. For complex: **Phase 0: `dream-general` produces `.features/<feature>/plan.md`, presents it to the user, and gets explicit confirmation.**
+5. For complex: **Phase 0: `dream-general` produces `features/<feature>/plan.md`, presents it to the user, and gets explicit confirmation.**
 6. For complex: `dream-general` produces feature contract.
 7. For complex: `dream-research` if external research needed.
 8. For complex: `dream-designer` produces UI spec.
@@ -194,7 +217,7 @@ Output: `APPROVED` or itemized defect list.
 
 Introduced before every generation or creation workflow:
 1. `dream-general` gathers context (project, existing features, rules).
-2. `dream-general` produces `.features/<feature>/plan.md` using the plan template.
+2. `dream-general` produces `features/<feature>/plan.md` using the plan template.
 3. `dream-general` presents the plan to the user in the conversation.
 4. `dream-general` asks for questions, edits, or confirmation.
 5. On **Confirm**: proceed to next phase. On **Edit**: update plan, re-present. On **Deny**: stop and document.

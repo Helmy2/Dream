@@ -18,7 +18,7 @@ flowchart TD
     Template --> Generated[Generated KMP app]
     Contract --> Generated
     Generated --> Verify[Tests, builds, platform launch, smoke flows]
-    Verify --> Report[.features/verification-report.md]
+    Verify --> Report[features/verification-report.md]
 ```
 
 ## Repository Map
@@ -29,11 +29,13 @@ flowchart TD
 - `temp/`: canonical Kotlin Multiplatform starter project.
 - `temp/.opencode/`: packaged OpenCode config, agents (7 agents: dream-general, dream-research, dream-designer, dream-implementer, dream-implementer-ui, dream-tester, dream-inspector), commands, and prompt guidance.
 - `temp/.opencode/knowledge-graph/`: reusable architecture rules and retrieval sources.
-- `temp/.features/`: generated app contracts, feature specs, decisions, reports, and retrospectives.
+- `temp/features/`: generated app contracts, feature specs, decisions, reports, and retrospectives.
 - `temp/maestro/`: Android and iOS smoke-flow scaffolding.
-- `temp/.opencode/scripts/dream-preflight.sh`: local readiness check for git, Android SDK, and Maestro.
+- `temp/.opencode/scripts/dream-preflight.sh`: local readiness check for git, Android SDK, and tooling.
 - `temp/.opencode/scripts/sync-pbxproj.rb`: auto-registers orphaned Swift files in Xcode project.pbxproj.
 - `temp/.opencode/scripts/remove-sample.sh`: removes sample feature files, strips sample deps, and checks for leftovers.
+- `temp/.opencode/scripts/start-codebase-memory-mcp.sh`: launches codebase-memory-mcp binary for code intelligence via persistent knowledge graph.
+- `temp/.cbmignore`: excludes files from codebase-memory-mcp indexing (build artifacts, generated files, Dream metadata).
 
 ```mermaid
 flowchart LR
@@ -45,7 +47,7 @@ flowchart LR
     Temp --> Agents[.opencode agents and commands]
     Temp --> Graph[.opencode/knowledge-graph rules]
     Temp --> MVP[.features generated metadata]
-    Temp --> Maestro[maestro smoke flows]
+    Temp --> Smoke[maestro smoke flows]
 ```
 
 ## Why `temp/` Exists
@@ -77,14 +79,14 @@ sequenceDiagram
 
     User->>General: Plain product request
     General->>Research: Gather context (on-demand)
-    General->>Project: Phase 0: Write .features/<feature>/plan.md
+    General->>Project: Phase 0: Write features/<feature>/plan.md
     General->>User: Present plan for review
     User->>General: Confirm, edit, or deny
-    General->>Project: Write .features/app-contract.yaml
-    General->>Project: Write .features/decisions.yaml
+    General->>Project: Write features/app-contract.yaml
+    General->>Project: Write features/decisions.yaml
     General->>Project: Write feature contract and test plan
     General->>Designer: Phase 0.5: produce ui-spec.md
-    Designer->>Project: Write .features/<feature>/ui-spec.md
+    Designer->>Project: Write features/<feature>/ui-spec.md
     General->>Impl: Phase 1: KMP foundation (domain, data, api)
     Impl->>Project: Add domain entities, repos, data layer, route types, tests
     par Phase 2: UI in parallel
@@ -93,7 +95,7 @@ sequenceDiagram
     ImplUI->>Project: Compose screens, SwiftUI views, ViewModels, bridge, tests
     General->>Project: Phase 3: wiring (umbrella, DI, nav)
     General->>Tester: Phase 4: full verification ladder
-    Tester->>Project: Gradle tests, platform builds, device launch, Maestro flows
+    Tester->>Project: Gradle tests, platform builds, device launch, logs
     Tester->>General: Report defects
     General->>Impl: Repair failures when needed
     Impl->>Project: Fix issues
@@ -104,15 +106,15 @@ sequenceDiagram
 
 Required generated artifacts:
 
-- `.features/app-contract.yaml`
-- `.features/decisions.yaml`
-- `.features/<feature>/plan.md`
-- `.features/<feature>/contract.yaml`
-- `.features/<feature>/ui-spec.md`
-- `.features/<feature>/test-plan.md`
-- `.features/<feature>/implementation-report.md`
-- `.features/<feature>/retrospective.md`
-- `.features/verification-report.md`
+- `features/app-contract.yaml`
+- `features/decisions.yaml`
+- `features/<feature>/plan.md`
+- `features/<feature>/contract.yaml`
+- `features/<feature>/ui-spec.md`
+- `features/<feature>/test-plan.md`
+- `features/<feature>/implementation-report.md`
+- `features/<feature>/retrospective.md`
+- `features/verification-report.md`
 
 ## Architecture Rules
 
@@ -283,10 +285,8 @@ flowchart TD
     AndroidBuild --> AndroidRuntime[Android CLI install/launch/log inspection]
     AndroidRuntime --> IOSBuild[xcodebuild]
     IOSBuild --> IOSRuntime[xcrun simctl install/launch/log inspection]
-    IOSRuntime --> Maestro[Maestro Android/iOS smoke flows]
-    Maestro --> MCP[mobile-mcp element tree + screenshot on failure]
+    IOSRuntime --> MCP[mobile-mcp element tree + screenshot on failure]
     MCP --> Report[verification-report.md]
-    Maestro --> Report
 ```
 
 Run from `temp/` or from a generated copy:
@@ -297,11 +297,10 @@ Run from `temp/` or from a generated copy:
 ./gradlew :androidApp:assembleDebug
 ```
 
-Feature-owned smoke flows live under `maestro/features/<feature-name>/`:
+Feature-owned smoke flows live under `maestro/features/<feature-name>/`. Run them via `/dream-e2e`:
 
 ```bash
-maestro test maestro/features/sample/android.yaml
-maestro test maestro/features/sample/ios.yaml
+/dream-e2e <feature-name>
 ```
 
 Every user-visible generated feature should have at least one Android smoke flow and one iOS smoke flow when the feature is supported on that platform. App-level startup smoke checks may exist, but they do not replace feature-level coverage.
@@ -319,19 +318,29 @@ Use `temp/.opencode/guidance/templates/verification-report-template.md` for the 
 
 Dream orchestrates feature work in phases through `dream-general`. When adding or replacing a feature:
 
-1. **Phase 0 — Plan & User Review:** `dream-general` produces `.features/<feature>/plan.md`, presents it to the user, and gets explicit confirmation before proceeding.
+1. **Phase 0 — Plan & User Review:** `dream-general` produces `features/<feature>/plan.md`, presents it to the user, and gets explicit confirmation before proceeding.
 2. **Phase 1 — Research (on-demand):** Use `dream-research` for codebase discovery, external library research, API docs, or troubleshooting.
-3. **Phase 2 — Contract:** Create or update the feature contract. Write `.features/<feature>/contract.yaml` and `.features/<feature>/test-plan.md`.
-4. **Phase 3 — Design:** Use `dream-designer` to produce `.features/<feature>/ui-spec.md` — view states, design-system components, layout, interactions.
+3. **Phase 2 — Contract:** Create or update the feature contract. Write `features/<feature>/contract.yaml` and `features/<feature>/test-plan.md`.
+4. **Phase 3 — Design:** Use `dream-designer` to produce `features/<feature>/ui-spec.md` — view states, design-system components, layout, interactions.
 5. **Phase 4 — KMP foundation:** Use `dream-implementer` for `feature/<name>/domain` (entities, repository interfaces, use cases), `feature/<name>/data` (repo implementations, DTOs, mappers), and `feature/<name>/api` (NavKey route types only). No UI.
 6. **Phase 5 — UI:** Deploy `dream-implementer-ui` for cross-platform UI — Compose screens, ViewModels, Koin navigation installers, presentation tests, SwiftUI views, bridge code, and XCTest coverage.
 7. **Phase 6 — Wiring:** Consolidate umbrella module imports, DI registration, and navigation entries.
-8. **Phase 7 — Verification:** Use `dream-tester` for the full verification ladder — Gradle unit tests, platform builds, device install/launch, log inspection, Maestro smoke flows.
+8. **Phase 7 — Verification:** Use `dream-tester` for the full verification ladder — Gradle unit tests, platform builds, device install/launch, log inspection. Run Maestro end-to-end flows separately via `/dream-e2e`.
 9. Write reports using the templates under `temp/.opencode/guidance/templates/`.
 10. Request `dream-inspector` QA gate for substantial work — architecture violations, contract parity, test coverage, anti-patterns.
 11. Only commit when verification and review are clean and staging is safe.
 
 Use `temp/.opencode/guidance/new-feature-checklist.md` as the operational checklist.
+
+## MCP Tools
+
+Dream agents have access to two MCP servers for enhanced capabilities:
+
+**mobile-mcp** provides device interaction for verification and UI inspection. Used by `dream-tester` and `dream-inspector` for screenshots, element trees, and crash logs.
+
+**codebase-memory-mcp** provides code intelligence via a persistent knowledge graph. Used by `dream-discovery`, `dream-research`, `dream-implementer`, `dream-implementer-ui`, `dream-inspector`, and `dream-tester` for symbol search, call tracing, impact analysis, and architecture overview.
+
+Agents should prefer MCP queries over grep/read for codebase exploration. See `temp/.opencode/guidance/reference/codebase-memory-mcp-tools.md` for the full tool reference.
 
 ## Sample Feature Policy
 

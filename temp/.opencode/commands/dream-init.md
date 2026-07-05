@@ -23,26 +23,27 @@ Treat `$ARGUMENTS` as optional override hints (e.g., app name, package name).
    - Report "Android SDK: <path>" or "blocked: Android SDK not found"
 
 3. **Platform tooling verification**:
-   - Check `java -version` (JDK 17+ required)
-   - Check `maestro --version` (Maestro CLI)
-   - Check `xcodebuild -version` (macOS only)
-   - Check `xcrun simctl list` (macOS only)
-   - Report each as "passed" or "blocked by environment"
+    - Check `java -version` (JDK 17+ required)
+    - Check `xcodebuild -version` (macOS only)
+    - Check `xcrun simctl list` (macOS only)
+    - Check `codebase-memory-mcp --version` (optional, for code intelligence)
+    - Check Maestro via `/dream-e2e` preflight when needed
+    - Report each as "passed" or "blocked by environment"
 
-4. **`.features/` directory structure**:
-   - Create `.features/` if missing
-   - Create `.features/app-contract.yaml` with a stub:
+4. **`features/` directory structure**:
+   - Create `features/` if missing
+   - Create `features/app-contract.yaml` with a stub:
      ```yaml
      # App Contract
      name: <project-name-or-uninitialized>
      features: []
      ```
-   - Create `.features/decisions.yaml` with a stub:
+   - Create `features/decisions.yaml` with a stub:
      ```yaml
      # Architecture Decisions
      ```
-   - Create `.features/` directory
-   - Report ".features/: initialized"
+   - Create `features/` directory
+   - Report "features/: initialized"
 
 5. **Build verification**:
    - Run `./gradlew projects` to verify the Gradle build is structurally valid
@@ -50,18 +51,19 @@ Treat `$ARGUMENTS` as optional override hints (e.g., app name, package name).
    - Report "build: passed" or "build: <error summary>"
 
 6. **Readiness report** — Output a summary table:
-   ```
-   | Check              | Status        |
-   |--------------------|---------------|
-   | git                | initialized   |
-   | Android SDK        | /path         |
-   | Maestro            | passed        |
-   | Xcode              | passed        |
-   | JDK                | 17.0.x        |
-   | .features/              | initialized   |
-   | Gradle projects    | passed        |
-   | Models             | configured    |
-   ```
+    ```
+    | Check                    | Status        |
+    |--------------------------|---------------|
+    | git                      | initialized   |
+    | Android SDK              | /path         |
+    | Maestro (via `/dream-e2e`) | available/blocked | |
+    | Xcode                    | passed        |
+    | JDK                      | 17.0.x        |
+    | codebase-memory-mcp      | passed        |
+    | features/               | initialized   |
+    | Gradle projects          | passed        |
+    | Models                   | configured    |
+    ```
 
 7. **Model configuration** — Ask the user if they want to customize model assignments:
    - Present the default model mapping (see Model Assignments below)
@@ -96,4 +98,4 @@ To override, edit `.opencode/opencode.json` or re-run `/dream-init`.
 - This command is safe to re-run — it skips steps that are already complete
 - Do not generate any feature code during init
 - Do not commit unless the user explicitly asks for it after reviewing the readiness report
-- Write results to `.features/init-report.md` at the end
+- Write results to `features/init-report.md` at the end

@@ -11,7 +11,7 @@ When working in this generated project, read in this order:
 3. [.opencode/knowledge-graph/README.md](.opencode/knowledge-graph/README.md)
 4. Relevant topic files in [.opencode/knowledge-graph/best-practices/](.opencode/knowledge-graph/best-practices/README.md)
 5. [README.md](README.md)
-6. Existing `.features/` metadata when it exists
+6. Existing `features/` metadata when it exists
 
 ## Packaged Agent Layer
 
@@ -21,7 +21,7 @@ When working in this generated project, read in this order:
 - [.opencode/guidance/](.opencode/guidance): operating guide and prompt scaffolds
 - [.opencode/knowledge-graph/](.opencode/knowledge-graph): architecture rules and retrieval sources
 - [maestro/](maestro): Android and iOS smoke-flow scaffolding for generated feature validation
-- [scripts/dream-preflight.sh](scripts/dream-preflight.sh): git, Android SDK, and Maestro readiness preflight
+- [scripts/dream-preflight.sh](scripts/dream-preflight.sh): git, Android SDK, and tooling readiness preflight
 - [scripts/sync-pbxproj.rb](scripts/sync-pbxproj.rb): auto-registers orphaned Swift files in Xcode project.pbxproj
 - [scripts/remove-sample.sh](scripts/remove-sample.sh): removes sample feature files, strips sample deps, and checks for leftovers
 - [.opencode/guidance/new-feature-checklist.md](.opencode/guidance/new-feature-checklist.md): contract-first feature wiring, verification, and git checklist
@@ -36,7 +36,6 @@ When working in this generated project, read in this order:
 - When working on the native SwiftUI variant, load the iOS best-practice files covering project structure, KMP bridge rules, Xcode configuration, and XCTest packaging.
 - Use Android CLI for Android device/emulator setup, install, launch, inspection, logs, and repair loops.
 - Use `xcodebuild` and `xcrun simctl` for iOS build, simulator install, launch, logs, and crash capture.
-- Use Maestro for black-box smoke flows after platform launch is healthy.
 - Do not claim success from green commands alone; match the contract, tests, and review expectations in [.opencode/guidance/dream-agent-operating-guide.md](.opencode/guidance/dream-agent-operating-guide.md).
 
 ## Validation
@@ -57,7 +56,6 @@ Dream's stricter final verification includes:
 ./gradlew :androidApp:assembleDebug
 # Android CLI install/launch/log inspection
 # xcodebuild plus xcrun simctl build/install/launch/log inspection
-# Maestro smoke flows for relevant Android and iOS user journeys
 ```
 
 Use focused commands for iteration, but do not report final success without the required verification behavior or a documented blocker.

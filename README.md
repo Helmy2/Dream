@@ -5,7 +5,7 @@ Dream is a local-first AI app builder for Kotlin Multiplatform. It packages a re
 ## Repository Structure
 
 - `temp/` — Canonical Kotlin Multiplatform starter project copied by the initializer
-- `temp/.features/` — Generated app contracts, feature specs, decisions, reports, and retrospectives
+- `temp/features/` — Generated app contracts, feature specs, decisions, reports, and retrospectives
 - `temp/maestro/` — Android and iOS smoke-flow scaffolding
 - `dream-init` — Initializer script that copies and renames `temp/` into a new project
 - `ONBOARDING.md` — Human-readable guide to the project architecture, workflow, and validation model

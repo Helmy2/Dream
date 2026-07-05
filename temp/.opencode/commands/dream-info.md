@@ -20,17 +20,17 @@ Read all `.opencode/commands/*.md` files. For each, extract the `description:` f
 ### 3. Available Scripts
 
 From the repository map in `ONBOARDING.md` and `AGENTS.md`, list:
-- `scripts/dream-preflight.sh` — local readiness check for git, Android SDK, and Maestro
+- `scripts/dream-preflight.sh` — local readiness check for git, Android SDK, and tooling
 - `scripts/sync-pbxproj.rb` — auto-registers orphaned Swift files and removes deleted file references in Xcode project.pbxproj
 - `scripts/remove-sample.sh` — removes sample feature files, strips sample deps, and checks for leftovers
 
 ### 4. Agents
 
-Read `.opencode/guidance/opencode-agent-map.md` to list all 10 agents with their one-line role summary. Present as a table.
+Read `.opencode/guidance/opencode-agent-map.md` to list all agents with their one-line role summary. Present as a table.
 
 ### 5. Implemented Features
 
-Read all `.features/*/retrospective.md` files in the target project. For each, extract:
+Read all `features/*/retrospective.md` files in the target project. For each, extract:
 - Feature name (from directory name)
 - Short one-line description of what was implemented/improved
 - Application status (Applied / Not Applied)
@@ -58,17 +58,18 @@ Present as a clean terminal-friendly summary:
 │ /dream-ui-fix    │ Fix visual, layout, and rendering issues        │
 │ /dream-bug-fix   │ Fix logic, crash, runtime, data, state bugs     │
 │ /dream-verify    │ Verification and repair workflow                │
+│ /dream-e2e       │ Run Maestro end-to-end smoke flows for features │
 │ /dream-review    │ Architecture and contract compliance review     │
 │ /dream-improve   │ Apply unapplied retrospectives to template      │
 │ /dream-resume    │ Resume a Dream session from saved state         │
-│ /dream-init      │ Initialize .features/ directory structure       │
+│ /dream-init      │ Initialize features/ directory structure       │
 │ /dream-info      │ Display this overview                           │
 └──────────────────┴─────────────────────────────────────────────────┘
 
 ┌───────────────────────────┬────────────────────────────────────────┐
 │ SCRIPT                    │ PURPOSE                                │
 ├───────────────────────────┼────────────────────────────────────────┤
-│ scripts/dream-preflight.sh│ git, Android SDK, Maestro readiness   │
+│ scripts/dream-preflight.sh│ git, Android SDK, tooling readiness   │
 │ scripts/sync-pbxproj.rb   │ Sync Swift files in Xcode (add/remove)│
 │ scripts/remove-sample.sh  │ Remove sample feature and check leftovers│
 └───────────────────────────┴────────────────────────────────────────┘
@@ -86,6 +87,18 @@ Present as a clean terminal-friendly summary:
 │ dream-tester         │ Full verification ladder                  │
 │ dream-inspector      │ Final QA and architecture review gate     │
 └──────────────────────┴───────────────────────────────────────────┘
+
+┌───────────────────────────┬────────────────────────────────────────┐
+│ MCP SERVER                │ PURPOSE                                │
+├───────────────────────────┼────────────────────────────────────────┤
+│ mobile-mcp                │ Device interaction for verification    │
+│                           │ and UI inspection (screenshots,        │
+│                           │ element trees, crash logs)             │
+├───────────────────────────┼────────────────────────────────────────┤
+│ codebase-memory-mcp       │ Code intelligence via persistent       │
+│                           │ knowledge graph (symbol search, call   │
+│                           │ tracing, impact analysis)              │
+└───────────────────────────┴────────────────────────────────────────┘
 
 Implemented Template Improvements:
   • <feature-name> — <short description> [Applied/Not Applied]

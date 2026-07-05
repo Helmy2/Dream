@@ -26,7 +26,8 @@ interface SampleDatabaseFactory {
 }
 
 fun createSampleDatabase(
-    factory: SampleDatabaseFactory
+    factory: SampleDatabaseFactory,
+    allowDestructiveMigration: Boolean = false,
 ): SampleDatabase = factory
     .createBuilder()
-    .buildBundledRoomDatabase()
+    .buildBundledRoomDatabase(allowDestructiveMigration = allowDestructiveMigration)

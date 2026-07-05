@@ -28,11 +28,6 @@ All Dream agents must preserve these rules unless a higher-priority project-spec
 ## iOS Tooling
 
 - Use `xcodebuild` plus `xcrun simctl` for iOS build, simulator install, launch, logs, and crash capture
-
-## Testing
-
-- Use Maestro for black-box smoke and end-to-end user-flow checks after platform launch is healthy
-
 ## iOS UI Strategy
 
 - When the project contains both `iosApp-compose` and `iosApp-swiftui`, remove the unused folder and rename the kept one to `iosApp` during project instantiation

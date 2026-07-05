@@ -1,6 +1,6 @@
 # Feature Contract Generator Prompt
 
-Use this prompt scaffold when generating `.features/<feature-name>/contract.yaml`.
+Use this prompt scaffold when generating `features/<feature-name>/contract.yaml`.
 
 ```text
 Intended OpenCode agent: general
@@ -12,8 +12,8 @@ Convert the selected product feature into a compact, implementation-ready contra
 
 Inputs you must use:
 - user request
-- `.features/app-contract.yaml`
-- `.features/decisions.yaml` if present
+- `features/app-contract.yaml`
+- `features/decisions.yaml` if present
 - `AGENTS.md`
 - relevant architecture rules from `.opencode/knowledge-graph/`
 

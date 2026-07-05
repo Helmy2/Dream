@@ -13,8 +13,8 @@ Read:
 - `.opencode/guidance/dream-agent-operating-guide.md`
 - relevant `.opencode/knowledge-graph/best-practices/*.md`
 - `.opencode/guidance/new-feature-checklist.md`
-- `.features/app-contract.yaml`
-- `.features/decisions.yaml`
+- `features/app-contract.yaml`
+- `features/decisions.yaml`
 - relevant feature contracts
 
 Then:
@@ -75,7 +75,7 @@ Use the following techniques based on the bug type:
   | DI resolution, missing module | `umbrella-*` |
 
 - if the error could be in multiple layers, start with the innermost (domain → data → api → impl → bridge)
-- document the suspected root cause and the files to modify in `.features/bug-fix/diagnosis.md`
+- document the suspected root cause and the files to modify in `features/bug-fix/diagnosis.md`
 
 ### Phase 3: Apply Fix
 
@@ -114,7 +114,7 @@ After the fix is applied, run targeted verification based on the fixed layer:
 
 ### Report
 
-- write `.features/bug-fix/report.md` documenting:
+- write `features/bug-fix/report.md` documenting:
   - bug description and reproduction steps
   - diagnostic output (crash log, error message, failing test)
   - root cause and files modified

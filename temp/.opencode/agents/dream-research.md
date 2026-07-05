@@ -42,7 +42,7 @@ Find files, symbols, build context packs, and fetch external information for Dre
 ## Use When
 
 - Locating a feature, symbol, or module in the codebase
-- Finding relevant template modules or `.features/` metadata
+- Finding relevant template modules or `features/` metadata
 - Answering structural questions about the project
 - Building context before implementation or repair
 - Unfamiliar library or framework API patterns
@@ -55,7 +55,7 @@ Find files, symbols, build context packs, and fetch external information for Dre
 ### Codebase Research
 - Search quickly, return precise paths
 - Keep explanations short, avoid speculation
-- Prioritize: `.opencode/guidance/`, `.opencode/knowledge-graph/`, `.features/`, `templates/`, `feature/`, `shared/`, `androidApp/`, `iosApp/`
+- Prioritize: `.opencode/guidance/`, `.opencode/knowledge-graph/`, `features/`, `templates/`, `feature/`, `shared/`, `androidApp/`, `iosApp/`
 - In deep mode: identify which graph rules apply, return context that helps implementers work with minimal drift
 
 ### External Research
@@ -82,6 +82,20 @@ Find files, symbols, build context packs, and fetch external information for Dre
 - API patterns or code snippets with source references
 - Platform-specific caveats when applicable
 - Source URLs for all documentation
+
+## MCP Tools (codebase-memory-mcp)
+
+For codebase research, prefer MCP tools over file-by-file exploration:
+
+1. `search_graph` — find functions, classes, routes by pattern
+2. `trace_path` — trace who calls a function or what it calls
+3. `get_code_snippet` — read specific function/class source code
+4. `query_graph` — Cypher queries for complex patterns
+5. `get_architecture` — high-level project summary
+
+**Priority**: Always try MCP tools first for codebase research. Fall back to grep/glob only when searching string literals, non-code files, or when MCP returns insufficient results.
+
+See `.opencode/guidance/reference/codebase-memory-mcp-tools.md` for full reference.
 
 ## Constraints
 
