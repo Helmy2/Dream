@@ -19,9 +19,9 @@ Read first:
 - `.opencode/guidance/opencode-agent-map.md`
 - `AGENTS.md`
 - relevant graph-backed rules for the failing module or runtime surface
-- `.features/app-contract.yaml`
-- `.features/decisions.yaml`
-- `.features/<feature-name>/contract.yaml` if feature-specific
+- `features/app-contract.yaml`
+- `features/decisions.yaml`
+- `features/<feature-name>/contract.yaml` if feature-specific
 - `.opencode/guidance/templates/verification-report-template.md`
 
 Required verification for local-only MVPs:
@@ -80,7 +80,7 @@ Repair loop:
 1. `dream-general` delegates verification to `dream-tester`
 2. `dream-general` identifies the failing module or runtime layer from tester output
 3. `dream-discovery` gathers additional focused context if needed (uses codebase-memory-mcp for efficient code intelligence queries)
-4. `dream-general` persists iteration state to `.features/verification-report.md` (current iteration, failures, past attempts, next module to fix)
+4. `dream-general` persists iteration state to `features/verification-report.md` (current iteration, failures, past attempts, next module to fix)
 5. `dream-general` launches a fresh implementer subagent invocation based on the failing layer:
    - `dream-implementer` for domain, data, or api failures
    - `dream-implementer-android` for Compose UI or `impl` failures
@@ -89,7 +89,7 @@ Repair loop:
 7. The implementer makes the smallest correct fix
 8. `dream-general` delegates reverification to `dream-tester`
 9. `dream-general` checks skip conditions: iteration ≤ 5? failure count decreased? no regressions? environment blocker repeated?
-10. if a skip condition triggers, stop and report `blocked` with the skip reason (documented in `.features/verification-report.md`); otherwise repeat from step 1
+10. if a skip condition triggers, stop and report `blocked` with the skip reason (documented in `features/verification-report.md`); otherwise repeat from step 1
 11. `dream-inspector` performs final review for substantial generation or repair work before validated success is reported
 
 If `dream-inspector` fails at the tool level:
@@ -104,8 +104,8 @@ Output requirements:
 - list commands run
 - state review mode as `delegated` or `manual`
 - list failing areas if blocked
-- write or update `.features/verification-report.md`
-- in `.features/verification-report.md`, list every check under one of these statuses: `passed`, `blocked by environment`, `not run`, or `not applicable`
+- write or update `features/verification-report.md`
+- in `features/verification-report.md`, list every check under one of these statuses: `passed`, `blocked by environment`, `not run`, or `not applicable`
 - follow `.opencode/guidance/templates/verification-report-template.md` unless the orchestrator requests a stricter variant
 - for completed feature flows, state the git commit hash or the precise reason no commit was created
 

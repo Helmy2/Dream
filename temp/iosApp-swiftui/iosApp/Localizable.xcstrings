@@ -249,7 +249,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Generate features from compact contracts stored in .features/."
+            "value" : "Generate features from compact contracts stored in features/."
           }
         }
       }

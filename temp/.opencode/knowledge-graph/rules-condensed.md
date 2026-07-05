@@ -73,6 +73,12 @@ Quick-reference rules for Dream agents. Load specific files for details.
 - [res-3] Strings-first workflow: define ALL strings in `strings.xml` before writing UI
 - [res-4] Naming: `<feature>_<purpose>` (e.g., `expense_title`, `expense_add_button`)
 
+## Internationalization [file:17]
+
+- [i18n-1] No hardcoded locale-specific symbols (currency, date separators, AM/PM) in shared code — use locale-aware formatting
+- [i18n-2] Currency formatting must accept a locale parameter or use a platform locale provider
+- [i18n-3] Date/time formatting must use locale-aware patterns, not hardcoded separators
+
 ## Dependency Injection [file:18]
 
 - [di-1] `startKoin` only from top-level app init (Android: `Application.onCreate()`)
@@ -148,7 +154,7 @@ Quick-reference rules for Dream agents. Load specific files for details.
 
 ### Phase Checkpoints
 
-- [ckpt-1] After each phase completes, write checkpoint to `.features/<feature>/checkpoints.md`
+- [ckpt-1] After each phase completes, write checkpoint to `features/<feature>/checkpoints.md`
 - [ckpt-2] Checkpoint includes: phase name, git commit hash, status, timestamp, context usage
 - [ckpt-3] If a later phase fails, offer to roll back to last good checkpoint
 - [ckpt-4] Checkpoints are append-only — never overwrite previous entries
@@ -157,7 +163,7 @@ Quick-reference rules for Dream agents. Load specific files for details.
 
 - [ctx-1] Track context usage continuously (estimate based on files read, tool calls, file sizes)
 - [ctx-2] At 50% context: warn user in conversation
-- [ctx-3] At 70% context: compact automatically (write state to .features/, start fresh subagent)
+- [ctx-3] At 70% context: compact automatically (write state to features/, start fresh subagent)
 - [ctx-4] At 90% context: force compaction with minimal handoff
 - [ctx-5] Compact proactively after 3 repair rounds (even if context < 70%)
 - [ctx-6] Include context usage estimate in phase checkpoints

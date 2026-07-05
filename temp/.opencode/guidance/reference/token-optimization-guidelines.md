@@ -130,7 +130,7 @@ Use `git diff --name-only` to identify changed modules.
 
 After 3 repair rounds or when context approaches limit:
 
-1. Write state to `.features/<feature>/report.md`
+1. Write state to `features/<feature>/report.md`
 2. Create compact handoff prompt
 3. Start fresh conversation with handoff only
 

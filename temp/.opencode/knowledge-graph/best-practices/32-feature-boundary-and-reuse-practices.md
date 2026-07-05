@@ -34,7 +34,7 @@ Reusable principle:
 - prefer one owning feature data layer for one persisted aggregate
 - if two features need equal ownership of the same persisted concept, extract the storage contract and implementation to an appropriate shared module or shared domain/core area
 - do not let a second feature silently mutate another feature's data model without tests for both workflows
-- record the decision in `.features/decisions.yaml` when cross-feature data reuse is chosen
+- record the decision in `features/decisions.yaml` when cross-feature data reuse is chosen
 
 ### 32.4 Extract shared behavior when reuse becomes product infrastructure
 

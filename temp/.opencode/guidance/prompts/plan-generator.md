@@ -1,6 +1,6 @@
 # Plan Generator Prompt
 
-Use this prompt scaffold when generating `.features/<feature-name>/plan.md` during Phase 0 (Plan & User Review).
+Use this prompt scaffold when generating `features/<feature-name>/plan.md` during Phase 0 (Plan & User Review).
 
 ```text
 Intended OpenCode agent: dream-general
@@ -14,8 +14,8 @@ what Dream will build, what files will be touched, and in what order.
 
 Inputs you must use:
 - user request
-- `.features/app-contract.yaml`
-- `.features/decisions.yaml` if present
+- `features/app-contract.yaml`
+- `features/decisions.yaml` if present
 - `AGENTS.md`
 - relevant architecture rules from `.opencode/knowledge-graph/`
 - `dream-discovery` (deep mode) output for project structure context (uses codebase-memory-mcp for efficient code intelligence queries)
@@ -34,7 +34,7 @@ Template to use:
 `.opencode/guidance/templates/plan-template.md`
 
 Output format:
-Write the completed plan to `.features/<feature-name>/plan.md` using the template structure.
+Write the completed plan to `features/<feature-name>/plan.md` using the template structure.
 
 After writing:
 1. Present the plan to the user in the conversation (readable formatting, not raw markdown)
@@ -45,7 +45,7 @@ After writing:
    - "Or would you like to **deny** this plan and stop?"
 3. Handle user response:
    - Question → answer, update plan if needed, re-present
-   - Edit → update `.features/<feature-name>/plan.md`, re-present
+   - Edit → update `features/<feature-name>/plan.md`, re-present
    - Confirm → proceed to next phase
-   - Deny → stop and document in `.features/<feature-name>/report.md`
+   - Deny → stop and document in `features/<feature-name>/report.md`
 ```

@@ -20,7 +20,7 @@ Then:
 ## Step 1: Gather Improvements
 
 ### 1.1 From Retrospectives
-- find all `.features/*/retrospective.md` files where `Applied: not yet` in the Application Status section
+- find all `features/*/retrospective.md` files where `Applied: not yet` in the Application Status section
 - if none found, report that all retrospectives are applied and continue to Step 1.2
 - collect all recommended improvements across unapplied retros, grouped by target area:
   - guidance changes (`.opencode/guidance/`)

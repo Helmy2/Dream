@@ -1,6 +1,6 @@
 # Plan Template
 
-Use this template when generating `.features/<feature>/plan.md` during Phase 0 (Plan & User Review).
+Use this template when generating `features/<feature>/plan.md` during Phase 0 (Plan & User Review).
 
 **Note:** This template applies to `/dream-create` and `/dream-feature` workflows (COMPLEX complexity). For trivial and simple workflows, see `.opencode/guidance/reference/complexity-routing.md`.
 

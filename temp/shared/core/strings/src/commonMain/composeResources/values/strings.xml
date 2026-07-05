@@ -25,7 +25,7 @@
     <string name="sample_category_label">Category</string>
     <string name="sample_occurred_label">Occurred</string>
     <string name="sample_seed_contract_first_title">Contract-first features</string>
-    <string name="sample_seed_contract_first_description">Generate features from compact contracts stored in .features/.</string>
+    <string name="sample_seed_contract_first_description">Generate features from compact contracts stored in features/.</string>
     <string name="sample_seed_shared_architecture_title">Shared architecture</string>
     <string name="sample_seed_shared_architecture_description">Keep domain, data, presentation, and UI code in stable modules.</string>
 </resources>

@@ -102,7 +102,7 @@ struct SampleDetailView: View {
             item: SampleItemSwift(
                 id: "1",
                 title: "Contract-first features",
-                description: "Generate features from compact contracts stored in .features/.",
+                description: "Generate features from compact contracts stored in features/.",
                 category: .contract,
                 occurredAtMillis: 1_720_000_000_000,
                 updatedAtMillis: 1_720_000_000_000

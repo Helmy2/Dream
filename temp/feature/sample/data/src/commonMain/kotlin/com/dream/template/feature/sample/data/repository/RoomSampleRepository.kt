@@ -75,7 +75,7 @@ class RoomSampleRepository(
         SampleItemEntity(
             id = "contract-first",
             title = "Contract-first features",
-            description = "Generate features from compact contracts stored in .features/.",
+            description = "Generate features from compact contracts stored in features/.",
             category = SampleCategory.Contract.name,
             occurredAtMillis = 1_720_000_000_000,
             updatedAtMillis = 1_720_000_000_000,

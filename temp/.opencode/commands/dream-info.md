@@ -30,7 +30,7 @@ Read `.opencode/guidance/opencode-agent-map.md` to list all agents with their on
 
 ### 5. Implemented Features
 
-Read all `.features/*/retrospective.md` files in the target project. For each, extract:
+Read all `features/*/retrospective.md` files in the target project. For each, extract:
 - Feature name (from directory name)
 - Short one-line description of what was implemented/improved
 - Application status (Applied / Not Applied)
@@ -62,7 +62,7 @@ Present as a clean terminal-friendly summary:
 │ /dream-review    │ Architecture and contract compliance review     │
 │ /dream-improve   │ Apply unapplied retrospectives to template      │
 │ /dream-resume    │ Resume a Dream session from saved state         │
-│ /dream-init      │ Initialize .features/ directory structure       │
+│ /dream-init      │ Initialize features/ directory structure       │
 │ /dream-info      │ Display this overview                           │
 └──────────────────┴─────────────────────────────────────────────────┘
 

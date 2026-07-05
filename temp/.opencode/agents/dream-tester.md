@@ -104,7 +104,7 @@ If pattern matches, include mitigation in failure report.
 
 After UI implementation, verify the implemented UI matches the UI spec:
 
-- Read `.features/<feature>/ui-spec.md` for expected states and components
+- Read `features/<feature>/ui-spec.md` for expected states and components
 - For each screen state (Loading, Empty, Content, Error):
   - Capture screenshot via `mobile_take_screenshot`
   - Compare against spec: are expected components present? Are states rendered correctly?

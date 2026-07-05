@@ -48,7 +48,7 @@
 
 ## dream-designer
 
-- Do not edit files outside `.features/`
+- Do not edit files outside `features/`
 - Do not write any code
 - Do not act as final reviewer
 

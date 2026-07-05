@@ -19,7 +19,7 @@ Prefer linking to those documents in discussions and change summaries instead of
 
 - [temp](temp): canonical starter project copied by the initializer
 - [ONBOARDING.md](ONBOARDING.md): human-readable guide to the project architecture, workflow, and validation model
-- [temp/.features/](temp/.features): generated app contracts, feature specs, decisions, reports, and retrospectives
+- [temp/features/](temp/features): generated app contracts, feature specs, decisions, reports, and retrospectives
 - [temp/maestro/](temp/maestro): Android and iOS smoke-flow scaffolding
 - [temp/.opencode/opencode.json](temp/.opencode/opencode.json): packaged OpenCode instruction injection and MCP config
 - [temp/.opencode/agents/](temp/.opencode/agents): Dream agent definitions (dream-general, dream-research, dream-designer, dream-implementer, dream-implementer-ui, dream-tester, dream-inspector)

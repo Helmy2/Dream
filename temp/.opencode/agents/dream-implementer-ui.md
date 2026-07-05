@@ -35,7 +35,7 @@ You receive a `platform` parameter: `android`, `ios`, or `both`.
 **Tier 1 (always loaded):** This file + condensed rules (`.opencode/knowledge-graph/rules-condensed.md`)
 
 **Tier 2 (load before coding):**
-- UI spec: `.features/<feature>/ui-spec.md`
+- UI spec: `features/<feature>/ui-spec.md`
 
 **Android-specific (when platform = android or both):**
 - Presentation: `.opencode/knowledge-graph/best-practices/14-presentation-layer-practices.md`

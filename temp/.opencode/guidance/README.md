@@ -11,8 +11,8 @@ This folder tells OpenCode agents how to use both consistently.
 - `opencode-agent-map.md`: stage-to-agent ownership map for Dream
 - `dream-agent-operating-guide.md`: default workflow and non-negotiable operating rules
 - `prompts/project-instantiation.md`: prompt scaffold for copying and customizing a Dream template into a new project
-- `prompts/app-contract-generator.md`: prompt scaffold for generating `.features/app-contract.yaml`
-- `prompts/feature-contract-generator.md`: prompt scaffold for generating `.features/<feature>/contract.yaml`
+- `prompts/app-contract-generator.md`: prompt scaffold for generating `features/app-contract.yaml`
+- `prompts/feature-contract-generator.md`: prompt scaffold for generating `features/<feature>/contract.yaml`
 - `prompts/feature-implementation.md`: prompt scaffold for implementing a feature inside a Dream project
 - `prompts/verification-and-repair.md`: prompt scaffold for verification, diagnosis, and repair
 

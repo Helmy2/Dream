@@ -17,16 +17,16 @@ For detailed rules, see `.opencode/knowledge-graph/rules-condensed.md`.
 
 ## Phase 0: Plan & User Review (Always)
 
-- [ ] Create `.features/<feature-name>/plan.md` using the plan template before any implementation.
+- [ ] Create `features/<feature-name>/plan.md` using the plan template before any implementation.
 - [ ] Plan must define: feature goal, priority, modules to create/modify, screens with states, architecture decisions, dependencies, and phases.
 - [ ] Present the plan to the user and ask: **questions? edits? confirm? deny?**
 - [ ] On **Confirm**: create feature branch (`dream/feature/<name>`) and proceed.
 - [ ] On **Edit**: update plan and re-present; loop until confirmed or denied.
-- [ ] On **Deny**: stop and document in `.features/<feature>/report.md`.
+- [ ] On **Deny**: stop and document in `features/<feature>/report.md`.
 
 ## Contract First (Always)
 
-- [ ] Create or update `.features/<feature-name>/contract.yaml` before implementation starts.
+- [ ] Create or update `features/<feature-name>/contract.yaml` before implementation starts.
 - [ ] Define entity fields, action inputs, screen states, design expectations, and tests by layer.
 - [ ] Use meaningful timestamp field names with units (e.g., `createdAtMillis`).
 - [ ] Mark `timeSensitiveBehavior.usesTimeProvider: true` if feature uses time-sensitive logic (see Time section).
@@ -81,7 +81,7 @@ For detailed rules, see `.opencode/knowledge-graph/rules-condensed.md`.
 
 ## Phase Checkpoints (Always)
 
-- [ ] After each phase completes, append to `.features/<feature>/checkpoints.md`.
+- [ ] After each phase completes, append to `features/<feature>/checkpoints.md`.
 - [ ] Checkpoint includes: phase name, git commit hash, status, timestamp.
 - [ ] If a later phase fails, offer to roll back to last good checkpoint.
 
@@ -93,7 +93,7 @@ For detailed rules, see `.opencode/knowledge-graph/rules-condensed.md`.
 - [ ] Run `git status`, `git diff`, and `git log --oneline -10`.
 - [ ] Stage only intended files.
 - [ ] Present commit summary to user and get explicit approval before committing.
-- [ ] Write `.features/<feature-name>/retrospective.md`.
+- [ ] Write `features/<feature-name>/retrospective.md`.
 
 ## Preflight (Always)
 
@@ -157,7 +157,7 @@ Apply when using `/dream-ui-fix`:
 - [ ] Phase 3: Apply fix only to presentation layer — never domain, data, or api.
 - [ ] Phase 4: Re-capture screenshot + element tree for before/after comparison.
 - [ ] Phase 4: Present before/after evidence to user and get signoff.
-- [ ] Write `.features/ui-fix/report.md`.
+- [ ] Write `features/ui-fix/report.md`.
 - [ ] Commit only when user confirms fix is correct.
 
 ## Bug Fix Workflow
@@ -170,5 +170,5 @@ Apply when using `/dream-bug-fix`:
 - [ ] Phase 3: Apply minimal fix — fix the bug, do not refactor.
 - [ ] Phase 4: Run targeted re-verification per fixed layer.
 - [ ] Phase 4: Check skip conditions after each round.
-- [ ] Write `.features/bug-fix/report.md`.
+- [ ] Write `features/bug-fix/report.md`.
 - [ ] Commit only when verification is green and user confirms.

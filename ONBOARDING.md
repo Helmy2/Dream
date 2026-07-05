@@ -18,7 +18,7 @@ flowchart TD
     Template --> Generated[Generated KMP app]
     Contract --> Generated
     Generated --> Verify[Tests, builds, platform launch, smoke flows]
-    Verify --> Report[.features/verification-report.md]
+    Verify --> Report[features/verification-report.md]
 ```
 
 ## Repository Map
@@ -29,7 +29,7 @@ flowchart TD
 - `temp/`: canonical Kotlin Multiplatform starter project.
 - `temp/.opencode/`: packaged OpenCode config, agents (7 agents: dream-general, dream-research, dream-designer, dream-implementer, dream-implementer-ui, dream-tester, dream-inspector), commands, and prompt guidance.
 - `temp/.opencode/knowledge-graph/`: reusable architecture rules and retrieval sources.
-- `temp/.features/`: generated app contracts, feature specs, decisions, reports, and retrospectives.
+- `temp/features/`: generated app contracts, feature specs, decisions, reports, and retrospectives.
 - `temp/maestro/`: Android and iOS smoke-flow scaffolding.
 - `temp/.opencode/scripts/dream-preflight.sh`: local readiness check for git, Android SDK, and tooling.
 - `temp/.opencode/scripts/sync-pbxproj.rb`: auto-registers orphaned Swift files in Xcode project.pbxproj.
@@ -79,14 +79,14 @@ sequenceDiagram
 
     User->>General: Plain product request
     General->>Research: Gather context (on-demand)
-    General->>Project: Phase 0: Write .features/<feature>/plan.md
+    General->>Project: Phase 0: Write features/<feature>/plan.md
     General->>User: Present plan for review
     User->>General: Confirm, edit, or deny
-    General->>Project: Write .features/app-contract.yaml
-    General->>Project: Write .features/decisions.yaml
+    General->>Project: Write features/app-contract.yaml
+    General->>Project: Write features/decisions.yaml
     General->>Project: Write feature contract and test plan
     General->>Designer: Phase 0.5: produce ui-spec.md
-    Designer->>Project: Write .features/<feature>/ui-spec.md
+    Designer->>Project: Write features/<feature>/ui-spec.md
     General->>Impl: Phase 1: KMP foundation (domain, data, api)
     Impl->>Project: Add domain entities, repos, data layer, route types, tests
     par Phase 2: UI in parallel
@@ -106,15 +106,15 @@ sequenceDiagram
 
 Required generated artifacts:
 
-- `.features/app-contract.yaml`
-- `.features/decisions.yaml`
-- `.features/<feature>/plan.md`
-- `.features/<feature>/contract.yaml`
-- `.features/<feature>/ui-spec.md`
-- `.features/<feature>/test-plan.md`
-- `.features/<feature>/implementation-report.md`
-- `.features/<feature>/retrospective.md`
-- `.features/verification-report.md`
+- `features/app-contract.yaml`
+- `features/decisions.yaml`
+- `features/<feature>/plan.md`
+- `features/<feature>/contract.yaml`
+- `features/<feature>/ui-spec.md`
+- `features/<feature>/test-plan.md`
+- `features/<feature>/implementation-report.md`
+- `features/<feature>/retrospective.md`
+- `features/verification-report.md`
 
 ## Architecture Rules
 
@@ -318,10 +318,10 @@ Use `temp/.opencode/guidance/templates/verification-report-template.md` for the 
 
 Dream orchestrates feature work in phases through `dream-general`. When adding or replacing a feature:
 
-1. **Phase 0 — Plan & User Review:** `dream-general` produces `.features/<feature>/plan.md`, presents it to the user, and gets explicit confirmation before proceeding.
+1. **Phase 0 — Plan & User Review:** `dream-general` produces `features/<feature>/plan.md`, presents it to the user, and gets explicit confirmation before proceeding.
 2. **Phase 1 — Research (on-demand):** Use `dream-research` for codebase discovery, external library research, API docs, or troubleshooting.
-3. **Phase 2 — Contract:** Create or update the feature contract. Write `.features/<feature>/contract.yaml` and `.features/<feature>/test-plan.md`.
-4. **Phase 3 — Design:** Use `dream-designer` to produce `.features/<feature>/ui-spec.md` — view states, design-system components, layout, interactions.
+3. **Phase 2 — Contract:** Create or update the feature contract. Write `features/<feature>/contract.yaml` and `features/<feature>/test-plan.md`.
+4. **Phase 3 — Design:** Use `dream-designer` to produce `features/<feature>/ui-spec.md` — view states, design-system components, layout, interactions.
 5. **Phase 4 — KMP foundation:** Use `dream-implementer` for `feature/<name>/domain` (entities, repository interfaces, use cases), `feature/<name>/data` (repo implementations, DTOs, mappers), and `feature/<name>/api` (NavKey route types only). No UI.
 6. **Phase 5 — UI:** Deploy `dream-implementer-ui` for cross-platform UI — Compose screens, ViewModels, Koin navigation installers, presentation tests, SwiftUI views, bridge code, and XCTest coverage.
 7. **Phase 6 — Wiring:** Consolidate umbrella module imports, DI registration, and navigation entries.

@@ -38,7 +38,7 @@ Quickly locate files, symbols, and build focused context packs for Dream tasks. 
 ## Use When
 
 - Locating a feature, symbol, or module in the codebase
-- Finding relevant template modules or `.features/` metadata
+- Finding relevant template modules or `features/` metadata
 - Answering structural questions about the project
 - Building context before implementation or repair
 - Quick lookups for file paths, class names, or function signatures
@@ -48,7 +48,7 @@ Quickly locate files, symbols, and build focused context packs for Dream tasks. 
 ### Explore Mode
 - Search quickly, return precise paths
 - Keep explanations short, avoid speculation
-- Prioritize: `.opencode/guidance/`, `.opencode/knowledge-graph/`, `.features/`, `templates/`, `feature/`, `shared/`, `androidApp/`, `iosApp/`
+- Prioritize: `.opencode/guidance/`, `.opencode/knowledge-graph/`, `features/`, `templates/`, `feature/`, `shared/`, `androidApp/`, `iosApp/`
 - In deep mode: identify which graph rules apply, return context that helps implementers work with minimal drift
 
 ### Context Mode

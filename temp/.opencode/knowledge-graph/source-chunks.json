@@ -179,7 +179,7 @@
         "endLine": 52
       },
       "summary": "Defines feature api/impl boundary, cross-feature navigation rules, domain reuse, cross-feature data exceptions, and shared extraction signals.",
-      "text": "Feature impl modules must not depend directly on another feature impl module. Cross-feature navigation goes through the target feature api module, which owns the NavKey route types. Domain-only reuse can be valid for aggregators or dependent workflows when documented. Cross-feature data implementation reuse is a temporary MVP exception and should be recorded in .features/decisions.yaml. Extract to shared modules when multiple features equally own the same persisted concept, when three or more features need the same behavior, or when ownership cannot be explained clearly."
+      "text": "Feature impl modules must not depend directly on another feature impl module. Cross-feature navigation goes through the target feature api module, which owns the NavKey route types. Domain-only reuse can be valid for aggregators or dependent workflows when documented. Cross-feature data implementation reuse is a temporary MVP exception and should be recorded in features/decisions.yaml. Extract to shared modules when multiple features equally own the same persisted concept, when three or more features need the same behavior, or when ownership cannot be explained clearly."
     },
     {
       "id": "chunk.responsive.form_ime",

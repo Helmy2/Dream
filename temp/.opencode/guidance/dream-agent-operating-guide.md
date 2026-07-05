@@ -4,7 +4,7 @@
 
 Defines default behavior for OpenCode agents generating, reviewing, verifying, or repairing Dream projects.
 
-**Use with**: `opencode-agent-map.md`, `PRODUCT.md`, `README.md`, `best-practices/`, `AGENTS.md`, `.features/` metadata.
+**Use with**: `opencode-agent-map.md`, `PRODUCT.md`, `README.md`, `best-practices/`, `AGENTS.md`, `features/` metadata.
 
 ## Default Mission
 
@@ -105,7 +105,7 @@ Should not: move logic to app shells, bypass shared infrastructure, introduce cr
 
 ### Generation Workflow
 
-1. `dream-general` reads product request → produces `.features/<feature>/plan.md` → presents plan to user → gets explicit confirmation
+1. `dream-general` reads product request → produces `features/<feature>/plan.md` → presents plan to user → gets explicit confirmation
 2. `dream-discovery` gathers codebase context
 3. `dream-designer` produces UI spec
 4. `dream-implementer` implements KMP business layer + tests + wiring
@@ -175,23 +175,23 @@ See `.opencode/guidance/reference/skip-conditions.md`
 
 ## Context Management
 
-**Fresh subagent per round**: Each repair round uses fresh implementer invocation. Subagent reads state from `.features/`, not conversation history.
+**Fresh subagent per round**: Each repair round uses fresh implementer invocation. Subagent reads state from `features/`, not conversation history.
 
-**State persistence**: Before delegating, write to `.features/<feature>/report.md`: iteration number, failures, past fixes, expected action, relevant rules.
+**State persistence**: Before delegating, write to `features/<feature>/report.md`: iteration number, failures, past fixes, expected action, relevant rules.
 
-**Context budget**: If conversation exceeds ~3 repair rounds, write state to `.features/`, start fresh conversation with compact handoff.
+**Context budget**: If conversation exceeds ~3 repair rounds, write state to `features/`, start fresh conversation with compact handoff.
 
 ### Context Compaction Workflow
 
 When context window approaches limit or after 3 repair rounds:
 
-1. **Write state to file** `.features/<feature>/report.md`
+1. **Write state to file** `features/<feature>/report.md`
 2. **Create compact handoff prompt** with: iteration, what was tried, what fails, next module, relevant rules
 3. **Start fresh conversation** with handoff prompt only
 
 ### Fresh Subagent Invocation
 
-Each repair round must use a fresh subagent invocation. Subagent reads current state from `.features/` files, not conversation history. Pass iteration number and pointer to state file.
+Each repair round must use a fresh subagent invocation. Subagent reads current state from `features/` files, not conversation history. Pass iteration number and pointer to state file.
 
 ## Context Caching (Token Optimization)
 
@@ -210,7 +210,7 @@ Each repair round must use a fresh subagent invocation. Subagent reads current s
 
 ## Template Self-Improvement
 
-Each feature captures retrospective at `.features/<feature>/retrospective.md`. Written automatically after every feature. Applied via `/dream-improve` command.
+Each feature captures retrospective at `features/<feature>/retrospective.md`. Written automatically after every feature. Applied via `/dream-improve` command.
 
 ## Stop Conditions
 
@@ -220,9 +220,9 @@ Flow stops when: work implemented and verified, real blocker documented, skip co
 
 | File | Author | Template |
 |------|--------|----------|
-| `.features/<feature>/plan.md` | dream-general | `plan-template.md` |
-| `.features/<feature>/contract.yaml` | dream-general | `feature-contract-template.md` |
-| `.features/<feature>/spec.md` | dream-designer | `feature-spec-template.md` |
-| `.features/<feature>/report.md` | dream-general | `feature-report-template.md` |
+| `features/<feature>/plan.md` | dream-general | `plan-template.md` |
+| `features/<feature>/contract.yaml` | dream-general | `feature-contract-template.md` |
+| `features/<feature>/spec.md` | dream-designer | `feature-spec-template.md` |
+| `features/<feature>/report.md` | dream-general | `feature-report-template.md` |
 
 Use templates from `.opencode/guidance/templates/` for reports. Plans must be user-approved before implementation proceeds.

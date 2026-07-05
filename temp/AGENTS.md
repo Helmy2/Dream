@@ -11,7 +11,7 @@ When working in this generated project, read in this order:
 3. [.opencode/knowledge-graph/README.md](.opencode/knowledge-graph/README.md)
 4. Relevant topic files in [.opencode/knowledge-graph/best-practices/](.opencode/knowledge-graph/best-practices/README.md)
 5. [README.md](README.md)
-6. Existing `.features/` metadata when it exists
+6. Existing `features/` metadata when it exists
 
 ## Packaged Agent Layer
 
