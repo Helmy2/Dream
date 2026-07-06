@@ -68,9 +68,9 @@ Treat `$ARGUMENTS` as optional override hints (e.g., app name, package name).
 7. **Model configuration** — Ask the user if they want to customize model assignments:
    - Present the default model mapping (see Model Assignments below)
    - Offer presets:
-     - **Balanced** (default): DeepSeek V4 Pro for orchestrator/implementer/inspector, Qwen3.7 Plus for designer/UI, Big Pickle for discovery/research, MiMo V2.5 for tester
-     - **Budget**: Big Pickle for all agents (free, 200K context)
-     - **Maximum quality**: DeepSeek V4 Pro for all agents (strongest reasoning)
+      - **Balanced** (default): Qwen3.7 Plus for orchestrator, DeepSeek V4 Pro for implementer, Qwen3.7 Plus for designer/UI, Big Pickle for discovery/research, MiMo V2.5 for tester/inspector
+      - **Budget**: Big Pickle for all agents (free, 200K context)
+      - **Maximum quality**: DeepSeek V4 Pro for implementer, Qwen3.7 Plus for orchestrator/designer/UI (image support), MiMo V2.5 for tester/inspector
      - **Custom**: Let user pick per-agent
    - If user chooses custom, walk through each agent and ask for model selection
    - Write the selected configuration to `.opencode/opencode.json` under the `agent` key
@@ -81,15 +81,15 @@ Treat `$ARGUMENTS` as optional override hints (e.g., app name, package name).
 Default model mapping optimized per agent role:
 
 | Agent | Model | Model ID | Context | Images | Cost ($/M in/out) |
-|---|---|---|---|---|---|
-| `dream-general` | DeepSeek V4 Pro | `opencode-go/deepseek-v4-pro` | 1M | No | $1.74/$3.48 |
+|---|---|---|---|---|---|---|
+| `dream-general` | Qwen3.7 Plus | `opencode-go/qwen3.7-plus` | 1M | Yes | $0.40/$1.60 |
 | `dream-designer` | Qwen3.7 Plus | `opencode-go/qwen3.7-plus` | 1M | Yes | $0.40/$1.60 |
 | `dream-discovery` | Big Pickle | `opencode/big-pickle` | 200K | No | FREE |
 | `dream-implementer` | DeepSeek V4 Pro | `opencode-go/deepseek-v4-pro` | 1M | No | $1.74/$3.48 |
 | `dream-implementer-ui` | Qwen3.7 Plus | `opencode-go/qwen3.7-plus` | 1M | Yes | $0.40/$1.60 |
 | `dream-research` | Big Pickle | `opencode/big-pickle` | 200K | No | FREE |
 | `dream-tester` | MiMo V2.5 | `opencode-go/mimo-v2.5` | 1M | Yes | $0.14/$0.28 |
-| `dream-inspector` | DeepSeek V4 Pro | `opencode-go/deepseek-v4-pro` | 1M | No | $1.74/$3.48 |
+| `dream-inspector` | MiMo V2.5 | `opencode-go/mimo-v2.5` | 1M | Yes | $0.14/$0.28 |
 
 To override, edit `.opencode/opencode.json` or re-run `/dream-init`.
 

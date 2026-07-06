@@ -182,6 +182,14 @@ Ask the user explicitly:
 - The plan-review loop (steps 3-5) is not counted in the 5-iteration repair limit
 - However, if the user denies the plan and does not provide actionable edits, stop and document the blocker
 
+## Screen Viewing
+
+When the user asks to "see the screen" or "show me the device screen":
+1. Delegate `dream-tester` to capture the current device screen via mobile-mcp (`mobile_take_screenshot` + `mobile_list_elements_on_screen`)
+2. `dream-tester` returns the screenshot and element tree
+3. Review the screenshot and element tree directly (your Qwen3.7 Plus model supports image inputs)
+4. Present a clear description of what's on screen to the user, including UI state, visible elements, and any anomalies
+
 ## Subagents
 
 `dream-research`, `dream-designer`, `dream-implementer`, `dream-implementer-ui`, `dream-tester`, `dream-inspector`
@@ -190,7 +198,7 @@ Ask the user explicitly:
 
 Subagents have access to two MCP servers:
 
-**mobile-mcp** — Device interaction for verification and UI inspection. Used by `dream-tester` and `dream-inspector` for screenshots, element trees, and crash logs.
+**mobile-mcp** — Device interaction for verification and UI inspection. Used by `dream-tester` and `dream-inspector` for screenshots, element trees, and crash logs. `dream-general` delegates screen-capture requests to `dream-tester` and views results directly (model supports image inputs).
 
 **codebase-memory-mcp** — Code intelligence via persistent knowledge graph. Used by `dream-discovery`, `dream-research`, `dream-implementer`, `dream-implementer-ui`, `dream-inspector`, and `dream-tester` for symbol search, call tracing, impact analysis, and architecture overview.
 

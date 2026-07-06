@@ -6,7 +6,7 @@
   ],
   "agent": {
     "dream-general": {
-      "model": "opencode-go/deepseek-v4-pro"
+      "model": "opencode-go/qwen3.7-plus"
     },
     "dream-designer": {
       "model": "opencode-go/qwen3.7-plus"
@@ -27,7 +27,7 @@
       "model": "opencode-go/mimo-v2.5"
     },
     "dream-inspector": {
-      "model": "opencode-go/deepseek-v4-pro"
+      "model": "opencode-go/mimo-v2.5"
     }
   },
   "mcp": {

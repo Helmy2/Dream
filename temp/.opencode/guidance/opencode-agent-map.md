@@ -36,16 +36,18 @@ Defines which OpenCode agent owns each Dream workflow stage.
 
 Each agent is configured with a model optimized for its role. Configuration lives in `opencode.json` under the `agent` key. Users can customize during `/dream-init` or by editing `opencode.json` directly.
 
+**Image-capable** models (Qwen3.7 Plus, MiMo V2.5) are assigned to agents that view screenshots — `dream-general` (user requests like "show me the screen"), `dream-designer` (visual specs), `dream-implementer-ui` (UI spec interpretation), `dream-tester` (verification), and `dream-inspector` (QA screenshot checks). Agents that work purely with text (`dream-implementer`, `dream-discovery`, `dream-research`) use DeepSeek V4 Pro or Big Pickle.
+
 | Agent | Model | Model ID | Rationale |
-|---|---|---|---|
-| `dream-general` | DeepSeek V4 Pro | `opencode-go/deepseek-v4-pro` | 1M context + strongest reasoning for orchestration |
+|---|---|---|---|---|
+| `dream-general` | Qwen3.7 Plus | `opencode-go/qwen3.7-plus` | 1M context + image support for visual orchestration and screen viewing |
 | `dream-designer` | Qwen3.7 Plus | `opencode-go/qwen3.7-plus` | Image support for visual understanding |
 | `dream-discovery` | Big Pickle | `opencode/big-pickle` | Free, 200K context for fast exploration |
-| `dream-implementer` | DeepSeek V4 Pro | `opencode-go/deepseek-v4-pro` | Strongest reasoning for complex KMP code |
+| `dream-implementer` | DeepSeek V4 Pro | `opencode-go/deepseek-v4-pro` | Strongest reasoning for complex KMP code (no image support needed) |
 | `dream-implementer-ui` | Qwen3.7 Plus | `opencode-go/qwen3.7-plus` | Image support for UI spec interpretation |
 | `dream-research` | Big Pickle | `opencode/big-pickle` | Free, 200K context for research |
 | `dream-tester` | MiMo V2.5 | `opencode-go/mimo-v2.5` | Low cost, image support for screenshot comparison |
-| `dream-inspector` | DeepSeek V4 Pro | `opencode-go/deepseek-v4-pro` | Strongest reasoning for QA gate |
+| `dream-inspector` | MiMo V2.5 | `opencode-go/mimo-v2.5` | Low cost, image support for screenshot-based QA verification |
 
 ### Overriding Models
 
@@ -71,7 +73,7 @@ Two MCP servers are configured in `opencode.json`:
 
 Device interaction for verification and UI inspection.
 
-- **Used by**: `dream-tester`, `dream-inspector`
+- **Used by**: `dream-general` (via delegation to `dream-tester`), `dream-tester`, `dream-inspector`
 - **Key tools**: `mobile_take_screenshot`, `mobile_list_elements_on_screen`, `mobile_list_crashes`, `mobile_get_crash`
 - **Launcher**: `.opencode/scripts/start-mobile-mcp.sh`
 

@@ -53,10 +53,11 @@ See `.opencode/guidance/reference/complexity-routing.md` for full details and ex
 
 Each agent uses a model optimized for its role. The default mapping balances cost, context window, and capability:
 
-- **Orchestration & Implementation** (dream-general, dream-implementer, dream-inspector): DeepSeek V4 Pro — strongest reasoning, 1M context
+- **Orchestration** (dream-general): Qwen3.7 Plus — image support for screen viewing + 1M context
+- **Implementation** (dream-implementer): DeepSeek V4 Pro — strongest reasoning, 1M context (no image support needed)
 - **UI & Design** (dream-designer, dream-implementer-ui): Qwen3.7 Plus — image support for visual tasks
 - **Exploration & Research** (dream-discovery, dream-research): Big Pickle — free, sufficient for read-only tasks
-- **Verification** (dream-tester): MiMo V2.5 — low cost with image support for screenshot comparison
+- **Verification & QA** (dream-tester, dream-inspector): MiMo V2.5 — low cost with image support for screenshot comparison
 
 Users can customize model assignments during `/dream-init` or by editing `opencode.json`. See `opencode-agent-map.md` for the full mapping and override instructions.
 
@@ -76,7 +77,7 @@ Optional for: single-line corrections, documentation updates, typo fixes.
 
 Two MCP servers are configured in `opencode.json`:
 
-**mobile-mcp** — Device interaction for verification and UI inspection. Used by `dream-tester` and `dream-inspector` for screenshots, element trees, and crash logs.
+**mobile-mcp** — Device interaction for verification and UI inspection. Used by `dream-general` (via delegation to `dream-tester`), `dream-tester`, and `dream-inspector` for screenshots, element trees, and crash logs.
 
 **codebase-memory-mcp** — Code intelligence via persistent knowledge graph. Used by `dream-discovery`, `dream-research`, `dream-implementer`, `dream-implementer-ui`, and `dream-inspector` for symbol search, call tracing, impact analysis, and architecture overview.
 
