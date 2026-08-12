@@ -21,9 +21,9 @@ When working in this generated project, read in this order:
 - [.opencode/guidance/](.opencode/guidance): operating guide and prompt scaffolds
 - [.opencode/knowledge-graph/](.opencode/knowledge-graph): architecture rules and retrieval sources
 - [maestro/](maestro): Android and iOS smoke-flow scaffolding for generated feature validation
-- [scripts/dream-preflight.sh](scripts/dream-preflight.sh): git, Android SDK, and tooling readiness preflight
-- [scripts/sync-pbxproj.rb](scripts/sync-pbxproj.rb): auto-registers orphaned Swift files in Xcode project.pbxproj
-- [scripts/remove-sample.sh](scripts/remove-sample.sh): removes sample feature files, strips sample deps, and checks for leftovers
+- [.opencode/scripts/dream-preflight.sh](.opencode/scripts/dream-preflight.sh): git, Android SDK, and tooling readiness preflight
+- [.opencode/scripts/sync-pbxproj.rb](.opencode/scripts/sync-pbxproj.rb): auto-registers orphaned Swift files in Xcode project.pbxproj
+- [.opencode/scripts/remove-sample.sh](.opencode/scripts/remove-sample.sh): removes sample feature files, strips sample deps, and checks for leftovers
 - [.opencode/guidance/new-feature-checklist.md](.opencode/guidance/new-feature-checklist.md): contract-first feature wiring, verification, and git checklist
 
 ## Working Rules
@@ -43,7 +43,7 @@ When working in this generated project, read in this order:
 Run commands from this project root:
 
 ```bash
-./scripts/dream-preflight.sh
+./.opencode/scripts/dream-preflight.sh
 ./gradlew :feature:sample:impl:allTests :shared:navigation:allTests :shared:core:domain:allTests :shared:core:data:allTests :shared:core:presentation:allTests :shared:core:testing:allTests
 ./gradlew :androidApp:assembleDebug
 xcodebuild -project iosApp-swiftui/iosApp.xcodeproj -scheme iosApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.2' build

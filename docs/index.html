@@ -1,0 +1,1018 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Flow — Building Faster Without Building Worse</title>
+<style>
+  :root {
+    --bg: #eef0f4;
+    --surface: #ffffff;
+    --surface-2: #e4e7ee;
+    --ink: #1a2130;
+    --ink-dim: #5a6478;
+    --accent: #b8701f;
+    --accent-ink: #6e4210;
+    --good: #256b5b;
+    --good-bg: #dcece6;
+    --bad: #9a3a26;
+    --bad-bg: #f3ddd6;
+    --border: #ccd1dc;
+    --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, Consolas, monospace;
+  }
+  :root[data-theme="dark"] {
+    --bg: #12151d;
+    --surface: #1a1f2a;
+    --surface-2: #232937;
+    --ink: #e8eaf0;
+    --ink-dim: #99a1b5;
+    --accent: #e3a15c;
+    --accent-ink: #f6d3a3;
+    --good: #5fb39f;
+    --good-bg: #1c332e;
+    --bad: #e0876c;
+    --bad-bg: #3a2420;
+    --border: #2e3648;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12151d;
+      --surface: #1a1f2a;
+      --surface-2: #232937;
+      --ink: #e8eaf0;
+      --ink-dim: #99a1b5;
+      --accent: #e3a15c;
+      --accent-ink: #f6d3a3;
+      --good: #5fb39f;
+      --good-bg: #1c332e;
+      --bad: #e0876c;
+      --bad-bg: #3a2420;
+      --border: #2e3648;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    overflow: hidden;
+  }
+  body { min-height: 100vh; }
+
+  .deck {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .rail {
+    position: fixed;
+    left: 22px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    z-index: 20;
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+  .rail-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--ink-dim);
+    letter-spacing: 0.04em;
+  }
+  .rail-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+  .rail-item.active { color: var(--accent); }
+  .rail-item.active .rail-dot { background: var(--accent); width: 8px; height: 8px; }
+  @media (max-width: 860px) { .rail { display: none; } }
+
+  .progress-bar {
+    position: fixed; top: 0; left: 0; height: 3px;
+    background: var(--accent);
+    z-index: 30;
+    transition: width 0.35s ease;
+  }
+  @media (prefers-reduced-motion: reduce) { .progress-bar { transition: none; } }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    padding: 7vh 11vw 8vh 11vw;
+    opacity: 0;
+  }
+  .slide.active {
+    display: flex;
+    opacity: 1;
+    animation: fadeIn 0.4s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  @media (prefers-reduced-motion: reduce) { .slide.active { animation: none; } }
+
+  @media (max-width: 860px) {
+    .slide { padding: 8vh 7vw 12vh 7vw; }
+  }
+
+  .kicker {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    margin-bottom: auto;
+    flex: 0 0 auto;
+  }
+  .kicker b { color: var(--accent); font-weight: 600; }
+
+  .slide-body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: safe center;
+    min-height: 0;
+    min-width: 0;
+    overflow-y: auto;
+    padding: 2vh 0;
+  }
+
+  h1.title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(2.6rem, 6vw, 4.4rem);
+    line-height: 1.05;
+    margin: 0 0 0.5em 0;
+    text-wrap: balance;
+    max-width: 15ch;
+  }
+  .subtitle {
+    font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+    color: var(--ink-dim);
+    max-width: 46ch;
+    line-height: 1.5;
+  }
+  .meta-line {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--ink-dim);
+    margin-top: 2.5em;
+    letter-spacing: 0.03em;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(1.9rem, 3.6vw, 2.7rem);
+    line-height: 1.15;
+    margin: 0 0 0.7em 0;
+    text-wrap: balance;
+    max-width: 22ch;
+  }
+
+  .statement {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+    line-height: 1.28;
+    max-width: 20ch;
+    text-wrap: balance;
+  }
+  .statement-sub {
+    margin-top: 1em;
+    font-size: clamp(1.02rem, 1.4vw, 1.2rem);
+    color: var(--ink-dim);
+    max-width: 48ch;
+    line-height: 1.55;
+  }
+
+  p.lede {
+    font-size: clamp(1rem, 1.4vw, 1.18rem);
+    line-height: 1.62;
+    max-width: 62ch;
+    color: var(--ink);
+  }
+  p.lede + p.lede { margin-top: 0.9em; }
+
+  .checklist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1.1em; max-width: 62ch; }
+  .checklist li {
+    display: grid;
+    grid-template-columns: 22px 1fr;
+    gap: 12px;
+    font-size: 1.02rem;
+    line-height: 1.5;
+  }
+  .checklist li::before {
+    content: "";
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent);
+    margin-top: 0.55em;
+  }
+  .checklist b { font-weight: 600; }
+  .checklist .dim { color: var(--ink-dim); }
+
+  .anti-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.85em; max-width: 68ch; }
+  .anti-list li {
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--ink);
+    padding: 0.15em 0 0.15em 1.6em;
+    position: relative;
+  }
+  .anti-list li::before {
+    content: "×";
+    position: absolute; left: 0; top: 0.1em;
+    color: var(--bad);
+    font-weight: 700;
+    font-family: var(--font-body);
+  }
+  .anti-list code { color: var(--accent-ink); }
+
+  table.deck-table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.95rem;
+  }
+  table.deck-table th, table.deck-table td {
+    text-align: left;
+    padding: 0.65em 1em 0.65em 0;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.45;
+  }
+  table.deck-table th {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    font-weight: 500;
+  }
+  table.deck-table td code, table.deck-table td.mono { font-family: var(--font-mono); font-size: 0.88em; }
+  .table-wrap { overflow-x: auto; max-width: 100%; }
+
+  .quote-block {
+    border-left: 3px solid var(--accent);
+    padding: 0.2em 0 0.2em 1.4em;
+    max-width: 60ch;
+  }
+  .quote-block p {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+    line-height: 1.5;
+    margin: 0;
+  }
+  .cite {
+    display: block;
+    margin-top: 0.9em;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--ink-dim);
+  }
+
+  .pill-row { display: flex; flex-wrap: wrap; gap: 0.6em; }
+  .pill {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    padding: 0.35em 0.85em;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    color: var(--ink-dim);
+    white-space: nowrap;
+  }
+  .pill.accent { border-color: var(--accent); color: var(--accent-ink); }
+  .pill.good { border-color: var(--good); color: var(--good); background: var(--good-bg); }
+  .pill.bad { border-color: var(--bad); color: var(--bad); background: var(--bad-bg); }
+
+  .code-block {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    line-height: 1.55;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1em 1.2em;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .code-block.minus { border-left: 3px solid var(--bad); background: var(--bad-bg); }
+  .code-block.plus { border-left: 3px solid var(--good); background: var(--good-bg); }
+  .code-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4em; max-width: 78ch; }
+  @media (max-width: 860px) { .code-pair { grid-template-columns: 1fr; } }
+  .code-label { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.5em; }
+  .code-label.minus { color: var(--bad); }
+  .code-label.plus { color: var(--good); }
+  .file-path { font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-dim); margin-bottom: 1.1em; word-break: break-all; }
+
+  figure.diagram { margin: 0.4em 0 0 0; max-width: 100%; min-width: 0; }
+  figure.diagram svg { width: 100%; height: auto; max-width: 760px; display: block; color: var(--ink); }
+  figure.diagram figcaption { margin-top: 0.9em; font-size: 0.92rem; color: var(--ink-dim); max-width: 56ch; line-height: 1.5; }
+  .dg-node rect, .dg-node { fill: var(--surface); stroke: var(--ink-dim); stroke-width: 1.5; }
+  .dg-node-accent { fill: var(--surface); stroke: var(--accent); stroke-width: 2; }
+  .dg-text { fill: var(--ink); font-family: var(--font-mono); font-size: 12.5px; }
+  .dg-text-dim { fill: var(--ink-dim); font-family: var(--font-mono); font-size: 10.5px; }
+  .dg-text-accent { fill: var(--accent-ink); font-family: var(--font-mono); font-size: 10.5px; font-weight: 600; }
+  .dg-arrow { stroke: var(--ink-dim); stroke-width: 1.5; fill: none; }
+  .dg-arrow-accent { stroke: var(--accent); stroke-width: 1.5; fill: none; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 3em; max-width: 76ch; }
+  @media (max-width: 860px) { .two-col { grid-template-columns: 1fr; gap: 1.6em; } }
+  .col h3 { font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-dim); margin: 0 0 0.9em 0; }
+
+  .footer-row {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-dim);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .nav-buttons {
+    position: fixed;
+    bottom: 24px;
+    right: 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 25;
+  }
+  .nav-counter {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-dim);
+    font-variant-numeric: tabular-nums;
+  }
+  .nav-buttons-group { display: flex; gap: 10px; }
+  .nav-btn {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .nav-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+  .click-zone { position: fixed; top: 0; bottom: 0; width: 18%; z-index: 15; cursor: pointer; }
+  .click-zone.left { left: 0; }
+  .click-zone.right { right: 0; }
+  @media (max-width: 860px) { .click-zone { display: none; } }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar" style="width: 0%"></div>
+
+<nav class="rail" id="rail" aria-hidden="true"></nav>
+
+<div class="deck" id="deck" role="region" aria-label="Slide deck" tabindex="0"></div>
+
+<div class="click-zone left" id="zoneLeft" aria-hidden="true"></div>
+<div class="click-zone right" id="zoneRight" aria-hidden="true"></div>
+
+<div class="nav-buttons">
+  <span class="nav-counter" id="navCounter">01 / 28</span>
+  <div class="nav-buttons-group">
+    <button class="nav-btn" id="prevBtn" aria-label="Previous slide">‹</button>
+    <button class="nav-btn" id="nextBtn" aria-label="Next slide">›</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  var SECTIONS = {
+    A: "Foundations",
+    B: "The Flow",
+    C: "Dream, In This Repo",
+    D: "Why AI Defaults To Bad Code",
+    E: "The Knowledge System",
+    F: "AI Testing AI",
+    G: "Learning From Mistakes",
+    H: "Takeaways"
+  };
+
+  function kicker(letter) {
+    return '<div class="kicker"><b>' + letter + '</b> — ' + SECTIONS[letter].toUpperCase() + '</div>';
+  }
+
+  var slides = [];
+
+  // ---------- A. FOUNDATIONS ----------
+
+  slides.push({ section: 'A', html:
+    '<div class="slide-body">' +
+      '<h1 class="title">Building Faster Without Building Worse</h1>' +
+      '<p class="subtitle">How a structured AI flow — not a bigger prompt — is how we scale AI-assisted development.</p>' +
+      '<div class="meta-line">AI FLOW · 12 August 2026</div>' +
+    '</div>'
+  });
+
+  slides.push({ section: 'A', html:
+    '<div class="slide-body">' +
+      '<p class="statement">A single prompt can produce code that looks finished — and is checked by nothing but our own eyes.</p>' +
+      '<p class="statement-sub">That gap between "looks done" and "is verified" is exactly where AI-assisted work gets a bad reputation. An AI flow closes that gap without giving back the speed.</p>' +
+    '</div>'
+  });
+
+  slides.push({ section: 'A', html:
+    '<div class="slide-body">' +
+      '<h2>What is an agent?</h2>' +
+      '<p class="lede">An LLM given tools, a goal, and a loop — not just a single reply. It plans a step, calls a tool, looks at what actually happened, and decides the next step. A prompt returns text once; an agent keeps going until the goal is met.</p>' +
+      '<figure class="diagram">' +
+        '<svg viewBox="0 0 640 300" role="img" aria-label="An agent loops through plan, act, and observe, feeding each result back into the next plan, driven by a goal.">' +
+          '<defs><marker id="a1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,0 10,5 0,10" fill="var(--ink-dim)"/></marker></defs>' +
+          '<text x="320" y="26" class="dg-text-dim" text-anchor="middle">GOAL</text>' +
+          '<line x1="320" y1="34" x2="320" y2="64" class="dg-arrow" marker-end="url(#a1)"/>' +
+          '<rect x="240" y="66" width="160" height="52" rx="10" class="dg-node"/>' +
+          '<text x="320" y="97" class="dg-text" text-anchor="middle">Plan</text>' +
+          '<path d="M 388 110 C 460 140, 490 160, 505 180" class="dg-arrow" marker-end="url(#a1)" fill="none"/>' +
+          '<rect x="440" y="182" width="150" height="52" rx="10" class="dg-node"/>' +
+          '<text x="515" y="213" class="dg-text" text-anchor="middle">Act (tool call)</text>' +
+          '<line x1="440" y1="208" x2="200" y2="208" class="dg-arrow" marker-end="url(#a1)"/>' +
+          '<rect x="50" y="182" width="150" height="52" rx="10" class="dg-node"/>' +
+          '<text x="125" y="213" class="dg-text" text-anchor="middle">Observe</text>' +
+          '<path d="M 135 182 C 150 150, 200 125, 250 116" class="dg-arrow" marker-end="url(#a1)" fill="none"/>' +
+        '</svg>' +
+        '<figcaption>Plan → act → observe → plan again. Prompting is one box on this diagram: a single Act with no Observe and no way back in.</figcaption>' +
+      '</figure>' +
+    '</div>'
+  });
+
+  // ---------- B. THE FLOW ----------
+
+  slides.push({ section: 'B', html:
+    '<div class="slide-body">' +
+      '<h2>One agent isn\'t enough for real work</h2>' +
+      '<p class="lede">A single agent juggling an entire feature drifts: it forgets earlier constraints, blurs layers together, and reviews its own work with the same blind spots that wrote it. A flow gives each concern to a specialist and makes the handoff between them explicit.</p>' +
+      '<figure class="diagram">' +
+        '<svg viewBox="0 0 700 300" role="img" aria-label="An orchestrator agent delegates to five specialist agents: discovery, design, implement, test, and review.">' +
+          '<defs><marker id="a2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,0 10,5 0,10" fill="var(--ink-dim)"/></marker></defs>' +
+          '<rect x="270" y="16" width="160" height="52" rx="10" class="dg-node-accent"/>' +
+          '<text x="350" y="47" class="dg-text-accent" text-anchor="middle">orchestrator</text>' +
+          '<text x="350" y="88" class="dg-text-dim" text-anchor="middle">delegates →</text>' +
+          (function(){
+            var labels = ['discovery','design','implement','test','review'];
+            var out = '';
+            for (var i=0;i<5;i++) {
+              var x = 20 + i*136;
+              out += '<path d="M 350 70 L ' + (x+60) + ' 190" class="dg-arrow" marker-end="url(#a2)"/>';
+              out += '<rect x="' + x + '" y="192" width="120" height="52" rx="10" class="dg-node"/>';
+              out += '<text x="' + (x+60) + '" y="223" class="dg-text" text-anchor="middle">' + labels[i] + '</text>';
+            }
+            return out;
+          })() +
+        '</svg>' +
+        '<figcaption>dream-general never edits code itself — it interprets the request and routes each phase to the agent built for it.</figcaption>' +
+      '</figure>' +
+    '</div>'
+  });
+
+  slides.push({ section: 'B', html:
+    '<div class="slide-body">' +
+      '<h2>Anatomy of a flow</h2>' +
+      '<ul class="checklist">' +
+        '<li><span><b>Phases</b> — plan, build, verify, review, each with a clear exit condition, <span class="dim">not "keep going until it feels done."</span></span></li>' +
+        '<li><span><b>Handoffs</b> — one agent\'s output is the next agent\'s input, <span class="dim">nothing carried as unwritten shared context.</span></span></li>' +
+        '<li><span><b>Artifacts as contracts</b> — a spec file, a contract file, a report, <span class="dim">not a conversation you\'d have to re-read to reconstruct intent.</span></span></li>' +
+        '<li><span><b>Gates</b> — a phase can\'t be marked done by the agent that did the work, <span class="dim">only by the one that checks it.</span></span></li>' +
+      '</ul>' +
+    '</div>'
+  });
+
+  slides.push({ section: 'B', html:
+    '<div class="slide-body">' +
+      '<h2>Prompting vs. a flow</h2>' +
+      '<div class="table-wrap"><table class="deck-table">' +
+        '<tr><th></th><th>Just prompting</th><th>An AI flow</th></tr>' +
+        '<tr><td>Context</td><td>One giant, decaying context</td><td>Small, focused context per stage</td></tr>' +
+        '<tr><td>Verification</td><td>Self-reported — "looks right"</td><td>A separate agent checks the work</td></tr>' +
+        '<tr><td>Division of labor</td><td>One generalist doing everything</td><td>Specialists matched to each concern</td></tr>' +
+        '<tr><td>Repeatability</td><td>A different result each time you ask</td><td>Same phases, same checks, every time</td></tr>' +
+        '<tr><td>Failure mode</td><td>Silent — ships until someone notices</td><td>Loud — a gate blocks the handoff</td></tr>' +
+      '</table></div>' +
+    '</div>'
+  });
+
+  slides.push({ section: 'B', html:
+    '<div class="slide-body">' +
+      '<h2>The shape of a flow</h2>' +
+      '<figure class="diagram">' +
+        '<svg viewBox="0 0 960 260" role="img" aria-label="Plan flows into build, into verify, into a review gate, which either approves to ship or rejects back to build for repair.">' +
+          '<defs><marker id="a3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,0 10,5 0,10" fill="var(--ink-dim)"/></marker>' +
+          '<marker id="a3b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,0 10,5 0,10" fill="var(--accent)"/></marker></defs>' +
+          '<rect x="45" y="102" width="130" height="56" rx="10" class="dg-node"/><text x="110" y="135" class="dg-text" text-anchor="middle">Plan</text>' +
+          '<line x1="175" y1="130" x2="215" y2="130" class="dg-arrow" marker-end="url(#a3)"/>' +
+          '<rect x="220" y="102" width="130" height="56" rx="10" class="dg-node"/><text x="285" y="135" class="dg-text" text-anchor="middle">Build</text>' +
+          '<line x1="350" y1="130" x2="390" y2="130" class="dg-arrow" marker-end="url(#a3)"/>' +
+          '<rect x="395" y="102" width="130" height="56" rx="10" class="dg-node"/><text x="460" y="135" class="dg-text" text-anchor="middle">Verify</text>' +
+          '<line x1="525" y1="130" x2="565" y2="130" class="dg-arrow" marker-end="url(#a3)"/>' +
+          '<polygon points="660,80 740,130 660,180 580,130" class="dg-node-accent"/>' +
+          '<text x="660" y="126" class="dg-text-accent" text-anchor="middle">Review</text>' +
+          '<text x="660" y="140" class="dg-text-dim" text-anchor="middle" font-size="9">gate</text>' +
+          '<line x1="740" y1="130" x2="795" y2="130" class="dg-arrow-accent" marker-end="url(#a3b)"/>' +
+          '<text x="768" y="118" class="dg-text-dim" text-anchor="middle" font-size="9">approved</text>' +
+          '<rect x="800" y="102" width="130" height="56" rx="10" class="dg-node"/><text x="865" y="135" class="dg-text" text-anchor="middle">Ship</text>' +
+          '<path d="M 660 180 C 620 235, 350 235, 285 160" class="dg-arrow" marker-end="url(#a3)" fill="none"/>' +
+          '<text x="470" y="232" class="dg-text-dim" text-anchor="middle" font-size="10">defects found → repair</text>' +
+        '</svg>' +
+        '<figcaption>Every flow in this deck — including Dream\'s — is a variation on this shape.</figcaption>' +
+      '</figure>' +
+    '</div>'
+  });
+
+  // ---------- C. DREAM ----------
+
+  slides.push({ section: 'C', html:
+    '<div class="slide-body">' +
+      '<h2>Dream: this isn\'t hypothetical</h2>' +
+      '<p class="lede">Dream is a local-first AI app builder for Kotlin Multiplatform — Android and iOS — built on OpenCode, living in this repository right now. <code class="mono">temp/</code> is the starter template it copies and renames into every project it generates.</p>' +
+      '<p class="lede">Everything in the rest of this deck is a real file you can open today, not a slide-only diagram.</p>' +
+      '<div class="code-block" style="max-width: 46ch; margin-top: 0.6em;">temp/.opencode/\n  agents/       — 8 subagent definitions\n  commands/     — /dream-feature, /dream-e2e, /dream-review…\n  guidance/     — operating rules, agent map\n  knowledge-graph/ — architecture rules + anti-patterns</div>' +
+    '</div>'
+  });
+
+  slides.push({ section: 'C', html:
+    '<div class="slide-body">' +
+      '<h2>Eight agents, eight jobs</h2>' +
+      '<div class="table-wrap"><table class="deck-table">' +
+        '<tr><th>Agent</th><th>Role</th></tr>' +
+        '<tr><td class="mono">dream-general</td><td>Orchestrator — interprets the request, plans, delegates. Never edits code.</td></tr>' +
+        '<tr><td class="mono">dream-discovery</td><td>Fast, read-only exploration — locates files and symbols.</td></tr>' +
+        '<tr><td class="mono">dream-research</td><td>Codebase + external research (docs, APIs, troubleshooting).</td></tr>' +
+        '<tr><td class="mono">dream-designer</td><td>Turns a feature contract into a UI/UX spec. No code.</td></tr>' +
+        '<tr><td class="mono">dream-implementer</td><td>KMP business layer: domain, data, api, wiring.</td></tr>' +
+        '<tr><td class="mono">dream-implementer-ui</td><td>Compose (Android) + SwiftUI (iOS).</td></tr>' +
+        '<tr><td class="mono">dream-tester</td><td>Full verification ladder: tests, builds, device, logs.</td></tr>' +
+        '<tr><td class="mono">dream-inspector</td><td>Final QA gate — read-only. Approves, or lists defects.</td></tr>' +
+      '</table></div>' +
+    '</div>'
+  });
+
+  slides.push({ section: 'C', html:
+    '<div class="slide-body">' +
+      '<h2>The model fits the job, not the other way round</h2>' +
+      '<div class="table-wrap"><table class="deck-table">' +
+        '<tr><th>Agent</th><th>Model</th><th>Why</th></tr>' +
+        '<tr><td class="mono">dream-general</td><td>Qwen3.7 Plus</td><td>1M context + image support, for orchestration and screen-viewing</td></tr>' +
+        '<tr><td class="mono">dream-implementer</td><td>DeepSeek V4 Pro</td><td>Strongest reasoning for complex KMP code — no image support needed</td></tr>' +
+        '<tr><td class="mono">discovery / research</td><td>Big Pickle</td><td>Free, 200K context, built for fast exploration</td></tr>' +
+        '<tr><td class="mono">tester / inspector</td><td>MiMo V2.5</td><td>Low cost + image support, for screenshot-based verification</td></tr>' +
+      '</table></div>' +
+      '<p class="lede" style="margin-top: 1.4em;">Verification runs on every change — so it runs on the cheapest model that can still see the screen.</p>' +
+      '<p class="lede" style="margin-top: 1em;">Chosen once, at bootstrap, as a preset:</p>' +
+      '<div class="pill-row"><span class="pill">Balanced</span><span class="pill">Budget</span><span class="pill accent">Maximum Quality</span></div>' +
+    '</div>'
+  });
+
+  slides.push({ section: 'C', html:
+    '<div class="slide-body">' +
+      '<h2>Nothing gets built without a plan you\'ve approved</h2>' +
+      '<div class="quote-block"><p>"Should not: edit implementation files, run verification directly, skip inspector for substantial work, skip Phase 0 (Plan &amp; User Review)."</p><span class="cite">— dream-general\'s rules, opencode-agent-map.md</span></div>' +
+      '<p class="lede" style="margin-top: 1.6em; max-width: 56ch;">On <b>Confirm</b>: proceed to the next phase. On <b>Edit</b>: update the plan, re-present it. On <b>Deny</b>: stop the workflow and document why.</p>' +
+    '</div>'
+  });
+
+  slides.push({ section: 'C', html:
+    '<div class="slide-body">' +
+      '<h2>One feature, start to finish</h2>' +
+      '<figure class="diagram">' +
+        '<svg viewBox="0 0 1070 260" role="img" aria-label="Interpret and plan, research and contract, design, implement business logic, implement UI, verify, review, then ship, with a repair loop from review back to implementation.">' +
+          '<defs><marker id="a4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,0 10,5 0,10" fill="var(--ink-dim)"/></marker></defs>' +
+          (function(){
+            var nodes = [
+              {t:'Plan', sub:'gate · Phase 0', accent:true},
+              {t:'Research', sub:'+ contract'},
+              {t:'Design', sub:'ui-spec.md'},
+              {t:'Implement', sub:'business layer'},
+              {t:'Implement UI', sub:'Compose + SwiftUI'},
+              {t:'Verify', sub:'tester ladder'},
+              {t:'Review', sub:'gate · inspector', accent:true},
+              {t:'Ship', sub:''}
+            ];
+            var out = '';
+            var w = 112, gap = 20, x0 = 15, y = 92, h = 56;
+            for (var i=0;i<nodes.length;i++) {
+              var x = x0 + i*(w+gap);
+              var cls = nodes[i].accent ? 'dg-node-accent' : 'dg-node';
+              var tcls = nodes[i].accent ? 'dg-text-accent' : 'dg-text';
+              out += '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="9" class="'+cls+'"/>';
+              out += '<text x="'+(x+w/2)+'" y="'+(y+24)+'" class="'+tcls+'" text-anchor="middle" font-size="11.5">'+nodes[i].t+'</text>';
+              if (nodes[i].sub) out += '<text x="'+(x+w/2)+'" y="'+(y+40)+'" class="dg-text-dim" text-anchor="middle" font-size="9">'+nodes[i].sub+'</text>';
+              if (i < nodes.length-1) out += '<line x1="'+(x+w)+'" y1="'+(y+h/2)+'" x2="'+(x+w+gap-4)+'" y2="'+(y+h/2)+'" class="dg-arrow" marker-end="url(#a4)"/>';
+            }
+            return out;
+          })() +
+          '<path d="M 780 148 C 780 210, 500 210, 460 158" class="dg-arrow" marker-end="url(#a4)" fill="none"/>' +
+          '<text x="620" y="228" class="dg-text-dim" text-anchor="middle" font-size="10">defects → repair, max 2 rounds</text>' +
+        '</svg>' +
+        '<figcaption>The real "Feature Generation" workflow from opencode-agent-map.md, condensed to its checkpoints.</figcaption>' +
+      '</figure>' +
+    '</div>'
+  });
+
+  slides.push({ section: 'C', html:
+    '<div class="slide-body">' +
+      '<h2>More than one road in</h2>' +
+      '<div class="table-wrap"><table class="deck-table">' +
+        '<tr><th>Command</th><th>What it\'s for</th></tr>' +
+        '<tr><td class="mono">/dream-quick-fix</td><td>Skips Phase 0, contract, and spec entirely for trivial 1–3 file fixes. Commits straight to the current branch.</td></tr>' +
+        '<tr><td class="mono">/dream-bug-fix</td><td>Root-causes crashes using real device data — mobile-mcp crash logs, adb logcat, xcrun simctl log stream — routed to a layer by error pattern.</td></tr>' +
+        '<tr><td class="mono">/dream-ui-fix</td><td>Before/after screenshot diff, scoped strictly to the presentation layer — never touches domain or data.</td></tr>' +
+        '<tr><td class="mono">/dream-resume</td><td>Recovers an interrupted session from a git checkpoint: continue, roll back, restart, or abort.</td></tr>' +
+        '<tr><td class="mono">/dream-info</td><td>Read-only dashboard — agents, commands, MCP servers, and which retrospectives are still unapplied.</td></tr>' +
+        '<tr><td class="mono">/dream-init</td><td>One-time bootstrap: detects the toolchain, picks a model preset.</td></tr>' +
+      '</table></div>' +
+    '</div>'
+  });
+
+  // ---------- D. WHY AI DEFAULTS TO BAD CODE ----------
+
+  slides.push({ section: 'D', html:
+    '<div class="slide-body">' +
+      '<p class="statement">A model trained on the average of public code inherits the average of public code — bugs, shortcuts, and all.</p>' +
+      '<p class="statement-sub">Nobody taught it your architecture\'s rules. Left alone, it reproduces what most repos do, not what yours needs.</p>' +
+    '</div>'
+  });
+
+  slides.push({ section: 'D', html:
+    '<div class="slide-body">' +
+      '<h2>Verbatim, from Dream\'s own anti-pattern list</h2>' +
+      '<ul class="anti-list">' +
+        '<li>do not call system time directly throughout the app</li>' +
+        '<li>do not instantiate repositories, use cases, or ViewModels inside recomposing composables</li>' +
+        '<li>do not hardcode user-visible strings in shared UI code</li>' +
+        '<li>do not use <code>String.format</code> or <code>java.text.*</code> in <code>commonMain</code> — JVM-only APIs that break iOS compilation</li>' +
+        '<li>do not keep dead code in shared core modules — remove it during implementation</li>' +
+        '<li>do not leave <code>Clock.System.now()</code> calls in feature code — always inject <code>TimeProvider</code></li>' +
+      '</ul>' +
+      '<p class="file-path" style="margin-top: 1.2em;">temp/.opencode/knowledge-graph/best-practices/26-anti-patterns-to-avoid-when-reusing-this-architecture.md — 26 in total.</p>' +
+    '</div>'
+  });
+
+  slides.push({ section: 'D', html:
+    '<div class="slide-body">' +
+      '<h2>This is what it looks like when it happens</h2>' +
+      '<div class="file-path">temp/shared/core/data/.../RoomDatabaseBuilder.kt</div>' +
+      '<div class="code-pair">' +
+        '<div><div class="code-label minus">Before</div><div class="code-block minus">fun &lt;T : RoomDatabase&gt; Builder&lt;T&gt;\n  .buildBundledRoomDatabase(): T =\n    setDriver(BundledSQLiteDriver())\n      .setQueryCoroutineContext(Dispatchers.Default)\n      .fallbackToDestructiveMigration(\n        dropAllTables = true)\n      .build()</div></div>' +
+        '<div><div class="code-label plus">After</div><div class="code-block plus">fun &lt;T : RoomDatabase&gt; Builder&lt;T&gt;\n  .buildBundledRoomDatabase(\n    allowDestructiveMigration: Boolean = false,\n  ): T {\n    val builder = setDriver(...)\n      .setQueryCoroutineContext(Dispatchers.Default)\n    return if (allowDestructiveMigration) {\n      builder.fallbackToDestructiveMigration(\n        dropAllTables = true).build()\n    } else { builder.build() }\n  }</div></div>' +
+      '</div>' +
+      '<p class="lede" style="margin-top: 1em; max-width: 66ch;">Unconditional — any schema mismatch would silently wipe the user\'s local database on next launch. Nothing about the "before" code looks wrong at a glance. That\'s the danger.</p>' +
+    '</div>'
+  });
+
+  // ---------- E. THE KNOWLEDGE SYSTEM ----------
+
+  slides.push({ section: 'E', html:
+    '<div class="slide-body">' +
+      '<h2>Two knowledge systems, one job: stop guessing</h2>' +
+      '<figure class="diagram">' +
+        '<svg viewBox="0 0 760 300" role="img" aria-label="A prescriptive rules graph and a descriptive code-intelligence graph both feed guardrails into the agent before it writes code.">' +
+          '<defs><marker id="a5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,0 10,5 0,10" fill="var(--ink-dim)"/></marker></defs>' +
+          '<rect x="40" y="30" width="260" height="70" rx="10" class="dg-node"/><text x="170" y="60" class="dg-text" text-anchor="middle">Prescriptive graph</text><text x="170" y="80" class="dg-text-dim" text-anchor="middle" font-size="10">architecture rules, anti-patterns</text>' +
+          '<rect x="460" y="30" width="260" height="70" rx="10" class="dg-node"/><text x="590" y="60" class="dg-text" text-anchor="middle">Descriptive graph</text><text x="590" y="80" class="dg-text-dim" text-anchor="middle" font-size="10">codebase-memory-mcp</text>' +
+          '<rect x="270" y="205" width="220" height="66" rx="10" class="dg-node-accent"/><text x="380" y="234" class="dg-text-accent" text-anchor="middle">agent, about to</text><text x="380" y="250" class="dg-text-accent" text-anchor="middle">write code</text>' +
+          '<path d="M 200 100 C 220 150, 300 175, 340 205" class="dg-arrow" marker-end="url(#a5)" fill="none"/>' +
+          '<text x="230" y="165" class="dg-text-dim" text-anchor="middle" font-size="10">guardrails</text>' +
+          '<path d="M 590 100 C 570 150, 470 175, 420 205" class="dg-arrow" marker-end="url(#a5)" fill="none"/>' +
+          '<text x="560" y="165" class="dg-text-dim" text-anchor="middle" font-size="10">ground truth</text>' +
+        '</svg>' +
+      '</figure>' +
+      '<div class="quote-block" style="margin-top: 1em;"><p>"The prescriptive graph enforces rules, while codebase-memory-mcp provides code-level understanding."</p><span class="cite">— temp/.opencode/knowledge-graph/README.md</span></div>' +
+    '</div>'
+  });
+
+  slides.push({ section: 'E', html:
+    '<div class="slide-body">' +
+      '<h2>Prescriptive: guardrails for what to generate</h2>' +
+      '<div class="quote-block"><p>"The graph is optimized for three AI tasks: retrieval of architecture rules and rationale, generation guardrails for new code, architecture review and violation detection."</p><span class="cite">— knowledge-graph/README.md</span></div>' +
+      '<p class="lede" style="margin: 1.4em 0 0.7em 0;">Every rule carries a strength, so an agent knows what it can\'t cross versus what it can override with reason:</p>' +
+      '<div class="pill-row"><span class="pill bad">non_negotiable</span><span class="pill accent">recommended</span><span class="pill">default</span><span class="pill">caution</span></div>' +
+    '</div>'
+  });
+
+  slides.push({ section: 'E', html:
+    '<div class="slide-body">' +
+      '<h2>Descriptive: what the code actually does</h2>' +
+      '<p class="lede">A persistent knowledge graph of the real codebase — functions, classes, call chains, dependencies — queried instead of grepped.</p>' +
+      '<div class="pill-row" style="margin: 1em 0 1.4em 0;"><span class="pill">search_graph</span><span class="pill">trace_path</span><span class="pill">get_code_snippet</span><span class="pill">detect_changes</span><span class="pill">query_graph</span><span class="pill">get_architecture</span></div>' +
+      '<div class="quote-block"><p>"Agents should prefer MCP queries over grep/read for codebase exploration. Fall back to grep/glob only for string literals, non-code files, or when MCP returns insufficient results."</p><span class="cite">— AGENTS.md</span></div>' +
+      '<p class="lede" style="margin-top: 1.2em;"><b>99% token reduction</b> vs. grep/read exploration — token-optimization-guidelines.md</p>' +
+    '</div>'
+  });
+
+  slides.push({ section: 'E', html:
+    '<div class="slide-body">' +
+      '<h2>The habit every implementer follows before touching code</h2>' +
+      '<ul class="checklist">' +
+        '<li><span><b>1. trace_path</b> — <span class="dim">who calls this, what does it call</span></span></li>' +
+        '<li><span><b>2. search_graph</b> — <span class="dim">find the pattern already in use, don\'t invent a new one</span></span></li>' +
+        '<li><span><b>3. detect_changes</b> — <span class="dim">check the blast radius before editing</span></span></li>' +
+        '<li><span><b>4. get_code_snippet</b> — <span class="dim">the exact source, not a remembered guess</span></span></li>' +
+      '</ul>' +
+      '<p class="lede" style="margin-top: 1.4em;">The guardrail runs before the first line is written — not as a review comment after.</p>' +
+    '</div>'
+  });
+
+  // ---------- F. AI TESTING AI ----------
+
+  slides.push({ section: 'F', html:
+    '<div class="slide-body">' +
+      '<p class="statement">The agent that wrote the code is the worst agent to ask whether it\'s correct.</p>' +
+      '<p class="statement-sub">So Dream never asks it. Verification and review run as separate agents, with no memory of writing the code they\'re checking.</p>' +
+    '</div>'
+  });
+
+  slides.push({ section: 'F', html:
+    '<div class="slide-body">' +
+      '<h2>dream-tester: the verification ladder</h2>' +
+      '<ul class="checklist">' +
+        '<li><span><b>Unit tests</b> — <span class="dim">allTests, scoped to what git diff actually touched</span></span></li>' +
+        '<li><span><b>Platform builds</b> — <span class="dim">assembleDebug, xcodebuild</span></span></li>' +
+        '<li><span><b>Install + launch</b> — <span class="dim">on a real device or emulator/simulator</span></span></li>' +
+        '<li><span><b>Log inspection</b> — <span class="dim">crash logs and logcat, not just an exit code</span></span></li>' +
+      '</ul>' +
+      '<p class="lede" style="margin-top: 1.4em;">Recurring failure signatures (<code class="mono">di-resolution</code>, <code class="mono">ios-bridge-export</code>) are tracked in verification-patterns.md — the same AI mistake gets flagged faster next time.</p>' +
+    '</div>'
+  });
+
+  slides.push({ section: 'F', html:
+    '<div class="slide-body">' +
+      '<h2>/dream-e2e: proving the UI actually works</h2>' +
+      '<p class="lede">Maestro drives the real, installed app on a real emulator or simulator through a feature\'s key user journeys — the same as a person tapping through it.</p>' +
+      '<p class="lede">Flows use stable selectors — accessibility labels and text — never index-based taps that break the moment a layout shifts.</p>' +
+      '<div class="pill-row" style="margin-top: 1.2em;"><span class="pill good">passed</span><span class="pill bad">blocked by environment</span><span class="pill">not run</span><span class="pill">not applicable</span></div>' +
+    '</div>'
+  });
+
+  slides.push({ section: 'F', html:
+    '<div class="slide-body">' +
+      '<h2>dream-inspector: reviewer with the pen taken away</h2>' +
+      '<div class="pill-row" style="margin-bottom: 1.2em;"><span class="pill bad">permission.edit: deny</span></div>' +
+      '<p class="lede">It can read the diff, the contract, the screenshots. It cannot fix anything itself — only report.</p>' +
+      '<div class="quote-block" style="margin-top: 1em;"><p>"Scan the codebase for violations of Clean Architecture, SOLID, Clean Code, and Production Safety... reason from first principles rather than matching specific patterns."</p><span class="cite">— dream-inspector.md, Principle-Based Scan</span></div>' +
+      '<p class="lede" style="margin-top: 1.1em;">Output: <code class="mono">APPROVED</code>, or a defect list with severity, file, line, suggested fix, and the rule violated.</p>' +
+    '</div>'
+  });
+
+  slides.push({ section: 'F', html:
+    '<div class="slide-body">' +
+      '<h2>The loop closes</h2>' +
+      '<div class="two-col">' +
+        '<div class="col"><h3>Before</h3><p class="lede">An unconditional <code class="mono">fallbackToDestructiveMigration(dropAllTables = true)</code> shipped. Nothing scanned for it.</p></div>' +
+        '<div class="col"><h3>Now</h3><p class="lede">Production Safety checks explicitly for <b>"destructive operations guarded behind build flags"</b> — on every future feature.</p></div>' +
+      '</div>' +
+      '<p class="lede" style="margin-top: 1.6em;">The bug that shipped once is now a permanent line item in a review that runs every time.</p>' +
+    '</div>'
+  });
+
+  slides.push({ section: 'F', html:
+    '<div class="slide-body">' +
+      '<h2>AI proposes the fix. A human still decides.</h2>' +
+      '<figure class="diagram">' +
+        '<svg viewBox="0 0 820 380" role="img" aria-label="Inspector produces a defect list, a human decides to repair, accept, or deny; repair loops back to inspector, deny stops the workflow.">' +
+          '<defs><marker id="a6" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,0 10,5 0,10" fill="var(--ink-dim)"/></marker>' +
+          '<marker id="a6b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,0 10,5 0,10" fill="var(--accent)"/></marker></defs>' +
+          '<rect x="330" y="20" width="160" height="50" rx="9" class="dg-node"/><text x="410" y="50" class="dg-text" text-anchor="middle">dream-inspector</text>' +
+          '<line x1="410" y1="70" x2="410" y2="100" class="dg-arrow" marker-end="url(#a6)"/>' +
+          '<rect x="330" y="102" width="160" height="50" rx="9" class="dg-node"/><text x="410" y="132" class="dg-text" text-anchor="middle">defect list</text>' +
+          '<line x1="410" y1="152" x2="410" y2="182" class="dg-arrow" marker-end="url(#a6)"/>' +
+          '<polygon points="410,180 500,240 410,300 320,240" class="dg-node-accent"/>' +
+          '<text x="410" y="236" class="dg-text-accent" text-anchor="middle">human</text><text x="410" y="250" class="dg-text-accent" text-anchor="middle">decides</text>' +
+          '<path d="M 320 240 C 200 240, 200 100, 328 40" class="dg-arrow" marker-end="url(#a6)" fill="none"/>' +
+          '<text x="205" y="150" class="dg-text-dim" text-anchor="middle" font-size="10" transform="rotate(-90 205 150)">repair · max 2 rounds</text>' +
+          '<line x1="500" y1="240" x2="650" y2="240" class="dg-arrow-accent" marker-end="url(#a6b)"/>' +
+          '<rect x="655" y="215" width="130" height="50" rx="9" class="dg-node"/><text x="720" y="245" class="dg-text" text-anchor="middle">accept → ship</text>' +
+          '<line x1="410" y1="300" x2="410" y2="330" class="dg-arrow" marker-end="url(#a6)"/>' +
+          '<rect x="330" y="332" width="160" height="42" rx="9" class="dg-node"/><text x="410" y="358" class="dg-text" text-anchor="middle">deny · stop</text>' +
+        '</svg>' +
+        '<figcaption>After two failed repair rounds, Dream stops trying and escalates to a person — no unlimited unsupervised retries.</figcaption>' +
+      '</figure>' +
+    '</div>'
+  });
+
+  // ---------- G. LEARNING FROM MISTAKES ----------
+
+  slides.push({ section: 'G', html:
+    '<div class="slide-body">' +
+      '<p class="statement">dream-inspector\'s defects don\'t rewrite the rules by themselves. Something has to close that loop.</p>' +
+      '<p class="statement-sub">That something is two stages deep, and a human signs off on both — not because the AI can\'t act alone, but because a permanent rule change deserves a second look before it applies to every future feature.</p>' +
+    '</div>'
+  });
+
+  slides.push({ section: 'G', html:
+    '<div class="slide-body">' +
+      '<h2>Every feature ends with a retrospective</h2>' +
+      '<p class="lede">/dream-feature and /dream-create both close by writing one: what didn\'t work, what was brittle, what the template itself should learn.</p>' +
+      '<div class="quote-block"><p>"What Did Not Work Well" · "Brittle Smoke Patterns" · "Recommended Template Improvements"</p><span class="cite">— guidance/templates/template-improvement-retrospective-template.md</span></div>' +
+      '<div class="pill-row" style="margin-top: 1.2em;"><span class="pill bad">Applied: not yet</span></div>' +
+      '<p class="lede" style="margin-top: 0.8em;">It stays that way until a human runs <code class="mono">/dream-improve</code>.</p>' +
+    '</div>'
+  });
+
+  slides.push({ section: 'G', html:
+    '<div class="slide-body">' +
+      '<h2>dream-tester keeps its own list of past mistakes</h2>' +
+      '<div class="quote-block"><p>"Before reporting a failure as \'new\', check if it matches any pattern in verification-patterns.md."</p><span class="cite">— guidance/reference/verification-patterns.md</span></div>' +
+      '<div class="pill-row" style="margin: 1.2em 0;"><span class="pill">di-resolution</span><span class="pill">ios-bridge-export</span><span class="pill">string-resource-missing</span><span class="pill">navigation-entry-missing</span><span class="pill">test-mock-missing</span></div>' +
+      '<p class="lede">Real, but narrow: dream-tester reads and updates this list itself. No planning or implementation step reads it forward — today it changes what gets <em>recognized</em>, not yet what gets <em>written</em>.</p>' +
+    '</div>'
+  });
+
+  slides.push({ section: 'G', html:
+    '<div class="slide-body">' +
+      '<h2>/dream-improve: where retrospectives actually change the template</h2>' +
+      '<div class="quote-block"><p>"Use this when you want the AI to learn from past feature generations and improve the template."</p><span class="cite">— commands/dream-improve.md</span></div>' +
+      '<figure class="diagram">' +
+        '<svg viewBox="0 0 820 380" role="img" aria-label="Retrospectives feed dream-improve, which groups suggestions and asks a human to decide; applying writes into best-practices and the knowledge graph, skipping leaves it unapplied.">' +
+          '<defs><marker id="a8" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,0 10,5 0,10" fill="var(--ink-dim)"/></marker>' +
+          '<marker id="a8b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,0 10,5 0,10" fill="var(--accent)"/></marker></defs>' +
+          '<rect x="320" y="20" width="180" height="50" rx="9" class="dg-node"/><text x="410" y="50" class="dg-text" text-anchor="middle">retrospectives</text>' +
+          '<line x1="410" y1="70" x2="410" y2="100" class="dg-arrow" marker-end="url(#a8)"/>' +
+          '<rect x="300" y="102" width="220" height="50" rx="9" class="dg-node"/><text x="410" y="132" class="dg-text" text-anchor="middle" font-size="10.5">/dream-improve: scan + group</text>' +
+          '<line x1="410" y1="152" x2="410" y2="182" class="dg-arrow" marker-end="url(#a8)"/>' +
+          '<polygon points="410,180 500,240 410,300 320,240" class="dg-node-accent"/>' +
+          '<text x="410" y="236" class="dg-text-accent" text-anchor="middle">human</text><text x="410" y="250" class="dg-text-accent" text-anchor="middle">decides</text>' +
+          '<line x1="500" y1="240" x2="600" y2="240" class="dg-arrow-accent" marker-end="url(#a8b)"/>' +
+          '<rect x="605" y="205" width="190" height="70" rx="9" class="dg-node"/><text x="700" y="230" class="dg-text" text-anchor="middle" font-size="10.5">apply →</text><text x="700" y="246" class="dg-text" text-anchor="middle" font-size="10.5">best-practices /</text><text x="700" y="262" class="dg-text" text-anchor="middle" font-size="10.5">knowledge graph</text>' +
+          '<line x1="410" y1="300" x2="410" y2="330" class="dg-arrow" marker-end="url(#a8)"/>' +
+          '<rect x="330" y="332" width="160" height="42" rx="9" class="dg-node"/><text x="410" y="358" class="dg-text" text-anchor="middle" font-size="10.5">skip · stays unapplied</text>' +
+        '</svg>' +
+        '<figcaption>Applying is permanent — it shapes every feature generated after it, not just this one. Skipping leaves the retrospective marked "not yet" for next time.</figcaption>' +
+      '</figure>' +
+    '</div>'
+  });
+
+  slides.push({ section: 'G', html:
+    '<div class="slide-body">' +
+      '<h2>Three levels of memory, three different scopes</h2>' +
+      '<figure class="diagram">' +
+        '<svg viewBox="0 0 900 220" role="img" aria-label="Contract.yaml remembers for this feature, decisions.yaml remembers for this app, and retrospective.md plus dream-improve remembers for every future app, gated by human approval.">' +
+          '<defs><marker id="a9" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,0 10,5 0,10" fill="var(--ink-dim)"/></marker>' +
+          '<marker id="a9b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,0 10,5 0,10" fill="var(--accent)"/></marker></defs>' +
+          '<rect x="20" y="95" width="200" height="65" rx="10" class="dg-node"/><text x="120" y="122" class="dg-text" text-anchor="middle">contract.yaml</text><text x="120" y="140" class="dg-text-dim" text-anchor="middle">this feature</text>' +
+          '<line x1="220" y1="127" x2="255" y2="125" class="dg-arrow" marker-end="url(#a9)"/>' +
+          '<rect x="260" y="90" width="260" height="70" rx="10" class="dg-node"/><text x="390" y="118" class="dg-text" text-anchor="middle">decisions.yaml</text><text x="390" y="136" class="dg-text-dim" text-anchor="middle" font-size="9.5">this app · actively appended</text>' +
+          '<line x1="520" y1="125" x2="555" y2="125" class="dg-arrow-accent" marker-end="url(#a9b)"/>' +
+          '<rect x="560" y="80" width="320" height="90" rx="10" class="dg-node-accent"/><text x="720" y="112" class="dg-text-accent" text-anchor="middle" font-size="10.5">retrospective.md + /dream-improve</text><text x="720" y="132" class="dg-text-dim" text-anchor="middle" font-size="9.5">every future app · human-approved</text>' +
+        '</svg>' +
+        '<figcaption>Each level remembers for a wider audience. Only the widest one — the one that changes the template for every future app — needs a human\'s yes.</figcaption>' +
+      '</figure>' +
+    '</div>'
+  });
+
+  // ---------- H. TAKEAWAYS ----------
+
+  slides.push({ section: 'H', html:
+    '<div class="slide-body">' +
+      '<h2>The whole shape, together</h2>' +
+      '<figure class="diagram">' +
+        '<svg viewBox="0 0 1070 300" role="img" aria-label="The full Dream lifecycle: plan gate, research, design, implement guided by the knowledge graph, verify with Maestro, review gate, ship, with a repair loop." >' +
+          '<defs><marker id="a7" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,0 10,5 0,10" fill="var(--ink-dim)"/></marker></defs>' +
+          '<rect x="225" y="20" width="260" height="40" rx="8" class="dg-node"/><text x="355" y="45" class="dg-text-dim" text-anchor="middle" font-size="9.5">knowledge graph + codebase-memory-mcp</text>' +
+          '<rect x="560" y="20" width="170" height="40" rx="8" class="dg-node"/><text x="645" y="45" class="dg-text-dim" text-anchor="middle" font-size="10.5">Maestro (device)</text>' +
+          (function(){
+            var nodes = [
+              {t:'Plan', accent:true},{t:'Research'},{t:'Design'},{t:'Implement'},
+              {t:'Implement UI'},{t:'Verify'},{t:'Review', accent:true},{t:'Ship'}
+            ];
+            var out = '';
+            var w = 112, gap = 20, x0 = 15, y = 152, h = 56;
+            for (var i=0;i<nodes.length;i++) {
+              var x = x0 + i*(w+gap);
+              var cls = nodes[i].accent ? 'dg-node-accent' : 'dg-node';
+              var tcls = nodes[i].accent ? 'dg-text-accent' : 'dg-text';
+              out += '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="9" class="'+cls+'"/>';
+              out += '<text x="'+(x+w/2)+'" y="'+(y+33)+'" class="'+tcls+'" text-anchor="middle" font-size="11.5">'+nodes[i].t+'</text>';
+              if (i < nodes.length-1) out += '<line x1="'+(x+w)+'" y1="'+(y+h/2)+'" x2="'+(x+w+gap-4)+'" y2="'+(y+h/2)+'" class="dg-arrow" marker-end="url(#a7)"/>';
+            }
+            return out;
+          })() +
+          '<line x1="355" y1="60" x2="355" y2="150" class="dg-arrow" marker-end="url(#a7)"/>' +
+          '<line x1="645" y1="60" x2="645" y2="150" class="dg-arrow" marker-end="url(#a7)"/>' +
+          '<path d="M 780 208 C 780 265, 500 265, 460 218" class="dg-arrow" marker-end="url(#a7)" fill="none"/>' +
+          '<text x="620" y="285" class="dg-text-dim" text-anchor="middle" font-size="10">repair loop</text>' +
+        '</svg>' +
+      '</figure>' +
+    '</div>'
+  });
+
+  slides.push({ section: 'H', html:
+    '<div class="slide-body">' +
+      '<h2>What this actually buys us</h2>' +
+      '<ul class="checklist">' +
+        '<li><span><b>Speed without the "looks done" lie</b> — <span class="dim">verification is structural, not a favor someone remembers to do</span></span></li>' +
+        '<li><span><b>Specialists, not one model doing everything at once</b></span></li>' +
+        '<li><span><b>Rules and codebase truth available before the first line is written</b> — <span class="dim">not corrected after</span></span></li>' +
+        '<li><span><b>A second, independent, edit-denied reviewer</b> — <span class="dim">on every substantial change</span></span></li>' +
+        '<li><span><b>A human gate that never disappears</b> — <span class="dim">bounded repair loops, and stuck work escalates to a person</span></span></li>' +
+        '<li><span><b>Mistakes get written down and folded back in</b> — <span class="dim">deliberately, on a human\'s approval, not automatically</span></span></li>' +
+      '</ul>' +
+      '<p class="lede" style="margin-top: 1.4em;">The specific agents are Dream\'s. The pattern — plan, delegate, verify independently, gate before shipping, learn on approval — is what\'s worth taking into our own workflow.</p>' +
+    '</div>'
+  });
+
+  slides.push({ section: 'H', html:
+    '<div class="slide-body">' +
+      '<h1 class="title" style="font-size: clamp(2.4rem, 5vw, 3.6rem);">Questions?</h1>' +
+      '<p class="subtitle">temp/.opencode/ — every agent, command, and rule discussed here.</p>' +
+    '</div>'
+  });
+
+  // ---------- RENDER ----------
+
+  var deck = document.getElementById('deck');
+  var rail = document.getElementById('rail');
+  var progressBar = document.getElementById('progressBar');
+  var current = 0;
+
+  slides.forEach(function (s, i) {
+    var el = document.createElement('section');
+    el.className = 'slide';
+    el.setAttribute('data-index', i);
+    el.innerHTML = kicker(s.section) + s.html +
+      '<div class="footer-row"><span>' + SECTIONS[s.section] + '</span></div>';
+    deck.appendChild(el);
+  });
+
+  var letters = Object.keys(SECTIONS);
+  letters.forEach(function (letter) {
+    var item = document.createElement('div');
+    item.className = 'rail-item';
+    item.setAttribute('data-letter', letter);
+    item.innerHTML = '<span class="rail-dot"></span><span>' + letter + '</span>';
+    rail.appendChild(item);
+  });
+
+  var slideEls = deck.querySelectorAll('.slide');
+  var railEls = rail.querySelectorAll('.rail-item');
+
+  function show(i) {
+    if (i < 0 || i >= slides.length) return;
+    slideEls[current].classList.remove('active');
+    current = i;
+    slideEls[current].classList.add('active');
+    progressBar.style.width = ((current + 1) / slides.length * 100) + '%';
+    var activeLetter = slides[current].section;
+    railEls.forEach(function (r) {
+      r.classList.toggle('active', r.getAttribute('data-letter') === activeLetter);
+    });
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === slides.length - 1;
+    document.getElementById('navCounter').textContent = String(current + 1).padStart(2, '0') + ' / ' + slides.length;
+  }
+
+  function next() { show(current + 1); }
+  function prev() { show(current - 1); }
+
+  document.getElementById('nextBtn').addEventListener('click', next);
+  document.getElementById('prevBtn').addEventListener('click', prev);
+  document.getElementById('zoneLeft').addEventListener('click', prev);
+  document.getElementById('zoneRight').addEventListener('click', next);
+
+  window.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+    else if (e.key === 'Home') { e.preventDefault(); show(0); }
+    else if (e.key === 'End') { e.preventDefault(); show(slides.length - 1); }
+  });
+
+  var touchStartX = null;
+  deck.addEventListener('touchstart', function (e) { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
+  deck.addEventListener('touchend', function (e) {
+    if (touchStartX === null) return;
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) { dx < 0 ? next() : prev(); }
+    touchStartX = null;
+  }, { passive: true });
+
+  show(0);
+})();
+</script>
+
+</body>
+</html>
