@@ -381,26 +381,178 @@
   .click-zone.left { left: 0; }
   .click-zone.right { right: 0; }
   @media (max-width: 860px) { .click-zone { display: none; } }
+
+  /* ---------- ambient background ---------- */
+  #ambient {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(560px circle at var(--mx, 50%) var(--my, 30%), color-mix(in srgb, var(--accent) 13%, transparent), transparent 72%);
+  }
+  @media (prefers-reduced-motion: reduce) { #ambient { display: none; } }
+
+  /* ---------- entrance stagger ---------- */
+  @keyframes itemIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @keyframes svgIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+  .slide.active .slide-body > * { animation: itemIn 0.5s ease backwards; }
+  .slide.active .slide-body > *:nth-child(1) { animation-delay: 0.04s; }
+  .slide.active .slide-body > *:nth-child(2) { animation-delay: 0.11s; }
+  .slide.active .slide-body > *:nth-child(3) { animation-delay: 0.18s; }
+  .slide.active .slide-body > *:nth-child(4) { animation-delay: 0.25s; }
+  .slide.active .slide-body > *:nth-child(5) { animation-delay: 0.32s; }
+  .slide.active .slide-body > *:nth-child(6) { animation-delay: 0.39s; }
+  .slide.active .stagger-item { animation: itemIn 0.42s ease backwards; }
+  .slide.active figure.diagram svg .svg-in { animation: svgIn 0.5s ease backwards; }
+  @media (prefers-reduced-motion: reduce) {
+    .slide.active .slide-body > *,
+    .slide.active .stagger-item,
+    .slide.active figure.diagram svg .svg-in { animation: none; }
+  }
+
+  /* ---------- hover interactivity ---------- */
+  .dg-node, .dg-node-accent { transition: filter 0.15s ease, stroke-width 0.15s ease; }
+  .dg-node:hover, .dg-node-accent:hover { filter: brightness(1.12); stroke-width: 2.4; }
+  table.deck-table tr { transition: background 0.15s ease; }
+  table.deck-table tr:hover td { background: var(--surface-2); }
+  .pill { transition: border-color 0.15s ease, color 0.15s ease, transform 0.15s ease; }
+  .pill:hover { border-color: var(--accent); color: var(--accent-ink); transform: translateY(-1px); }
+  .code-block, .quote-block { cursor: pointer; transition: border-color 0.15s ease; }
+  .code-block:hover { border-color: var(--accent); }
+  .quote-block:hover { border-left-color: var(--accent); }
+  .rail-item { cursor: pointer; transition: color 0.15s ease; border-radius: 4px; }
+  .rail-item:hover { color: var(--accent); }
+  .rail-item:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  /* ---------- top controls ---------- */
+  .top-controls { position: fixed; top: 20px; right: 32px; display: flex; gap: 10px; z-index: 25; }
+  @media (max-width: 860px) { .top-controls { top: 12px; right: 12px; } }
+  .top-controls .nav-btn { font-size: 15px; }
+
+  /* ---------- section progress ticks ---------- */
+  .progress-track { position: fixed; top: 0; left: 0; right: 0; height: 3px; background: var(--surface-2); z-index: 29; }
+  .progress-tick { position: fixed; top: 0; width: 2px; height: 3px; background: var(--bg); z-index: 31; }
+
+  /* ---------- overlays (overview + help) ---------- */
+  .overlay {
+    position: fixed; inset: 0; z-index: 50;
+    background: color-mix(in srgb, var(--bg) 93%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: none;
+    flex-direction: column;
+    padding: 6vh 6vw;
+    overflow-y: auto;
+  }
+  .overlay.open { display: flex; animation: fadeIn 0.25s ease; }
+  @media (prefers-reduced-motion: reduce) { .overlay.open { animation: none; } }
+  .overlay h2 { margin: 0 0 0.15em 0; }
+  .overlay-sub { color: var(--ink-dim); font-size: 0.85rem; margin: 0 0 1.6em 0; font-family: var(--font-mono); }
+  .overlay-close {
+    position: absolute; top: 20px; right: 32px;
+  }
+  @media (max-width: 860px) { .overlay-close { top: 12px; right: 12px; } }
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 12px;
+  }
+  .overview-card {
+    text-align: left;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 10px;
+    padding: 12px 14px;
+    cursor: pointer;
+    color: var(--ink);
+    font-family: var(--font-body);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .overview-card:hover, .overview-card:focus-visible { border-color: var(--accent); transform: translateY(-2px); outline: none; }
+  .overview-card.current { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
+  .overview-card .oc-index { font-family: var(--font-mono); font-size: 0.7rem; color: var(--ink-dim); display: flex; justify-content: space-between; }
+  .overview-card .oc-title { font-size: 0.88rem; line-height: 1.35; font-weight: 500; }
+
+  .kbd-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.95em; max-width: 46ch; }
+  .kbd-list li { display: flex; justify-content: space-between; gap: 1.5em; font-size: 0.95rem; color: var(--ink-dim); }
+  .kbd-list li span:first-child { color: var(--ink); }
+  kbd { font-family: var(--font-mono); font-size: 0.76rem; background: var(--surface-2); border: 1px solid var(--border); border-radius: 5px; padding: 0.18em 0.55em; white-space: nowrap; }
+
+  /* ---------- toast ---------- */
+  .toast {
+    position: fixed;
+    bottom: 84px;
+    left: 50%;
+    transform: translateX(-50%) translateY(8px);
+    background: var(--ink);
+    color: var(--bg);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    padding: 0.6em 1.1em;
+    border-radius: 8px;
+    z-index: 60;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
 
-<div class="progress-bar" id="progressBar" style="width: 0%"></div>
+<div id="ambient" aria-hidden="true"></div>
 
-<nav class="rail" id="rail" aria-hidden="true"></nav>
+<div class="progress-track" aria-hidden="true"></div>
+<div class="progress-bar" id="progressBar" style="width: 0%"></div>
+<div id="progressTicks" aria-hidden="true"></div>
+
+<nav class="rail" id="rail" aria-label="Jump to section"></nav>
 
 <div class="deck" id="deck" role="region" aria-label="Slide deck" tabindex="0"></div>
 
 <div class="click-zone left" id="zoneLeft" aria-hidden="true"></div>
 <div class="click-zone right" id="zoneRight" aria-hidden="true"></div>
 
+<div class="top-controls">
+  <button class="nav-btn" id="overviewBtn" aria-label="Show all slides" title="All slides (G)">⊞</button>
+  <button class="nav-btn" id="themeBtn" aria-label="Toggle theme" title="Toggle theme (T)">☾</button>
+  <button class="nav-btn" id="helpBtn" aria-label="Keyboard shortcuts" title="Keyboard shortcuts (?)">?</button>
+</div>
+
 <div class="nav-buttons">
-  <span class="nav-counter" id="navCounter">01 / 28</span>
+  <span class="nav-counter" id="navCounter">01 / 34</span>
   <div class="nav-buttons-group">
     <button class="nav-btn" id="prevBtn" aria-label="Previous slide">‹</button>
     <button class="nav-btn" id="nextBtn" aria-label="Next slide">›</button>
   </div>
 </div>
+
+<div class="overlay" id="overview" aria-hidden="true">
+  <button class="nav-btn overlay-close" id="overviewClose" aria-label="Close overview">✕</button>
+  <h2>All slides</h2>
+  <p class="overlay-sub">Click any slide to jump straight to it.</p>
+  <div class="overview-grid" id="overviewGrid"></div>
+</div>
+
+<div class="overlay" id="help" aria-hidden="true">
+  <button class="nav-btn overlay-close" id="helpClose" aria-label="Close shortcuts">✕</button>
+  <h2>Keyboard shortcuts</h2>
+  <p class="overlay-sub">This deck is a website — it responds to more than arrow keys.</p>
+  <ul class="kbd-list">
+    <li><span>Next / previous slide</span><span><kbd>→</kbd> <kbd>Space</kbd> / <kbd>←</kbd></span></li>
+    <li><span>First / last slide</span><span><kbd>Home</kbd> / <kbd>End</kbd></span></li>
+    <li><span>All slides overview</span><span><kbd>G</kbd></span></li>
+    <li><span>Toggle light / dark</span><span><kbd>T</kbd></span></li>
+    <li><span>This help panel</span><span><kbd>?</kbd></span></li>
+    <li><span>Close any panel</span><span><kbd>Esc</kbd></span></li>
+    <li><span>Copy a quote or code block</span><span>click it</span></li>
+  </ul>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
 (function () {
@@ -950,6 +1102,8 @@
   var progressBar = document.getElementById('progressBar');
   var current = 0;
 
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   slides.forEach(function (s, i) {
     var el = document.createElement('section');
     el.className = 'slide';
@@ -957,6 +1111,21 @@
     el.innerHTML = kicker(s.section) + s.html +
       '<div class="footer-row"><span>' + SECTIONS[s.section] + '</span></div>';
     deck.appendChild(el);
+
+    if (!reduceMotion) {
+      var staggerTargets = el.querySelectorAll('.checklist li, .anti-list li, table.deck-table tr, .pill-row .pill');
+      staggerTargets.forEach(function (t, idx) {
+        t.classList.add('stagger-item');
+        t.style.animationDelay = (0.08 + idx * 0.05) + 's';
+      });
+      el.querySelectorAll('figure.diagram svg').forEach(function (svg) {
+        var shapes = svg.querySelectorAll(':scope > *:not(defs)');
+        shapes.forEach(function (shape, idx) {
+          shape.classList.add('svg-in');
+          shape.style.animationDelay = (idx * 0.04) + 's';
+        });
+      });
+    }
   });
 
   var letters = Object.keys(SECTIONS);
@@ -964,9 +1133,21 @@
     var item = document.createElement('div');
     item.className = 'rail-item';
     item.setAttribute('data-letter', letter);
+    item.setAttribute('role', 'button');
+    item.setAttribute('tabindex', '0');
+    item.setAttribute('aria-label', 'Jump to section ' + letter + ': ' + SECTIONS[letter]);
     item.innerHTML = '<span class="rail-dot"></span><span>' + letter + '</span>';
+    item.addEventListener('click', function () { jumpToSection(letter); });
+    item.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); jumpToSection(letter); }
+    });
     rail.appendChild(item);
   });
+
+  function jumpToSection(letter) {
+    var idx = slides.findIndex(function (s) { return s.section === letter; });
+    if (idx !== -1) show(idx);
+  }
 
   var slideEls = deck.querySelectorAll('.slide');
   var railEls = rail.querySelectorAll('.rail-item');
@@ -994,11 +1175,124 @@
   document.getElementById('zoneLeft').addEventListener('click', prev);
   document.getElementById('zoneRight').addEventListener('click', next);
 
+  // ---------- section progress ticks ----------
+  (function () {
+    var wrap = document.getElementById('progressTicks');
+    var lastSection = null;
+    slides.forEach(function (s, i) {
+      if (i === 0) { lastSection = s.section; return; }
+      if (s.section !== lastSection) {
+        lastSection = s.section;
+        var tick = document.createElement('div');
+        tick.className = 'progress-tick';
+        tick.style.left = (i / slides.length * 100) + '%';
+        wrap.appendChild(tick);
+      }
+    });
+  })();
+
+  // ---------- ambient cursor glow ----------
+  if (!reduceMotion) {
+    var ambient = document.getElementById('ambient');
+    var raf = null;
+    window.addEventListener('mousemove', function (e) {
+      if (raf) return;
+      raf = requestAnimationFrame(function () {
+        ambient.style.setProperty('--mx', (e.clientX / window.innerWidth * 100) + '%');
+        ambient.style.setProperty('--my', (e.clientY / window.innerHeight * 100) + '%');
+        raf = null;
+      });
+    });
+  }
+
+  // ---------- theme toggle (persists across visits where storage is available) ----------
+  var themeBtn = document.getElementById('themeBtn');
+  var memTheme = null;
+  function readStoredTheme() { try { return localStorage.getItem('ai-flow-theme') || memTheme; } catch (e) { return memTheme; } }
+  function writeStoredTheme(v) { memTheme = v; try { localStorage.setItem('ai-flow-theme', v); } catch (e) {} }
+  function effectiveTheme() {
+    return readStoredTheme() || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  }
+  function applyTheme(t, persist) {
+    document.documentElement.setAttribute('data-theme', t);
+    if (persist) writeStoredTheme(t);
+    themeBtn.textContent = t === 'dark' ? '☀' : '☾';
+    themeBtn.setAttribute('aria-label', t === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+  }
+  applyTheme(effectiveTheme(), false);
+  themeBtn.addEventListener('click', function () {
+    applyTheme(effectiveTheme() === 'dark' ? 'light' : 'dark', true);
+  });
+
+  // ---------- overlays: all-slides overview + keyboard help ----------
+  var overview = document.getElementById('overview');
+  var overviewGrid = document.getElementById('overviewGrid');
+  var help = document.getElementById('help');
+
+  slideEls.forEach(function (el, i) {
+    var titleEl = el.querySelector('h1, h2, .statement');
+    var label = titleEl ? titleEl.textContent.trim() : SECTIONS[slides[i].section];
+    var card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'overview-card';
+    card.innerHTML = '<span class="oc-index"><span>' + String(i + 1).padStart(2, '0') + '</span><span>' + slides[i].section + '</span></span><span class="oc-title">' + label + '</span>';
+    card.addEventListener('click', function () { show(i); closeOverlays(); });
+    overviewGrid.appendChild(card);
+  });
+  var overviewCards = overviewGrid.querySelectorAll('.overview-card');
+
+  function closeOverlays() {
+    overview.classList.remove('open');
+    overview.setAttribute('aria-hidden', 'true');
+    help.classList.remove('open');
+    help.setAttribute('aria-hidden', 'true');
+  }
+  function openOverview() {
+    overviewCards.forEach(function (c, i) { c.classList.toggle('current', i === current); });
+    overview.classList.add('open');
+    overview.setAttribute('aria-hidden', 'false');
+  }
+  function openHelp() {
+    help.classList.add('open');
+    help.setAttribute('aria-hidden', 'false');
+  }
+  function overlayOpen() { return overview.classList.contains('open') || help.classList.contains('open'); }
+
+  document.getElementById('overviewBtn').addEventListener('click', openOverview);
+  document.getElementById('overviewClose').addEventListener('click', closeOverlays);
+  document.getElementById('helpBtn').addEventListener('click', openHelp);
+  document.getElementById('helpClose').addEventListener('click', closeOverlays);
+
+  // ---------- click a quote or code block to copy it ----------
+  var toast = document.getElementById('toast');
+  var toastTimer = null;
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 1600);
+  }
+  deck.addEventListener('click', function (e) {
+    var block = e.target.closest('.code-block, .quote-block');
+    if (!block) return;
+    var text = block.textContent.replace(/\s+/g, ' ').trim();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { showToast('Copied to clipboard'); }, function () {});
+    }
+  });
+
   window.addEventListener('keydown', function (e) {
+    if (overlayOpen()) {
+      if (e.key === 'Escape') { e.preventDefault(); closeOverlays(); }
+      return;
+    }
     if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
     else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
     else if (e.key === 'Home') { e.preventDefault(); show(0); }
     else if (e.key === 'End') { e.preventDefault(); show(slides.length - 1); }
+    else if (e.key === 'g' || e.key === 'G') { e.preventDefault(); openOverview(); }
+    else if (e.key === 't' || e.key === 'T') { themeBtn.click(); }
+    else if (e.key === '?') { e.preventDefault(); openHelp(); }
   });
 
   var touchStartX = null;
