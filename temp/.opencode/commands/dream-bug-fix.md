@@ -13,8 +13,8 @@ Read:
 - `.opencode/guidance/dream-agent-operating-guide.md`
 - relevant `.opencode/knowledge-graph/best-practices/*.md`
 - `.opencode/guidance/new-feature-checklist.md`
-- `features/app-contract.yaml`
-- `features/decisions.yaml`
+- `specs/app-contract.yaml`
+- `specs/decisions.yaml`
 - relevant feature contracts
 
 Then:
@@ -52,12 +52,12 @@ Use the following techniques based on the bug type:
 - ask the user for reproduction steps if none provided
 
 **For runtime/logic bugs (wrong data, wrong state, wrong navigation):**
-- run `./gradlew :feature:<name>:domain:allTests` and `:feature:<name>:data:allTests` for targeted test feedback
+- run `./kotlin test -m <name>-domain --platform=android` and `./kotlin test -m <name>-data --platform=android` for targeted test feedback
 - if tests pass but behavior is wrong, inspect the feature's contract and trace the data flow
 - use `dream-search` for cryptic error messages, unfamiliar exceptions, or dependency issues
 
 **For build/compilation bugs:**
-- run `./gradlew :androidApp:assembleDebug` or `xcodebuild build` and capture the error output
+- run `./kotlin build -m androidApp --platform=android` or `./kotlin build -m iosApp --platform=iosSimulatorArm64` and capture the error output
 - delegate to `dream-search` for unfamiliar compiler errors
 
 ### Phase 2: Root Cause Analysis
@@ -71,18 +71,18 @@ Use the following techniques based on the bug type:
   | Domain model validation, use case logic | `domain` |
   | API contract, NavKey, navigation setup | `api` |
   | ViewModel state, screen rendering, compose | `impl` (Android) |
-  | SwiftUI view, bridge protocol, @Observable | iosApp-swiftui (iOS) |
+  | SwiftUI view, bridge protocol, @Observable | iosApp (iOS) |
   | DI resolution, missing module | `umbrella-*` |
 
 - if the error could be in multiple layers, start with the innermost (domain → data → api → impl → bridge)
-- document the suspected root cause and the files to modify in `features/bug-fix/diagnosis.md`
+- document the suspected root cause and the files to modify in `specs/bug-fix/diagnosis.md`
 
 ### Phase 3: Apply Fix
 
 - delegate to the layer-appropriate implementer:
   - `dream-implementer` for domain, data, api, or wiring bugs
   - `dream-implementer-android` for Compose/ViewModel bugs in `impl`
-  - `dream-implementer-ios` for SwiftUI, bridge, or XCTest bugs
+  - `dream-implementer-ios` for SwiftUI or bridge bugs
 - include in the fix prompt:
   - the bug description and reproduction steps
   - the diagnostic output (stack trace, error message, failing test)
@@ -96,12 +96,12 @@ After the fix is applied, run targeted verification based on the fixed layer:
 
 | Fixed Layer | Verification |
 |-------------|-------------|
-| domain only | `./gradlew :feature:<name>:domain:allTests` |
-| data only | `./gradlew :feature:<name>:data:allTests` |
-| api only | `./gradlew :feature:<name>:api:allTests` |
-| impl (Android) | `./gradlew :feature:<name>:impl:allTests` + `./gradlew :androidApp:assembleDebug` |
-| iosApp-swiftui | `xcodebuild build` + `xcodebuild test` + `xcrun simctl` install/launch |
-| umbrella/wiring | `./gradlew :androidApp:assembleDebug` + platform launch |
+| domain only | `./kotlin test -m <name>-domain --platform=android` |
+| data only | `./kotlin test -m <name>-data --platform=android` |
+| api only | `./kotlin test -m <name>-api --platform=android` |
+| impl (Android) | `./kotlin test -m <name>-impl --platform=android` + `./kotlin build -m androidApp --platform=android` |
+| iosApp | `./kotlin build -m iosApp --platform=iosSimulatorArm64` + `xcrun simctl` install/launch |
+| umbrella/wiring | `./kotlin build -m androidApp --platform=android` + platform launch |
 
 **For crash bugs:** re-launch the app and reproduce the original steps. Check logs for no new crash.
 
@@ -114,7 +114,7 @@ After the fix is applied, run targeted verification based on the fixed layer:
 
 ### Report
 
-- write `features/bug-fix/report.md` documenting:
+- write `specs/bug-fix/report.md` documenting:
   - bug description and reproduction steps
   - diagnostic output (crash log, error message, failing test)
   - root cause and files modified

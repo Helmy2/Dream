@@ -30,7 +30,7 @@ Native SwiftUI hosts should not need the full shared DI container just to load o
 
 Best practice:
 
-- provide explicit iOS-facing factory functions such as `iosSampleRepository()` from `iosMain` when the SwiftUI host needs a small shared surface
+- provide explicit iOS-facing factory functions such as `iosSampleRepository()` from `src@ios` when the SwiftUI host needs a small shared surface
 - keep those factories in `umbrella-core` or another non-Compose export module
 - avoid forcing SwiftUI code to understand or start Koin when a direct factory is enough
 

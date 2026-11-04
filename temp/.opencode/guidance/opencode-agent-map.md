@@ -97,7 +97,7 @@ Owns: workflow orchestration, contracts, **plan generation**, delegation, verifi
 Should do:
 - Interpret user request
 - **Evaluate complexity** (trivial/simple/complex) and select appropriate workflow
-- **Create the plan** (`features/<feature>/plan.md` for complex, conversation plan for simple/trivial) and present it to the user during Phase 0
+- **Create the plan** (`specs/<feature>/plan.md` for complex, conversation plan for simple/trivial) and present it to the user during Phase 0
 - **Ask for questions, edits, or confirmation before proceeding**
 - Launch appropriate subagent per phase
 - Ensure Dream doesn't report success before verification is green
@@ -122,7 +122,7 @@ Owns: UI/UX specification generation.
 
 Use when: feature contract exists and UI implementation is about to start.
 
-Output: `features/<feature>/ui-spec.md`
+Output: `specs/<feature>/ui-spec.md`
 
 ### `dream-implementer`
 
@@ -164,7 +164,7 @@ Output: `APPROVED` or itemized defect list.
 
 1. `dream-general` interprets the request.
 2. `dream-research` gathers relevant context if needed.
-3. **Phase 0: `dream-general` produces `features/<feature>/plan.md`, presents it to the user, and gets explicit confirmation before proceeding.**
+3. **Phase 0: `dream-general` produces `specs/<feature>/plan.md`, presents it to the user, and gets explicit confirmation before proceeding.**
 4. `dream-general` generates contracts.
 5. `dream-implementer` instantiates template.
 6. `dream-implementer` removes `feature/sample` after first real feature.
@@ -180,7 +180,7 @@ Output: `APPROVED` or itemized defect list.
    - **Simple**: Lightweight workflow (brief conversation plan, minimal artifacts)
    - **Complex**: Full `/dream-feature` workflow
 4. For complex: `dream-research` gathers context (deep mode).
-5. For complex: **Phase 0: `dream-general` produces `features/<feature>/plan.md`, presents it to the user, and gets explicit confirmation.**
+5. For complex: **Phase 0: `dream-general` produces `specs/<feature>/plan.md`, presents it to the user, and gets explicit confirmation.**
 6. For complex: `dream-general` produces feature contract.
 7. For complex: `dream-research` if external research needed.
 8. For complex: `dream-designer` produces UI spec.
@@ -219,7 +219,7 @@ Output: `APPROVED` or itemized defect list.
 
 Introduced before every generation or creation workflow:
 1. `dream-general` gathers context (project, existing features, rules).
-2. `dream-general` produces `features/<feature>/plan.md` using the plan template.
+2. `dream-general` produces `specs/<feature>/plan.md` using the plan template.
 3. `dream-general` presents the plan to the user in the conversation.
 4. `dream-general` asks for questions, edits, or confirmation.
 5. On **Confirm**: proceed to next phase. On **Edit**: update plan, re-present. On **Deny**: stop and document.

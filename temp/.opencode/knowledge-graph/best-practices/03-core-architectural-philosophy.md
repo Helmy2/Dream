@@ -9,10 +9,10 @@ The main architectural ideas are:
 - keep domain pure Kotlin
 - make data implement domain contracts
 - keep UI dependent on domain, not on data internals
-- centralize cross-cutting concerns in `shared/core/*`
-- use physical Gradle modules to enforce dependency direction
+- centralize cross-cutting concerns in `shared/core-*`
+- use physical modules (one `module.yaml` each) to enforce dependency direction
 
-> **Terminology note:** The canonical dependency rule uses "Presentation" to describe the UI layer, but the actual Dream template implements this as `feature/<name>/impl` (which contains screens, ViewModels, UI models, and the Koin module). The `feature/<name>/api` module holds only public navigation contracts (`NavKey` route types). When reading this handbook, "presentation layer" or "Presentation" in diagrams refers to the `impl` module unless explicitly noted otherwise.
+> **Terminology note:** The canonical dependency rule uses "Presentation" to describe the UI layer, but the actual Dream template implements this as `feature/<name>-impl` (which contains screens, ViewModels, UI models, and the Koin module). The `feature/<name>-api` module holds only public navigation contracts (`NavKey` route types). When reading this handbook, "presentation layer" or "Presentation" in diagrams refers to the `impl` module unless explicitly noted otherwise.
 
 Canonical dependency rule:
 

@@ -13,8 +13,8 @@ Read:
 - `.opencode/guidance/dream-agent-operating-guide.md`
 - relevant `.opencode/knowledge-graph/best-practices/*.md`
 - `.opencode/guidance/new-feature-checklist.md`
-- `features/app-contract.yaml`
-- `features/decisions.yaml`
+- `specs/app-contract.yaml`
+- `specs/decisions.yaml`
 - relevant feature contracts and UI specs
 
 Then:
@@ -36,7 +36,7 @@ Then:
 ### Phase 1: Capture (visual state before fix)
 
 - if a device/simulator is available, use mobile-mcp tools to capture current visual state:
-  - `mobile_take_screenshot` or `mobile_save_screenshot` — save to `features/ui-fix/before-screenshot.png`
+  - `mobile_take_screenshot` or `mobile_save_screenshot` — save to `specs/ui-fix/before-screenshot.png`
   - `mobile_list_elements_on_screen` — capture element tree for structural comparison
 - if no device is available, ask the user to provide a screenshot and description
 - record the device, screen, and timestamp of capture
@@ -44,9 +44,9 @@ Then:
 ### Phase 2: Diagnose (identify root cause layer)
 
 - use `dream-discovery` to find the relevant UI source files:
-  - for Compose: find the screen composable, ViewModel, and UI state model in `feature/<name>/impl`
-  - for SwiftUI: find the view, ViewModel, and model files in `iosApp-swiftui/iosApp/<FeatureName>/`
-- compare current visual state against the feature's UI spec (`features/<feature>/ui-spec.md`)
+  - for Compose: find the screen composable, ViewModel, and UI state model in `feature/<name>-impl`
+  - for SwiftUI: find the view, ViewModel, and model files in `iosApp/src/<FeatureName>/`
+- compare current visual state against the feature's UI spec (`specs/<feature>/ui-spec.md`)
   - identify which states (Loading/Empty/Content/Error) are rendering incorrectly
   - identify missing, mispositioned, or malformed components
 - determine the fix layer:
@@ -71,7 +71,7 @@ Then:
 
 - re-launch the app on the same device/simulator
 - capture new screenshot and element tree:
-  `mobile_take_screenshot` — save to `features/ui-fix/after-screenshot.png`
+  `mobile_take_screenshot` — save to `specs/ui-fix/after-screenshot.png`
   `mobile_list_elements_on_screen` for structural comparison
 - present **before** and **after** evidence to the user
 - ask: **does this fix the visual issue?**
@@ -82,12 +82,12 @@ Then:
 
 ### Report
 
-- write `features/ui-fix/report.md` documenting:
+- write `specs/ui-fix/report.md` documenting:
   - issue description
   - before/after screenshots (file paths)
   - files modified
   - fix verification status (fixed / partial / blocked)
-- write phase checkpoints to `features/ui-fix/checkpoints.md` after each phase completes
+- write phase checkpoints to `specs/ui-fix/checkpoints.md` after each phase completes
 - if verification passed, present the merge summary to the user and request explicit confirmation
 - on confirm: squash merge feature branch to main, delete feature branch
 - on deny: keep branch, document reason in report

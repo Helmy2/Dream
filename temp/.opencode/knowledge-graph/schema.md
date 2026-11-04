@@ -70,9 +70,9 @@ Represents a reusable module or folder pattern.
 
 Examples:
 
-- `feature/<name>/domain`
-- `feature/<name>/data`
-- `feature/<name>/presentation`
+- `feature/<name>-domain`
+- `feature/<name>-data`
+- `feature/<name>-impl`
 
 Required fields:
 

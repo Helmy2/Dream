@@ -1,0 +1,34 @@
+product:
+  type: kmp/lib
+  platforms: [android, iosArm64, iosSimulatorArm64]
+
+apply:
+  - //templates/common.module-template.yaml
+
+dependencies:
+  - //shared/core-domain
+  - $libs.androidx.room.runtime: exported
+  - $libs.androidx.datastore.preferences.core: exported
+  - $libs.ktor.client.core: exported
+  - $libs.androidx.sqlite.bundled
+  - $libs.kotlinx.coroutines.core
+  - $libs.ktor.client.content.negotiation
+  - $libs.ktor.serialization.kotlinx.json
+  - $libs.ktor.client.logging
+  - $libs.ktor.client.auth
+
+dependencies@android:
+  - $libs.ktor.client.okhttp
+
+dependencies@ios:
+  - $libs.ktor.client.darwin
+
+settings:
+  android:
+    namespace: com.dream.template.shared.core.data
+  kotlin:
+    ksp:
+      processors:
+        - $libs.androidx.room.compiler
+      processorOptions:
+        room.schemaLocation: ./schemas

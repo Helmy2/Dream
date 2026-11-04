@@ -15,7 +15,6 @@
 #   - Project name (e.g. "ExpenseTracker")
 #   - App display name (e.g. "Expense Tracker")
 #   - Package root (e.g. "com.example.expensetracker")
-#   - iOS UI framework (Compose Multiplatform or SwiftUI)
 #
 
 set -euo pipefail
@@ -107,20 +106,8 @@ if [[ ! "$PACKAGE_ROOT" =~ ^[a-z_][a-z0-9_]*(\.[a-z_][a-z0-9_]*)*$ ]]; then
     exit 1
 fi
 
-read -r -p "$(info "Android app ID [${PACKAGE_ROOT}]: ")" ANDROID_APP_ID
-ANDROID_APP_ID="${ANDROID_APP_ID:-$PACKAGE_ROOT}"
-
-echo ""
-info "iOS UI framework:"
-info "  1) Compose Multiplatform (shared Compose UI via Kotlin)"
-info "  2) SwiftUI (native iOS, shared Domain/Data only)"
-read -r -p "$(info "Choose [1]: ")" IOS_CHOICE
-IOS_CHOICE="${IOS_CHOICE:-1}"
-case "$IOS_CHOICE" in
-    1) IOS_STRATEGY="compose_multiplatform" ; KEPT_IOS="iosApp-compose" ; REMOVED_IOS="iosApp-swiftui" ;;
-    2) IOS_STRATEGY="swiftui"              ; KEPT_IOS="iosApp-swiftui" ; REMOVED_IOS="iosApp-compose" ;;
-    *) error "Invalid choice" ; exit 1 ;;
-esac
+read -r -p "$(info "Android app ID [${PACKAGE_ROOT}.android]: ")" ANDROID_APP_ID
+ANDROID_APP_ID="${ANDROID_APP_ID:-${PACKAGE_ROOT}.android}"
 
 echo ""
 echo "────────────────────────────────────────────"
@@ -129,7 +116,7 @@ info  "Project name:    $PROJECT_NAME"
 info  "Display name:    $DISPLAY_NAME"
 info  "Package root:    $PACKAGE_ROOT"
 info  "Android app ID:  $ANDROID_APP_ID"
-info  "iOS UI:          ${IOS_STRATEGY}"
+info  "iOS UI:          SwiftUI (native)"
 echo "────────────────────────────────────────────"
 read -r -p "$(info "Proceed? (Y/n): ")" CONFIRM
 if [ "$CONFIRM" = "n" ] || [ "$CONFIRM" = "N" ]; then
@@ -158,7 +145,7 @@ info "📦 Copying template..."
 [ -e "$DEST" ] && rm -rf "$DEST"
 
 rsync -a \
-    --exclude=".gradle/" --exclude="build/" --exclude=".kotlin/" \
+    --exclude="build/" --exclude=".kotlin/" \
     --exclude=".idea/" --exclude="local.properties" \
     --exclude=".DS_Store" --exclude="*.iml" \
     "$TEMPLATE_DIR/" "$DEST/"
@@ -170,10 +157,11 @@ ok "✓ Copied."
 # ──────────────────────────────────────────────
 info "🔍 Renaming identifiers..."
 
-FILE_TYPES=(-name "*.kt" -o -name "*.kts" -o -name "*.xml" -o -name "*.swift" \
+FILE_TYPES=(-name "*.kt" -o -name "*.xml" -o -name "*.swift" \
            -o -name "*.xcconfig" -o -name "*.json" -o -name "*.md" \
            -o -name "*.yaml" -o -name "*.yml" -o -name "*.properties" \
-           -o -name "*.xcscheme" -o -name "*.pbxproj")
+           -o -name "*.xcscheme" -o -name "*.pbxproj" -o -name "*.plist" \
+           -o -name "*.xcstrings" -o -name "*.toml")
 
 sed_replace() {
     local pattern="$1" replacement="$2"
@@ -194,18 +182,21 @@ sed_replace "$ESCAPED_OLD_DISP" "$ESCAPED_NEW_DISP"
 info "  Sample title: Dream MVP Builder -> ${DISPLAY_NAME}"
 sed_replace "$ESCAPED_OLD_SAMP" "$ESCAPED_NEW_SAMP"
 
+# Apply the Android application ID (namespace stays tied to the Kotlin package).
+if [ "$ANDROID_APP_ID" != "${PACKAGE_ROOT}.android" ]; then
+    info "  Android app ID: ${PACKAGE_ROOT}.android -> ${ANDROID_APP_ID}"
+    ESC_OLD_APPID="$(escape_sed_pattern "${PACKAGE_ROOT}.android")"
+    ESC_NEW_APPID="$(escape_sed_replacement "$ANDROID_APP_ID")"
+    LC_ALL=C sed -i '' "s/applicationId: ${ESC_OLD_APPID}/applicationId: ${ESC_NEW_APPID}/" "$DEST/androidApp/module.yaml"
+    while IFS= read -r -d '' f; do
+        LC_ALL=C sed -i '' "s/appId: ${ESC_OLD_APPID}/appId: ${ESC_NEW_APPID}/g" "$f" 2>/dev/null || true
+    done < <(find "$DEST/maestro" -type f \( -name "*.yaml" -o -name "*.yml" \) -print0 2>/dev/null)
+fi
+
 ok "✓ Identifiers renamed."
 
 # ──────────────────────────────────────────────
-# Step 3: iOS project resolution
-# ──────────────────────────────────────────────
-info "📁 Resolving iOS project (${IOS_STRATEGY})..."
-rm -rf "$DEST/$REMOVED_IOS"
-mv "$DEST/$KEPT_IOS" "$DEST/iosApp"
-ok "✓ iOS project resolved."
-
-# ──────────────────────────────────────────────
-# Step 4: Directory restructuring
+# Step 3: Directory restructuring
 # ──────────────────────────────────────────────
 info "📁 Restructuring directories..."
 
@@ -237,26 +228,26 @@ find "$DEST" -depth -type d -name "com" -empty -delete 2>/dev/null || true
 ok "✓ Directory structure updated."
 
 # ──────────────────────────────────────────────
-# Step 5: Reset .features/
+# Step 4: Reset specs/ metadata
 # ──────────────────────────────────────────────
-info "📝 Resetting .features/ metadata..."
+info "📝 Resetting specs/ metadata..."
 
-cat > "$DEST/.features/app-contract.yaml" <<- YAMLEOF
+cat > "$DEST/specs/app-contract.yaml" <<- YAMLEOF
 name: ${DISPLAY_NAME}
 goal: Generated Kotlin Multiplatform MVP application.
 templateArchitecture: modular-hybrid
 platforms:
   - android
   - ios
-iosUiStrategy: ${IOS_STRATEGY}
+iosUiStrategy: swiftui
 backend:
   enabled: false
 YAMLEOF
 
-cat > "$DEST/.features/decisions.yaml" <<- YAMLEOF
+cat > "$DEST/specs/decisions.yaml" <<- YAMLEOF
 template: dream-kmp-base
 architecture: modular-hybrid
-iosUi: ${IOS_STRATEGY}
+iosUi: swiftui
 storage: local-room
 sampleStarterData:
   persistence: room
@@ -264,7 +255,7 @@ sampleStarterData:
   userEnteredContent: raw create/update text persisted locally
 YAMLEOF
 
-cat > "$DEST/.features/verification-report.md" <<- MDEOF
+cat > "$DEST/specs/verification-report.md" <<- MDEOF
 # Verification Report
 
 ## Status
@@ -283,12 +274,12 @@ cat > "$DEST/.features/verification-report.md" <<- MDEOF
 - Reset for a new Dream generation cycle.
 MDEOF
 
-[ -f "$DEST/.features/.gitkeep" ] && rm "$DEST/.features/.gitkeep"
+[ -f "$DEST/specs/.gitkeep" ] && rm "$DEST/specs/.gitkeep"
 
-ok "✓ .features/ metadata reset."
+ok "✓ specs/ metadata reset."
 
 # ──────────────────────────────────────────────
-# Step 6: Protect agent source in generated project
+# Step 5: Protect agent source in generated project
 # ──────────────────────────────────────────────
 info "🔒 Protecting agent source from git history..."
 cat >> "$DEST/.gitignore" <<- 'EOF'
@@ -300,19 +291,19 @@ EOF
 ok "✓ Agent source protected."
 
 # ──────────────────────────────────────────────
-# Step 8: Cleanup
+# Step 6: Cleanup
 # ──────────────────────────────────────────────
 info "🧹 Cleaning up..."
 
-rm -rf "$DEST/.gradle" "$DEST/build" "$DEST/.kotlin" "$DEST/.idea" \
-       "$DEST/local.properties" "$DEST/build-logic/bin" 2>/dev/null || true
+rm -rf "$DEST/build" "$DEST/.kotlin" "$DEST/.idea" \
+       "$DEST/local.properties" 2>/dev/null || true
 find "$DEST" -name ".DS_Store" -delete 2>/dev/null || true
 find "$DEST" -name "*.iml" -delete 2>/dev/null || true
 
 ok "✓ Cleanup done."
 
 # ──────────────────────────────────────────────
-# Step 9: Install dependencies
+# Step 7: Install dependencies
 # ──────────────────────────────────────────────
 echo ""
 info "╔══════════════════════════════════════════════╗"
@@ -354,24 +345,19 @@ check_install() {
 # mobilecli
 check_install "mobilecli" \
     "command -v mobilecli" \
-    "npm install -g @mobilenext/mobilecli"
+    "npm install -g @mobilenext/mobilecli" || true
 
 # Maestro
 check_install "maestro" \
     "command -v maestro" \
-    "curl -Ls https://get.maestro.mobile.dev | bash"
+    "curl -Ls https://get.maestro.mobile.dev | bash" || true
 
-# xcodeproj Ruby gem
-check_install "xcodeproj (Ruby gem)" \
-    "gem list -i xcodeproj" \
-    "gem install xcodeproj"
-
-# Java (check only — system-level install)
-printf "  %-30s" "Java (JDK 17+):"
-if java -version 2>&1 | grep -q 'version'; then
-    ok "found"
+# Kotlin Toolchain (the ./kotlin wrapper downloads the toolchain and its own JDK on first use)
+printf "  %-30s" "Kotlin Toolchain (./kotlin):"
+if [ -x "$DEST/kotlin" ]; then
+    ok "wrapper present"
 else
-    warn "missing — install JDK 17+ manually from https://adoptium.net"
+    warn "missing — run: kotlin update --create (inside $DEST)"
 fi
 
 echo ""
@@ -385,7 +371,7 @@ LEFTOVERS=0
 check() {
     local label="$1" pat="$2"
     local matches
-    matches=$(find "$DEST" -type f \( "${FILE_TYPES[@]}" \) -exec grep -l "$pat" {} + 2>/dev/null | head -5)
+    matches=$(find "$DEST" -type f \( "${FILE_TYPES[@]}" \) -exec grep -l "$pat" {} + 2>/dev/null | head -5 || true)
     if [ -n "$matches" ]; then
         warn "  ⚠ ${label} still present in:"
         echo "$matches" | sed 's/^/      -> /'

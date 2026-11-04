@@ -1,0 +1,20 @@
+product:
+  type: kmp/lib
+  platforms: [android]
+
+apply:
+  - //templates/common.module-template.yaml
+  - //templates/compose.module-template.yaml
+
+dependencies:
+  - $libs.compose.runtime: exported
+  - $libs.compose.components.resources: exported
+
+settings:
+  android:
+    namespace: com.dream.template.shared.core.strings
+  compose:
+    enabled: true
+    resources:
+      packageName: com.dream.template.shared.core.strings
+      exposedAccessors: true

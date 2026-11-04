@@ -1,0 +1,24 @@
+product:
+  type: kmp/lib
+  platforms: [android, iosArm64, iosSimulatorArm64]
+
+apply:
+  - //templates/common.module-template.yaml
+
+dependencies:
+  - //feature/sample-data: exported
+  - //feature/sample-domain: exported
+  - //shared/core-data: exported
+  - //shared/core-domain: exported
+  - $libs.koin.core
+  - $libs.kotlinx.coroutines.core
+
+settings:
+  android:
+    namespace: com.dream.template.shared.umbrella.core
+  kotlin:
+    compilerPlugins:
+      - id: io.insert-koin.compiler.plugin
+        dependency: $libs.koin.compiler.plugin
+        options:
+          moduleId: umbrella-core

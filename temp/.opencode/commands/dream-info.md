@@ -21,7 +21,6 @@ Read all `.opencode/commands/*.md` files. For each, extract the `description:` f
 
 From the repository map in `ONBOARDING.md` and `AGENTS.md`, list:
 - `scripts/dream-preflight.sh` — local readiness check for git, Android SDK, and tooling
-- `scripts/sync-pbxproj.rb` — auto-registers orphaned Swift files and removes deleted file references in Xcode project.pbxproj
 - `scripts/remove-sample.sh` — removes sample feature files, strips sample deps, and checks for leftovers
 
 ### 4. Agents
@@ -30,7 +29,7 @@ Read `.opencode/guidance/opencode-agent-map.md` to list all agents with their on
 
 ### 5. Implemented Features
 
-Read all `features/*/retrospective.md` files in the target project. For each, extract:
+Read all `specs/*/retrospective.md` files in the target project. For each, extract:
 - Feature name (from directory name)
 - Short one-line description of what was implemented/improved
 - Application status (Applied / Not Applied)
@@ -62,7 +61,7 @@ Present as a clean terminal-friendly summary:
 │ /dream-review    │ Architecture and contract compliance review     │
 │ /dream-improve   │ Apply unapplied retrospectives to template      │
 │ /dream-resume    │ Resume a Dream session from saved state         │
-│ /dream-init      │ Initialize features/ directory structure       │
+│ /dream-init      │ Initialize specs/ directory structure       │
 │ /dream-info      │ Display this overview                           │
 └──────────────────┴─────────────────────────────────────────────────┘
 
@@ -70,7 +69,6 @@ Present as a clean terminal-friendly summary:
 │ SCRIPT                    │ PURPOSE                                │
 ├───────────────────────────┼────────────────────────────────────────┤
 │ scripts/dream-preflight.sh│ git, Android SDK, tooling readiness   │
-│ scripts/sync-pbxproj.rb   │ Sync Swift files in Xcode (add/remove)│
 │ scripts/remove-sample.sh  │ Remove sample feature and check leftovers│
 └───────────────────────────┴────────────────────────────────────────┘
 

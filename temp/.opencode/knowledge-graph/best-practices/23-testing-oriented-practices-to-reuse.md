@@ -18,7 +18,7 @@ Typed results and repository interfaces reduce mocking complexity.
 
 For Room-backed feature data modules, common tests should not depend on Android-only database setup. Prefer:
 
-- pure entity-to-domain and domain-to-entity mapping tests in `commonTest`
+- pure entity-to-domain and domain-to-entity mapping tests in `test`
 - repository tests against fake DAO or fake database interfaces when the repository can depend on a narrow boundary
 - integration tests with a real Room database only where the target setup is known to run reliably
 
@@ -26,21 +26,23 @@ Do not claim a Room repository is fully covered by a presentation test that mock
 
 The sample feature includes copyable test examples:
 
-- `feature/sample/domain/src/commonTest/.../SampleItemTest.kt` for simple domain model tests
-- `feature/sample/domain/src/commonTest/.../SampleRepositoryContractTest.kt` for repository contract expectations
-- `feature/sample/data/src/commonTest/.../SampleItemMapperTest.kt` for data/entity mapping tests
+- `feature/sample-domain/test/.../SampleItemTest.kt` for simple domain model tests
+- `feature/sample-domain/test/.../SampleRepositoryContractTest.kt` for repository contract expectations
+- `feature/sample-data/test/.../SampleItemMapperTest.kt` for data/entity mapping tests
 
 ### 23.4 Prefer flows for observable state sources
 
 Flows make settings, logs, and derived state easier to observe consistently in both production and tests.
 
-### 23.5 Keep shared test utilities in shared/core/testing
+### 23.5 Keep shared test utilities in shared/core-testing
+
+Tests live in `test/` (common) and `test@android/` (Android host tests) inside each module. Run them with `./kotlin test --platform=android` and `./kotlin test --platform=iosSimulatorArm64`, or one module with `-m <module>`.
 
 Reusable fake providers and coroutine-aware helpers should live in a shared testing module instead of being recreated in each feature.
 
 Best practice:
 
-- keep fake time and dispatcher providers in `shared/core/testing`
+- keep fake time and dispatcher providers in `shared/core-testing`
 - declare test helper classes (fakes, builders, fixtures) as `internal` rather than `private` when they may be shared across test files in the same module
 - add coroutine test dependencies once in the shared testing module and reuse them from feature tests
 - test feature behavior at the feature layer and queue semantics at the shared presentation layer
@@ -52,7 +54,7 @@ Best practice:
 
 The project bundles [Mokkery](https://mokkery.dev) 3.4.1 as the KMP-native mocking library. It uses a Kotlin compiler plugin (not reflection), so it works on all targets including iOS and Wasm.
 
-- **No per-module setup** — the Mokkery plugin and `commonTest` dependency are applied automatically via `DreamKmpConventionPlugin`
+- **No per-module setup** — Mokkery is test-only: the dependency and compiler plugin are applied through `test-dependencies` and `test-settings.kotlin.compilerPlugins` in the common template; never in main code
 - **Suspend-friendly** — use `everySuspend` for coroutine methods and `verifySuspend` for interaction checks
 - **Mock at method level** — create mocks inside individual test methods rather than as shared fields to keep tests isolated
 
@@ -82,4 +84,4 @@ verifySuspend(exhaustiveOrder) {
 }
 ```
 
-Defaults to strict mode (un-stubbed calls throw). For very simple interfaces (single method), anonymous objects remain acceptable. Complex reusable fakes belong in `shared/core/testing`.
+Defaults to strict mode (un-stubbed calls throw). For very simple interfaces (single method), anonymous objects remain acceptable. Complex reusable fakes belong in `shared/core-testing`.

@@ -49,7 +49,7 @@ Run Maestro only after platform launch is verified. Start flows with `clearState
 
 ### Reporting
 
-- record Maestro status in `features/verification-report.md`
+- record Maestro status in `specs/verification-report.md`
 - status buckets: `passed`, `blocked by environment`, `not run`, `not applicable`
 - if Maestro `launchApp` fails on a physical Android device but `adb install` and `adb shell am start` work, record a Maestro/device-driver blocker and try emulator-backed Maestro when feasible
 

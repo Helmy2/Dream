@@ -46,7 +46,7 @@ Reusable principle:
 
 ### 31.5 All user-visible strings must come from shared resources
 
-No hardcoded string literals should appear in Compose UI code. Every user-visible string — labels, titles, buttons, error messages, content descriptions, hints — must be defined in `shared/core/strings/src/commonMain/composeResources/values/strings.xml` and referenced via `stringResource()`.
+No hardcoded string literals should appear in Compose UI code. Every user-visible string — labels, titles, buttons, error messages, content descriptions, hints — must be defined in `shared/core-strings/composeResources/values/strings.xml` and referenced via `stringResource()`.
 
 Workflow:
 1. Before writing any Compose UI, define all needed strings in `strings.xml` with a clear naming convention (`<feature>_<purpose>`).

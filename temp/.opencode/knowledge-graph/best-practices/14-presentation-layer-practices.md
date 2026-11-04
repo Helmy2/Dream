@@ -34,7 +34,7 @@ Best practice:
 
 ### 14.3 Prefer lifecycle-backed state holders
 
-In multiplatform Compose apps, the shared MVI base should extend lifecycle `ViewModel` so Android keeps state across configuration changes.
+In the Android-only Compose modules, the MVI base should extend lifecycle `ViewModel` so Android keeps state across configuration changes.
 
 Best practice:
 
@@ -164,7 +164,7 @@ State classes in `impl` must use UI model types for all data fields, never raw d
 
 Best practice:
 
-- create dedicated UI model data classes in `feature/<name>/impl` for each piece of renderable data (list items, detail summaries, formatted values)
+- create dedicated UI model data classes in `feature/<name>-impl` for each piece of renderable data (list items, detail summaries, formatted values)
 - inject `PresentationMapper` into the ViewModel via Koin `factory` — do not instantiate mappers in composables
 - use the mapper inside the ViewModel to convert domain models to UI models before publishing to state
 - composable views receive already-mapped UI models — they perform zero domain-to-UI transformation

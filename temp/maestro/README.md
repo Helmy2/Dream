@@ -42,11 +42,13 @@ For detail screens, assert rendered content rather than partial labels. Prefer d
 
 ## Environment Fallbacks
 
-If no Android device or emulator is attached, record Android smoke as `blocked by environment` and include the setup action needed. Do not mark it passed from Gradle build success.
+If no Android device or emulator is attached, record Android smoke as `blocked by environment` and include the setup action needed. Do not mark it passed from `./kotlin build` success.
 
 If Maestro `launchApp` fails on a physical Android device but `adb install` and `adb shell am start` work, treat that as a Maestro/device-driver blocker. Capture the working `adb` evidence, try an emulator-backed Maestro run when feasible, and record the physical-device Maestro result separately.
 
 If iOS simulator keyboard behavior makes a flow unreliable, use the `pressKey: Enter` fallback for single-line fields and verify the completed user outcome rather than the keyboard state itself.
+
+App IDs: Android `com.dream.template.android`, iOS `com.dream.template.ios`. Build the apps with `./kotlin build -m androidApp --platform=android` and `./kotlin build -m iosApp --platform=iosSimulatorArm64` (see `.opencode/guidance/reference/kotlin-toolchain.md` for the artifact paths).
 
 Recommended use:
 
@@ -59,6 +61,6 @@ Before running either command, boot or open the target emulator/simulator, insta
 
 Clear app state at the start of every smoke flow so seeded data, first-run UI, and local persistence are deterministic. Add `clearState` before `launchApp` unless a contract explicitly requires testing persisted state across launches.
 
-If Maestro is not installed or a simulator/device is unavailable, record the check as `blocked by environment` in `features/verification-report.md` instead of claiming validation passed.
+If Maestro is not installed or a simulator/device is unavailable, record the check as `blocked by environment` in `specs/verification-report.md` instead of claiming validation passed.
 
 When a flow exposes a reusable template issue or a newly reliable smoke pattern, capture it with `.opencode/guidance/templates/template-improvement-retrospective-template.md`.

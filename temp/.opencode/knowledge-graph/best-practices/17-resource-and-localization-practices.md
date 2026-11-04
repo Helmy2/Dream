@@ -2,7 +2,7 @@
 
 A strong resource rule is:
 
-- all shared user-visible strings come from the dedicated `shared/core/strings` Compose Resources module
+- all shared user-visible strings come from the dedicated `shared/core-strings` Compose Resources module
 
 ### 17.1 Single source of truth for strings
 
@@ -10,7 +10,9 @@ Best practice to copy directly:
 
 - keep one shared strings source for shared UI layers
 - do not create random feature-local string stores unless architecture truly requires it
-- export the generated `Res` class publicly when another module consumes those resources
+- export the generated `Res` class publicly when another module consumes those resources (`settings.compose.resources.exposedAccessors: true`)
+- Compose resources live in `composeResources/` at the module root and are Android-only; keep `settings.compose.resources.packageName` unchanged so `Res` imports stay stable, and run `./kotlin clean` after changing it
+- iOS strings live in `Localizable.xcstrings` (see file 39)
 
 ### 17.2 No hardcoded strings in composables
 
@@ -24,7 +26,7 @@ Why it helps:
 
 ### 17.3 Strings-first workflow
 
-Before writing any Compose UI for a feature, define ALL user-visible strings in `shared/core/strings/src/commonMain/composeResources/values/strings.xml` first. Use a naming convention of `<feature>_<purpose>` (e.g., `expense_title`, `expense_add_button`, `expense_error_message`).
+Before writing any Compose UI for a feature, define ALL user-visible strings in `shared/core-strings/composeResources/values/strings.xml` first. Use a naming convention of `<feature>_<purpose>` (e.g., `expense_title`, `expense_add_button`, `expense_error_message`).
 
 This ensures:
 - UI code imports strings, not invents them

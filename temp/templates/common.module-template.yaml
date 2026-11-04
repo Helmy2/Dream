@@ -1,0 +1,29 @@
+# Applied to every Dream module (replaces the DreamKmpConventionPlugin).
+settings:
+  kotlin:
+    version: 2.4.0
+    freeCompilerArgs:
+      - -Xexpect-actual-classes
+    serialization: json
+  jvm:
+    release: 17
+  android:
+    compileSdk: 37
+    minSdk: 28
+    targetSdk: 37
+
+dependencies@android:
+  - $libs.kotlinx.coroutines.android
+
+# Mokkery is scoped to test compilation only; it never touches main code.
+test-dependencies:
+  - $libs.mokkery.core
+  - $libs.mokkery.runtime
+  - $libs.mokkery.coroutines
+  - $libs.kotlinx.coroutines.test
+
+test-settings:
+  kotlin:
+    compilerPlugins:
+      - id: dev.mokkery
+        dependency: $libs.mokkery.plugin

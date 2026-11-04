@@ -1,0 +1,20 @@
+product:
+  type: kmp/lib
+  platforms: [android]
+
+apply:
+  - //templates/common.module-template.yaml
+  - //templates/compose.module-template.yaml
+
+dependencies:
+  - $libs.compose.runtime
+  - $libs.compose.foundation
+  - $libs.compose.material3
+  - $libs.compose.ui
+  - $libs.compose.components.resources
+
+settings:
+  android:
+    namespace: com.dream.template.shared.designsystem
+  compose:
+    enabled: true

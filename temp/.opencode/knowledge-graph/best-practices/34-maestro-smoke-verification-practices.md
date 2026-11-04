@@ -109,4 +109,4 @@ Reusable principle:
 - Maestro `launchApp` failure on physical Android with successful `adb install` and `adb shell am start` is a Maestro/device-driver blocker
 - emulator-backed Maestro should be tried when feasible after physical-device driver issues
 - iOS simulator keyboard issues should be worked around with reliable input patterns before declaring the product blocked
-- Gradle build success does not replace smoke validation
+- Toolchain build success does not replace smoke validation

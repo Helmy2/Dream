@@ -4,7 +4,7 @@ These are among the most valuable practices to carry into another project.
 
 ### 6.1 Strict dependency direction
 
-- `feature:x:domain` should depend only on shared pure core modules such as `shared:core:domain`
+- `feature/x-domain` should depend only on shared pure core modules such as `shared/core-domain`
 - `feature:x:data` should depend on its own `domain` plus shared runtime infrastructure
 - `feature:x:api` should depend only on shared navigation runtime (for `NavKey`) and minimal shared contracts; no Compose, no Koin module definitions
 - `feature:x:impl` should depend on its own `api`, its own `domain`, shared presentation helpers, and the design system

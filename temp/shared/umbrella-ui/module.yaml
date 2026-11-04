@@ -1,0 +1,25 @@
+product:
+  type: kmp/lib
+  platforms: [android]
+
+apply:
+  - //templates/common.module-template.yaml
+  - //templates/compose.module-template.yaml
+
+dependencies:
+  - //shared/umbrella-core
+  - //feature/sample-data
+  - //feature/sample-domain
+  - //shared/core-presentation
+  - //shared/designsystem: exported
+  - //shared/navigation: exported
+  - //feature/sample-api: exported
+  - //feature/sample-impl
+  - $libs.compose.runtime
+  - $libs.koin.core
+  - $libs.koin.compose
+  - $libs.koin.composeViewModel
+
+settings:
+  android:
+    namespace: com.dream.template.shared.umbrella.ui

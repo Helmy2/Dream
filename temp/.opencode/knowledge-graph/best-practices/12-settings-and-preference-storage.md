@@ -25,21 +25,22 @@ Best practice:
 
 - never let UI or use cases parse raw preference keys directly
 
-### 12.3 KMP DataStore setup in `shared:core:data`
+### 12.3 KMP DataStore setup in `shared/core-data`
 
-DataStore Preferences is multiplatform (Android and iOS here) using expect/actual. The template ships with a working implementation in `shared/core/data/src/.../datastore/`.
+DataStore Preferences is multiplatform (Android and iOS here) using expect/actual. The template ships with a working implementation in `shared/core-data/src/.../datastore/`.
 
-**Dependencies** (in `shared:core:data/build.gradle.kts`):
-```kotlin
-commonMainApi(libs.androidx.datastore.preferences.core)
+**Dependencies** (in `shared/core-data/module.yaml`):
+```yaml
+dependencies:
+  - $libs.androidx.datastore.preferences.core: exported
 ```
 
-**Common source** (`commonMain`):
+**Common source** (`src`):
 ```kotlin
 expect fun createDataStore(context: Any? = null): DataStore<Preferences>
 ```
 
-**Android** (`androidMain`):
+**Android** (`src@android`):
 ```kotlin
 actual fun createDataStore(context: Any?): DataStore<Preferences> {
     val appContext = (context as Context).applicationContext
@@ -49,7 +50,7 @@ actual fun createDataStore(context: Any?): DataStore<Preferences> {
 }
 ```
 
-**iOS** (`iosMain`):
+**iOS** (`src@ios`):
 ```kotlin
 actual fun createDataStore(context: Any?): DataStore<Preferences> {
     return DataStoreFactory.create(
@@ -67,7 +68,7 @@ actual fun createDataStore(context: Any?): DataStore<Preferences> {
 }
 ```
 
-**DI wiring** (in `shared:core:data` or umbrella):
+**DI wiring** (in `shared/core-data` or umbrella):
 ```kotlin
 single { createDataStore(appContext) } // appContext = Context on Android, null elsewhere
 ```
@@ -77,6 +78,6 @@ Key points:
 - `PreferenceDataStoreFactory` for the Android implementation
 - `OkioStorage` on iOS native (okio is transitively included by DataStore)
 - Host app passes `Context` on Android; other platforms pass `null`
-- The template provides `createDataStore(context: Any?): DataStore<Preferences>` as an expect/actual factory in `shared/core/data`
-- A `DataStoreSessionStorage` implementation is available in `shared/core/data/src/.../session/` for optional auth/session token persistence
+- The template provides `createDataStore(context: Any?): DataStore<Preferences>` as an expect/actual factory in `shared/core-data`
+- A `DataStoreSessionStorage` implementation is available in `shared/core-data/src/.../session/` for optional auth/session token persistence
 - Both DataStore and SessionStorage are wired into the Koin DI module in `shared/umbrella-core`

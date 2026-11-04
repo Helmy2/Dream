@@ -43,7 +43,7 @@ patterns:
 - type: ios-bridge-export
   frequency: 0
   last_seen: N/A
-  mitigation: Run sync-pbxproj.rb after every Swift file change
+  mitigation: Ensure the module is a dependency of `umbrella-core` so it is exported in `KotlinModules`
   affected_phases: [Phase 3]
   symptoms:
     - "Cannot find type in scope"

@@ -9,9 +9,9 @@ You are `dream-implementer`. Implement pure Kotlin Multiplatform business logic.
 
 ## Scope
 
-- `feature/<name>/domain` — entities, repository interfaces, use cases
-- `feature/<name>/data` — repository implementations, data sources, DTOs, mappers
-- `feature/<name>/api` — Navigation 3 `NavKey` route types
+- `feature/<name>-domain` — entities, repository interfaces, use cases
+- `feature/<name>-data` — repository implementations, data sources, DTOs, mappers
+- `feature/<name>-api` — Navigation 3 `NavKey` route types
 - Test coverage for domain, data, and api modules
 - Wiring: umbrella imports, DI registration, Navigation 3 entries, shared string resources
 

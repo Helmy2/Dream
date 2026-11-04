@@ -6,7 +6,7 @@ A strong KMP architecture does not need to force the same UI stack on both platf
 
 Current strong pattern:
 
-- Android uses Compose Multiplatform UI
+- Android uses Jetpack Compose UI in Android-only modules (no Compose on iOS)
 - iOS uses native SwiftUI
 - both consume the same shared domain and data logic
 
@@ -34,15 +34,15 @@ Why this works well:
 
 ### 19.4 Split the exported iOS surface by UI strategy
 
-Dream uses two different umbrella modules for iOS because the consumers are different:
+Dream uses two different umbrella modules because the consumers are different:
 
 - `shared/umbrella-core` exports non-Compose business logic for native SwiftUI hosts
-- `shared/umbrella-ui` exports the Compose entry point for Compose Multiplatform iOS hosts
+- `shared/umbrella-ui` is the Android-only Compose composition root
 
 Best practice:
 
 - keep native SwiftUI hosts dependent on `umbrella-core`, not on Compose UI aggregators
-- keep Compose-based iOS hosts dependent on `umbrella-ui`, not on native Swift bridge code
+- keep the Android app dependent on `umbrella-ui`, not on SwiftUI bridge code
 - do not make the SwiftUI export framework pull in Compose, Navigation 3 UI, or Koin Compose dependencies just to simplify one host app
 
 ### 19.5 Export transitive shared types deliberately
@@ -51,9 +51,9 @@ Kotlin Multiplatform frameworks do not automatically expose every transitive dep
 
 Best practice:
 
-- when an exported framework should expose types from dependent modules, declare `export(projects....)` for those modules in the framework binary configuration
-- the exported dependency chain must use `api(...)`, not `implementation(...)`, or Swift will not see the transitive types cleanly
-- verify the exported header and Swift module after changes instead of assuming Gradle dependency visibility matches Swift visibility
+- the iOS app sees code reachable from `iosApp/module.yaml` dependencies (`//shared/umbrella-core`) through the single `KotlinModules` framework
+- mark dependencies `exported` where their types appear in public signatures that Swift consumes
+- verify the generated Objective-C names after changes instead of assuming Kotlin visibility matches Swift visibility
 
 ### 19.6 Keep the native host thin even when iOS is fully native
 

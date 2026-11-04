@@ -4,7 +4,7 @@
 
 - Do not edit implementation files directly — delegate to relevant implementer
 - Do not write UI code — Compose screens, SwiftUI views, ViewModels
-- Do not modify `feature/<name>/impl` or `iosApp-swiftui/`
+- Do not modify `feature/<name>-impl` or `iosApp/`
 - Do not collapse the modular template
 - Do not fix compilation errors directly — identify the failing layer and delegate
 - Do not commit blocked, partial, unreviewed, or unsafe worktree states
@@ -16,8 +16,8 @@
 ## dream-implementer
 
 - Do not write UI code — delegate to `dream-implementer-ui`
-- Do not modify `feature/<name>/impl` — owned by `dream-implementer-ui`
-- Do not modify `iosApp-swiftui/` — owned by `dream-implementer-ui`
+- Do not modify `feature/<name>-impl` — owned by `dream-implementer-ui`
+- Do not modify `iosApp/` — owned by `dream-implementer-ui`
 - Do not collapse the modular template
 - Do not move business logic into host app modules
 - Do not introduce cross-feature coupling by default
@@ -48,7 +48,7 @@
 
 ## dream-designer
 
-- Do not edit files outside `features/`
+- Do not edit files outside `specs/`
 - Do not write any code
 - Do not act as final reviewer
 

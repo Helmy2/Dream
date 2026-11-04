@@ -1,6 +1,6 @@
 # 39. iOS String Localization Practices
 
-The native SwiftUI host uses Apple's `.xcstrings` String Catalog for localization, while the shared Compose Multiplatform UI uses `shared/core/strings/strings.xml`. These two sources must stay in sync.
+The native SwiftUI host uses Apple's `.xcstrings` String Catalog for localization, while the Android-only Compose UI uses `shared/core-strings/composeResources/values/strings.xml`. These two sources must stay in sync.
 
 ### 39.1 Every shared string must match key and English value
 
@@ -68,10 +68,10 @@ var displayName: String {
 
 When adding or changing a user-visible string:
 
-1. Update `shared/core/strings/strings.xml` first (source of truth for shared strings)
-2. Add a matching entry to `iosApp-swiftui/iosApp/Localizable.xcstrings` with the same key and English value
+1. Update `shared/core-strings/composeResources/values/strings.xml` first (source of truth for shared strings)
+2. Add a matching entry to `iosApp/src/Localizable.xcstrings` with the same key and English value
 3. If the string is iOS-only, add only to the xcstrings with an `ios_` infix
-4. Verify both `xcodebuild build` and `./gradlew :shared:core:strings:allTests` still pass
+4. Verify both `./kotlin build -m iosApp --platform=iosSimulatorArm64` and `./kotlin build -m core-strings --platform=android` still pass
 
 ### 39.5 No hardcoded user-visible strings in SwiftUI views
 
@@ -109,5 +109,5 @@ plutil -p /path/to/build/Products/Debug-iphonesimulator/iosApp.app/Localizable.p
 - run `plutil -lint` on the source `.xcstrings` file as a pre-build sanity check:
 
 ```bash
-plutil -lint iosApp-swiftui/iosApp/Localizable.xcstrings
+plutil -lint iosApp/src/Localizable.xcstrings
 ```

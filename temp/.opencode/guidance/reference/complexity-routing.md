@@ -206,7 +206,7 @@ The user can override the automatic classification:
 **Evaluation:**
 - Files: 5-8 (screen, viewmodel, ui state, mapper, tests, strings)
 - Screens: 1
-- Modules: 1 (feature/expense/impl)
+- Modules: 1 (feature/expense-impl)
 - Dependencies: 0
 - Arch changes: No
 
@@ -244,7 +244,7 @@ User: "yes"
 
 ### Simple Phase 0
 ```
-dream-general: "Plan: Add expense list screen with 3 states (Loading, Empty, Content). Will create feature/expense/impl module with ExpenseListScreen, ExpenseListViewModel, and tests. No new dependencies. Proceed?"
+dream-general: "Plan: Add expense list screen with 3 states (Loading, Empty, Content). Will create feature/expense-impl module with ExpenseListScreen, ExpenseListViewModel, and tests. No new dependencies. Proceed?"
 User: "yes"
 ```
 

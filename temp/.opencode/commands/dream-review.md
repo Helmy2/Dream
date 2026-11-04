@@ -11,8 +11,8 @@ Read:
 - `.opencode/guidance/dream-agent-operating-guide.md`
 - `.opencode/knowledge-graph/README.md`
 - relevant `.opencode/knowledge-graph/best-practices/*.md`
-- `features/app-contract.yaml`
-- `features/decisions.yaml`
+- `specs/app-contract.yaml`
+- `specs/decisions.yaml`
 - relevant feature contracts
 
 Focus on:

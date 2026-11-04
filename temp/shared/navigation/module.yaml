@@ -1,0 +1,27 @@
+product:
+  type: kmp/lib
+  platforms: [android]
+
+apply:
+  - //templates/common.module-template.yaml
+  - //templates/compose.module-template.yaml
+
+dependencies:
+  - //shared/designsystem
+  - $libs.koin.compose
+  - $libs.koin.composeNavigation3
+  - $libs.compose.material3
+  - $libs.navigation3.runtime: exported
+  - $libs.navigation3.ui
+
+settings:
+  android:
+    namespace: com.dream.template.shared.navigation
+  compose:
+    enabled: true
+  kotlin:
+    compilerPlugins:
+      - id: io.insert-koin.compiler.plugin
+        dependency: $libs.koin.compiler.plugin
+        options:
+          moduleId: navigation

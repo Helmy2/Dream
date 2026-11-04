@@ -45,7 +45,7 @@ The initial graph covers:
 - package and app identity normalization
 - stable composition roots
 - UI quality and state design
-- iOS host structure, KMP bridge rules, Xcode configuration, and XCTest packaging
+- iOS host structure, KMP bridge rules, Xcode configuration, and Xcode project and testing limits
 
 ## Next Extensions
 

@@ -11,18 +11,18 @@ Read:
 - `.opencode/knowledge-graph/PRODUCT.md`
 - `.opencode/guidance/opencode-agent-map.md`
 - `.opencode/guidance/dream-agent-operating-guide.md`
-- `features/<feature>/resume.md` (if it exists)
-- `features/<feature>/plan.md` (if it exists)
-- `features/<feature>/checkpoints.md` (if it exists)
-- `features/<feature>/report.md` (if it exists)
+- `specs/<feature>/resume.md` (if it exists)
+- `specs/<feature>/plan.md` (if it exists)
+- `specs/<feature>/checkpoints.md` (if it exists)
+- `specs/<feature>/report.md` (if it exists)
 
 Then:
 
 ### Step 1: Locate Resume State
 
-- if `$ARGUMENTS` is a feature name, look for `features/<feature>/resume.md`
+- if `$ARGUMENTS` is a feature name, look for `specs/<feature>/resume.md`
 - if `$ARGUMENTS` is a path, read that file directly
-- if no resume file exists, check `features/<feature>/checkpoints.md` for the last completed phase
+- if no resume file exists, check `specs/<feature>/checkpoints.md` for the last completed phase
 - if neither exists, report: "No resume state found for <feature>. Start a new session with /dream-feature or /dream-create."
 
 ### Step 2: Read Resume Context
@@ -75,13 +75,13 @@ Ask the user:
 - start fresh from Phase 0
 
 **On Abort:**
-- write final state to `features/<feature>/report.md`
+- write final state to `specs/<feature>/report.md`
 - document why the session was aborted
 - do not merge or commit
 
 ### Step 5: Update Resume File
 
-After each significant action, update `features/<feature>/resume.md` with:
+After each significant action, update `specs/<feature>/resume.md` with:
 - current phase
 - completed phases with git hashes
 - iteration count
@@ -120,11 +120,11 @@ The resume file should follow this structure:
 - <any blockers preventing progress>
 
 ## Relevant Files
-- Plan: `features/<feature>/plan.md`
-- Contract: `features/<feature>/contract.yaml`
-- UI Spec: `features/<feature>/ui-spec.md`
-- Report: `features/<feature>/report.md`
-- Checkpoints: `features/<feature>/checkpoints.md`
+- Plan: `specs/<feature>/plan.md`
+- Contract: `specs/<feature>/contract.yaml`
+- UI Spec: `specs/<feature>/ui-spec.md`
+- Report: `specs/<feature>/report.md`
+- Checkpoints: `specs/<feature>/checkpoints.md`
 ```
 
 Do not commit until the user explicitly approves. Do not merge without user confirmation.

@@ -15,8 +15,8 @@ Read first:
 - `AGENTS.md`
 - `.opencode/guidance/dream-agent-operating-guide.md`
 - selected template README
-- selected template `features/` metadata
-- any already-generated `features/app-contract.yaml` or `features/decisions.yaml`
+- selected template `specs/` metadata
+- any already-generated `specs/app-contract.yaml` or `specs/decisions.yaml`
 
 Inputs you must use:
 - destination project name
@@ -44,21 +44,18 @@ Non-negotiable rules:
 
 Instantiation steps:
 1. Copy the selected template into the destination project location.
-2. Resolve the iOS UI strategy from `iosUiStrategy` in the app contract:
-   - If `compose_multiplatform`: delete `iosApp-swiftui/`, rename `iosApp-compose/` to `iosApp/`
-   - If `swiftui`: delete `iosApp-compose/`, rename `iosApp-swiftui/` to `iosApp/`
-    - Note: when using `dream-init`, this step is already handled by the initializer (prompts for iOS choice, removes unused variant, renames kept one). The agent should verify the result and proceed.
-    - Verify the kept iOS variant still has the correct Gradle embed-and-sign build phase, shared Xcode scheme, and framework search path.
-    - After resolving the iOS strategy, run `xcodebuild build` against the kept iOS project to confirm it compiles before proceeding to feature generation.
+2. Verify the iOS host. iOS is native SwiftUI only (`iosApp/`); there is no variant to choose.
+    - Verify `iosApp/module.xcodeproj` still has `KOTLIN_CLI_WRAPPER_PATH = ../kotlin`, the new `PRODUCT_BUNDLE_IDENTIFIER`, and `IPHONEOS_DEPLOYMENT_TARGET = 17.0` (see `.opencode/guidance/reference/kotlin-toolchain.md`).
+    - Run `./kotlin build -m iosApp --platform=iosSimulatorArm64` to confirm it compiles before proceeding to feature generation.
 3. Derive a canonical app identity before renaming anything.
 3. Rename app-visible template identifiers to app-specific identifiers.
 5. Rename package identifiers from template-specific values to project-specific values.
-6. Update Gradle, application id, namespace, and framework naming where needed.
+6. Update `project.yaml`, `module.yaml` settings, application id, namespace, and framework naming where needed.
 7. Audit all required identity surfaces and record each rename explicitly.
 8. Replace sample-facing display text that should not survive into the generated app baseline.
 9. Preserve reusable shared infrastructure, build logic, and architecture modules.
-10. Reset `features/verification-report.md` to reflect the new generation cycle rather than the source template's prior validation state.
-11. Update `features/decisions.yaml` and `features/app-contract.yaml` to reflect the generated app.
+10. Reset `specs/verification-report.md` to reflect the new generation cycle rather than the source template's prior validation state.
+11. Update `specs/decisions.yaml` and `specs/app-contract.yaml` to reflect the generated app.
 12. Decide whether the sample feature should remain temporarily as scaffolding or be replaced immediately by the first real feature.
 13. Verify git readiness in the destination project before later workflow stages depend on git commands.
 14. Verify Android SDK readiness early, or record precise environment blockers.
@@ -76,15 +73,16 @@ Canonical app identity you must derive and keep consistent:
 - Android application id
 - Android namespace values by module
 - iOS bundle or visible app identity where applicable
-- Gradle root project name and any generated naming derived from the app identity
+- Toolchain project naming and any generated naming derived from the app identity
 
 Required identity audit surfaces:
-- `settings.gradle.kts` root project name and included module naming where affected
-- every module `build.gradle.kts` namespace and Android application id values
+- `project.yaml` module list where module names are affected
+- every module `module.yaml` `settings.android.namespace` and the Android application id in `androidApp/module.yaml`
+- Koin compiler plugin `moduleId` values (must stay unique per module)
 - Kotlin package declarations and directory layout where package roots are renamed
 - Android manifest labels and other visible app identity text
 - iOS configuration values that carry app identity
-- README or `features/` metadata values that still carry template identity
+- README or `specs/` metadata values that still carry template identity
 - obvious sample or template display strings that would misidentify the generated app
 
 Template-specific decisions you must make explicitly:
@@ -96,13 +94,13 @@ Identity normalization rules:
 - normalize identity immediately unless a concrete blocker is documented
 - do not leave `template` or other template-only identity in package roots, namespaces, app ids, or user-facing app names
 - keep package roots deterministic from the canonical app identity rather than ad hoc renames
-- keep multi-word feature paths and Kotlin packages aligned; prefer package-mirroring directories such as `feature/expense/details` with `feature.expense.details`
+- keep multi-word feature paths and Kotlin packages aligned; prefer package-mirroring directories such as `feature/expense-details` with `feature.expense.details`
 - if a surface intentionally keeps template identity temporarily, record the exact reason and the follow-up removal step
 
 What to preserve from the template:
 - `androidApp/`
-- either `iosApp-compose/` or `iosApp-swiftui/` based on `iosUiStrategy` in the app contract
-- `shared/core/*`
+- `iosApp/`
+- `shared/core-*`
 - `shared/designsystem`
 - `shared/navigation`
 - `shared/umbrella-core`
@@ -114,7 +112,7 @@ What to customize:
 - application id and namespace values
 - package roots that still contain template identity
 - display text such as window title, starter labels, and obvious sample text
-- `features/` metadata for the new project
+- `specs/` metadata for the new project
 
 Required identity audit output:
 - canonical app identity summary
@@ -133,9 +131,9 @@ Rules for the sample feature:
 
 Required outputs:
 - instantiated project on disk
-- updated `features/app-contract.yaml`
-- updated `features/decisions.yaml`
-- reset or regenerated `features/verification-report.md`
+- updated `specs/app-contract.yaml`
+- updated `specs/decisions.yaml`
+- reset or regenerated `specs/verification-report.md`
 - concise summary of all renamed identifiers and structural decisions
 - explicit identity audit summary
 

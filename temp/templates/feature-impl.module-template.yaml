@@ -1,0 +1,9 @@
+# Android-only feature UI module: Compose + turbine (replaces DreamKmpFeatureImplConventionPlugin).
+# The Koin compiler plugin needs a unique `moduleId` per module, so each feature-impl module declares it itself:
+#   settings.kotlin.compilerPlugins: [{id: io.insert-koin.compiler.plugin, dependency: $libs.koin.compiler.plugin, options: {moduleId: <module name>}}]
+apply:
+  - //templates/common.module-template.yaml
+  - //templates/compose.module-template.yaml
+
+test-dependencies:
+  - $libs.turbine
