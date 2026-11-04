@@ -1,0 +1,14 @@
+# Applied to Android-only Compose UI modules (replaces DreamKmpComposeConventionPlugin).
+settings:
+  compose:
+    enabled: true
+    version: 1.11.1
+
+dependencies:
+  - $libs.androidx.lifecycle.runtimeCompose
+  - $libs.compose.icons.core
+  - $libs.compose.uiToolingPreview
+  - $libs.kotlinx.coroutines.core
+
+dependencies@android:
+  - $libs.compose.uiTooling

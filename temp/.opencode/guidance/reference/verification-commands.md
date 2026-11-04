@@ -14,35 +14,36 @@ git log --oneline -10
 adb devices
 ```
 
-## Gradle Tests
+## Kotlin Toolchain Tests
 
 ```bash
 # All tests
-./gradlew allTests
+./kotlin test --platform=android
+./kotlin test --platform=iosSimulatorArm64
 
 # Feature-specific tests
-./gradlew :feature:<name>:domain:allTests
-./gradlew :feature:<name>:data:allTests
-./gradlew :feature:<name>:impl:allTests
+./kotlin test -m <name>-domain --platform=android
+./kotlin test -m <name>-data --platform=android
+./kotlin test -m <name>-impl --platform=android
 
-# Shared module tests
-./gradlew :shared:core:domain:allTests
-./gradlew :shared:core:data:allTests
-./gradlew :shared:core:presentation:allTests
-./gradlew :shared:navigation:allTests
+# Shared module tests (module name = directory name)
+./kotlin test -m core-domain --platform=android
+./kotlin test -m core-data --platform=android
+./kotlin test -m core-presentation --platform=android
+./kotlin test -m navigation --platform=android
 ```
 
 ## Android Build
 
 ```bash
 # Debug build
-./gradlew :androidApp:assembleDebug
+./kotlin build -m androidApp --platform=android
 
 # Install on emulator
-adb install -r androidApp/build/outputs/apk/debug/androidApp-debug.apk
+adb install -r build/tasks/_androidApp_buildAndroidDebug/gradle-project-debug.apk
 
 # Launch app
-adb shell am start -n <package>/<main-activity>
+adb shell am start -n com.dream.template.android/.MainActivity
 
 # Uninstall (before fresh install)
 adb uninstall <package>
@@ -52,25 +53,23 @@ adb uninstall <package>
 
 ```bash
 # Build for simulator
-xcodebuild -project iosApp-swiftui/iosApp.xcodeproj \
-  -scheme iosApp \
-  -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.2' \
-  build
+./kotlin build -m iosApp --platform=iosSimulatorArm64
 
-# Build and test
-xcodebuild -project iosApp-swiftui/iosApp.xcodeproj \
-  -scheme iosApp \
-  -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.2' \
-  test
-
-# Install on simulator
-xcrun simctl install <device-id> <path-to-app>
+# Install on simulator (app bundle path from the Kotlin Toolchain reference)
+xcrun simctl install <device-id> build/tasks/_iosApp_buildIosAppIosSimulatorArm64Debug/bin/Debug-iphonesimulator/iosApp.app
 
 # Launch on simulator
-xcrun simctl launch <device-id> <bundle-id>
+xcrun simctl launch <device-id> com.dream.template.ios
 
 # Uninstall (before fresh install)
-xcrun simctl uninstall <device-id> <bundle-id>
+xcrun simctl uninstall <device-id> com.dream.template.ios
+```
+
+Swift unit tests (hosted `appTests` target, sources in `iosApp/test/`; also triggers the Kotlin Toolchain integration script, so no prior `./kotlin build` is needed). `./kotlin test` runs only Kotlin tests, never Swift tests:
+
+```bash
+xcodebuild test -project iosApp/module.xcodeproj -scheme app -destination 'platform=iOS Simulator,name=iPhone 17 Pro' CODE_SIGNING_ALLOWED=NO
+# or: -destination "id=<simulator-udid>"
 ```
 
 ## UI Inspection (via mobile-mcp)

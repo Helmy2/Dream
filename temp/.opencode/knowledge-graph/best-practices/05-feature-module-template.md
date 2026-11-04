@@ -3,14 +3,53 @@
 The canonical feature shape in Dream is:
 
 ```text
-feature/<name>/
-  domain/
-  data/
-  api/
-  impl/
+feature/
+  <name>-domain/
+  <name>-data/
+  <name>-api/
+  <name>-impl/        # Android-only (Compose)
 ```
 
-Multi-word features must use one consistent naming convention across folders, Gradle module names, and Kotlin packages. Prefer a folder path that mirrors package segments for multi-word concepts, such as `feature/expense/details/...` with `com.example.feature.expense.details...`, or use a single slug consistently everywhere. Do not mix a hyphenated folder such as `feature/expense-details` with package segments such as `feature.expense.details` unless a documented migration reason exists.
+Module name equals directory name and must be unique, so leaf directories are `<name>-domain`, `<name>-data`, `<name>-api`, `<name>-impl`. Modules are referenced as `//feature/<name>-impl` in `dependencies`. Kotlin packages are unchanged (`com.example.feature.<name>.domain`).
+
+Typical `module.yaml` shapes:
+
+```yaml
+# <name>-domain / <name>-data / <name>-api
+product:
+  type: kmp/lib
+  platforms: [android, iosArm64, iosSimulatorArm64]
+apply:
+  - //templates/common.module-template.yaml
+dependencies:
+  - //shared/core-domain: exported
+settings:
+  android:
+    namespace: com.example.feature.<name>.domain
+
+# <name>-impl (Android-only)
+product:
+  type: kmp/lib
+  platforms: [android]
+apply:
+  - //templates/feature-impl.module-template.yaml
+dependencies:
+  - //feature/<name>-api
+  - //feature/<name>-domain
+settings:
+  android:
+    namespace: com.example.feature.<name>.impl
+  kotlin:
+    compilerPlugins:
+      - id: io.insert-koin.compiler.plugin
+        dependency: $libs.koin.compiler.plugin
+        options:
+          moduleId: <name>-impl
+```
+
+Compose and the `impl` module are Android-only; iOS uses SwiftUI plus the `domain`/`data` modules.
+
+Multi-word features must use one consistent naming convention across module names (which equal directory names) and Kotlin packages. Use a single slug consistently, such as `expense-details-impl` with `com.example.feature.expense.details...`, and document the mapping between slug and package segments. Module names must stay unique across the project.
 
 ### 5.1 Domain module responsibilities
 
@@ -29,7 +68,7 @@ Multi-word features must use one consistent naming convention across folders, Gr
 - iOS APIs
 - Room annotations
 - Ktor clients
-- DataStore (setup lives in `shared:core:data` with expect/actual)
+- DataStore (setup lives in `shared/core-data` with expect/actual)
 
 ### 5.2 Data module responsibilities
 
@@ -59,7 +98,7 @@ Multi-word features must use one consistent naming convention across folders, Gr
 - Koin module definitions
 - Room, Ktor, or data-layer code
 
-Dependency rule: any module that needs to navigate to this feature depends on `feature/<name>/api`, never on `feature/<name>/impl`.
+Dependency rule: any module that needs to navigate to this feature depends on `//feature/<name>-api`, never on `//feature/<name>-impl`.
 
 ### 5.4 Impl module responsibilities
 
@@ -90,12 +129,12 @@ UI state rule:
 
 - ViewModel state fields must use UI model types, not domain types
 - domain models must not appear in state classes — they must be stopped at the ViewModel boundary
-- UI model classes live in `feature/<name>/impl` alongside state, action, and event definitions
+- UI model classes live in `feature/<name>-impl` alongside state, action, and event definitions
 
 `impl` depends on:
 
-- `feature/<name>/api`
-- `feature/<name>/domain`
+- `//feature/<name>-api`
+- `//feature/<name>-domain`
 - shared presentation helpers and design system
 
 ### 5.5 Why this template scales
@@ -107,7 +146,7 @@ This split keeps the public navigation contract stable and small. Other features
 Every feature `impl` module needs a Koin module that registers ViewModels and installs Navigation 3 entry providers. The pattern is identical across features:
 
 ```kotlin
-// feature/<name>/impl/src/commonMain/kotlin/.../di/<Name>Module.kt
+// feature/<name>-impl/src/com/.../di/<Name>Module.kt
 @OptIn(KoinExperimentalAPI::class)
 val <name>UiModule = module {
     factory<PresentationMapper> { PresentationMapper(get()) }
@@ -132,11 +171,12 @@ val <name>UiModule = module {
 
 Registration steps for a new feature:
 
-1. Create the DI module file in `feature/<name>/impl/.../di/`
-2. Add `feature/<name>/impl` dependency to `shared/umbrella-ui/build.gradle.kts`:
-   ```kotlin
-   commonMainImplementation(projects.feature.name.impl)
-   commonMainApi(projects.feature.name.api)
+1. Create the DI module file in `feature/<name>-impl/src/.../di/`
+2. Add the feature dependencies to `shared/umbrella-ui/module.yaml`:
+   ```yaml
+   dependencies:
+     - //feature/<name>-impl
+     - //feature/<name>-api: exported
    ```
 3. Import and add `<name>UiModule` to the `modules(...)` call in `UiModule.kt`
-4. Verify with `./gradlew :shared:umbrella-ui:allTests` — the DI graph test confirms all registrations resolve without eager instantiation
+4. Verify with `./kotlin test -m umbrella-ui --platform=android` — the DI graph test confirms all registrations resolve without eager instantiation

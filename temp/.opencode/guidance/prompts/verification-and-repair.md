@@ -19,19 +19,19 @@ Read first:
 - `.opencode/guidance/opencode-agent-map.md`
 - `AGENTS.md`
 - relevant graph-backed rules for the failing module or runtime surface
-- `features/app-contract.yaml`
-- `features/decisions.yaml`
-- `features/<feature-name>/contract.yaml` if feature-specific
+- `specs/app-contract.yaml`
+- `specs/decisions.yaml`
+- `specs/<feature-name>/contract.yaml` if feature-specific
 - `.opencode/guidance/templates/verification-report-template.md`
 
 Required verification for local-only MVPs:
 - `./scripts/dream-preflight.sh` when present
 - early git readiness: project is a git repository and `git status`, `git diff`, and `git log --oneline -10` work
 - early Android SDK readiness: `ANDROID_HOME` or the configured SDK path is available before Android validation is treated as code-ready
-- `./gradlew allTests`
-- `./gradlew :androidApp:assembleDebug`
+- `./kotlin test --platform=android` + `./kotlin test --platform=iosSimulatorArm64`
+- `./kotlin build -m androidApp --platform=android`
 - Android CLI install, launch, layout/screenshot inspection, and log capture for Android (`https://developer.android.com/tools/agents/android-cli`)
-- `xcodebuild` plus `xcrun simctl` build, install, launch, log, and crash capture for iOS
+- `./kotlin build -m iosApp --platform=iosSimulatorArm64` plus `xcrun simctl` install, launch, log, and crash capture for iOS (bundle id `com.dream.template.ios`)
 
 Required behavior:
  - do not report validated success until verification is green, contract behavior is implemented, required tests exist, and review status is documented
@@ -47,8 +47,8 @@ Required parity checks before validated success:
 - every contract action maps to a concrete handling path
 - every required contract test appears in the test plan and is backed by code-level coverage
 - multi-word feature folders and packages use one consistent naming convention
-- `feature/<name>/api` contains only `NavKey` route types and minimal public contracts; no Koin definitions
-- `feature/<name>/impl` is not imported by any other feature or by shared navigation; cross-feature navigation goes through `feature/<name>/api`
+- `feature/<name>-api` contains only `NavKey` route types and minimal public contracts; no Koin definitions
+- `feature/<name>-impl` is not imported by any other feature or by shared navigation; cross-feature navigation goes through `feature/<name>-api`
 - cross-feature data implementation reuse is documented as an MVP exception or extracted to a shared module
 - editable-form primary actions remain reachable while the software keyboard may be open
 - responsive forms use compact single-column, wider grouped layout, and adaptive wrapping where applicable
@@ -57,30 +57,30 @@ Required parity checks before validated success:
 - meaningful date/month/time tests use readable `kotlinx-datetime` construction rather than unexplained raw epoch values
 - repositories, use cases, and ViewModels are not instantiated inside recomposing composables
 - generated feature DI uses Koin compiler plugin DSL registration, not annotation-based DI such as `@KoinViewModel`, `@Module`, or `@ComponentScan`
-- feature-specific Navigation 3 route types are owned by `feature/<name>/api` and implement `NavKey`; Navigation 3 entry providers are installed in the Koin module inside `feature/<name>/impl`; shared navigation should not regain a shared `AppRoute` hierarchy without a concrete reason
-- when `iosUiStrategy` is `swiftui`, the native host keeps bridge code in `Core`, native state holders in `ViewModels`, and XCTest coverage in `iosAppTests`
-- when `iosUiStrategy` is `swiftui`, exported shared types needed by Swift are visible through framework `export(...)` plus transitive `api(...)` chains instead of hidden behind `implementation(...)`
+- feature-specific Navigation 3 route types are owned by `feature/<name>-api` and implement `NavKey`; Navigation 3 entry providers are installed in the Koin module inside `feature/<name>-impl`; shared navigation should not regain a shared `AppRoute` hierarchy without a concrete reason
+- the native host keeps bridge code in `Core` and native state holders in `ViewModels`
+- shared types needed by Swift are reachable from `iosApp`'s dependencies (via `//shared/umbrella-core`) so they appear in `KotlinModules`
 
 Automated defect scans (run these BEFORE signing off):
-1. **Grep for `Clock.System.now()`** in feature source files. The ONLY allowed occurrence is in `TimeProvider` implementations (e.g., `shared/core/domain/TimeProvider.kt` or an `expect/actual` platform time provider). Any other usage is a defect — flag it.
+1. **Grep for `Clock.System.now()`** in feature source files. The ONLY allowed occurrence is in `TimeProvider` implementations (e.g., `shared/core-domain/TimeProvider.kt` or an `expect/actual` platform time provider). Any other usage is a defect — flag it.
 2. **Grep for hardcoded user-visible strings** in Compose UI files. Look for string literals passed to `Text()`, `TextField()`, `Button()`, `contentDescription`, or similar UI parameters that are not wrapped in `stringResource()`. Flag any hardcoded visible text.
-3. **Grep for `String.format`** or `java.text.*` or `java.util.*` in `commonMain` source sets (not `androidMain`). These are JVM-only APIs that break iOS. Flag them.
+3. **Grep for `String.format`** or `java.text.*` or `java.util.*` in the common `src` source set (not `src@android`). These are JVM-only APIs that break iOS. Flag them.
 4. **Grep for `menuAnchor()`** — this Material3 API is deprecated. Flag for migration to `MenuAnchorType`.
-5. **Verify test coverage by layer**: Check that domain, data, and presentation modules each have at least one test file under `src/commonTest/`. A feature with only presentation tests but no domain or data tests is incomplete — flag it.
-6. **Verify shared strings XML exists**: Check that `shared/core/strings/src/commonMain/composeResources/values/strings.xml` contains string resources for the feature. Cross-reference with the feature's UI to ensure every user-visible string has a resource entry.
+5. **Verify test coverage by layer**: Check that domain, data, and presentation modules each have at least one test file under `test/`. A feature with only presentation tests but no domain or data tests is incomplete — flag it.
+6. **Verify shared strings XML exists**: Check that `shared/core-strings/composeResources/values/strings.xml` contains string resources for the feature. Cross-reference with the feature's UI to ensure every user-visible string has a resource entry.
 7. **Verify DI setup**: Check that the feature's DI module registers repositories, ViewModels, and navigation entries through Koin DSL (not manual construction). Verify that repositories and ViewModels are not instantiated inside `@Composable` functions.
 8. **Verify date formatting**: Check user-visible date/date-time text in common UI code uses `TimeProvider.formatDate(...)` or `TimeProvider.formatDateTime(...)`. Flag feature-local date formatting helpers.
-9. **Verify Koin compiler DSL setup**: Grep generated feature modules for `@KoinViewModel`, `@Module`, `@ComponentScan`, and `koin.annotations`. Flag any usage unless the user explicitly requested annotation-based DI. Verify modules using compiler DSL registrations apply `libs.plugins.koinCompiler`.
+9. **Verify Koin compiler DSL setup**: Grep generated feature modules for `@KoinViewModel`, `@Module`, `@ComponentScan`, and `koin.annotations`. Flag any usage unless the user explicitly requested annotation-based DI. Verify modules using compiler DSL registrations apply the Koin compiler plugin (`compilerPlugins` in `module.yaml`, with a unique `moduleId`).
 10. **Verify git completion for feature flows**: After validated feature work, run `git status`, `git diff`, and `git log --oneline -10`; stage only intended files, prepare a concise feature commit, and ask the user for explicit approval before committing. Do not commit blocked, partial, unreviewed, or unsafe worktree states.
 11. **Verify design-system usage**: Scan feature Compose code for raw Material3 imports such as `Button`, `OutlinedTextField`, `Card`, `AlertDialog`, `ModalBottomSheet`, `Snackbar`, `TopAppBar`, and progress indicators. If a Dream design-system wrapper exists, using the raw primitive is a defect unless a local exception is documented.
-12. **Verify SwiftUI host wiring**: When the native iOS strategy is SwiftUI, verify the shared Xcode scheme exists, `xcodebuild build` and `xcodebuild test` run against it, the Xcode shell build phase invokes the correct `embedAndSignAppleFrameworkForXcode` task, and `FRAMEWORK_SEARCH_PATHS` points at `shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)` without duplicate entries.
-13. **Verify Swift bridge API correctness**: When Swift uses exported Kotlin types, check for guessed ObjC-shaped names in Swift code such as underscore-suffixed enum cases, missing async wrapper usage, or missing exported framework types that indicate `export(...)` or `api(...)` gaps.
+12. **Verify SwiftUI host wiring**: Verify `iosApp/module.xcodeproj` still has `KOTLIN_CLI_WRAPPER_PATH = ../kotlin`, the expected bundle id, and `IPHONEOS_DEPLOYMENT_TARGET = 17.0`, and that `./kotlin build -m iosApp --platform=iosSimulatorArm64` succeeds.
+13. **Verify Swift bridge API correctness**: When Swift uses exported Kotlin types, check for guessed ObjC-shaped names in Swift code such as underscore-suffixed enum cases, missing async wrapper usage, or missing types in `KotlinModules` that indicate a missing module dependency in `umbrella-core`/`iosApp`.
 
 Repair loop:
 1. `dream-general` delegates verification to `dream-tester`
 2. `dream-general` identifies the failing module or runtime layer from tester output
 3. `dream-discovery` gathers additional focused context if needed (uses codebase-memory-mcp for efficient code intelligence queries)
-4. `dream-general` persists iteration state to `features/verification-report.md` (current iteration, failures, past attempts, next module to fix)
+4. `dream-general` persists iteration state to `specs/verification-report.md` (current iteration, failures, past attempts, next module to fix)
 5. `dream-general` launches a fresh implementer subagent invocation based on the failing layer:
    - `dream-implementer` for domain, data, or api failures
    - `dream-implementer-android` for Compose UI or `impl` failures
@@ -89,7 +89,7 @@ Repair loop:
 7. The implementer makes the smallest correct fix
 8. `dream-general` delegates reverification to `dream-tester`
 9. `dream-general` checks skip conditions: iteration ≤ 5? failure count decreased? no regressions? environment blocker repeated?
-10. if a skip condition triggers, stop and report `blocked` with the skip reason (documented in `features/verification-report.md`); otherwise repeat from step 1
+10. if a skip condition triggers, stop and report `blocked` with the skip reason (documented in `specs/verification-report.md`); otherwise repeat from step 1
 11. `dream-inspector` performs final review for substantial generation or repair work before validated success is reported
 
 If `dream-inspector` fails at the tool level:
@@ -104,8 +104,8 @@ Output requirements:
 - list commands run
 - state review mode as `delegated` or `manual`
 - list failing areas if blocked
-- write or update `features/verification-report.md`
-- in `features/verification-report.md`, list every check under one of these statuses: `passed`, `blocked by environment`, `not run`, or `not applicable`
+- write or update `specs/verification-report.md`
+- in `specs/verification-report.md`, list every check under one of these statuses: `passed`, `blocked by environment`, `not run`, or `not applicable`
 - follow `.opencode/guidance/templates/verification-report-template.md` unless the orchestrator requests a stricter variant
 - for completed feature flows, state the git commit hash or the precise reason no commit was created
 

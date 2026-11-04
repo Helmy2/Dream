@@ -51,7 +51,7 @@ The feature `impl` Koin module uses the Navigation 3 DSL to register entry provi
 Best practice:
 
 - use `navigation<Route> { FeatureScreen() }` inside the `impl` module's Koin module
-- the route type comes from `feature/<name>/api`; the screen comes from `feature/<name>/impl`
+- the route type comes from `feature/<name>-api`; the screen comes from `feature/<name>-impl`
 - `shared/umbrella-ui` imports feature `impl` Koin modules so all navigation installers are available before `NavDisplay` renders
 - do not register navigation entry providers in shared core, app shells, or feature `api` modules
 
@@ -71,28 +71,28 @@ Best practice:
 
 ### 18.7 Koin compiler plugin setup reference
 
-**Plugin setup** (in `build-logic/convention/src/main/kotlin/DreamKmpConventionPlugin.kt`):
-```kotlin
-plugins.apply("com.google.devtools.ksp")
-dependencies {
-    add("kspCommonMainMetadata", libs.koin.compiler)
-}
+**Plugin setup** (per module in `module.yaml`; there is no Gradle plugin):
+```yaml
+settings:
+  kotlin:
+    compilerPlugins:          # not platform-scopable
+      - id: io.insert-koin.compiler.plugin
+        dependency: $libs.koin.compiler.plugin
+        options:
+          moduleId: <module name>   # REQUIRED and unique per module
 ```
 
-**Module build file** (in `feature/<name>/impl/build.gradle.kts`):
-```kotlin
-plugins {
-    id("app.kmp.koin")
-}
+`moduleId` must be unique per module (use the module name) to avoid duplicate generated Koin hint classes in the APK.
 
-dependencies {
-    commonMainImplementation(libs.koin.core)
-    commonMainImplementation(libs.koin.compose)
-    commonMainImplementation(libs.koin.navigation3)
-}
+**Module dependencies** (in `feature/<name>-impl/module.yaml`):
+```yaml
+dependencies:
+  - $libs.koin.core
+  - $libs.koin.compose
+  - $libs.koin.navigation3
 ```
 
-**Compiler DSL registrations** (in `feature/<name>/impl/src/commonMain/kotlin/.../di/FeatureModule.kt`):
+**Compiler DSL registrations** (in `feature/<name>-impl/src/.../di/FeatureModule.kt`):
 ```kotlin
 import org.koin.dsl.module
 import org.koin.core.module.dsl.viewModel
@@ -120,7 +120,7 @@ val featureModule = module {
 }
 ```
 
-**Umbrella import** (in `shared/umbrella-ui/src/commonMain/kotlin/.../UiModule.kt`):
+**Umbrella import** (in `shared/umbrella-ui/src/.../UiModule.kt`):
 ```kotlin
 val UiModule = module {
     includes(featureModule)
@@ -134,6 +134,6 @@ Best practice:
 - use `single { }` for repositories and shared services (one instance per app)
 - import from `org.koin.plugin.module.dsl.*` for compile-safe registrations
 - do not use `@KoinViewModel`, `@Module`, `@ComponentScan`, or `@ComponentWithoutAnnotation` unless the user explicitly requests annotation style
-- verify DI graph resolves with `./gradlew :shared:umbrella-ui:allTests`
+- verify DI graph resolves with `./kotlin test -m umbrella-ui --platform=android`
 
 > **Reference:** [Koin KMP documentation](https://insert-koin.io/docs/reference/koin-mp/kmp/)

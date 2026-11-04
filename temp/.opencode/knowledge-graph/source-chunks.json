@@ -14,7 +14,7 @@
         "endLine": 26
       },
       "summary": "Defines strict boundaries, feature packaging, pure domain, central shared core, and the canonical dependency direction.",
-      "text": "Strong architecture is usually strongest where it stays strict about boundaries. The main architectural ideas are package by feature, split each feature into domain, data, and presentation, keep domain pure Kotlin, make data implement domain contracts, keep UI dependent on domain, not on data internals, centralize cross-cutting concerns in shared/core/*, and use physical Gradle modules to enforce dependency direction. Canonical dependency rule: Presentation -> Domain <- Data."
+      "text": "Strong architecture is usually strongest where it stays strict about boundaries. The main architectural ideas are package by feature, split each feature into domain, data, and presentation, keep domain pure Kotlin, make data implement domain contracts, keep UI dependent on domain, not on data internals, centralize cross-cutting concerns in shared/core-*, and use physical modules (one module.yaml each) to enforce dependency direction. Canonical dependency rule: Presentation -> Domain <- Data."
     },
     {
       "id": "chunk.feature.module_template",
@@ -25,7 +25,7 @@
         "endLine": 64
       },
       "summary": "Defines the canonical feature module shape: domain, data, api, and impl, with naming alignment and mapper placement.",
-      "text": "Feature modules should be split into domain, data, api, and impl. The api module contains only NavKey route types and minimal public contracts; it has no Koin definitions and no screens. The impl module contains screens, ViewModels, UI state, actions, events, and the Koin module that installs Navigation 3 entry providers. Nothing outside the feature depends on the impl module; callers depend on api only. Multi-word feature folders, Gradle module names, and Kotlin packages should use one consistent convention; prefer package-mirroring directories such as feature/expense/details with feature.expense.details, or use one slug consistently everywhere. Domain-to-UI mapping lives in impl, not in domain or data."
+      "text": "Feature modules should be split into domain, data, api, and impl. The api module contains only NavKey route types and minimal public contracts; it has no Koin definitions and no screens. The impl module contains screens, ViewModels, UI state, actions, events, and the Koin module that installs Navigation 3 entry providers. Nothing outside the feature depends on the impl module; callers depend on api only. Multi-word feature module names (equal to directory names, unique) and Kotlin packages should use one consistent convention; document the slug-to-package mapping and use one slug consistently everywhere. Domain-to-UI mapping lives in impl, not in domain or data."
     },
     {
       "id": "chunk.dependency.rules",
@@ -58,7 +58,7 @@
         "endLine": 72
       },
       "summary": "Defines repository translation boundaries, cancellation-safe helpers, cache-first reads, shared Room builder setup, per-feature clients, and mapper placement.",
-      "text": "Repositories translate external systems into domain-safe behavior. They map DTOs and entities into domain models, convert infrastructure failures into domain errors, and expose domain-friendly return types. Repository helpers must always rethrow CancellationException. Prefer local cache as the first read path when appropriate. Common Room builder setup belongs in shared/core/database so feature data modules do not duplicate bundled SQLite driver or KMP-safe query dispatcher policy. Data modules that talk to a backend should own a named HttpClient unless there is a strong reason to share one. Mapping should stay near the boundary, with data mapping in data and domain-to-UI mapping in presentation."
+      "text": "Repositories translate external systems into domain-safe behavior. They map DTOs and entities into domain models, convert infrastructure failures into domain errors, and expose domain-friendly return types. Repository helpers must always rethrow CancellationException. Prefer local cache as the first read path when appropriate. Common Room builder setup belongs in shared/core-database so feature data modules do not duplicate bundled SQLite driver or KMP-safe query dispatcher policy. Data modules that talk to a backend should own a named HttpClient unless there is a strong reason to share one. Mapping should stay near the boundary, with data mapping in data and domain-to-UI mapping in presentation."
     },
     {
       "id": "chunk.presentation.practices",
@@ -101,8 +101,8 @@
         "startLine": 1,
         "endLine": 31
       },
-      "summary": "Defines shared/core/strings Compose Resources, no hardcoded user-visible strings, public Res export, and a canonical Res import path.",
-      "text": "Shared user-visible strings should come from the dedicated shared/core/strings Compose Resources module. Shared UI code should not hardcode user-visible strings. Resource modules that are consumed across module boundaries should export the generated Res class publicly. One canonical Res import path should be defined and used consistently across modules, such as com.dream.template.shared.core.strings.Res for template strings."
+      "summary": "Defines shared/core-strings Compose Resources, no hardcoded user-visible strings, public Res export, and a canonical Res import path.",
+      "text": "Shared user-visible strings should come from the dedicated shared/core-strings Compose Resources module. Shared UI code should not hardcode user-visible strings. Resource modules that are consumed across module boundaries should export the generated Res class publicly. One canonical Res import path should be defined and used consistently across modules, such as com.dream.template.shared.core.strings.Res for template strings."
     },
     {
       "id": "chunk.di.practices",
@@ -123,8 +123,8 @@
         "startLine": 1,
         "endLine": 29
       },
-      "summary": "Defines reusable testing anchors such as injected time, explicit repository boundaries, and shared test utilities in shared/core/testing.",
-      "text": "Keep domain pure, inject time, and use explicit repository interfaces with typed results to reduce mocking complexity. Shared fake providers and coroutine-aware helpers should live in shared/core/testing so features can reuse one test infrastructure baseline. Test feature behavior at the feature layer and queue semantics at the shared presentation layer."
+      "summary": "Defines reusable testing anchors such as injected time, explicit repository boundaries, and shared test utilities in shared/core-testing.",
+      "text": "Keep domain pure, inject time, and use explicit repository interfaces with typed results to reduce mocking complexity. Shared fake providers and coroutine-aware helpers should live in shared/core-testing so features can reuse one test infrastructure baseline. Test feature behavior at the feature layer and queue semantics at the shared presentation layer."
     },
     {
       "id": "chunk.defaults.and_anti_patterns",
@@ -135,7 +135,7 @@
         "endLine": 36
       },
       "summary": "Defines default rules for future projects and the main anti-patterns to avoid.",
-      "text": "Default rules include feature-based modules, Presentation -> Domain <- Data, pure Kotlin domain, smaller shared core modules, TimeProvider as the centralized time source, shared design system and strings, repository typed results, and shared business logic with platform implementations behind interfaces. Anti-patterns include casual cross-feature data coupling, raw preference parsing in UI or domain, direct system time usage, hardcoded shared UI strings, leaked route types, giant convention plugins, over-opinionated design systems, and overbuilt MVI frameworks."
+      "text": "Default rules include feature-based modules, Presentation -> Domain <- Data, pure Kotlin domain, smaller shared core modules, TimeProvider as the centralized time source, shared design system and strings, repository typed results, and shared business logic with platform implementations behind interfaces. Anti-patterns include casual cross-feature data coupling, raw preference parsing in UI or domain, direct system time usage, hardcoded shared UI strings, leaked route types, giant build templates, over-opinionated design systems, and overbuilt MVI frameworks."
     },
     {
       "id": "chunk.identity.practices",
@@ -146,7 +146,7 @@
         "endLine": 65
       },
       "summary": "Defines canonical app identity derivation, immediate normalization of package-defining surfaces, explicit rename audits, and feature path/package alignment.",
-      "text": "Dream should derive one canonical app identity before renaming anything, then normalize package roots, namespaces, application ids, and visible app identity from that source of truth. Generated projects should record an explicit rename audit across Gradle names, module namespaces, package declarations, manifests, iOS identity, and .features metadata. Feature directory names, Gradle module paths, and Kotlin package declarations should tell the same story; avoid mixing feature/expense-details folders with feature.expense.details packages without an explicit convention."
+      "text": "Dream should derive one canonical app identity before renaming anything, then normalize package roots, namespaces, application ids, and visible app identity from that source of truth. Generated projects should record an explicit rename audit across project.yaml and module.yaml names, module namespaces, package declarations, manifests, iOS identity, and .features metadata. Feature module names (directory names), module.yaml paths, and Kotlin package declarations should tell the same story; avoid mixing feature/expense-details folders with feature.expense.details packages without an explicit convention."
     },
     {
       "id": "chunk.composition_root.practices",
@@ -179,7 +179,7 @@
         "endLine": 52
       },
       "summary": "Defines feature api/impl boundary, cross-feature navigation rules, domain reuse, cross-feature data exceptions, and shared extraction signals.",
-      "text": "Feature impl modules must not depend directly on another feature impl module. Cross-feature navigation goes through the target feature api module, which owns the NavKey route types. Domain-only reuse can be valid for aggregators or dependent workflows when documented. Cross-feature data implementation reuse is a temporary MVP exception and should be recorded in features/decisions.yaml. Extract to shared modules when multiple features equally own the same persisted concept, when three or more features need the same behavior, or when ownership cannot be explained clearly."
+      "text": "Feature impl modules must not depend directly on another feature impl module. Cross-feature navigation goes through the target feature api module, which owns the NavKey route types. Domain-only reuse can be valid for aggregators or dependent workflows when documented. Cross-feature data implementation reuse is a temporary MVP exception and should be recorded in specs/decisions.yaml. Extract to shared modules when multiple features equally own the same persisted concept, when three or more features need the same behavior, or when ownership cannot be explained clearly."
     },
     {
       "id": "chunk.responsive.form_ime",
@@ -211,8 +211,8 @@
         "startLine": 1,
         "endLine": 47
       },
-      "summary": "Defines the packaged iOS folder structure for native SwiftUI and the intentionally thin Compose iOS host.",
-      "text": "The native SwiftUI iOS host should keep bridge code in Core, native UI models in Models, state holders in ViewModels, and SwiftUI screens in Views. The Compose Multiplatform iOS host should remain intentionally tiny, with the app entry point and a UIViewControllerRepresentable wrapper only. Test files should live in a sibling iosAppTests directory, and packaged starter copy should be clearly replaceable during project instantiation."
+      "summary": "Defines the packaged iOS folder structure for native SwiftUI (there is no Compose iOS host).",
+      "text": "The native SwiftUI iOS host should keep bridge code in Core, native UI models in Models, state holders in ViewModels, and SwiftUI screens in Views. Compose is Android-only, so iOS UI is SwiftUI only under iosApp/src. Swift unit tests live in iosApp/test (hosted appTests target), and packaged starter copy should be clearly replaceable during project instantiation."
     },
     {
       "id": "chunk.ios.kmp_bridge",
@@ -222,8 +222,8 @@
         "startLine": 1,
         "endLine": 43
       },
-      "summary": "Defines the native bridge boundary, Swift-friendly async throws interop, SKIE naming rules, and export/api visibility requirements.",
-      "text": "Use one dedicated bridge such as SharedCoreBridge as the native host's entry point into shared Kotlin repositories and keep Kotlin-to-Swift mapping inside that boundary. Prefer Swift-friendly async throws APIs over raw Kotlin Result wrappers. Trust SKIE's generated Swift surface for enum cases, initializer labels, and async wrappers instead of guessing ObjC names. If Swift should see transitive shared types, the framework must export those modules and the dependency chain must use api rather than implementation."
+      "summary": "Defines the native bridge boundary, Swift-friendly async throws interop over plain Kotlin/Native ObjC interop (no SKIE), and dependency/exported visibility requirements.",
+      "text": "Use one dedicated bridge per feature as the native host's entry point into shared Kotlin repositories and keep Kotlin-to-Swift mapping inside that boundary. Prefer Swift-friendly async throws APIs over raw Kotlin Result wrappers. There is no SKIE: import KotlinModules, call top-level functions through generated FileNameKt classes, use Kotlin *OrThrow wrappers, and note that enums and sealed classes are Swift classes so switch needs a default branch. If Swift should see transitive shared types, they must be reachable from iosApp dependencies via umbrella-core and marked exported where needed."
     },
     {
       "id": "chunk.ios.xcode_configuration",
@@ -233,8 +233,8 @@
         "startLine": 1,
         "endLine": 36
       },
-      "summary": "Defines Gradle-driven framework embedding, deterministic framework search paths, xcconfig-based identity, and shared Xcode schemes.",
-      "text": "Xcode should run the appropriate embedAndSignAppleFrameworkForXcode Gradle task for the chosen iOS host. FRAMEWORK_SEARCH_PATHS should point at shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME) without duplicate entries. TEAM_ID, BUNDLE_ID, and APP_NAME should live in Config.xcconfig. Packaged templates should use shared schemes in xcshareddata/xcschemes and should not depend on user-specific xcuserdata schemes."
+      "summary": "Defines module.xcodeproj under iosApp, KOTLIN_CLI_WRAPPER_PATH, manual deployment target, bundle id settings, and file-system-synchronized sources.",
+      "text": "The Xcode project is iosApp/module.xcodeproj with KOTLIN_CLI_WRAPPER_PATH = ../kotlin. IPHONEOS_DEPLOYMENT_TARGET must be set manually because the Toolchain does not set it. The bundle id is PRODUCT_BUNDLE_IDENTIFIER and the display name lives in Info.plist. Swift sources are file-system-synchronized so no pbxproj sync is needed. The JSON project format (project.xcproj) is not supported by Kotlin Toolchain 0.13."
     },
     {
       "id": "chunk.ios.testing",
@@ -244,8 +244,8 @@
         "startLine": 1,
         "endLine": 35
       },
-      "summary": "Defines XCTest packaging for the SwiftUI host, bridge-protocol mocking, and validation through xcodebuild plus runtime smoke checks.",
-      "text": "The native SwiftUI host should package an iosAppTests target with sample ViewModel tests and a shared Xcode scheme so xcodebuild test works out of the box. Mock the native bridge protocol instead of SKIE internals directly. Keep XCTest focused on native orchestration while shared business logic stays covered by Kotlin tests. Validate native hosts with xcodebuild build, xcodebuild test, and then runtime smoke flows after simulator launch is healthy."
+      "summary": "Defines the hosted appTests target, bridge-protocol mocking, and validation through xcodebuild test, ./kotlin build, and runtime smoke checks.",
+      "text": "The Xcode project has an app target (sole holder of the Kotlin integration script phase) and a hosted appTests target; Swift tests live in iosApp/test with @testable import app and run via xcodebuild test -project iosApp/module.xcodeproj -scheme app. Mock the native bridge protocol instead of framework internals. Keep shared business logic covered by Kotlin tests run with ./kotlin test --platform=iosSimulatorArm64. Validate native hosts with ./kotlin build -m iosApp --platform=iosSimulatorArm64, then runtime smoke flows after simulator launch is healthy."
     },
     {
       "id": "chunk.ios.string_localization",
@@ -256,7 +256,7 @@
         "endLine": 49
       },
       "summary": "Defines xcstrings-to-xml key/value sync rule, iOS-only string conventions, localized SwiftUI usage, and the verification workflow.",
-      "text": "Every shared xcstrings key must match a strings.xml name, and every English value must match. Format specifiers convert from %1$s to %@. iOS-only strings use an ios_ infix and exist only in the xcstrings. Use Text(\"key_name\") for localized lookup in SwiftUI views and String(localized:) for computed property return values. When adding or changing a string, update strings.xml first, then xcstrings, then verify both xcodebuild and Gradle still pass. No hardcoded user-visible strings in SwiftUI views."
+      "text": "Every shared xcstrings key must match a strings.xml name, and every English value must match. Format specifiers convert from %1$s to %@. iOS-only strings use an ios_ infix and exist only in the xcstrings. Use Text(\"key_name\") for localized lookup in SwiftUI views and String(localized:) for computed property return values. When adding or changing a string, update strings.xml first, then xcstrings, then verify both the iOS and Android Toolchain builds still pass. No hardcoded user-visible strings in SwiftUI views."
     }
   ]
 }

@@ -19,7 +19,7 @@ Prefer linking to those documents in discussions and change summaries instead of
 
 - [temp](temp): canonical starter project copied by the initializer
 - [ONBOARDING.md](ONBOARDING.md): human-readable guide to the project architecture, workflow, and validation model
-- [temp/features/](temp/features): generated app contracts, feature specs, decisions, reports, and retrospectives
+- [temp/specs/](temp/specs): generated app contracts, feature specs, decisions, reports, and retrospectives
 - [temp/maestro/](temp/maestro): Android and iOS smoke-flow scaffolding
 - [temp/.opencode/opencode.json](temp/.opencode/opencode.json): packaged OpenCode instruction injection and MCP config
 - [temp/.opencode/agents/](temp/.opencode/agents): Dream agent definitions (dream-general, dream-research, dream-designer, dream-implementer, dream-implementer-ui, dream-tester, dream-inspector)
@@ -42,9 +42,16 @@ Prefer linking to those documents in discussions and change summaries instead of
 - [temp/.opencode/guidance/templates/](temp/.opencode/guidance/templates): feature contract, feature report, feature spec, plan, maestro smoke checklist, retrospective, and verification report templates
 - [temp/.opencode/knowledge-graph/README.md](temp/.opencode/knowledge-graph/README.md): packaged reusable architecture rules and source graph
 - [temp/.opencode/scripts/dream-preflight.sh](temp/.opencode/scripts/dream-preflight.sh): local readiness check for git, Android SDK, and tooling
-- [temp/.opencode/scripts/sync-pbxproj.rb](temp/.opencode/scripts/sync-pbxproj.rb): auto-registers orphaned Swift files in Xcode project.pbxproj
+- [temp/.opencode/scripts/sync-pbxproj.rb](temp/.opencode/scripts/sync-pbxproj.rb): obsolete under the Kotlin Toolchain (the Xcode project uses a file-system-synchronized folder, so new Swift files are picked up automatically); kept only for reference
+- [temp/.opencode/scripts/fix-ios-project.sh](temp/.opencode/scripts/fix-ios-project.sh): re-applies hand-maintained `module.xcodeproj` settings (wrapper path, deployment target, bundle id) after the Toolchain regenerates the project
 - [temp/.opencode/scripts/remove-sample.sh](temp/.opencode/scripts/remove-sample.sh): removes sample feature files, strips sample deps, and checks for leftovers
 - [temp/.opencode/scripts/start-codebase-memory-mcp.sh](temp/.opencode/scripts/start-codebase-memory-mcp.sh): launches codebase-memory-mcp binary for code intelligence via persistent knowledge graph
+
+## Build system: Kotlin Toolchain (Alpha)
+
+The starter builds with the JetBrains Kotlin Toolchain (`./kotlin` CLI, YAML config, v0.13, Alpha). There is no Gradle, `gradlew`, or `build.gradle.kts`. Modules are declared in `temp/project.yaml` and each has a `module.yaml`; module names equal directory names (for example `core-domain`, `sample-impl`). iOS is native SwiftUI only (`temp/iosApp`); Android UI is Jetpack Compose in Android-only modules.
+
+Not supported by Toolchain 0.13: SKIE, Swift export, and the Xcode 27 JSON project format (`project.xcproj`). The Xcode project has an `app` target (carries the Kotlin integration script phase) and a hosted `appTests` unit-test target (Swift tests in `iosApp/test`, run with `xcodebuild test`). Full reference: [temp/.opencode/guidance/reference/kotlin-toolchain.md](temp/.opencode/guidance/reference/kotlin-toolchain.md).
 
 ## MCP Servers
 
@@ -81,23 +88,30 @@ Code intelligence via persistent knowledge graph. Complements the prescriptive k
 
 ## Validation
 
-The repository root is not the main Gradle execution surface. For starter validation, run commands from [temp](temp):
+The repository root is not the main build execution surface. For starter validation, run commands from [temp](temp):
 
 ```bash
 cd temp
 ./.opencode/scripts/dream-preflight.sh
-./gradlew :feature:sample:impl:allTests :shared:navigation:allTests :shared:core:domain:allTests :shared:core:data:allTests :shared:core:presentation:allTests :shared:core:testing:allTests
-./gradlew :androidApp:assembleDebug
-xcodebuild -project iosApp-swiftui/iosApp.xcodeproj -scheme iosApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.2' build
+./kotlin build
+./kotlin test --platform=android
+./kotlin test --platform=iosSimulatorArm64
+./kotlin build -m androidApp --platform=android
+./kotlin build -m iosApp --platform=iosSimulatorArm64
 ```
+
+Focused iteration example: `./kotlin test -m sample-impl --platform=android`.
 
 Dream's stricter final verification target is documented in [temp/.opencode/guidance/dream-agent-operating-guide.md](temp/.opencode/guidance/dream-agent-operating-guide.md):
 
 ```bash
-./gradlew allTests
-./gradlew :androidApp:assembleDebug
+./kotlin build
+./kotlin test --platform=android
+./kotlin test --platform=iosSimulatorArm64
+./kotlin build -m androidApp --platform=android
+./kotlin build -m iosApp --platform=iosSimulatorArm64
 # Android CLI install/launch/log inspection
-# xcodebuild plus xcrun simctl build/install/launch/log inspection
+# xcrun simctl install/launch/log inspection
 ```
 
 Use the lighter template commands for focused iteration, but do not report final success without the required verification behavior or a documented blocker.

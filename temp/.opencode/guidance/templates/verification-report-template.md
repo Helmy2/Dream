@@ -45,5 +45,5 @@ Use this exact status vocabulary for every check: `passed`, `blocked by environm
 ## Template Feedback
 
 - Retrospective needed: `<yes | no>`
-- Retrospective path: `<features/template-improvement-retrospective.md | not applicable>`
+- Retrospective path: `<specs/template-improvement-retrospective.md | not applicable>`
 - Reusable template lessons: `<short summary or not applicable>`

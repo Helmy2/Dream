@@ -1,0 +1,15 @@
+product:
+  type: kmp/lib
+  platforms: [android, iosArm64, iosSimulatorArm64]
+
+apply:
+  - //templates/common.module-template.yaml
+
+dependencies:
+  - //shared/core-domain
+  - $libs.androidx.lifecycle.viewmodel: exported
+  - $libs.kotlinx.coroutines.core
+
+settings:
+  android:
+    namespace: com.dream.template.shared.core.presentation

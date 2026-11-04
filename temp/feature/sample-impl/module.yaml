@@ -1,0 +1,36 @@
+product:
+  type: kmp/lib
+  platforms: [android]
+
+apply:
+  - //templates/feature-impl.module-template.yaml
+
+dependencies:
+  - //feature/sample-api
+  - //feature/sample-domain
+  - //shared/core-domain
+  - //shared/core-presentation
+  - //shared/core-strings
+  - //shared/designsystem
+  - //shared/navigation
+  - $libs.compose.runtime
+  - $libs.compose.foundation
+  - $libs.compose.components.resources
+  - $libs.koin.compose
+  - $libs.koin.composeNavigation3
+  - $libs.koin.composeViewModel
+  - $libs.compose.material3
+  - $libs.compose.ui
+
+test-dependencies:
+  - //shared/core-testing
+
+settings:
+  android:
+    namespace: com.dream.template.feature.sample.impl
+  kotlin:
+    compilerPlugins:
+      - id: io.insert-koin.compiler.plugin
+        dependency: $libs.koin.compiler.plugin
+        options:
+          moduleId: sample-impl

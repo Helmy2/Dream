@@ -4,7 +4,7 @@ Use this checklist when adding or replacing a Dream feature module.
 
 Sections are tagged by condition:
 - **Always** — apply to every feature
-- **iOS** — apply only when `iosUiStrategy` is `swiftui`
+- **iOS** — apply when the feature has an iOS (SwiftUI) screen
 - **Forms** — apply only when feature has editable text inputs
 - **Time** — apply only when feature uses dates, timestamps, or time-sensitive logic
 - **First Feature** — apply only when removing the sample feature
@@ -17,44 +17,46 @@ For detailed rules, see `.opencode/knowledge-graph/rules-condensed.md`.
 
 ## Phase 0: Plan & User Review (Always)
 
-- [ ] Create `features/<feature-name>/plan.md` using the plan template before any implementation.
+- [ ] Create `specs/<feature-name>/plan.md` using the plan template before any implementation.
 - [ ] Plan must define: feature goal, priority, modules to create/modify, screens with states, architecture decisions, dependencies, and phases.
 - [ ] Present the plan to the user and ask: **questions? edits? confirm? deny?**
 - [ ] On **Confirm**: create feature branch (`dream/feature/<name>`) and proceed.
 - [ ] On **Edit**: update plan and re-present; loop until confirmed or denied.
-- [ ] On **Deny**: stop and document in `features/<feature>/report.md`.
+- [ ] On **Deny**: stop and document in `specs/<feature>/report.md`.
 
 ## Contract First (Always)
 
-- [ ] Create or update `features/<feature-name>/contract.yaml` before implementation starts.
+- [ ] Create or update `specs/<feature-name>/contract.yaml` before implementation starts.
 - [ ] Define entity fields, action inputs, screen states, design expectations, and tests by layer.
 - [ ] Use meaningful timestamp field names with units (e.g., `createdAtMillis`).
 - [ ] Mark `timeSensitiveBehavior.usesTimeProvider: true` if feature uses time-sensitive logic (see Time section).
 
 ## Feature Modules (Always)
 
-- [ ] Add `feature/<feature-name>/domain/build.gradle.kts`.
-- [ ] Add `feature/<feature-name>/data/build.gradle.kts` when persistence or network is needed.
-- [ ] Add `feature/<feature-name>/api/build.gradle.kts` with `NavKey` route types only; no Koin definitions.
-- [ ] Add `feature/<feature-name>/impl/build.gradle.kts` with screens, ViewModels, UI state, and Koin module.
-- [ ] For multi-word features, keep folder paths, Gradle modules, and packages aligned.
-- [ ] Add feature includes to `settings.gradle.kts`.
+- [ ] Add `feature/<feature-name>-domain/module.yaml` (`kmp/lib`, pure Kotlin).
+- [ ] Add `feature/<feature-name>-data/module.yaml` when persistence or network is needed.
+- [ ] Add `feature/<feature-name>-api/module.yaml` with `NavKey` route types only; no Koin definitions.
+- [ ] Add `feature/<feature-name>-impl/module.yaml` (`platforms: [android]`, Compose) with screens, ViewModels, UI state, and Koin module.
+- [ ] Module names equal directory names and must be unique across the project (e.g. `<feature-name>-domain`, never a bare `domain`).
+- [ ] Set a unique Koin compiler plugin `moduleId` (the module name) in each module that applies the Koin plugin.
+- [ ] For multi-word features, keep folder names, module names, and packages aligned.
+- [ ] Add each new module to `project.yaml` (create dir + `module.yaml` + `project.yaml` entry), and add `//feature/<feature-name>-...` dependencies in the consuming `module.yaml` files.
 - [ ] Keep repository interfaces in domain, implementations in data.
 - [ ] Inject PresentationMapper into ViewModels via Koin `factory` — not in composables.
 - [ ] Expose UI models (not domain types) in ViewModel state.
 - [ ] Add unit tests for PresentationMapper.
-- [ ] No module outside this feature should depend on `feature/<name>/impl`; callers use `api` only.
+- [ ] No module outside this feature should depend on `feature/<name>-impl`; callers use `api` only.
 
 ## Wiring (Always)
 
-- [ ] Add `NavKey` route types in `feature/<feature-name>/api`.
-- [ ] Install Navigation 3 entry providers in `feature/<feature-name>/impl` Koin module.
+- [ ] Add `NavKey` route types in `feature/<feature-name>-api`.
+- [ ] Install Navigation 3 entry providers in `feature/<feature-name>-impl` Koin module.
 - [ ] Keep shared navigation centralized in `shared/navigation`.
 - [ ] Import feature `impl` Koin modules in `shared/umbrella-ui`.
 - [ ] Register data/domain dependencies in `shared/umbrella-core`.
 - [ ] Use Koin compiler plugin DSL; no `@KoinViewModel`, `@Module`, or `@ComponentScan`.
-- [ ] Apply `libs.plugins.koinCompiler` in modules using compiler DSL.
-- [ ] Add all user-visible strings to `shared/core/strings` before writing UI text.
+- [ ] Configure the Koin compiler plugin (`settings.kotlin.compilerPlugins` with unique `moduleId`) in `module.yaml` of modules using compiler DSL.
+- [ ] Add all user-visible strings to `shared/core-strings` before writing UI text.
 - [ ] Cross-feature navigation goes through target feature's `api` only.
 
 ## Design System (Always)
@@ -68,7 +70,7 @@ For detailed rules, see `.opencode/knowledge-graph/rules-condensed.md`.
 - [ ] Add domain tests for model construction, value rules, and repository contracts.
 - [ ] Add data tests for entity/domain mapping and repository behavior.
 - [ ] Add presentation tests for loading, empty, content, error, action handling, and event emission.
-- [ ] Ensure required `commonTest` dependencies are present before writing tests.
+- [ ] Ensure required `test-dependencies` are declared in each module's `module.yaml` before writing tests.
 
 ## Git Branching (Always)
 
@@ -81,19 +83,19 @@ For detailed rules, see `.opencode/knowledge-graph/rules-condensed.md`.
 
 ## Phase Checkpoints (Always)
 
-- [ ] After each phase completes, append to `features/<feature>/checkpoints.md`.
+- [ ] After each phase completes, append to `specs/<feature>/checkpoints.md`.
 - [ ] Checkpoint includes: phase name, git commit hash, status, timestamp.
 - [ ] If a later phase fails, offer to roll back to last good checkpoint.
 
 ## Verification And Commit (Always)
 
-- [ ] Run required Gradle, platform builds, and UI inspection or document precise blockers.
+- [ ] Run required `./kotlin test`/`./kotlin build` commands, platform builds, and UI inspection or document precise blockers.
 - [ ] Record verification in explicit buckets: passed, blocked by environment, not run, not applicable.
 - [ ] Run `dream-inspector` or manual review fallback against contract parity and architecture rules.
 - [ ] Run `git status`, `git diff`, and `git log --oneline -10`.
 - [ ] Stage only intended files.
 - [ ] Present commit summary to user and get explicit approval before committing.
-- [ ] Write `features/<feature-name>/retrospective.md`.
+- [ ] Write `specs/<feature-name>/retrospective.md`.
 
 ## Preflight (Always)
 
@@ -105,16 +107,16 @@ For detailed rules, see `.opencode/knowledge-graph/rules-condensed.md`.
 
 ## iOS SwiftUI Host (iOS)
 
-Apply only when `iosUiStrategy` is `swiftui`:
+Apply when the feature has an iOS screen:
 
-- [ ] Create SwiftUI views in `iosApp/<FeatureName>/Views/`.
-- [ ] Create `@Observable` ViewModels in `iosApp/<FeatureName>/ViewModels/`.
-- [ ] Create Swift models in `iosApp/<FeatureName>/Models/` when needed.
+- [ ] Create SwiftUI views in `iosApp/src/<FeatureName>/Views/`.
+- [ ] Create `@Observable` ViewModels in `iosApp/src/<FeatureName>/ViewModels/`.
+- [ ] Create Swift models in `iosApp/src/<FeatureName>/Models/` when needed.
 - [ ] Extend bridge layer (`Core/SharedCoreBridge`) with new capabilities.
-- [ ] Add XCTest coverage in `iosAppTests/<FeatureName>/`.
-- [ ] Add string keys to `Localizable.xcstrings` matching `strings.xml`.
-- [ ] Run `ruby scripts/sync-pbxproj.rb` after adding/removing `.swift` files.
-- [ ] Run `xcodebuild build` and `xcodebuild test`.
+- [ ] Add string keys to `iosApp/src/Localizable.xcstrings` matching `strings.xml`.
+- [ ] New `.swift` files in `iosApp/src` are picked up automatically (no project sync script).
+- [ ] Run `./kotlin build -m iosApp --platform=iosSimulatorArm64` and install/launch with `xcrun simctl`. 
+- [ ] Run Swift unit tests: `xcodebuild test -project iosApp/module.xcodeproj -scheme app -destination 'platform=iOS Simulator,name=iPhone 17 Pro' CODE_SIGNING_ALLOWED=NO` (tests in `iosApp/test`, target `appTests`).
 
 ## Responsive Forms And IME (Forms)
 
@@ -157,7 +159,7 @@ Apply when using `/dream-ui-fix`:
 - [ ] Phase 3: Apply fix only to presentation layer — never domain, data, or api.
 - [ ] Phase 4: Re-capture screenshot + element tree for before/after comparison.
 - [ ] Phase 4: Present before/after evidence to user and get signoff.
-- [ ] Write `features/ui-fix/report.md`.
+- [ ] Write `specs/ui-fix/report.md`.
 - [ ] Commit only when user confirms fix is correct.
 
 ## Bug Fix Workflow
@@ -170,5 +172,5 @@ Apply when using `/dream-bug-fix`:
 - [ ] Phase 3: Apply minimal fix — fix the bug, do not refactor.
 - [ ] Phase 4: Run targeted re-verification per fixed layer.
 - [ ] Phase 4: Check skip conditions after each round.
-- [ ] Write `features/bug-fix/report.md`.
+- [ ] Write `specs/bug-fix/report.md`.
 - [ ] Commit only when verification is green and user confirms.

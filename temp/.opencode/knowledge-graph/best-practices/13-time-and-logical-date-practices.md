@@ -6,7 +6,7 @@ This architecture benefits from a particularly reusable time model.
 
 A dedicated production time provider should be the sole allowed caller of `Clock.System.now()`.
 
-A `TimeProvider` interface lives in `shared/core/domain` and should be injected through constructors into any class that needs the current time, current date, logical month, or shared date formatting. The production implementation is `SystemTimeProvider`; tests should use `FakeTimeProvider` from `shared/core/testing`.
+A `TimeProvider` interface lives in `shared/core-domain` and should be injected through constructors into any class that needs the current time, current date, logical month, or shared date formatting. The production implementation is `SystemTimeProvider`; tests should use `FakeTimeProvider` from `shared/core-testing`.
 
 Core API:
 
@@ -21,9 +21,9 @@ Rules:
 - Use `TimeProvider` injection for: record creation timestamps, logical month/year filters, date comparisons, shared date/date-time formatting, and any other time-derived value.
 - Date fields in contracts and code must be named by meaning and unit, for example `createdAtMillis`, `occurredAtMillis`, or `dueAtMillis`; avoid ambiguous names such as `date`, `dateTime`, or `dateMillis`.
 - Do not create feature-local date formatting helpers in common code; use `TimeProvider.formatDate(...)` or `TimeProvider.formatDateTime(...)`.
-- Shared formatting is deterministic English-only. Do not use `java.time.format`, `java.text.*`, `java.util.*`, or platform formatters in `commonMain`.
+- Shared formatting is deterministic English-only. Do not use `java.time.format`, `java.text.*`, `java.util.*`, or platform formatters in common `src`.
 - Do NOT use `Clock.System.now()` in companion objects, default parameter values, or top-level property initializers.
-- The `FakeTimeProvider` in `shared/core/testing` should be used in all tests that involve time-sensitive behavior.
+- The `FakeTimeProvider` in `shared/core-testing` should be used in all tests that involve time-sensitive behavior.
 
 ### 13.2 Logical date is different from calendar date
 

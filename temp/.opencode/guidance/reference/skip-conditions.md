@@ -36,7 +36,7 @@ If the same environment blocker (no Android device, missing SDK) appears in cons
 When any skip condition triggers, `dream-general` must:
 
 1. **Stop repairing immediately**
-2. **Record the skip condition** in `features/verification-report.md`:
+2. **Record the skip condition** in `specs/verification-report.md`:
    - Skip condition type
    - Iteration count
    - Failure history
@@ -55,7 +55,7 @@ When a phase fails or skip condition triggers, present these options:
 
 #### 2. **Rollback**
 - Use `git checkout <last-checkpoint>` to revert to last good state
-- Checkpoints are in `features/<feature>/checkpoints.md`
+- Checkpoints are in `specs/<feature>/checkpoints.md`
 - Allows user to try a different approach
 
 #### 3. **Skip**
@@ -66,7 +66,7 @@ When a phase fails or skip condition triggers, present these options:
 #### 4. **Stop**
 - End workflow immediately
 - Preserve feature branch for manual fix
-- Document reason in `features/<feature>/report.md`
+- Document reason in `specs/<feature>/report.md`
 - User can resume later with `/dream-resume`
 
 ### Example Error Recovery Message
@@ -74,7 +74,7 @@ When a phase fails or skip condition triggers, present these options:
 ```markdown
 ## Phase 3 Failed: iOS Build Error
 
-**Root cause**: Missing Swift bridge export in `iosApp-swiftui/iosApp/Core/`
+**Root cause**: Missing Swift bridge export in `iosApp/src/Core/`
 
 **Iteration**: 2 of 5
 **Failures**: 3 (2 iOS build errors, 1 iOS test failure)
@@ -82,8 +82,7 @@ When a phase fails or skip condition triggers, present these options:
 ### Recovery Options
 
 1. **Repair**: Delegate to `dream-implementer-ui` (platform: ios) with fix suggestion:
-   - Add missing export to `SharedBridge.swift`
-   - Run `ruby scripts/sync-pbxproj.rb`
+   - Add the missing `//feature/...` dependency to `shared/umbrella-core/module.yaml` (so it is part of `KotlinModules`) or fix the Swift usage
 
 2. **Rollback**: `git checkout a1b2c3d` (last checkpoint: Phase 2 completed)
 
@@ -99,4 +98,4 @@ When a phase fails or skip condition triggers, present these options:
 1. Before first repair, record initial failure count and set iteration = 1
 2. After each repair, delegate `dream-tester` to run verification and record: iteration number, failure count, list of failing tests/checks, whether new failures appeared
 3. Before starting next repair, check all skip conditions against tracked data
-4. When loop ends (green or blocked), include iteration history in `features/verification-report.md`
+4. When loop ends (green or blocked), include iteration history in `specs/verification-report.md`

@@ -64,9 +64,9 @@ Implementer applies minimal fix. No contract.yaml, no ui-spec.md.
 
 `dream-tester` runs targeted verification:
 
-- If only domain/data changed: `./gradlew :feature:<name>:domain:allTests` + `./gradlew :feature:<name>:data:allTests`
-- If only impl changed: `./gradlew :feature:<name>:impl:allTests` + `./gradlew :androidApp:assembleDebug`
-- If only iOS changed: `xcodebuild build`
+- If only domain/data changed: `./kotlin test -m <name>-domain --platform=android` + `./kotlin test -m <name>-data --platform=android`
+- If only impl changed: `./kotlin test -m <name>-impl --platform=android` + `./kotlin build -m androidApp --platform=android`
+- If only iOS changed: `./kotlin build -m iosApp --platform=iosSimulatorArm64`
 - If shared/* changed: Full verification ladder
 
 
@@ -106,14 +106,14 @@ Typo in expense_title string: "Expnese" should be "Expense"
 ### dream-general
 ```
 Issue: Typo in expense_title string
-Fix: Change "Expnese" to "Expense" in shared/core/strings/src/commonMain/composeResources/values/strings.xml line 12
+Fix: Change "Expnese" to "Expense" in shared/core-strings/composeResources/values/strings.xml line 12
 ```
 
 ### dream-implementer
 Applies fix to strings.xml.
 
 ### dream-tester
-Runs: `./gradlew :shared:core:strings:allTests`
+Runs: `./kotlin test -m core-strings --platform=android`
 Result: Passed
 
 ### dream-general

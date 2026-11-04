@@ -49,8 +49,8 @@ Maps topics to full best-practice files. Use this to find specific rules quickly
 |-------|------|-----------|
 | iOS Structure | `35-ios-project-structure-practices.md` | SwiftUI host layout |
 | iOS Bridge | `36-ios-kmp-bridge-practices.md` | Swift↔Kotlin boundary |
-| iOS Xcode | `37-ios-xcode-configuration-practices.md` | Framework paths, schemes |
-| iOS Testing | `38-ios-testing-practices.md` | XCTest packaging |
+| iOS Xcode | `37-ios-xcode-configuration-practices.md` | module.xcodeproj, deployment target |
+| iOS Testing | `38-ios-testing-practices.md` | Single-app-target limitation, Kotlin iOS tests |
 | iOS Strings | `39-ios-string-localization-practices.md` | xcstrings sync |
 
 ## Quick Lookup

@@ -1,0 +1,344 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 110;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		3F42FEB012B47B2DFF5E9A82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3C0D763B8B620EF7430B703E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6FBEC40534300DC004EE06D4;
+			remoteInfo = app;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		6FBECDC773A769B04A490886 /* iosApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7761FA3BC26985C8B9AC4609 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; name = Info.plist; path = src/Info.plist; sourceTree = "<group>"; };
+		A1B2C3D4E5F60718293A4B5C /* appTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = appTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		D03FF641A0954DA8661CCA51 /* Exceptions for "src" folder in "app" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 6FBEC40534300DC004EE06D4 /* app */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		4A0862674BA1A7570C362830 /* src */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D03FF641A0954DA8661CCA51 /* Exceptions for "src" folder in "app" target */,
+			);
+			path = src;
+			sourceTree = SOURCE_ROOT;
+		};
+		530076A0FCF2716D0A9543FF /* test */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = test;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7C8337DE966A3C0707B45180 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+		CBB78717F80AFDC618365352 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		40D3DAA8612D902096BFDB73 = {
+			isa = PBXGroup;
+			children = (
+				985C3CA482988763E2B823C9 /* Products */,
+				7761FA3BC26985C8B9AC4609 /* Info.plist */,
+				4A0862674BA1A7570C362830 /* src */,
+				530076A0FCF2716D0A9543FF /* test */,
+			);
+			sourceTree = "<group>";
+		};
+		985C3CA482988763E2B823C9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6FBECDC773A769B04A490886 /* iosApp.app */,
+				A1B2C3D4E5F60718293A4B5C /* appTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6FBEC40534300DC004EE06D4 /* app */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CB91009D875BC52B5A1620B6 /* Build configuration list for PBXNativeTarget "app" */;
+			buildPhases = (
+				F612AF93505B85FE282BA983 /* Build Kotlin */,
+				F4E27D8EDB680E01B2F87425 /* Sources */,
+				CBB78717F80AFDC618365352 /* Frameworks */,
+				3AD852D81BABA10D8F139A5B /* Resources */,
+			);
+			buildRules = (
+			);
+			fileSystemSynchronizedGroups = (
+				4A0862674BA1A7570C362830 /* src */,
+			);
+			name = app;
+			productName = app;
+			productReference = 6FBECDC773A769B04A490886 /* iosApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A1B2C3D4E5F60718293A4B5D /* appTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CEA0F7828D9EE9EBE7F54230 /* Build configuration list for PBXNativeTarget "appTests" */;
+			buildPhases = (
+				BCC0FCABD0C577C6A5D47086 /* Sources */,
+				7C8337DE966A3C0707B45180 /* Frameworks */,
+				ECCBD4DD91099368CED37CE0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D5263D3133B24A96BA76BC29 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				530076A0FCF2716D0A9543FF /* test */,
+			);
+			name = appTests;
+			productName = appTests;
+			productReference = A1B2C3D4E5F60718293A4B5C /* appTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3C0D763B8B620EF7430B703E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = NO;
+				TargetAttributes = {
+					A1B2C3D4E5F60718293A4B5D = {
+						TestTargetID = 6FBEC40534300DC004EE06D4;
+					};
+				};
+			};
+			buildConfigurationList = 564B9CCAD78F17DEB9EACFDF /* Build configuration list for PBXProject "module" */;
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				English,
+				en,
+			);
+			mainGroup = 40D3DAA8612D902096BFDB73;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 110;
+			productRefGroup = 985C3CA482988763E2B823C9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6FBEC40534300DC004EE06D4 /* app */,
+				A1B2C3D4E5F60718293A4B5D /* appTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3AD852D81BABA10D8F139A5B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		ECCBD4DD91099368CED37CE0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		F612AF93505B85FE282BA983 /* Build Kotlin */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			name = "Build Kotlin";
+			shellPath = /bin/sh;
+			shellScript = "# !KOTLIN INTEGRATION STEP!\n# This script is managed by the Kotlin Toolchain, do not edit manually!\n\"${KOTLIN_CLI_WRAPPER_PATH}\" tool xcode-integration\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BCC0FCABD0C577C6A5D47086 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+		F4E27D8EDB680E01B2F87425 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D5263D3133B24A96BA76BC29 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6FBEC40534300DC004EE06D4 /* app */;
+			targetProxy = 3F42FEB012B47B2DFF5E9A82 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		067BB7E267F03C4F0D31753B /* Debug configuration for PBXProject "module" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		1F44FBDDD2A6E75F5B4643F8 /* Debug configuration for PBXNativeTarget "appTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.dream.template.ios.tests;
+				PRODUCT_NAME = appTests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1 2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iosApp.app/iosApp";
+			};
+			name = Debug;
+		};
+		362D5FDC2CBF974ECC02DBE7 /* Release configuration for PBXNativeTarget "app" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				INFOPLIST_FILE = src/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				KOTLIN_CLI_WRAPPER_PATH = ../kotlin;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.dream.template.ios;
+				PRODUCT_MODULE_NAME = app;
+				PRODUCT_NAME = iosApp;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1 2";
+			};
+			name = Release;
+		};
+		43A3AB49FEDDB461F0032C45 /* Debug configuration for PBXNativeTarget "app" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INFOPLIST_FILE = src/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				KOTLIN_CLI_WRAPPER_PATH = ../kotlin;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dream.template.ios;
+				PRODUCT_MODULE_NAME = app;
+				PRODUCT_NAME = iosApp;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1 2";
+			};
+			name = Debug;
+		};
+		472B37BC8DCDEE3289835916 /* Release configuration for PBXNativeTarget "appTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.dream.template.ios.tests;
+				PRODUCT_NAME = appTests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1 2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iosApp.app/iosApp";
+			};
+			name = Release;
+		};
+		91869DC7E9DA76BA6F697E53 /* Release configuration for PBXProject "module" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		564B9CCAD78F17DEB9EACFDF /* Build configuration list for PBXProject "module" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				067BB7E267F03C4F0D31753B /* Debug configuration for PBXProject "module" */,
+				91869DC7E9DA76BA6F697E53 /* Release configuration for PBXProject "module" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		CB91009D875BC52B5A1620B6 /* Build configuration list for PBXNativeTarget "app" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43A3AB49FEDDB461F0032C45 /* Debug configuration for PBXNativeTarget "app" */,
+				362D5FDC2CBF974ECC02DBE7 /* Release configuration for PBXNativeTarget "app" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		CEA0F7828D9EE9EBE7F54230 /* Build configuration list for PBXNativeTarget "appTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1F44FBDDD2A6E75F5B4643F8 /* Debug configuration for PBXNativeTarget "appTests" */,
+				472B37BC8DCDEE3289835916 /* Release configuration for PBXNativeTarget "appTests" */,
+			);
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3C0D763B8B620EF7430B703E /* Project object */;
+	validationLevel = 1;
+}

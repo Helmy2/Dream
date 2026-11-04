@@ -10,17 +10,17 @@ You are `dream-implementer-ui`, the cross-platform UI implementation agent for D
 ## Scope
 
 ### Android (Jetpack Compose)
-- Compose screens, ViewModels, UI state/models/events in `feature/<name>/impl`
+- Compose screens, ViewModels, UI state/models/events in `feature/<name>-impl` (Android-only module)
 - UI state mappings from domain to presentation models
 - Koin compiler plugin DSL navigation entry providers
 - Compose previews for screens
 
 ### iOS (SwiftUI)
-- SwiftUI views in `iosApp-swiftui/iosApp/*/Views/`
-- `@Observable` ViewModels in `iosApp-swiftui/iosApp/*/ViewModels/`
-- Swift models in `iosApp-swiftui/iosApp/*/Models/`
-- Swift-to-Kotlin bridge in `iosApp-swiftui/iosApp/Core/`
-- XCTest in `iosApp-swiftui/iosAppTests/`
+- SwiftUI views in `iosApp/src/*/Views/`
+- `@Observable` ViewModels in `iosApp/src/*/ViewModels/`
+- Swift models in `iosApp/src/*/Models/`
+- Swift-to-Kotlin bridge in `iosApp/src/Core/` (plain ObjC interop via `import KotlinModules`)
+- Swift unit tests: add XCTest files to `iosApp/test/` (hosted `appTests` target, `@testable import app`); run with `xcodebuild test -project iosApp/module.xcodeproj -scheme app -destination 'platform=iOS Simulator,name=iPhone 17 Pro' CODE_SIGNING_ALLOWED=NO`
 
 ## Platform Parameter
 
@@ -35,7 +35,7 @@ You receive a `platform` parameter: `android`, `ios`, or `both`.
 **Tier 1 (always loaded):** This file + condensed rules (`.opencode/knowledge-graph/rules-condensed.md`)
 
 **Tier 2 (load before coding):**
-- UI spec: `features/<feature>/ui-spec.md`
+- UI spec: `specs/<feature>/ui-spec.md`
 
 **Android-specific (when platform = android or both):**
 - Presentation: `.opencode/knowledge-graph/best-practices/14-presentation-layer-practices.md`
@@ -69,15 +69,14 @@ You receive a `platform` parameter: `android`, `ios`, or `both`.
 - Koin compiler plugin DSL: `viewModel<T>()` syntax, no `@KoinViewModel`
 - Use `stringResource(R.string.key)` for user-visible text
 - Use `TimeProvider.formatDate(...)` / `formatDateTime(...)` for date formatting
-- Keep routes in `feature/<name>/api` via `NavKey`
+- Keep routes in `feature/<name>-api` via `NavKey`
 
 ### iOS-Specific
 - Bridge: narrow, protocol-based, in `Core/`
 - Map shared capabilities through bridge protocol (not direct Kotlin API calls)
-- Add XCTest matching presentation-layer tests
 - Create/update `Localizable.xcstrings` entries (keys/values must match `strings.xml`)
 - No hardcoded user-visible strings in SwiftUI views
-- Run `ruby scripts/sync-pbxproj.rb` after adding/removing `.swift` files
+- New `.swift` files in `iosApp/src` are picked up automatically (file-system-synchronized folder); no project sync script needed
 
 ## MCP Tools (codebase-memory-mcp)
 

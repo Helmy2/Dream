@@ -26,11 +26,11 @@ Translate feature contracts into visual state definitions before platform UI imp
 
 ## Input
 
-Read feature contract from `features/<feature>/contract.yaml`.
+Read feature contract from `specs/<feature>/contract.yaml`.
 
 ## Output
 
-Author `features/<feature>/ui-spec.md` defining per screen:
+Author `specs/<feature>/ui-spec.md` defining per screen:
 - Screen name and purpose
 - View states: Loading, Empty, Content, Error (triggers + user sees)
 - Component hierarchy: shared design-system components by name
@@ -47,4 +47,4 @@ Author `features/<feature>/ui-spec.md` defining per screen:
 
 ## Constraints
 
-Do not edit files outside `features/`, write code, or act as final reviewer.
+Do not edit files outside `specs/`, write code, or act as final reviewer.

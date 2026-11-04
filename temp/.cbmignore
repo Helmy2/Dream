@@ -1,0 +1,18 @@
+# Build output and tool caches
+build/
+.kotlin/
+.opencode/
+
+# Generated Xcode / Compose resource output
+**/module.xcodeproj/
+**/xcuserdata/
+**/*.cvr
+
+# Dream metadata (not code)
+specs/
+maestro/
+graphify-out/
+.codebase-memory/
+
+# Lockfiles / catalogs
+libs.versions.toml

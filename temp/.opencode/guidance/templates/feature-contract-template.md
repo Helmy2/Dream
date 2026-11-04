@@ -6,7 +6,6 @@
 app:
   name: ""
   package: ""
-  iosUiStrategy: "swiftui"  # or "compose"
 ```
 
 ## Decisions

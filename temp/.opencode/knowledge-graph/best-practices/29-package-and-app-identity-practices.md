@@ -8,10 +8,9 @@ Before renaming project files or package roots, derive a canonical identity that
 
 - app display name
 - canonical package root
-- Android application id
-- Android namespace values
-- iOS bundle or visible app identity where applicable
-- Gradle root project name
+- Android application id (`androidApp/module.yaml`)
+- Android namespace values (each `module.yaml`)
+- iOS bundle id (`PRODUCT_BUNDLE_IDENTIFIER` in `iosApp/module.xcodeproj`) and `CFBundleDisplayName` in `iosApp/src/Info.plist`
 
 Generated apps should not rename these surfaces independently from one another.
 They should all flow from the same canonical identity decision.
@@ -32,13 +31,12 @@ Dream should record a rename audit for the generated project.
 
 At minimum, the audit should cover:
 
-- Gradle root project name
-- module namespace values
-- Android application id values
+- `project.yaml` / `module.yaml` module names and namespace values
+- Android application id values (`androidApp/module.yaml`)
 - Kotlin package declarations and package directories where renamed
 - Android manifest labels or other visible app-name surfaces
-- iOS configuration values that carry app identity
-- `features/` metadata and documentation values that still mention template identity
+- iOS bundle id and display name (`module.xcodeproj`, `Info.plist`)
+- `specs/` metadata and documentation values that still mention template identity
 - obvious sample or template-facing display strings
 
 ### 29.4 Do not confuse sample scaffolding with final product identity
@@ -53,11 +51,11 @@ Reusable principle:
 
 ### 29.5 Keep feature paths and packages aligned
 
-Feature directory names, Gradle module paths, and Kotlin package declarations should tell the same story.
+Feature module names (= directory names), `module.yaml` references, and Kotlin package declarations should tell the same story.
 
 Reusable principle:
 
 - choose one multi-word feature convention before generation writes code
-- prefer package-mirroring directories for nested concepts, such as `feature/expense/details` with `feature.expense.details`
-- if using a slug such as `expense-details`, use the same slug consistently in generated module names and documentation
-- do not leave reviewers to mentally translate between `expense-details` folders and `expense.details` packages without an explicit convention
+- module names must be unique and equal the directory name, so use a slug such as `expense-details-impl` consistently in directories, `project.yaml`, and `//feature/...` dependency paths
+- keep Kotlin packages (`feature.expense.details`) independent of directory names and document the mapping
+- do not leave reviewers to mentally translate between slugs and packages without an explicit convention

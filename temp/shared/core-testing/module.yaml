@@ -1,0 +1,17 @@
+product:
+  type: kmp/lib
+  platforms: [android, iosArm64, iosSimulatorArm64]
+
+apply:
+  - //templates/common.module-template.yaml
+
+dependencies:
+  - //shared/core-data
+  - //shared/core-domain
+  - $libs.kotlinx.coroutines.core
+  - $libs.kotlinx.datetime
+  - $libs.kotlinx.coroutines.test
+
+settings:
+  android:
+    namespace: com.dream.template.shared.core.testing

@@ -4,7 +4,7 @@ This architecture works especially well in local-first applications.
 
 ### 11.1 Shared Room database helpers
 
-Common Room builder setup should live in `shared/core/data` so feature data modules do not duplicate driver or query dispatcher policy.
+Common Room builder setup should live in `shared/core-data` so feature data modules do not duplicate driver or query dispatcher policy.
 
 Best practice:
 
@@ -15,13 +15,13 @@ Best practice:
 
 ### 11.2 Single shared Room database (default pattern)
 
-The Dream template uses one shared database class in `shared/core/data` for all features. This is the default pattern.
+The Dream template uses one shared database class in `shared/core-data` for all features. This is the default pattern.
 
 Where database classes live:
 
-- `shared/core/data` owns the `@Database` class, entity definitions, DAO interfaces, platform-specific factories, and schema exports
-- `shared/core/data` owns the `RoomDatabase.Builder` extension (`buildBundledRoomDatabase`)
-- feature `data` modules own repository implementations, mappers, and DAO usage — they import DAOs from `shared/core/data`
+- `shared/core-data` owns the `@Database` class, entity definitions, DAO interfaces, platform-specific factories, and schema exports
+- `shared/core-data` owns the `RoomDatabase.Builder` extension (`buildBundledRoomDatabase`)
+- feature `data` modules own repository implementations, mappers, and DAO usage — they import DAOs from `shared/core-data`
 - each feature adds its tables to the shared database class; new entities and DAOs are registered in the same `@Database` annotation
 
 Why this is useful:
@@ -35,7 +35,7 @@ When to use a per-feature database instead:
 
 - only when a feature has a genuinely isolated schema that no other feature will ever share
 - keep the database class, entity, and DAO in the feature `data` module in that case
-- document the exception in `features/decisions.yaml`
+- document the exception in `specs/decisions.yaml`
 
 ### 11.3 Entity design follows feature boundaries
 
@@ -74,14 +74,18 @@ Why it helps:
 
 ### 11.6 Room KMP setup reference
 
-**Dependencies** (in `shared/core/data/build.gradle.kts`):
-```kotlin
-commonMainApi(libs.androidx.room.runtime)
-commonMainApi(libs.androidx.room.ktx)
-annotationProcessor(libs.androidx.room.compiler)
+**Dependencies** (in `shared/core-data/module.yaml`):
+```yaml
+dependencies:
+  - $libs.androidx.room.runtime: exported
+  - $libs.androidx.room.ktx: exported
+settings:
+  kotlin:
+    ksp:
+      processors: [$libs.androidx.room.compiler]   # unqualified, not platform-scoped
 ```
 
-**Database class** (`commonMain`):
+**Database class** (`src`):
 ```kotlin
 @Database(
     entities = [SampleEntity::class],
@@ -98,7 +102,7 @@ expect object AppDatabaseConstructor : RoomDatabaseConstructor<AppDatabase> {
 }
 ```
 
-**Android factory** (`androidMain`):
+**Android factory** (`src@android`):
 ```kotlin
 fun getRoomDatabase(context: Context): AppDatabase {
     return Room.databaseBuilder(
@@ -109,7 +113,7 @@ fun getRoomDatabase(context: Context): AppDatabase {
 }
 ```
 
-**iOS factory** (`iosMain`):
+**iOS factory** (`src@ios`):
 ```kotlin
 fun getRoomDatabase(): AppDatabase {
     val dbFile = NSFileManager.defaultManager
@@ -122,18 +126,21 @@ fun getRoomDatabase(): AppDatabase {
 }
 ```
 
-**Schema export** (in `build.gradle.kts`):
-```kotlin
-room {
-    schemaDirectory("$projectDir/schemas")
-}
+**Schema export** (in `shared/core-data/module.yaml`):
+```yaml
+settings:
+  kotlin:
+    ksp:
+      processorOptions:
+        room.schemaLocation: ./schemas
 ```
+Schemas export to `shared/core-data/schemas` and are committed.
 
 Best practice:
 
 - export schema files to version control for migration verification
 - use `BundledSQLiteDriver` for iOS (not the Android-only SQLite driver)
-- keep the database class in `shared/core/data`, not in feature modules
+- keep the database class in `shared/core-data`, not in feature modules
 - add new entities and DAOs to the existing `@Database` annotation
 
 > **Reference:** [Android Room KMP documentation](https://developer.android.com/kotlin/multiplatform/room)

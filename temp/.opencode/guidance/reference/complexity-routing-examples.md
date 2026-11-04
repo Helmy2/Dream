@@ -34,13 +34,13 @@ Fix typo in expense_title string: "Expnese" should be "Expense"
 
 ### Phase 0 (2-line conversation)
 ```
-dream-general: "Issue: Typo in expense_title string. Fix: Change 'Expnese' to 'Expense' in shared/core/strings/src/commonMain/composeResources/values/strings.xml line 12. Proceed?"
+dream-general: "Issue: Typo in expense_title string. Fix: Change 'Expnese' to 'Expense' in shared/core-strings/composeResources/values/strings.xml line 12. Proceed?"
 User: "yes"
 ```
 
 ### Workflow
 1. dream-implementer applies fix to strings.xml
-2. dream-tester runs: `./gradlew :shared:core:strings:allTests`
+2. dream-tester runs: `./kotlin test -m core-strings --platform=android`
 3. Verification passes
 4. Commit to current branch (no feature branch)
 5. Done
@@ -68,7 +68,7 @@ Add expense list screen with loading, empty, and content states
 **Criteria:**
 - Files to change: 6 (ExpenseListScreen.kt, ExpenseListViewModel.kt, ExpenseListUiState.kt, ExpenseListMapper.kt, ExpenseListTest.kt, strings.xml)
 - New screens: 1
-- New modules: 1 (feature/expense/impl — domain/data/api already exist or not needed)
+- New modules: 1 (feature/expense-impl — domain/data/api already exist or not needed)
 - New dependencies: 0
 - Architectural changes: no
 
@@ -83,13 +83,13 @@ Add expense list screen with loading, empty, and content states
 
 ### Phase 0 (Brief conversation)
 ```
-dream-general: "Plan: Add expense list screen with 3 states (Loading, Empty, Content). Will create feature/expense/impl module with ExpenseListScreen, ExpenseListViewModel, ExpenseListUiState, ExpenseListMapper, and tests. Uses existing ExpenseRepository from domain. No new dependencies. Proceed?"
+dream-general: "Plan: Add expense list screen with 3 states (Loading, Empty, Content). Will create feature/expense-impl module with ExpenseListScreen, ExpenseListViewModel, ExpenseListUiState, ExpenseListMapper, and tests. Uses existing ExpenseRepository from domain. No new dependencies. Proceed?"
 User: "yes"
 ```
 
 ### Workflow
 1. dream-research gathers context (if needed)
-2. dream-implementer creates feature/expense/impl module with domain/data/api (if not exists)
+2. dream-implementer creates feature/expense-impl module with domain/data/api (if not exists)
 3. dream-implementer-ui creates Compose UI + SwiftUI UI
 4. dream-tester runs verification
 5. Commit to feature branch
@@ -121,7 +121,7 @@ Add expense tracker with list, detail, add screens — domain/data/api/impl, Roo
 **Criteria:**
 - Files to change: 15+
 - New screens: 3
-- New modules: 4 (feature/expense/domain, feature/expense/data, feature/expense/api, feature/expense/impl)
+- New modules: 4 (feature/expense-domain, feature/expense-data, feature/expense-api, feature/expense-impl)
 - New dependencies: 1 (Room database)
 - Architectural changes: no
 - Complete feature: yes (all layers + both platforms)
@@ -153,15 +153,15 @@ Build a complete expense tracking feature with 3 screens, Room database persiste
 ## Modules
 
 ### Create
-- `feature/expense/domain` — entities, repository interfaces, use cases
-- `feature/expense/data` — Room database, DAOs, repository implementations
-- `feature/expense/api` — NavKey route types
-- `feature/expense/impl` — 3 Compose screens, ViewModels, UI state/events
+- `feature/expense-domain` — entities, repository interfaces, use cases
+- `feature/expense-data` — Room database, DAOs, repository implementations
+- `feature/expense-api` — NavKey route types
+- `feature/expense-impl` — 3 Compose screens, ViewModels, UI state/events
 
 ### Modify
 - `shared/umbrella-core` — register domain/data DI modules
 - `shared/umbrella-ui` — register UI DI modules and navigation entries
-- `shared/core/strings` — add expense-related strings
+- `shared/core-strings` — add expense-related strings
 
 ## Screens
 
@@ -247,7 +247,7 @@ Add a settings screen with 2 toggles: dark mode and notifications. I know this i
 
 ### Phase 0 (Brief conversation)
 ```
-dream-general: "Plan: Add settings screen with 2 toggles (dark mode, notifications). Will create feature/settings/impl with SettingsScreen, SettingsViewModel, and tests. Uses existing DataStore for preferences. Proceed?"
+dream-general: "Plan: Add settings screen with 2 toggles (dark mode, notifications). Will create feature/settings-impl with SettingsScreen, SettingsViewModel, and tests. Uses existing DataStore for preferences. Proceed?"
 User: "yes"
 ```
 

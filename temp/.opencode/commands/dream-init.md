@@ -24,30 +24,31 @@ Treat `$ARGUMENTS` as optional override hints (e.g., app name, package name).
 
 3. **Platform tooling verification**:
     - Check `java -version` (JDK 17+ required)
-    - Check `xcodebuild -version` (macOS only)
+    - Check `xcodebuild -version` (macOS only; required by the Toolchain for the iOS app)
+    - Check `./kotlin --version` (Kotlin Toolchain wrapper)
     - Check `xcrun simctl list` (macOS only)
     - Check `codebase-memory-mcp --version` (optional, for code intelligence)
     - Check Maestro via `/dream-e2e` preflight when needed
     - Report each as "passed" or "blocked by environment"
 
-4. **`features/` directory structure**:
-   - Create `features/` if missing
-   - Create `features/app-contract.yaml` with a stub:
+4. **`specs/` directory structure**:
+   - Create `specs/` if missing
+   - Create `specs/app-contract.yaml` with a stub:
      ```yaml
      # App Contract
      name: <project-name-or-uninitialized>
      features: []
      ```
-   - Create `features/decisions.yaml` with a stub:
+   - Create `specs/decisions.yaml` with a stub:
      ```yaml
      # Architecture Decisions
      ```
-   - Create `features/` directory
-   - Report "features/: initialized"
+   - Create `specs/` directory
+   - Report "specs/: initialized"
 
 5. **Build verification**:
-   - Run `./gradlew projects` to verify the Gradle build is structurally valid
-   - If this fails, report the error as a build environment blocker (do not interpret Gradle output as a product defect at this stage)
+   - Run `./kotlin build -m core-domain --platform=android` to verify the Kotlin Toolchain build is structurally valid
+   - If this fails, report the error as a build environment blocker (do not interpret Toolchain output as a product defect at this stage)
    - Report "build: passed" or "build: <error summary>"
 
 6. **Readiness report** — Output a summary table:
@@ -60,8 +61,8 @@ Treat `$ARGUMENTS` as optional override hints (e.g., app name, package name).
     | Xcode                    | passed        |
     | JDK                      | 17.0.x        |
     | codebase-memory-mcp      | passed        |
-    | features/               | initialized   |
-    | Gradle projects          | passed        |
+    | specs/               | initialized   |
+    | Kotlin Toolchain build   | passed        |
     | Models                   | configured    |
     ```
 
@@ -98,4 +99,4 @@ To override, edit `.opencode/opencode.json` or re-run `/dream-init`.
 - This command is safe to re-run — it skips steps that are already complete
 - Do not generate any feature code during init
 - Do not commit unless the user explicitly asks for it after reviewing the readiness report
-- Write results to `features/init-report.md` at the end
+- Write results to `specs/init-report.md` at the end

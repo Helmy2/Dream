@@ -42,12 +42,12 @@ Find files, symbols, build context packs, and fetch external information for Dre
 ## Use When
 
 - Locating a feature, symbol, or module in the codebase
-- Finding relevant template modules or `features/` metadata
+- Finding relevant template modules or `specs/` metadata
 - Answering structural questions about the project
 - Building context before implementation or repair
 - Unfamiliar library or framework API patterns
 - Dependency version compatibility questions
-- Cryptic Gradle, compiler, or runtime errors
+- Cryptic Kotlin Toolchain, compiler, or runtime errors
 - Cross-platform capability research
 
 ## How
@@ -55,7 +55,7 @@ Find files, symbols, build context packs, and fetch external information for Dre
 ### Codebase Research
 - Search quickly, return precise paths
 - Keep explanations short, avoid speculation
-- Prioritize: `.opencode/guidance/`, `.opencode/knowledge-graph/`, `features/`, `templates/`, `feature/`, `shared/`, `androidApp/`, `iosApp/`
+- Prioritize: `.opencode/guidance/`, `.opencode/knowledge-graph/`, `specs/`, `templates/`, `feature/`, `shared/`, `androidApp/`, `iosApp/`
 - In deep mode: identify which graph rules apply, return context that helps implementers work with minimal drift
 
 ### External Research

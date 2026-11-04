@@ -8,10 +8,10 @@ These are the main things to avoid in future projects, even if traces of them ex
 - do not hardcode user-visible strings in shared UI code
 - do not let navigation route types leak into every feature module by default
 - do not instantiate repositories, use cases, or ViewModels inside recomposing composables
-- do not create giant convention plugins that hide the whole build
+- do not create giant build templates that hide the whole build
 - do not make the design system too opinionated for feature-specific layout needs
 - do not build a complicated MVI framework if a small base class is enough
-- do not use `String.format` or `java.text.*` or `java.util.*` in `commonMain` source sets — these are JVM-only APIs that break iOS compilation
+- do not use `String.format` or `java.text.*` or `java.util.*` in common `src` source sets — these are JVM-only APIs that break iOS compilation
 - do not use `ExposedDropdownMenuBox.menuAnchor()` — this API is deprecated in Material3; use `MenuAnchorType` instead
 - do not keep dead code in shared core modules (e.g., unused sealed classes, unused data classes, unused expect/actual declarations) — remove it during implementation
 - do not let documentation (README, AGENTS.md, verification commands) reference modules that no longer exist — update them when changing the module structure
@@ -22,7 +22,7 @@ These are the main things to avoid in future projects, even if traces of them ex
 - do not expose SwiftUI hosts to `implementation(...)`-hidden Kotlin types and assume they will appear in Swift — exported framework dependencies must be `export(...)`-ed and transitively `api(...)`
 - do not spread Kotlin-to-Swift mapping logic across SwiftUI views — keep it in a dedicated bridge boundary
 - do not make native SwiftUI hosts start shared Compose-oriented DI if a narrow iOS factory function is sufficient
-- do not rely on ObjC-shaped API guesses in Swift when SKIE provides a native Swift surface — verify the generated Swift names for enum cases, async wrappers, and constructor labels
-- do not place feature-specific mappers (Entity → DomainModel) in `shared/core/data/mapper/` — they belong in `feature/<name>/data/.../mapper/`; the shared data module owns entities and DAOs, not domain-bound mappers
+- do not rely on ObjC-shaped API guesses in Swift — there is no SKIE; verify the generated Objective-C names, remember enums/sealed classes are Swift classes (`switch` needs `default:`), and top-level functions live on `<FileName>Kt` classes
+- do not place feature-specific mappers (Entity → DomainModel) in `shared/core-data/mapper/` — they belong in `feature/<name>-data/.../mapper/`; the shared data module owns entities and DAOs, not domain-bound mappers
 - do not use `viewModel { }` lambda syntax in Koin compiler plugin DSL — use `viewModel<T>()` syntax exclusively; the lambda form is unsupported and produces cryptic compilation errors
 - do not create mappers with hardcoded `SystemTimeProvider()` in composable functions — inject `TimeProvider` via Koin `factory` into the ViewModel and pass it to the mapper

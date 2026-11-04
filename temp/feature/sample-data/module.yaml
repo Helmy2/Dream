@@ -1,0 +1,27 @@
+product:
+  type: kmp/lib
+  platforms: [android, iosArm64, iosSimulatorArm64]
+
+apply:
+  - //templates/common.module-template.yaml
+
+dependencies:
+  - //feature/sample-domain: exported
+  - //shared/core-data: exported
+  - //shared/core-domain: exported
+  - $libs.koin.core
+  - $libs.kotlinx.coroutines.core
+  - $libs.ktor.client.core
+
+test-dependencies:
+  - //shared/core-testing
+
+settings:
+  android:
+    namespace: com.dream.template.feature.sample.data
+  kotlin:
+    compilerPlugins:
+      - id: io.insert-koin.compiler.plugin
+        dependency: $libs.koin.compiler.plugin
+        options:
+          moduleId: sample-data

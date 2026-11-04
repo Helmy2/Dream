@@ -4,9 +4,9 @@ One of the best structural decisions in this style of architecture is splitting 
 
 Current split:
 
-- `shared:core:domain`
-- `shared:core:data`
-- `shared:core:presentation`
+- `shared/core-domain`
+- `shared/core-data`
+- `shared/core-presentation`
 
 Why this is worth reusing:
 

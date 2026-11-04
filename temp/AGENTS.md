@@ -11,7 +11,7 @@ When working in this generated project, read in this order:
 3. [.opencode/knowledge-graph/README.md](.opencode/knowledge-graph/README.md)
 4. Relevant topic files in [.opencode/knowledge-graph/best-practices/](.opencode/knowledge-graph/best-practices/README.md)
 5. [README.md](README.md)
-6. Existing `features/` metadata when it exists
+6. Existing `specs/` metadata when it exists
 
 ## Packaged Agent Layer
 
@@ -22,9 +22,17 @@ When working in this generated project, read in this order:
 - [.opencode/knowledge-graph/](.opencode/knowledge-graph): architecture rules and retrieval sources
 - [maestro/](maestro): Android and iOS smoke-flow scaffolding for generated feature validation
 - [.opencode/scripts/dream-preflight.sh](.opencode/scripts/dream-preflight.sh): git, Android SDK, and tooling readiness preflight
-- [.opencode/scripts/sync-pbxproj.rb](.opencode/scripts/sync-pbxproj.rb): auto-registers orphaned Swift files in Xcode project.pbxproj
+- [.opencode/scripts/sync-pbxproj.rb](.opencode/scripts/sync-pbxproj.rb): obsolete under the Kotlin Toolchain (the Xcode project uses a file-system-synchronized folder, so new Swift files are picked up automatically); kept only for reference
+- [.opencode/guidance/reference/kotlin-toolchain.md](.opencode/guidance/reference/kotlin-toolchain.md): Kotlin Toolchain commands, project layout, module names, and iOS/Android rules
+- [.opencode/scripts/fix-ios-project.sh](.opencode/scripts/fix-ios-project.sh): re-applies hand-maintained `module.xcodeproj` settings (wrapper path, deployment target, bundle id) after the Toolchain regenerates the project
 - [.opencode/scripts/remove-sample.sh](.opencode/scripts/remove-sample.sh): removes sample feature files, strips sample deps, and checks for leftovers
 - [.opencode/guidance/new-feature-checklist.md](.opencode/guidance/new-feature-checklist.md): contract-first feature wiring, verification, and git checklist
+
+## Build system: Kotlin Toolchain (Alpha)
+
+This project builds with the JetBrains Kotlin Toolchain (`./kotlin` CLI, YAML config, v0.13, Alpha). There is no Gradle or `gradlew`. Modules are listed in `project.yaml`; each has a `module.yaml`, and module names equal directory names (for example `core-domain`, `sample-impl`).
+
+Not supported by Toolchain 0.13: SKIE, Swift export, and the Xcode 27 JSON project format (`project.xcproj`). The Xcode project has an `app` target (the only one with the Kotlin integration script phase) and a hosted `appTests` unit-test target (Swift tests in `iosApp/test`, run with `xcodebuild test -project iosApp/module.xcodeproj -scheme app -destination 'platform=iOS Simulator,name=iPhone 17 Pro' CODE_SIGNING_ALLOWED=NO`; `./kotlin test` runs Kotlin tests only). Alpha tool: if something is unsupported, stop and report; do not work around it with Gradle. Full reference: [.opencode/guidance/reference/kotlin-toolchain.md](.opencode/guidance/reference/kotlin-toolchain.md).
 
 ## Working Rules
 
@@ -32,8 +40,8 @@ When working in this generated project, read in this order:
 - Keep domain logic pure Kotlin and keep product behavior in feature modules, not host app modules.
 - Do not simplify the template by collapsing modules just to make a task faster.
 - Treat Android and iOS as generated app product targets.
-- `iosApp-compose` is the Compose Multiplatform iOS variant; `iosApp-swiftui` is the native SwiftUI variant. The agent removes the unused option during project instantiation.
-- When working on the native SwiftUI variant, load the iOS best-practice files covering project structure, KMP bridge rules, Xcode configuration, and XCTest packaging.
+- iOS is native SwiftUI only (`iosApp/`); Android UI is Jetpack Compose in Android-only modules. There is no Compose iOS variant.
+- When working on the iOS app, load the iOS best-practice files covering project structure, KMP bridge rules, Xcode configuration, and Swift unit-test (`appTests`) packaging.
 - Use Android CLI for Android device/emulator setup, install, launch, inspection, logs, and repair loops.
 - Use `xcodebuild` and `xcrun simctl` for iOS build, simulator install, launch, logs, and crash capture.
 - Do not claim success from green commands alone; match the contract, tests, and review expectations in [.opencode/guidance/dream-agent-operating-guide.md](.opencode/guidance/dream-agent-operating-guide.md).
@@ -44,18 +52,25 @@ Run commands from this project root:
 
 ```bash
 ./.opencode/scripts/dream-preflight.sh
-./gradlew :feature:sample:impl:allTests :shared:navigation:allTests :shared:core:domain:allTests :shared:core:data:allTests :shared:core:presentation:allTests :shared:core:testing:allTests
-./gradlew :androidApp:assembleDebug
-xcodebuild -project iosApp-swiftui/iosApp.xcodeproj -scheme iosApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.2' build
+./kotlin build
+./kotlin test --platform=android
+./kotlin test --platform=iosSimulatorArm64
+./kotlin build -m androidApp --platform=android
+./kotlin build -m iosApp --platform=iosSimulatorArm64
 ```
+
+Focused iteration example: `./kotlin test -m sample-impl --platform=android`.
 
 Dream's stricter final verification includes:
 
 ```bash
-./gradlew allTests
-./gradlew :androidApp:assembleDebug
+./kotlin build
+./kotlin test --platform=android
+./kotlin test --platform=iosSimulatorArm64
+./kotlin build -m androidApp --platform=android
+./kotlin build -m iosApp --platform=iosSimulatorArm64
 # Android CLI install/launch/log inspection
-# xcodebuild plus xcrun simctl build/install/launch/log inspection
+# xcrun simctl install/launch/log inspection
 ```
 
 Use focused commands for iteration, but do not report final success without the required verification behavior or a documented blocker.

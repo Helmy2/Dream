@@ -49,10 +49,19 @@ if command -v xcodebuild >/dev/null 2>&1; then
   pass 'Xcode is installed'
 fi
 
-if command -v java >/dev/null 2>&1; then
-  pass 'Java is available'
+if [ -x ./kotlin ]; then
+  if ./kotlin --version >/dev/null 2>&1; then
+    pass 'Kotlin Toolchain wrapper (./kotlin) works'
+  else
+    blocker './kotlin --version failed; check network access for first-time Toolchain provisioning'
+  fi
 else
-  blocker 'Java is not available; install JDK 17+'
+  blocker './kotlin wrapper is missing or not executable; run: kotlin update --create'
+fi
+
+# The Kotlin Toolchain provisions its own JDK, so a system Java is optional.
+if command -v java >/dev/null 2>&1; then
+  pass 'System Java is available (optional)'
 fi
 
 exit "$status"

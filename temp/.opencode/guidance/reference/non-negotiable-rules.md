@@ -15,7 +15,7 @@ All Dream agents must preserve these rules unless a higher-priority project-spec
 
 ## Resources
 
-- Keep user-visible shared UI strings in shared resources (`shared/core/strings`)
+- Keep user-visible shared UI strings in shared resources (`shared/core-strings`)
 
 ## Platform Targets
 
@@ -27,11 +27,11 @@ All Dream agents must preserve these rules unless a higher-priority project-spec
 
 ## iOS Tooling
 
-- Use `xcodebuild` plus `xcrun simctl` for iOS build, simulator install, launch, logs, and crash capture
-## iOS UI Strategy
+- Use `./kotlin build -m iosApp --platform=iosSimulatorArm64` plus `xcrun simctl` for iOS build, simulator install, launch, logs, and crash capture
+## iOS UI
 
-- When the project contains both `iosApp-compose` and `iosApp-swiftui`, remove the unused folder and rename the kept one to `iosApp` during project instantiation
-- When the project uses the native SwiftUI iOS strategy, load the dedicated iOS best-practice files (35-39) before editing native iOS code
+- iOS is native SwiftUI only (`iosApp/`); Compose UI is Android-only and there is no Compose-for-iOS variant
+- Load the dedicated iOS best-practice files (35-39) before editing native iOS code
 
 ## Verification
 

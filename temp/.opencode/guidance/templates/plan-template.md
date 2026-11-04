@@ -1,6 +1,6 @@
 # Plan Template
 
-Use this template when generating `features/<feature>/plan.md` during Phase 0 (Plan & User Review).
+Use this template when generating `specs/<feature>/plan.md` during Phase 0 (Plan & User Review).
 
 **Note:** This template applies to `/dream-create` and `/dream-feature` workflows (COMPLEX complexity). For trivial and simple workflows, see `.opencode/guidance/reference/complexity-routing.md`.
 
@@ -53,16 +53,16 @@ One-line summary of what this feature does and why it exists.
 ## Modules
 
 ### Create
-- `feature/<name>/domain` — entities, repository interfaces, use cases
-- `feature/<name>/data` — data sources, DTOs, mappers, repository implementations
-- `feature/<name>/api` — NavKey route types (no Koin)
-- `feature/<name>/impl` — Compose screens, ViewModels, UI state/events, Koin module
+- `feature/<name>-domain` — entities, repository interfaces, use cases
+- `feature/<name>-data` — data sources, DTOs, mappers, repository implementations
+- `feature/<name>-api` — NavKey route types (no Koin)
+- `feature/<name>-impl` — Compose screens, ViewModels, UI state/events, Koin module
 
 ### Modify
 - `shared/umbrella-core` — register domain/data DI modules
 - `shared/umbrella-ui` — register UI DI modules and navigation entries
-- `shared/core/strings` — add user-visible string resources
-- `androidApp` / `iosApp-swiftui` — if host wiring changes are needed
+- `shared/core-strings` — add user-visible string resources
+- `androidApp` / `iosApp` — if host wiring changes are needed
 
 ## Screens
 

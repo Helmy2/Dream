@@ -38,7 +38,7 @@ Reusable lesson:
 
 ### 10.4 Named `HttpClient` instances per feature
 
-A strong network boundary pattern is using a per-feature Ktor client setup. The template provides a shared `HttpClientFactory` in `shared/core/data/src/.../network/` that feature data modules can use to create configured clients.
+A strong network boundary pattern is using a per-feature Ktor client setup. The template provides a shared `HttpClientFactory` in `shared/core-data/src/.../network/` that feature data modules can use to create configured clients.
 
 Why it is smart:
 
@@ -65,7 +65,7 @@ Recommended mapper placement:
 - data layer: DTO <-> entity <-> domain mapping stays in the **feature's** data layer, not the shared data layer
 - presentation layer: domain -> UI mapping stays in presentation
 
-Anti-example: mappers that convert `Entity → FeatureDomainModel` belong in `feature/<name>/data/.../mapper/`, not in `shared/core/data/mapper/`. The shared data module owns entities and DAOs, not domain-bound mappers. Placing feature mappers in shared data creates unnecessary coupling and breaks the feature boundary.
+Anti-example: mappers that convert `Entity → FeatureDomainModel` belong in `feature/<name>-data/.../mapper/`, not in `shared/core-data/mapper/`. The shared data module owns entities and DAOs, not domain-bound mappers. Placing feature mappers in shared data creates unnecessary coupling and breaks the feature boundary.
 
 Recommended mapper style:
 

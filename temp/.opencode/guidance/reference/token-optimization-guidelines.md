@@ -111,15 +111,15 @@ Based on changed files, run only necessary checks:
 
 **If only domain/data changed:**
 - Domain/data tests only
-- Skip: assembleDebug, xcodebuild
+- Skip: Android/iOS app builds
 
 **If only impl changed:**
 - Impl tests + Android build
-- Skip: xcodebuild (unless iOS also changed)
+- Skip: iOS build (unless iOS also changed)
 
 **If only iOS files changed:**
-- xcodebuild build + test
-- Skip: Android build, Gradle tests
+- `./kotlin build -m iosApp --platform=iosSimulatorArm64` + `xcrun simctl` install/launch
+- Skip: Android build and Android unit tests
 
 **If shared/* changed:**
 - Full verification ladder
@@ -130,7 +130,7 @@ Use `git diff --name-only` to identify changed modules.
 
 After 3 repair rounds or when context approaches limit:
 
-1. Write state to `features/<feature>/report.md`
+1. Write state to `specs/<feature>/report.md`
 2. Create compact handoff prompt
 3. Start fresh conversation with handoff only
 

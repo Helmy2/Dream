@@ -10,8 +10,8 @@ You are `dream-tester`. Run the full Dream verification ladder.
 
 ## Scope
 
-- Gradle unit test suites
-- Platform builds (`assembleDebug`, `xcodebuild`)
+- Kotlin Toolchain unit test suites (`./kotlin test`)
+- Platform builds (`./kotlin build -m androidApp --platform=android`, `./kotlin build -m iosApp --platform=iosSimulatorArm64`)
 - Install and launch on Android emulator / iOS simulator
 - Inspect platform logs for crashes
 
@@ -68,10 +68,10 @@ verification:
 
 ### How to Parallelize
 
-1. Detect if both platforms changed: `git diff --name-only | grep -E "(androidApp|iosApp-swiftui|impl/)"`
+1. Detect if both platforms changed: `git diff --name-only | grep -E "(androidApp|iosApp|impl/)"`
 2. If both changed, run Android and iOS verification concurrently:
-   - Spawn Android verification: `./gradlew :androidApp:assembleDebug` + Android CLI checks
-   - Spawn iOS verification: `xcodebuild` + `xcrun simctl` checks
+   - Spawn Android verification: `./kotlin build -m androidApp --platform=android` + Android CLI checks
+   - Spawn iOS verification: `./kotlin build -m iosApp --platform=iosSimulatorArm64` + `xcrun simctl` checks
 3. Merge results into single verification-report.md
 4. Report wall-clock time (max of both), not sum
 
@@ -104,7 +104,7 @@ If pattern matches, include mitigation in failure report.
 
 After UI implementation, verify the implemented UI matches the UI spec:
 
-- Read `features/<feature>/ui-spec.md` for expected states and components
+- Read `specs/<feature>/ui-spec.md` for expected states and components
 - For each screen state (Loading, Empty, Content, Error):
   - Capture screenshot via `mobile_take_screenshot`
   - Compare against spec: are expected components present? Are states rendered correctly?
@@ -117,18 +117,19 @@ After UI implementation, verify the implemented UI matches the UI spec:
 Based on changed files, run only necessary checks:
 
 **If only domain/data changed:**
-- `./gradlew :feature:<name>:domain:allTests`
-- `./gradlew :feature:<name>:data:allTests`
-- Skip: assembleDebug, xcodebuild
+- `./kotlin test -m <name>-domain --platform=android`
+- `./kotlin test -m <name>-data --platform=android`
+- Skip: Android/iOS app builds
 
 **If only impl changed:**
-- `./gradlew :feature:<name>:impl:allTests`
-- `./gradlew :androidApp:assembleDebug`
-- Skip: xcodebuild (unless iOS also changed)
+- `./kotlin test -m <name>-impl --platform=android`
+- `./kotlin build -m androidApp --platform=android`
+- Skip: iOS build (unless iOS also changed)
 
 **If only iOS files changed:**
-- `xcodebuild build` + `xcodebuild test`
-- Skip: Android build, Gradle tests
+- `./kotlin build -m iosApp --platform=iosSimulatorArm64` + `xcrun simctl` install/launch
+- Swift unit tests: `xcodebuild test -project iosApp/module.xcodeproj -scheme app -destination 'platform=iOS Simulator,name=iPhone 17 Pro' CODE_SIGNING_ALLOWED=NO` (`./kotlin test` never runs Swift tests)
+- Skip: Android build and Android unit tests
 
 **If shared/* changed:**
 - Full verification ladder

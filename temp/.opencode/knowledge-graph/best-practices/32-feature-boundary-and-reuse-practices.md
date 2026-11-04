@@ -6,13 +6,13 @@ Feature reuse should preserve clear ownership instead of creating hidden cross-f
 
 A feature is split into two presentation-facing sub-modules:
 
-- `feature/<name>/api`: the public navigation contract. Contains `NavKey` route types and any minimal public types needed for navigation. No screens, no ViewModels, no Koin module.
-- `feature/<name>/impl`: the private implementation. Contains screens, ViewModels, UI state/actions/events, presentation mappers, and the Koin module that installs Navigation 3 entry providers.
+- `feature/<name>-api`: the public navigation contract. Contains `NavKey` route types and any minimal public types needed for navigation. No screens, no ViewModels, no Koin module.
+- `feature/<name>-impl`: the private implementation. Contains screens, ViewModels, UI state/actions/events, presentation mappers, and the Koin module that installs Navigation 3 entry providers.
 
 Reusable principle:
 
-- other features and the app shell depend on `feature/<name>/api` only
-- no module outside the feature should depend on `feature/<name>/impl`
+- other features and the app shell depend on `feature/<name>-api` only
+- no module outside the feature should depend on `feature/<name>-impl`
 - cross-feature navigation goes through the target feature's `api`, never its `impl`
 
 ### 32.2 Reuse domain contracts carefully
@@ -34,7 +34,7 @@ Reusable principle:
 - prefer one owning feature data layer for one persisted aggregate
 - if two features need equal ownership of the same persisted concept, extract the storage contract and implementation to an appropriate shared module or shared domain/core area
 - do not let a second feature silently mutate another feature's data model without tests for both workflows
-- record the decision in `features/decisions.yaml` when cross-feature data reuse is chosen
+- record the decision in `specs/decisions.yaml` when cross-feature data reuse is chosen
 
 ### 32.4 Extract shared behavior when reuse becomes product infrastructure
 

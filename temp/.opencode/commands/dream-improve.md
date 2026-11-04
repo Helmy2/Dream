@@ -20,7 +20,7 @@ Then:
 ## Step 1: Gather Improvements
 
 ### 1.1 From Retrospectives
-- find all `features/*/retrospective.md` files where `Applied: not yet` in the Application Status section
+- find all `specs/*/retrospective.md` files where `Applied: not yet` in the Application Status section
 - if none found, report that all retrospectives are applied and continue to Step 1.2
 - collect all recommended improvements across unapplied retros, grouped by target area:
   - guidance changes (`.opencode/guidance/`)
@@ -216,7 +216,7 @@ Check and apply the following token optimization guidelines:
 
 ## Step 6: Verify Changes
 
-- run `./gradlew :androidApp:assembleDebug` and `./gradlew allTests` (or at minimum `./gradlew projects`) to verify the template is still structurally valid after changes
+- run `./kotlin build -m androidApp --platform=android` and `./kotlin test --platform=android` + `./kotlin test --platform=iosSimulatorArm64` (or at minimum `./kotlin build -m core-domain --platform=android`) to verify the template is still structurally valid after changes
 - run `git status`, `git diff`, and `git log --oneline -10`
 - present the commit summary to the user and request explicit confirmation before staging and committing template improvement files
 

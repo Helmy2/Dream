@@ -8,7 +8,9 @@ Use this document when you are new to the repository and need to understand how 
 
 Dream is not a single generated app. Dream is the tool and starter baseline that creates generated apps.
 
-The repository centers on `temp/`, which is the canonical starter project copied by the initializer. Generated app work should happen in `temp/` or in a copy created from `temp/`, not in unrelated root-level Gradle surfaces.
+The repository centers on `temp/`, which is the canonical starter project copied by the initializer. Generated app work should happen in `temp/` or in a copy created from `temp/`, not in unrelated root-level surfaces.
+
+**Build system: Kotlin Toolchain (Alpha).** The starter builds with the JetBrains Kotlin Toolchain (`./kotlin` CLI, YAML `project.yaml` / `module.yaml`, v0.13) instead of Gradle. iOS is native SwiftUI only (`iosApp/`); Android UI is Jetpack Compose in Android-only modules. Not supported by Toolchain 0.13: SKIE, Swift export, and the Xcode 27 JSON project format. The Xcode project has an `app` target plus a hosted `appTests` unit-test target (Swift tests in `iosApp/test`, run via `xcodebuild test`; `./kotlin test` runs Kotlin tests only). See `temp/.opencode/guidance/reference/kotlin-toolchain.md` for commands, layout, module names, and iOS/Android rules.
 
 ```mermaid
 flowchart TD
@@ -18,7 +20,7 @@ flowchart TD
     Template --> Generated[Generated KMP app]
     Contract --> Generated
     Generated --> Verify[Tests, builds, platform launch, smoke flows]
-    Verify --> Report[features/verification-report.md]
+    Verify --> Report[specs/verification-report.md]
 ```
 
 ## Repository Map
@@ -29,10 +31,10 @@ flowchart TD
 - `temp/`: canonical Kotlin Multiplatform starter project.
 - `temp/.opencode/`: packaged OpenCode config, agents (7 agents: dream-general, dream-research, dream-designer, dream-implementer, dream-implementer-ui, dream-tester, dream-inspector), commands, and prompt guidance.
 - `temp/.opencode/knowledge-graph/`: reusable architecture rules and retrieval sources.
-- `temp/features/`: generated app contracts, feature specs, decisions, reports, and retrospectives.
+- `temp/specs/`: generated app contracts, feature specs, decisions, reports, and retrospectives.
 - `temp/maestro/`: Android and iOS smoke-flow scaffolding.
 - `temp/.opencode/scripts/dream-preflight.sh`: local readiness check for git, Android SDK, and tooling.
-- `temp/.opencode/scripts/sync-pbxproj.rb`: auto-registers orphaned Swift files in Xcode project.pbxproj.
+- `temp/.opencode/scripts/sync-pbxproj.rb`: obsolete under the Kotlin Toolchain (the Xcode project uses a file-system-synchronized folder, so new Swift files are picked up automatically).
 - `temp/.opencode/scripts/remove-sample.sh`: removes sample feature files, strips sample deps, and checks for leftovers.
 - `temp/.opencode/scripts/start-codebase-memory-mcp.sh`: launches codebase-memory-mcp binary for code intelligence via persistent knowledge graph.
 - `temp/.cbmignore`: excludes files from codebase-memory-mcp indexing (build artifacts, generated files, Dream metadata).
@@ -41,7 +43,7 @@ flowchart TD
 flowchart LR
     Root[Dream repo root] --> Init[dream-init]
     Root --> Temp[temp/ canonical starter]
-    Temp --> Apps[androidApp / iosApp-compose / iosApp-swiftui]
+    Temp --> Apps[androidApp / iosApp]
     Temp --> Shared[shared/*]
     Temp --> Features[feature/*]
     Temp --> Agents[.opencode agents and commands]
@@ -79,14 +81,14 @@ sequenceDiagram
 
     User->>General: Plain product request
     General->>Research: Gather context (on-demand)
-    General->>Project: Phase 0: Write features/<feature>/plan.md
+    General->>Project: Phase 0: Write specs/<feature>/plan.md
     General->>User: Present plan for review
     User->>General: Confirm, edit, or deny
-    General->>Project: Write features/app-contract.yaml
-    General->>Project: Write features/decisions.yaml
+    General->>Project: Write specs/app-contract.yaml
+    General->>Project: Write specs/decisions.yaml
     General->>Project: Write feature contract and test plan
     General->>Designer: Phase 0.5: produce ui-spec.md
-    Designer->>Project: Write features/<feature>/ui-spec.md
+    Designer->>Project: Write specs/<feature>/ui-spec.md
     General->>Impl: Phase 1: KMP foundation (domain, data, api)
     Impl->>Project: Add domain entities, repos, data layer, route types, tests
     par Phase 2: UI in parallel
@@ -95,7 +97,7 @@ sequenceDiagram
     ImplUI->>Project: Compose screens, SwiftUI views, ViewModels, bridge, tests
     General->>Project: Phase 3: wiring (umbrella, DI, nav)
     General->>Tester: Phase 4: full verification ladder
-    Tester->>Project: Gradle tests, platform builds, device launch, logs
+    Tester->>Project: Kotlin Toolchain tests, platform builds, device launch, logs
     Tester->>General: Report defects
     General->>Impl: Repair failures when needed
     Impl->>Project: Fix issues
@@ -106,15 +108,15 @@ sequenceDiagram
 
 Required generated artifacts:
 
-- `features/app-contract.yaml`
-- `features/decisions.yaml`
-- `features/<feature>/plan.md`
-- `features/<feature>/contract.yaml`
-- `features/<feature>/ui-spec.md`
-- `features/<feature>/test-plan.md`
-- `features/<feature>/implementation-report.md`
-- `features/<feature>/retrospective.md`
-- `features/verification-report.md`
+- `specs/app-contract.yaml`
+- `specs/decisions.yaml`
+- `specs/<feature>/plan.md`
+- `specs/<feature>/contract.yaml`
+- `specs/<feature>/ui-spec.md`
+- `specs/<feature>/test-plan.md`
+- `specs/<feature>/implementation-report.md`
+- `specs/<feature>/retrospective.md`
+- `specs/verification-report.md`
 
 ## Architecture Rules
 
@@ -133,20 +135,20 @@ Non-negotiable rules:
 
 ```mermaid
 flowchart TD
-    Presentation[feature/name/presentation] --> Domain[feature/name/domain]
-    Data[feature/name/data] --> Domain
-    Presentation --> SharedPresentation[shared/core/presentation]
-    Presentation --> Strings[shared/core/strings]
+    Presentation[feature/name-presentation] --> Domain[feature/name-domain]
+    Data[feature/name-data] --> Domain
+    Presentation --> SharedPresentation[shared/core-presentation]
+    Presentation --> Strings[shared/core-strings]
     Presentation --> Design[shared/designsystem]
-    Data --> SharedData[shared/core/data]
-    Data --> SharedDomain[shared/core/domain]
-    subgraph Compose Flow
-        HostC[androidApp / iosApp-compose] --> UmbrellaUI[shared/umbrella-ui]
+    Data --> SharedData[shared/core-data]
+    Data --> SharedDomain[shared/core-domain]
+    subgraph Android Compose Flow
+        HostC[androidApp] --> UmbrellaUI[shared/umbrella-ui]
         UmbrellaUI --> Navigation[shared/navigation]
-        UmbrellaUI --> FeatureUI[feature presentation modules]
+        UmbrellaUI --> FeatureUI[feature impl modules]
     end
-    subgraph Native Flow
-        HostS[iosApp-swiftui] --> UmbrellaCore[shared/umbrella-core]
+    subgraph iOS Native Flow
+        HostS[iosApp SwiftUI] --> UmbrellaCore[shared/umbrella-core]
     end
     UmbrellaUI --> UmbrellaCore
     UmbrellaCore --> FeatureData[feature data modules]
@@ -156,21 +158,21 @@ flowchart TD
 
 Generated features use this shape:
 
-- `feature/<name>/domain`: domain models, repository interfaces, use cases, pure business contracts
-- `feature/<name>/data`: Room/network/local implementations, entities, mapping, repository implementations
-- `feature/<name>/api`: public navigation contract — `NavKey` route types and any minimal public types callers need to navigate to this feature
-- `feature/<name>/impl`: full feature implementation — screens, ViewModels, UI state/actions/events, presentation mappers, and the Koin module that installs Navigation 3 entry providers
+- `feature/<name>-domain`: domain models, repository interfaces, use cases, pure business contracts
+- `feature/<name>-data`: Room/network/local implementations, entities, mapping, repository implementations
+- `feature/<name>-api`: public navigation contract — `NavKey` route types and any minimal public types callers need to navigate to this feature
+- `feature/<name>-impl`: full feature implementation — screens, ViewModels, UI state/actions/events, presentation mappers, and the Koin module that installs Navigation 3 entry providers
 
-For multi-word feature concepts, keep folders, Gradle module names, and Kotlin packages aligned. Prefer package-mirroring directories such as `feature/expense/details` with `feature.expense.details`, or use a single slug consistently everywhere. Avoid mixed conventions such as a `feature/expense-details` folder with `feature.expense.details` packages.
+For multi-word feature concepts, keep module names (equal to directory names, which must be unique under the Toolchain) and Kotlin packages aligned. Module directories are flat, such as `feature/expense-details-domain` or `feature/sample-impl`; Kotlin packages stay dotted (`feature.expense.details`).
 
 ```mermaid
 flowchart TD
-    Domain[feature/name/domain]
-    Data[feature/name/data] --> Domain
-    Api[feature/name/api]
-    Impl[feature/name/impl] --> Api
+    Domain[feature/name-domain]
+    Data[feature/name-data] --> Domain
+    Api[feature/name-api]
+    Impl[feature/name-impl] --> Api
     Impl --> Domain
-    Impl --> Shared[shared/core/* + shared/designsystem]
+    Impl --> Shared[shared/core-* + shared/designsystem]
     OtherFeature[other feature or app shell] --> Api
     UmbrellaUI[shared/umbrella-ui] --> Impl
 ```
@@ -185,7 +187,7 @@ Why this shape:
 
 Feature reuse rules:
 
-- other features and the app shell depend on `feature/<name>/api` only, never on `feature/<name>/impl`
+- other features and the app shell depend on `feature/<name>-api` only, never on `feature/<name>-impl`
 - domain-only reuse can be valid for aggregators or clearly dependent workflows
 - cross-feature data implementation reuse is an explicit MVP exception, not the default
 - extract to `shared/*` when multiple features equally own the same persisted concept or reusable behavior
@@ -202,16 +204,16 @@ Dream uses Navigation 3 with centralized navigation display and feature-owned ty
 
 Rules:
 
-- route types live in `feature/<name>/api` and implement `androidx.navigation3.runtime.NavKey`
-- `feature/<name>/impl` installs Navigation 3 entry providers using `navigation<Route> { FeatureScreen() }` in its Koin module
+- route types live in `feature/<name>-api` and implement `androidx.navigation3.runtime.NavKey`
+- `feature/<name>-impl` installs Navigation 3 entry providers using `navigation<Route> { FeatureScreen() }` in its Koin module
 - `shared/navigation` owns the `NavKey` back stack and renders it with `NavDisplay`; it has no knowledge of feature-specific types
 - `shared/umbrella-ui` imports feature `impl` Koin modules so all navigation installers are registered before `NavDisplay` renders
-- other features or the app shell navigate by depending on `feature/<name>/api` for the route type only
+- other features or the app shell navigate by depending on `feature/<name>-api` for the route type only
 
 ```mermaid
 flowchart LR
-    Api[feature/name/api\nSampleRoute : NavKey]
-    Impl[feature/name/impl\nKoin: navigation&lt;SampleRoute&gt;]
+    Api[feature/name-api\nSampleRoute : NavKey]
+    Impl[feature/name-impl\nKoin: navigation&lt;SampleRoute&gt;]
     Impl --> Api
     UmbrellaUI[shared/umbrella-ui] --> Impl
     Navigator[shared/navigation Navigator] --> BackStack[SnapshotStateList&lt;NavKey&gt;]
@@ -236,12 +238,11 @@ Rules:
 
 ```mermaid
 flowchart TD
-    subgraph Compose Flow
+    subgraph Android Compose Flow
         Android[androidApp MainActivity] --> InitUI[shared/umbrella-ui initKoin]
-        IOSC[iosApp-compose MainViewController] --> InitUI
     end
-    subgraph Native Flow
-        IOSS[iosApp-swiftui] --> InitNative[Native Swift initKoin]
+    subgraph iOS Native Flow
+        IOSS[iosApp SwiftUI] --> InitNative[Native Swift initKoin]
     end
     InitUI --> Guard[one-time startup guard]
     InitNative --> Guard
@@ -257,7 +258,7 @@ The starter demonstrates local-first persistence with KMP Room.
 
 Important defaults:
 
-- Room builder policy is centralized in `shared/core/data`.
+- Room builder policy is centralized in `shared/core-data`.
 - The bundled SQLite driver is configured once.
 - Room query execution uses `Dispatchers.Default` for KMP-safe behavior.
 - First-pass MVP iteration uses destructive migration fallback to recover from stale local test schemas.
@@ -280,10 +281,10 @@ Dream treats verification as a ladder, not a single build command.
 
 ```mermaid
 flowchart TD
-    Preflight[./.opencode/scripts/dream-preflight.sh] --> Tests[./gradlew allTests]
-    Tests --> AndroidBuild[./gradlew :androidApp:assembleDebug]
+    Preflight[./.opencode/scripts/dream-preflight.sh] --> Tests[./kotlin test per platform]
+    Tests --> AndroidBuild[./kotlin build -m androidApp --platform=android]
     AndroidBuild --> AndroidRuntime[Android CLI install/launch/log inspection]
-    AndroidRuntime --> IOSBuild[xcodebuild]
+    AndroidRuntime --> IOSBuild[./kotlin build -m iosApp --platform=iosSimulatorArm64]
     IOSBuild --> IOSRuntime[xcrun simctl install/launch/log inspection]
     IOSRuntime --> MCP[mobile-mcp element tree + screenshot on failure]
     MCP --> Report[verification-report.md]
@@ -293,9 +294,14 @@ Run from `temp/` or from a generated copy:
 
 ```bash
 ./.opencode/scripts/dream-preflight.sh
-./gradlew allTests
-./gradlew :androidApp:assembleDebug
+./kotlin build
+./kotlin test --platform=android
+./kotlin test --platform=iosSimulatorArm64
+./kotlin build -m androidApp --platform=android
+./kotlin build -m iosApp --platform=iosSimulatorArm64
 ```
+
+Focused iteration example: `./kotlin test -m sample-impl --platform=android`. Module names equal directory names (`core-domain`, `sample-impl`, ...).
 
 Feature-owned smoke flows live under `maestro/features/<feature-name>/`. Run them via `/dream-e2e`:
 
@@ -318,14 +324,14 @@ Use `temp/.opencode/guidance/templates/verification-report-template.md` for the 
 
 Dream orchestrates feature work in phases through `dream-general`. When adding or replacing a feature:
 
-1. **Phase 0 — Plan & User Review:** `dream-general` produces `features/<feature>/plan.md`, presents it to the user, and gets explicit confirmation before proceeding.
+1. **Phase 0 — Plan & User Review:** `dream-general` produces `specs/<feature>/plan.md`, presents it to the user, and gets explicit confirmation before proceeding.
 2. **Phase 1 — Research (on-demand):** Use `dream-research` for codebase discovery, external library research, API docs, or troubleshooting.
-3. **Phase 2 — Contract:** Create or update the feature contract. Write `features/<feature>/contract.yaml` and `features/<feature>/test-plan.md`.
-4. **Phase 3 — Design:** Use `dream-designer` to produce `features/<feature>/ui-spec.md` — view states, design-system components, layout, interactions.
-5. **Phase 4 — KMP foundation:** Use `dream-implementer` for `feature/<name>/domain` (entities, repository interfaces, use cases), `feature/<name>/data` (repo implementations, DTOs, mappers), and `feature/<name>/api` (NavKey route types only). No UI.
-6. **Phase 5 — UI:** Deploy `dream-implementer-ui` for cross-platform UI — Compose screens, ViewModels, Koin navigation installers, presentation tests, SwiftUI views, bridge code, and XCTest coverage.
+3. **Phase 2 — Contract:** Create or update the feature contract. Write `specs/<feature>/contract.yaml` and `specs/<feature>/test-plan.md`.
+4. **Phase 3 — Design:** Use `dream-designer` to produce `specs/<feature>/ui-spec.md` — view states, design-system components, layout, interactions.
+5. **Phase 4 — KMP foundation:** Use `dream-implementer` for `feature/<name>-domain` (entities, repository interfaces, use cases), `feature/<name>-data` (repo implementations, DTOs, mappers), and `feature/<name>-api` (NavKey route types only). No UI.
+6. **Phase 5 — UI:** Deploy `dream-implementer-ui` for cross-platform UI — Compose screens, ViewModels, Koin navigation installers, presentation tests, SwiftUI views, bridge code, and Swift unit tests in `iosApp/test`.
 7. **Phase 6 — Wiring:** Consolidate umbrella module imports, DI registration, and navigation entries.
-8. **Phase 7 — Verification:** Use `dream-tester` for the full verification ladder — Gradle unit tests, platform builds, device install/launch, log inspection. Run Maestro end-to-end flows separately via `/dream-e2e`.
+8. **Phase 7 — Verification:** Use `dream-tester` for the full verification ladder — Kotlin Toolchain unit tests, platform builds, device install/launch, log inspection. Run Maestro end-to-end flows separately via `/dream-e2e`.
 9. Write reports using the templates under `temp/.opencode/guidance/templates/`.
 10. Request `dream-inspector` QA gate for substantial work — architecture violations, contract parity, test coverage, anti-patterns.
 11. Only commit when verification and review are clean and staging is safe.
@@ -344,12 +350,12 @@ Agents should prefer MCP queries over grep/read for codebase exploration. See `t
 
 ## Sample Feature Policy
 
-`feature/sample` exists as starter scaffolding. It is useful for demonstrating module shape, Room, strings, ViewModel tests, navigation, and DI.
+`feature/sample-*` exists as starter scaffolding. It is useful for demonstrating module shape, Room, strings, ViewModel tests, navigation, and DI.
 
 Once a real first feature replaces it in a generated app, remove sample leftovers:
 
-- `feature/sample` modules
-- settings includes
+- `feature/sample-*` modules
+- `project.yaml` module entries
 - sample DI registrations
 - sample route keys and navigation entries
 - sample strings and docs text
@@ -370,5 +376,5 @@ When changing Dream rather than a generated app:
 ## Current Follow-Ups
 
 - Run a fresh generated-project flow to verify the hardening changes eliminate first-run drift in practice.
-- Keep sample schema exports only as starter scaffolding; remove them when a generated app replaces `feature/sample`.
+- Keep sample schema exports only as starter scaffolding; remove them when a generated app replaces `feature/sample-*`.
 - Continue tightening identity normalization during project instantiation.

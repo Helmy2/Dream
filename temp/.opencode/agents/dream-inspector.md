@@ -48,12 +48,12 @@ See `.opencode/guidance/reference/codebase-memory-mcp-tools.md` for full referen
 
 ## Required Checks
 
-- Read every relevant `features/<feature>/contract.yaml`
+- Read every relevant `specs/<feature>/contract.yaml`
 - Verify each contract entity field, action, and state maps to code and tests
 - Verify time-sensitive behavior uses `TimeProvider` and tests use `FakeTimeProvider`
 - Verify each required test is present or explicitly blocked
 - Verify verification report uses correct status buckets
-- Read `features/<feature>/ui-spec.md` and verify UI spec compliance (states match spec, components present)
+- Read `specs/<feature>/ui-spec.md` and verify UI spec compliance (states match spec, components present)
 - When first real feature exists, grep for leftover sample artifacts
 - Use mobile-mcp to verify UI renders correctly (screenshot + element tree)
 
@@ -112,7 +112,7 @@ Return: `INSPECTOR_FAILED: <precise-error>`
 ```yaml
 defects:
   - severity: critical
-    file: feature/expense/impl/ExpenseScreen.kt
+    file: feature/expense-impl/ExpenseScreen.kt
     line: 42
     issue: Missing error state handling in when(uiState) expression
     suggested_fix: |
@@ -125,7 +125,7 @@ defects:
     rule_violated: pres-5
 
   - severity: warning
-    file: feature/expense/data/ExpenseRepositoryImpl.kt
+    file: feature/expense-data/ExpenseRepositoryImpl.kt
     line: 15
     issue: Direct Clock.System.now() call instead of TimeProvider
     suggested_fix: |

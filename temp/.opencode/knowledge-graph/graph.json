@@ -281,7 +281,7 @@
       "id": "module.feature.domain",
       "type": "ModulePattern",
       "name": "Feature Domain Module",
-      "pattern": "feature/<name>/domain",
+      "pattern": "feature/<name>-domain",
       "source": {
         "file": ".opencode/knowledge-graph/best-practices/05-feature-module-template.md",
         "startLine": 1,
@@ -292,7 +292,7 @@
       "id": "module.feature.data",
       "type": "ModulePattern",
       "name": "Feature Data Module",
-      "pattern": "feature/<name>/data",
+      "pattern": "feature/<name>-data",
       "source": {
         "file": ".opencode/knowledge-graph/best-practices/05-feature-module-template.md",
         "startLine": 1,
@@ -303,7 +303,7 @@
       "id": "module.feature.presentation",
       "type": "ModulePattern",
       "name": "Feature Presentation Module",
-      "pattern": "feature/<name>/presentation",
+      "pattern": "feature/<name>-impl",
       "source": {
         "file": ".opencode/knowledge-graph/best-practices/05-feature-module-template.md",
         "startLine": 1,
@@ -405,7 +405,7 @@
       "id": "practice.shared_strings",
       "type": "Practice",
       "name": "Centralize user-visible strings",
-      "statement": "Keep shared user-visible strings in shared/core/strings Compose Resources and export the generated Res class publicly for cross-module consumers.",
+      "statement": "Keep shared user-visible strings in shared/core-strings Compose Resources and export the generated Res class publicly for cross-module consumers.",
       "classification": "kmp_oriented",
       "strength": "recommended",
       "source": {
@@ -431,7 +431,7 @@
       "id": "practice.shared_test_utilities",
       "type": "Practice",
       "name": "Reuse shared test utilities",
-      "statement": "Keep fake providers and coroutine-aware helpers in shared/core/testing and reuse them from feature tests.",
+      "statement": "Keep fake providers and coroutine-aware helpers in shared/core-testing and reuse them from feature tests.",
       "classification": "project_specific",
       "strength": "recommended",
       "source": {
@@ -457,7 +457,7 @@
       "id": "practice.ios_host_structure",
       "type": "Practice",
       "name": "Keep iOS hosts structurally obvious",
-      "statement": "Native SwiftUI hosts should organize code under Core, Models, ViewModels, and Views, while Compose iOS hosts should remain intentionally thin.",
+      "statement": "Native SwiftUI hosts should organize code under Core, Models, ViewModels, and Views, and iOS has no Compose host (Compose is Android-only).",
       "classification": "project_specific",
       "strength": "recommended",
       "source": {
@@ -523,8 +523,8 @@
     {
       "id": "rule.ios_xctest_packaging",
       "type": "Rule",
-      "name": "Package XCTest with the native SwiftUI host",
-      "statement": "The native SwiftUI host should include an iosAppTests target and shared scheme so xcodebuild test works in the packaged template.",
+      "name": "Swift unit tests run in a hosted appTests target",
+      "statement": "The Xcode project has an app target (the only one with the Kotlin Toolchain integration script phase) and a hosted appTests unit-test target; Swift tests live in iosApp/test, use @testable import app, and run with xcodebuild test -scheme app; ./kotlin test runs only Kotlin tests.",
       "scope": "platform",
       "classification": "project_specific",
       "strength": "recommended",
@@ -538,8 +538,8 @@
       "id": "antipattern.swift_guessing_objc_api",
       "type": "AntiPattern",
       "name": "Guessing ObjC-shaped Swift API names",
-      "statement": "Do not guess underscore-suffixed enum cases, constructor labels, or other ObjC-shaped names in Swift when SKIE provides a native Swift surface.",
-      "replacementGuidance": "Verify the generated Swift API after shared changes and update Swift code to use the real enum cases, async wrappers, and initializer labels.",
+      "statement": "Do not guess underscore-suffixed enum cases, constructor labels, or other ObjC-shaped names in Swift because there is no SKIE: Kotlin enums and sealed classes are Swift classes, so switch needs a default branch.",
+      "replacementGuidance": "Verify the generated Objective-C API after shared changes and update Swift code to use the real class names, async signatures, and initializer labels.",
       "classification": "kmp_oriented",
       "strength": "caution",
       "source": {
@@ -734,7 +734,7 @@
       "id": "rule.shared_ui_no_hardcoded_strings",
       "type": "Rule",
       "name": "No hardcoded user-visible strings in shared UI",
-      "statement": "All user-visible strings in shared UI should come from shared/core/strings resources or another deliberate shared resource module.",
+      "statement": "All user-visible strings in shared UI should come from shared/core-strings resources or another deliberate shared resource module.",
       "scope": "resources",
       "classification": "kmp_oriented",
       "strength": "non_negotiable",
@@ -858,7 +858,7 @@
       "type": "AntiPattern",
       "name": "Hardcoded shared UI strings",
       "statement": "Do not hardcode user-visible strings in shared UI code.",
-      "replacementGuidance": "Use shared/core/strings Compose Resources or another deliberate shared resource module as the source of truth for user-visible strings.",
+      "replacementGuidance": "Use shared/core-strings Compose Resources or another deliberate shared resource module as the source of truth for user-visible strings.",
       "classification": "kmp_oriented",
       "strength": "caution",
       "source": {
@@ -868,11 +868,11 @@
       }
     },
     {
-      "id": "antipattern.giant_convention_plugins",
+      "id": "antipattern.giant_build_templates",
       "type": "AntiPattern",
-      "name": "Giant convention plugins",
-      "statement": "Do not create giant convention plugins that hide the whole build.",
-      "replacementGuidance": "Keep convention plugins narrow and keep real module dependencies explicit in build files.",
+      "name": "Giant build templates",
+      "statement": "Do not create giant module templates that hide the whole build.",
+      "replacementGuidance": "Keep templates narrow and keep real module dependencies explicit in each module.yaml.",
       "classification": "universal",
       "strength": "caution",
       "source": {
@@ -1648,7 +1648,7 @@
       }
     },
     {
-      "from": "antipattern.giant_convention_plugins",
+      "from": "antipattern.giant_build_templates",
       "type": "REPLACED_BY",
       "to": "practice.feature_based_packaging",
       "source": {
