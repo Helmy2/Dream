@@ -8,11 +8,11 @@ name: local-crud
 summary: Local-first list / detail / create / edit feature persisted in Room, with native UI on both platforms.
 
 validated_with:
-  kotlin_toolchain: 0.13.0
+  kotlin_toolchain: 0.14.1
   kotlin: 2.4.0
   compose_multiplatform: 1.11.1
   room: 2.8.4
-  commit: 1d99e39   # base starter commit; re-run the archetype check after any later archetype change
+  commit: cd6a720   # base starter commit; re-run the archetype check after any later archetype change
   date: "2026-11-21"
   note: >
     Archetype code lives outside the build and can rot. Re-validate it (see archetypes/README.md,
