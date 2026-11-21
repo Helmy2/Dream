@@ -8,16 +8,17 @@ apply:
 
 dependencies:
   - //shared/umbrella-core
-  - //feature/sample-data
-  - //feature/sample-domain
   - //shared/core-presentation
+  - //shared/core-strings
   - //shared/designsystem: exported
   - //shared/navigation: exported
-  - //feature/sample-api: exported
-  - //feature/sample-impl
   - $libs.compose.runtime
+  - $libs.compose.foundation
+  - $libs.compose.material3
+  - $libs.compose.ui
   - $libs.koin.core
   - $libs.koin.compose
+  - $libs.koin.composeNavigation3
   - $libs.koin.composeViewModel
 
 settings:

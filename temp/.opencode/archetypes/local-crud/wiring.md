@@ -2,6 +2,8 @@
 
 Everything a new feature touches outside its own modules. Snippets are from the working sample; replace `Sample`/`sample` per `archetype.yaml` (`naming`). Order matters: modules first, then DI, then hosts.
 
+The empty starter ships a placeholder home screen (`HomeRoute` and `placeholderHomeModule` in `shared/umbrella-ui`, an empty state in `ContentView.swift`) and calls `initKoin(appContext = applicationContext)`. The snippets below are the state after the first feature replaces them; the "First Feature" section of `guidance/new-feature-checklist.md` lists the removals. `apply-verbatim.sh` applies everything below unchanged to a scratch copy, which is how the archetype check works.
+
 ## 1. `project.yaml`
 
 ```yaml

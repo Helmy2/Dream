@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
-# Self-test for verify-feature.sh. Copies the project to a scratch directory, breaks it in specific ways,
-# and checks that verify-feature.sh reports the expected check. Never modifies the real project.
+# Self-test for verify-feature.sh. Copies the project to a scratch directory, applies the local-crud
+# archetype verbatim (the starter itself has no features), breaks the result in specific ways, and checks
+# that verify-feature.sh reports the expected check. Never modifies the real project.
 #
 # Usage: .opencode/scripts/test-verify-feature.sh [feature-name]   (default: sample)
-# Needs rsync, perl and python3. Runs verify-feature.sh with --quick, so no builds are started.
+# Needs rsync, perl and python3, and a TMPDIR outside any git repository. Runs verify-feature.sh with
+# --quick, so no builds are started. The feature under test is the archetype's "sample".
 
 set -u
 SRC="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -16,6 +18,8 @@ PASS=0; FAIL=0
 fresh() {
   rm -rf "$W"; mkdir -p "$W"
   rsync -a --exclude=build/ --exclude=.kotlin/ --exclude=node_modules/ --exclude=.git/ "$SRC/" "$W/"
+  bash "$W/.opencode/archetypes/local-crud/apply-verbatim.sh" "$W" >/dev/null 2>&1 \
+    || { echo "Could not apply the local-crud archetype to the scratch copy (is TMPDIR inside a git repository?)" >&2; exit 2; }
 }
 run() { (cd "$W" && bash .opencode/scripts/verify-feature.sh "$F" --quick 2>&1); }
 

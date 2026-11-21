@@ -101,22 +101,24 @@ maestro:
   note: flows assert on the demo seed text; update them when seed data and strings change.
 
 wiring:
-  # Files outside the new modules that must change. Exact snippets: see ../../wiring.md in this folder.
+  # Files outside the new modules that must change. Exact snippets: see wiring.md in this folder.
+  # apply-verbatim.sh performs all of them unchanged (feature name "sample") on a scratch copy; it is for
+  # the archetype check and test fixtures only. Real features adapt these by hand.
   - project.yaml                                  # add the four module entries
   - shared/umbrella-core/module.yaml              # add -data and -domain as exported (iOS framework exposure)
   - shared/umbrella-ui/module.yaml                # add -data, -domain, -api (exported), -impl
-  - shared/umbrella-ui/src/**/di/UiModule.kt      # start destination, data module, UI module, initKoin params
-  - androidApp/src/**/MainActivity.kt             # pass the database factory to initKoin
-  - iosApp/src/ContentView.swift                  # root view
+  - shared/umbrella-ui/src/**/di/UiModule.kt      # start destination (replaces the placeholder HomeRoute), data module, UI module, initKoin params
+  - androidApp/src/**/MainActivity.kt             # pass the database factory to initKoin (the starter calls initKoin(appContext = ...))
+  - iosApp/src/ContentView.swift                  # root view (replaces the placeholder empty state)
   - iosApp/src/Core/AppDependencies.swift         # inject the bridge
-  - shared/core-strings and iosApp/src/Localizable.xcstrings
+  - shared/core-strings and iosApp/src/Localizable.xcstrings   # add the feature keys; remove placeholder_* once the placeholder is gone
   - maestro/features/<feature>/
 
 tests_included:
   - domain: SampleItemTest, SampleRepositoryContractTest
   - data: SampleItemMapperTest, RoomSampleRepositoryTest (fake DAO, no real database)
   - presentation: SampleViewModelTest
-  - umbrella-core: SampleDataModuleTest (DI graph composition)
+  - umbrella-core: SampleDataModuleTest (DI graph composition; lives at kotlin/shared/umbrella-core/test/)
   - ios: SampleListViewModelTests, SampleDetailViewModelTests with MockSampleRepositoryBridge
 
 verification:

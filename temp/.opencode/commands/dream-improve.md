@@ -182,7 +182,6 @@ Check and apply the following token optimization guidelines:
 - [ ] `agent-constraints.md` exists
 - [ ] `verification-commands.md` exists
 - [ ] `skip-conditions.md` exists
-- [ ] `sample-cleanup-checklist.md` exists
 
 ### 5.5 Output Structure
 

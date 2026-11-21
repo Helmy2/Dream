@@ -36,15 +36,22 @@ Planned, not yet written: `remote-list` (Ktor, DTO, mapper, cache) and `settings
 
 Archetype code lives outside the build and can rot as versions change. Run this before a release and whenever `libs.versions.toml` or the Toolchain version changes:
 
-1. Copy `temp/` to a scratch directory (not inside this repo).
-2. Delete the existing `feature/sample-*` modules and sample wiring, or start from an empty shell once one exists.
-3. Apply the archetype from `.opencode/archetypes/<name>/` following `wiring.md`.
-4. Run every command under `verification` in `archetype.yaml` and confirm the tests pass.
-5. If it fails, fix the archetype folder, update `validated_with`, and commit.
+```bash
+# from the starter root (temp/)
+SCRATCH="$HOME/.dream-scratch/archetype-check"   # outside any git repo, and NOT under /tmp, /var or /etc
+rm -rf "$SCRATCH" && mkdir -p "$SCRATCH"
+rsync -a --exclude=build/ --exclude=.kotlin/ --exclude=.git/ ./ "$SCRATCH/"
+"$SCRATCH/.opencode/archetypes/<name>/apply-verbatim.sh" "$SCRATCH"
+cd "$SCRATCH" && .opencode/scripts/verify-feature.sh sample    # full run: structure, build, tests, Swift tests
+```
+
+The scratch directory must not be under `/tmp`, `/var` or `/etc` (symlinks into `/private` on macOS): Xcode reports the symlinked path and the Toolchain's Xcode integration cannot resolve it, so the Swift tests cannot run there. `verify-feature.sh` reports that as `not run` and exits 1 instead of passing.
+
+`apply-verbatim.sh` applies the archetype unchanged (feature name `sample`), so the result is the original working feature on top of the current starter. If the check fails, fix the archetype folder, update `validated_with` in `archetype.yaml`, and commit. `.opencode/scripts/test-verify-feature.sh` uses the same fixture for its quick structural run.
 
 ## Adding an archetype
 
 1. Build the feature in a scratch copy of `temp/` until it compiles and passes tests on both platforms.
 2. Copy its modules, iOS files, strings and Maestro flows into a new folder here, mirroring `local-crud/`.
-3. Write `archetype.yaml` and `wiring.md`, and add a row to the table above.
+3. Write `archetype.yaml` and `wiring.md`, add an `apply-verbatim.sh` that applies it unchanged to a scratch copy, and add a row to the table above.
 4. Run the archetype check.

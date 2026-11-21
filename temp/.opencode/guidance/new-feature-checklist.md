@@ -7,7 +7,7 @@ Sections are tagged by condition:
 - **iOS** — apply when the feature has an iOS (SwiftUI) screen
 - **Forms** — apply only when feature has editable text inputs
 - **Time** — apply only when feature uses dates, timestamps, or time-sensitive logic
-- **First Feature** — apply only when removing the sample feature
+- **First Feature** — apply only when adding the first real feature to the empty starter
 - **UI Fix** — apply when using `/dream-ui-fix`
 - **Bug Fix** — apply when using `/dream-bug-fix`
 
@@ -168,15 +168,17 @@ Apply only when feature uses dates, timestamps, or time-sensitive logic:
 - [ ] Use `FakeTimeProvider` in time-sensitive tests.
 - [ ] Do not add feature-local date formatting helpers in common code.
 
-## Sample Removal (First Feature)
+## First Feature (First Feature)
 
-Apply only when removing the sample feature for the first time:
+Apply only when adding the first real feature to the empty starter. The starter ships a placeholder home screen that the first feature replaces:
 
-- [ ] Run `./.opencode/scripts/remove-sample.sh --dry-run` first.
-- [ ] Run `./.opencode/scripts/remove-sample.sh` to delete sample files and strip deps.
-- [ ] Complete manual edits from script output.
+- [ ] Point `navigatorModule` in `shared/umbrella-ui/src/**/di/UiModule.kt` at the feature's route (`Navigator(startDestination = <FeatureRoute>)`) and add the feature's data and UI Koin modules to `initKoin`, passing any platform factories they need.
+- [ ] Delete `shared/umbrella-ui/src/**/home/PlaceholderHome.kt` and remove `placeholderHomeModule` from `initKoin`.
+- [ ] Remove the `placeholder_*` keys from `shared/core-strings` and `iosApp/src/Localizable.xcstrings`.
+- [ ] iOS: replace the body of `iosApp/src/ContentView.swift` with the feature's root view (the placeholder uses `DreamEmptyStateView`).
+- [ ] Keep `iosApp/test/BridgeErrorTests.swift`; it covers generic bridge code and keeps the `appTests` bundle non-empty.
 - [ ] Update `AGENTS.md`, `README.md`, and `maestro/README.md`.
-- [ ] Run `./.opencode/scripts/remove-sample.sh --dry-run` again to confirm no leftovers.
+- [ ] Run `.opencode/scripts/verify-feature.sh <feature-name>`.
 
 ---
 

@@ -1,9 +1,7 @@
 package com.dream.template.shared.di
 
-import com.dream.template.feature.sample.api.navigation.SampleRoute
-import com.dream.template.feature.sample.data.di.sampleDataModule
-import com.dream.template.feature.sample.data.local.SampleDatabaseFactory
-import com.dream.template.feature.sample.impl.di.sampleUiModule
+import com.dream.template.shared.home.HomeRoute
+import com.dream.template.shared.home.placeholderHomeModule
 import com.dream.template.shared.navigation.Navigator
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
@@ -11,13 +9,16 @@ import org.koin.dsl.module
 
 
 val navigatorModule = module {
-    single { Navigator(startDestination = SampleRoute) }
+    single { Navigator(startDestination = HomeRoute) }
 }
 
 private var hasStartedKoin = false
 
+/**
+ * Composition root. Feature modules are listed in [startKoin]'s `modules(...)` call: add each feature's
+ * data module and UI module here, and give [initKoin] whatever platform factories they need.
+ */
 fun initKoin(
-    sampleDatabaseFactory: SampleDatabaseFactory,
     appContext: Any? = null,
     appDeclaration: KoinAppDeclaration = {}
 ) {
@@ -27,8 +28,7 @@ fun initKoin(
         appDeclaration()
         modules(
             coreModule(appContext),
-            sampleDataModule(sampleDatabaseFactory),
-            sampleUiModule,
+            placeholderHomeModule,
             navigatorModule,
         )
     }

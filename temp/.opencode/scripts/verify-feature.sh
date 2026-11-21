@@ -11,7 +11,8 @@
 #   -h, --help
 #
 # Output: one line per check: passed / FAILED / warning / not applicable / not run.
-# Exit code: 0 when nothing FAILED, 1 otherwise. Warnings never fail the run; read them anyway.
+# Exit code: 0 when nothing FAILED and, in a full run, nothing was left "not run"; 1 otherwise.
+# Warnings never fail the run; read them anyway. --quick always reports B1 as not run and can still exit 0.
 #
 # Needs bash, grep, find, sed, awk and python3 (for Localizable.xcstrings). Works with macOS bash 3.2.
 
@@ -296,12 +297,22 @@ else
     if [ -z "$SIM" ]; then
       SIM="$(xcrun simctl list devices available 2>/dev/null | grep -E '^[[:space:]]+iPhone' | head -1 | sed -E 's/^[[:space:]]+//; s/ \([0-9A-F-]{36}\).*//')"
     fi
+    PHYSICAL="$(pwd -P)"
+    case "$PHYSICAL" in
+      /private/*)
+        # /tmp, /var and /etc are symlinks into /private. Xcode reports the symlinked form (SRCROOT=/tmp/...)
+        # and the Kotlin Toolchain's xcode-integration cannot match it ("Unable to resolve a module with the
+        # module directory"), so the Swift tests cannot run from such a location.
+        emit nr B7 "Swift tests not run: $PHYSICAL is under a symlinked macOS path (/tmp, /var, /etc). The Toolchain's Xcode integration cannot resolve it; move the project elsewhere (for example under \$HOME) and run again." ;;
+      *)
     if [ -z "$SIM" ]; then emit nr B7 "Swift tests: no available iPhone simulator found (pass --simulator <name>)"
     else
       step B7 "Swift tests on '$SIM' (xcodebuild test -scheme iosApp)" \
         xcodebuild test -project iosApp/module.xcodeproj -scheme iosApp -destination "platform=iOS Simulator,name=$SIM" \
           -derivedDataPath "$LOGDIR/derived-data" CODE_SIGNING_ALLOWED=NO
     fi
+        ;;
+    esac
   else
     emit na B5 "iOS build and Swift tests skipped (no iOS screen for this feature)"
   fi
@@ -312,6 +323,10 @@ if [ "$FAILED" -gt 0 ]; then
   echo "Result: NOT READY. Fix every FAILED line, then run again."
   exit 1
 fi
-if $QUICK; then echo "Result: structure OK. Run without --quick before reporting success."
-else echo "Result: structure, build and tests OK (warnings still need a look; device launch and Maestro are separate steps)."; fi
+if $QUICK; then echo "Result: structure OK. Run without --quick before reporting success."; exit 0; fi
+if [ "$NOTRUN" -gt 0 ]; then
+  echo "Result: INCOMPLETE. $NOTRUN check(s) did not run (see the 'not run' lines). Do not report success until they run."
+  exit 1
+fi
+echo "Result: structure, build and tests OK (warnings still need a look; device launch and Maestro are separate steps)."
 exit 0
