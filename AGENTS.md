@@ -38,6 +38,8 @@ Prefer linking to those documents in discussions and change summaries instead of
   - `dream-improve` — Apply unapplied feature retrospectives and token optimization
   - `dream-info` — Display Dream tool overview, commands, agents, and features
 - [temp/.opencode/guidance/](temp/.opencode/guidance): packaged operating guidance and prompt scaffolds
+- [temp/.opencode/archetypes/](temp/.opencode/archetypes/README.md): working reference features (`local-crud`) that agents read and adapt when building a similar feature
+- [plans/](plans): Dream's own change plans and baselines (not part of the starter)
 - [temp/.opencode/guidance/reference/](temp/.opencode/guidance/reference): agent constraints, non-negotiable rules, verification commands/patterns, skip conditions, and token optimization guidelines
 - [temp/.opencode/guidance/templates/](temp/.opencode/guidance/templates): feature contract, feature report, feature spec, plan, maestro smoke checklist, retrospective, and verification report templates
 - [temp/.opencode/knowledge-graph/README.md](temp/.opencode/knowledge-graph/README.md): packaged reusable architecture rules and source graph

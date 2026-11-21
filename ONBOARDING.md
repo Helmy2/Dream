@@ -31,6 +31,8 @@ flowchart TD
 - `temp/`: canonical Kotlin Multiplatform starter project.
 - `temp/.opencode/`: packaged OpenCode config, agents (7 agents: dream-general, dream-research, dream-designer, dream-implementer, dream-implementer-ui, dream-tester, dream-inspector), commands, and prompt guidance.
 - `temp/.opencode/knowledge-graph/`: reusable architecture rules and retrieval sources.
+- `temp/.opencode/archetypes/`: working reference features for common architectures (currently `local-crud`). Agents read an archetype and adapt it; see its `README.md` for choosing, applying, and re-validating one.
+- `plans/`: Dream's own change plans and baselines (not part of the starter).
 - `temp/specs/`: generated app contracts, feature specs, decisions, reports, and retrospectives.
 - `temp/maestro/`: Android and iOS smoke-flow scaffolding.
 - `temp/.opencode/scripts/dream-preflight.sh`: local readiness check for git, Android SDK, and tooling.
@@ -261,7 +263,7 @@ Important defaults:
 - Room builder policy is centralized in `shared/core-data`.
 - The bundled SQLite driver is configured once.
 - Room query execution uses `Dispatchers.Default` for KMP-safe behavior.
-- First-pass MVP iteration uses destructive migration fallback to recover from stale local test schemas.
+- First-pass MVP iteration may opt in to destructive migration fallback (`allowDestructiveMigration`, off by default) to recover from stale local test schemas.
 - Real apps that need to preserve user data must replace destructive fallback with migrations.
 
 ## Testing

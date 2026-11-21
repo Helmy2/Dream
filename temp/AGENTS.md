@@ -19,6 +19,7 @@ When working in this generated project, read in this order:
 - [.opencode/agents/](.opencode/agents): Dream agent definitions (dream-general, dream-research, dream-designer, dream-implementer, dream-implementer-ui, dream-tester, dream-inspector)
 - [.opencode/commands/](.opencode/commands): Dream slash-command workflows
 - [.opencode/guidance/](.opencode/guidance): operating guide and prompt scaffolds
+- [.opencode/archetypes/](.opencode/archetypes/README.md): working reference features for common architectures (start with `local-crud`); read one before building a similar feature
 - [.opencode/knowledge-graph/](.opencode/knowledge-graph): architecture rules and retrieval sources
 - [maestro/](maestro): Android and iOS smoke-flow scaffolding for generated feature validation
 - [.opencode/scripts/dream-preflight.sh](.opencode/scripts/dream-preflight.sh): git, Android SDK, and tooling readiness preflight

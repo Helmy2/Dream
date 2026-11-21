@@ -1,0 +1,13 @@
+product:
+  type: kmp/lib
+  platforms: [android, iosArm64, iosSimulatorArm64]
+
+apply:
+  - //templates/common.module-template.yaml
+
+dependencies:
+  - //shared/core-domain: exported
+
+settings:
+  android:
+    namespace: com.dream.template.feature.sample.domain

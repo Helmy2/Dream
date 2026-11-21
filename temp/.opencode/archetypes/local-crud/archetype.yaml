@@ -1,0 +1,137 @@
+# Archetype: local-crud
+#
+# A complete, working reference feature: list, detail and create/edit screens backed by a local Room
+# database, on Android (Compose) and iOS (SwiftUI). The code in this folder is a real, compiling
+# snapshot of the former `feature/sample-*` modules. Read it, then adapt it; do not copy it blindly.
+
+name: local-crud
+summary: Local-first list / detail / create / edit feature persisted in Room, with native UI on both platforms.
+
+validated_with:
+  kotlin_toolchain: 0.13.0
+  kotlin: 2.4.0
+  compose_multiplatform: 1.11.1
+  room: 2.8.4
+  commit: ecb3067
+  date: "2026-11-21"
+  note: >
+    Archetype code lives outside the build and can rot. Re-validate it (see archetypes/README.md,
+    "Archetype check") whenever versions in libs.versions.toml change.
+
+when_to_use:
+  - The feature manages a collection of user-owned records stored on the device.
+  - It needs a list screen, a detail screen, and create/edit with validation.
+  - Offline-first is required and no backend exists yet (or the backend comes later).
+
+when_not_to_use:
+  - Data comes from a remote API first (use a remote-list archetype once it exists).
+  - The feature is a single settings screen (use a settings archetype once it exists).
+  - There is no persistent entity at all (build the feature from the architecture rules instead).
+
+tradeoffs:
+  - Room's destructive-migration fallback is opt-in (`allowDestructiveMigration`, default false) and the sample does not enable it. Schema version stays at 1 with an exported schema; any entity change needs a version bump plus a migration (or an explicit, temporary opt-in during early iteration).
+  - Seeds three demo rows on first load (`seedIfNeeded`). Remove or replace the seeding for a real feature.
+  - The detail and list screens share one ViewModel on Android (`SampleViewModel`); iOS uses two (`SampleListViewModel`, `SampleDetailViewModel`).
+  - Android UI (`*-impl`) is Android-only; iOS is a hand-written SwiftUI mirror. Logic is written twice by design.
+  - The demo category enum (Contract/Architecture/Preview) is example data, not a pattern to keep.
+
+naming:
+  # Replace consistently across Kotlin, Swift, YAML, strings and Maestro. `com.dream.template` is
+  # rewritten by dream-init and does not need manual replacement.
+  Sample: "<Feature>          # PascalCase, e.g. Expense"
+  sample: "<feature>          # lowercase, e.g. expense; also module names feature/<feature>-*"
+  SampleItem: "<Entity>       # the persisted record, e.g. ExpenseItem"
+  SampleCategory: "<Category> # demo enum; replace with real fields or delete"
+  dream_sample.db: "<app>_<feature>.db"
+  sample_items: "<feature>_items   # Room table name"
+  description_: >
+    Swift sees the Kotlin property `description` as `description_` (it clashes with NSObject);
+    keep that in Swift mapping code.
+
+modules:
+  - name: feature/sample-domain
+    platforms: [android, iosArm64, iosSimulatorArm64]
+    contains: [SampleItem, SampleCategory, SampleRepository]
+    depends_on: [shared/core-domain]
+  - name: feature/sample-data
+    platforms: [android, iosArm64, iosSimulatorArm64]
+    contains:
+      - Room database, DAO, entity (local/)
+      - platform database factories (src@android, src@ios)
+      - RoomSampleRepository and SampleItemMapper
+      - sampleDataModule (di/)
+      - "iOS bridge helpers: *OrThrow extensions and iosSampleRepository() (bridge/)"
+      - Room schema export (schemas/)
+    depends_on: [feature/sample-domain, shared/core-data, shared/core-domain]
+    ksp: room compiler with room.schemaLocation ./schemas
+    koin_module_id: sample-data
+  - name: feature/sample-api
+    platforms: [android, iosArm64, iosSimulatorArm64]
+    contains: [SampleRoute, SampleDetailRoute]   # NavKey route types only
+    depends_on: [navigation3.runtime]
+  - name: feature/sample-impl
+    platforms: [android]
+    contains: [list/detail screens, form components, ViewModel, state/action/event, presentation mapper, sampleUiModule]
+    depends_on:
+      - feature/sample-api
+      - feature/sample-domain
+      - shared/core-domain
+      - shared/core-presentation
+      - shared/core-strings
+      - shared/designsystem
+      - shared/navigation
+    koin_module_id: sample-impl
+    template: //templates/feature-impl.module-template.yaml
+
+ios:
+  source: ios/src/Sample
+  contains: [Models, ViewModels, Views, Bridge/SampleBridge.swift]
+  tests: ios/test           # Swift unit tests plus the bridge mock
+  generic_bridge_code_stays_in: iosApp/src/Core   # BridgeError
+  core_reference: ios/src/Core/AppDependencies.swift   # shows how the bridge is injected
+
+strings:
+  android: strings/strings.xml           # every key is prefixed sample_ and goes in shared/core-strings
+  ios: strings/Localizable.xcstrings     # same keys, goes in iosApp/src/Localizable.xcstrings
+  rule: keep Android and iOS keys identical; user-visible text must not be hardcoded in screens.
+
+maestro:
+  source: maestro/features/sample
+  flows: [android.yaml, ios.yaml]
+  note: flows assert on the demo seed text; update them when seed data and strings change.
+
+wiring:
+  # Files outside the new modules that must change. Exact snippets: see ../../wiring.md in this folder.
+  - project.yaml                                  # add the four module entries
+  - shared/umbrella-core/module.yaml              # add -data and -domain as exported (iOS framework exposure)
+  - shared/umbrella-ui/module.yaml                # add -data, -domain, -api (exported), -impl
+  - shared/umbrella-ui/src/**/di/UiModule.kt      # start destination, data module, UI module, initKoin params
+  - androidApp/src/**/MainActivity.kt             # pass the database factory to initKoin
+  - iosApp/src/ContentView.swift                  # root view
+  - iosApp/src/Core/AppDependencies.swift         # inject the bridge
+  - shared/core-strings and iosApp/src/Localizable.xcstrings
+  - maestro/features/<feature>/
+
+tests_included:
+  - domain: SampleItemTest, SampleRepositoryContractTest
+  - data: SampleItemMapperTest, RoomSampleRepositoryTest (fake DAO, no real database)
+  - presentation: SampleViewModelTest
+  - umbrella-core: SampleDataModuleTest (DI graph composition)
+  - ios: SampleListViewModelTests, SampleDetailViewModelTests with MockSampleRepositoryBridge
+
+verification:
+  - ./kotlin build
+  - ./kotlin test --platform=android
+  - ./kotlin test --platform=iosSimulatorArm64
+  - ./kotlin build -m androidApp --platform=android
+  - ./kotlin build -m iosApp --platform=iosSimulatorArm64
+  - .opencode/scripts/fix-ios-project.sh        # run after iOS builds; restores the appTests testable
+  - xcodebuild test -project iosApp/module.xcodeproj -scheme iosApp -destination 'platform=iOS Simulator,name=<available simulator>' CODE_SIGNING_ALLOWED=NO
+
+pitfalls:
+  - Every module that uses the Koin compiler plugin needs a unique moduleId (module name). Set it for each new -data and -impl module.
+  - Module names equal directory names under the Toolchain and must be unique (feature/expense-domain, not feature/expense/domain).
+  - New Swift files in iosApp/src need no project registration, but a Toolchain build can regenerate the Xcode project and strip the appTests testable; run fix-ios-project.sh before Swift tests.
+  - Keep the Kotlin file names of bridge helpers stable; Swift calls them through the generated <FileName>Kt class.
+  - Add real Room migrations before shipping persisted data; never ship with the destructive fallback enabled.
+  - Room schema export directories are named after the database class FQN; dream-init does not rename them, Room regenerates them.
