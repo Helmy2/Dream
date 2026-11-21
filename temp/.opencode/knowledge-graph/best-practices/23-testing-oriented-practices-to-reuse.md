@@ -24,11 +24,11 @@ For Room-backed feature data modules, common tests should not depend on Android-
 
 Do not claim a Room repository is fully covered by a presentation test that mocks the repository.
 
-The sample feature includes copyable test examples:
+The `local-crud` archetype (`.opencode/archetypes/local-crud/kotlin/feature/`) includes copyable test examples:
 
-- `feature/sample-domain/test/.../SampleItemTest.kt` for simple domain model tests
-- `feature/sample-domain/test/.../SampleRepositoryContractTest.kt` for repository contract expectations
-- `feature/sample-data/test/.../SampleItemMapperTest.kt` for data/entity mapping tests
+- `sample-domain/test/.../SampleItemTest.kt` for simple domain model tests
+- `sample-domain/test/.../SampleRepositoryContractTest.kt` for repository contract expectations
+- `sample-data/test/.../SampleItemMapperTest.kt` for data/entity mapping tests
 
 ### 23.4 Prefer flows for observable state sources
 

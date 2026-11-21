@@ -257,6 +257,17 @@
       },
       "summary": "Defines xcstrings-to-xml key/value sync rule, iOS-only string conventions, localized SwiftUI usage, and the verification workflow.",
       "text": "Every shared xcstrings key must match a strings.xml name, and every English value must match. Format specifiers convert from %1$s to %@. iOS-only strings use an ios_ infix and exist only in the xcstrings. Use Text(\"key_name\") for localized lookup in SwiftUI views and String(localized:) for computed property return values. When adding or changing a string, update strings.xml first, then xcstrings, then verify both the iOS and Android Toolchain builds still pass. No hardcoded user-visible strings in SwiftUI views."
+    },
+    {
+      "id": "chunk.workflow.archetypes",
+      "title": "Archetype Practices",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/40-archetype-practices.md",
+        "startLine": 1,
+        "endLine": 42
+      },
+      "summary": "Defines how agents choose, adapt, validate, and finish features with archetypes, the placeholder home, and the verify-feature gate.",
+      "text": "An archetype is a complete, working reference feature under .opencode/archetypes/<name>/; the starter has no feature modules. Before planning, read the archetype index and each archetype.yaml and record the choice (or none with the reason) in the plan. Adapt the archetype: rename per its naming map, drop demo content, never copy it unchanged; apply-verbatim.sh exists only for the archetype check. The first real feature replaces the placeholder home (HomeRoute, placeholderHomeModule, ContentView empty state, placeholder_* strings). Archetypes are valid only if validated: run the archetype check from a scratch copy outside git and outside /tmp, /var, /etc whenever versions change. Finish every feature with verify-feature.sh in full; FAILED blocks success and a full run with checks not run is INCOMPLETE."
     }
   ]
 }

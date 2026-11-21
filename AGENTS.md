@@ -121,7 +121,8 @@ Use the lighter template commands for focused iteration, but do not report final
 ## When Updating Dream
 
 - If you change generation workflow or success criteria, update [temp/.opencode/guidance/dream-agent-operating-guide.md](temp/.opencode/guidance/dream-agent-operating-guide.md) and the relevant files under [temp/.opencode/guidance/prompts/](temp/.opencode/guidance/prompts/).
-- If you change reusable architecture rules, update the corresponding files in [temp/.opencode/knowledge-graph/best-practices/](temp/.opencode/knowledge-graph/best-practices/README.md).
+- If you change reusable architecture rules, update the corresponding files in [temp/.opencode/knowledge-graph/best-practices/](temp/.opencode/knowledge-graph/best-practices/README.md), keep `graph.json` and `source-chunks.json` in step, and run `python3 temp/.opencode/knowledge-graph/test/test_graph.py`.
+- If you add or change an archetype, update its `archetype.yaml` and `wiring.md`, then run the archetype check described in [temp/.opencode/archetypes/README.md](temp/.opencode/archetypes/README.md).
 - If you change starter structure or validation commands, update [temp/AGENTS.md](temp/AGENTS.md).
 - If you add or change scripts, update the relevant files under [temp/.opencode/scripts/](temp/.opencode/scripts/) and document them in root [ONBOARDING.md](ONBOARDING.md) and [AGENTS.md](AGENTS.md).
 

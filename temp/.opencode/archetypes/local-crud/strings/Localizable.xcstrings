@@ -89,13 +89,13 @@
         }
       }
     },
-    "sample_details_header" : {
+    "sample_detail_title" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Details"
+            "value" : "Sample detail"
           }
         }
       }
@@ -151,6 +151,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Starter content failed to load"
+          }
+        }
+      }
+    },
+    "sample_ios_details_header" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Details"
           }
         }
       }
@@ -327,17 +338,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Required"
-          }
-        }
-      }
-    },
-    "sample_detail_title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sample detail"
           }
         }
       }

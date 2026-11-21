@@ -41,7 +41,7 @@ Every line is `passed`, `FAILED`, `warning`, `not applicable`, or `not run`, mat
 
 The script cannot judge contract parity, UI quality, or runtime behavior. The items below that it does not cover still apply, along with device launch, log inspection, and `/dream-e2e`.
 
-`.opencode/scripts/test-verify-feature.sh` breaks a scratch copy of the project in 18 ways and checks the gate catches each one. Run it after editing `verify-feature.sh`.
+`.opencode/scripts/test-verify-feature.sh` breaks a scratch copy of the project in 20 ways and checks the gate catches each one. Run it after editing `verify-feature.sh`.
 
 ---
 

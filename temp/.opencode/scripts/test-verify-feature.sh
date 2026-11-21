@@ -56,6 +56,8 @@ expect "impl Koin module not installed in umbrella-ui"         FAILED  W2   "gre
 expect "impl tests deleted"                                    FAILED  T1   "rm -rf $IMPL/test"
 expect "hardcoded UI text in impl"                             warning S1   "d=\$(find $IMPL/src -name '*.kt' | head -1); printf '\nfun x(){ Text(\"hello\") }\n' >> \$d"
 expect "iOS string key missing"                                FAILED  S4   "python3 -I -c \"import json;p='iosApp/src/Localizable.xcstrings';d=json.load(open(p));del d['strings']['${F}_add'];json.dump(d,open(p,'w'))\""
+expect "iOS-only string key without an ios_ infix"             FAILED  S4   "python3 -I -c \"import json;p='iosApp/src/Localizable.xcstrings';d=json.load(open(p));d['strings']['${F}_orphan']=d['strings']['${F}_add'];json.dump(d,open(p,'w'))\""
+expect "iOS string value differs from Android"                 FAILED  S4   "python3 -I -c \"import json;p='iosApp/src/Localizable.xcstrings';d=json.load(open(p));d['strings']['${F}_add']['localizations']['en']['stringUnit']['value']='Changed';json.dump(d,open(p,'w'))\""
 expect "Maestro appId mismatch"                                FAILED  E1   "perl -pi -e 's/^appId:.*/appId: com.wrong.app/' maestro/features/$F/android.yaml"
 expect "Swift tests removed"                                   FAILED  I3   "rm -f iosApp/test/*.swift"
 expect "stripped appTests testable is repaired and reported"   warning I4   "perl -0pi -e 's/<Testables>.*?<\\/Testables>/<Testables>\n      <\\/Testables>/s' iosApp/module.xcodeproj/xcshareddata/xcschemes/iosApp.xcscheme"

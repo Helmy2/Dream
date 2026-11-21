@@ -46,6 +46,11 @@ The initial graph covers:
 - stable composition roots
 - UI quality and state design
 - iOS host structure, KMP bridge rules, Xcode configuration, and Xcode project and testing limits
+- archetypes: choosing, adapting, and validating reference features, and the verify-feature gate
+
+## Validation
+
+After editing `graph.json`, `source-chunks.json`, or any best-practice file, run `python3 .opencode/knowledge-graph/test/test_graph.py` from the project root. It checks node and edge integrity and that every source line range still exists. There is no generator: both JSON files are maintained by hand, so keep their `source` line ranges in step with the markdown.
 
 ## Next Extensions
 

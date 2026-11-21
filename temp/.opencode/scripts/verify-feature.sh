@@ -247,19 +247,46 @@ else
   if [ "${tests:-0}" -gt 0 ]; then emit ok I3 "$tests Swift test file(s) in iosApp/test reference the feature"
   else emit fail I3 "no Swift tests in iosApp/test reference $IOS_DIR"; fi
 
-  if [ -f "$XCSTRINGS" ] && command -v python3 >/dev/null 2>&1; then
-    ikeys="$(python3 -I -c "
-import json,sys
-d=json.load(open(sys.argv[1]))
-print('\n'.join(sorted(k for k in d.get('strings',{}) if k.startswith(sys.argv[2]))))" "$XCSTRINGS" "$PREFIX" 2>/dev/null)"
-    only_a="$(comm -23 <(printf '%s\n' "$akeys") <(printf '%s\n' "$ikeys") | grep -v '^$' | tr '\n' ' ')"
-    only_i="$(comm -13 <(printf '%s\n' "$akeys") <(printf '%s\n' "$ikeys") | grep -v '^$' | tr '\n' ' ')"
-    # Every Android key must exist on iOS. iOS-only keys are legitimate (iOS-specific copy), so only note them.
-    if [ -n "$only_a" ]; then emit fail S4 "Android string keys missing from $XCSTRINGS: $only_a"
-    elif [ -n "$only_i" ]; then emit ok S4 "all Android string keys exist on iOS (iOS-only keys, fine if iOS-specific: $only_i)"
-    else emit ok S4 "Android and iOS string keys match for prefix ${PREFIX}"; fi
+  if [ -f "$XCSTRINGS" ] && [ -f "$ANDROID_STRINGS" ] && command -v python3 >/dev/null 2>&1; then
+    # Enforces best-practices/39: every Android key exists on iOS, iOS-only keys use an ios_ infix, and the
+    # English values match once %1$s is converted to %@.
+    s4="$(python3 -I - "$ANDROID_STRINGS" "$XCSTRINGS" "$PREFIX" <<'PY'
+import json, re, sys
+import xml.etree.ElementTree as ET
+
+xml_path, xc_path, prefix = sys.argv[1:4]
+esc = {"n": "\n", "t": "\t"}
+unescape = lambda v: re.sub(r"\\(.)", lambda m: esc.get(m.group(1), m.group(1)), v)
+android = {e.get("name"): unescape(e.text or "") for e in ET.parse(xml_path).getroot().findall("string")
+           if e.get("name", "").startswith(prefix)}
+ios = {}
+for k, v in json.load(open(xc_path, encoding="utf-8")).get("strings", {}).items():
+    if k.startswith(prefix):
+        unit = v.get("localizations", {}).get("en", {}).get("stringUnit")
+        ios[k] = unit["value"] if unit else None
+convert = lambda v: re.sub(r"%\d+\$s", "%@", v)
+only_a = sorted(set(android) - set(ios))
+only_i = sorted(set(ios) - set(android))
+no_infix = [k for k in only_i if "_ios_" not in k]
+mismatch = [k for k in sorted(set(android) & set(ios)) if ios[k] is not None and convert(android[k]) != ios[k]]
+problems = []
+if only_a: problems.append("Android keys missing on iOS: " + " ".join(only_a))
+if no_infix: problems.append("iOS-only keys without an ios_ infix (rename to <prefix>ios_...): " + " ".join(no_infix))
+if mismatch: problems.append("English values differ (after %1$s -> %@): " + " ".join(mismatch))
+if problems:
+    print("FAIL|" + " | ".join(problems))
+else:
+    extra = f" ({len(only_i)} iOS-only key(s) with ios_ infix)" if only_i else ""
+    print(f"OK|Android and iOS strings match for prefix {prefix}: {len(android)} key(s), values in sync{extra}")
+PY
+)"
+    case "$s4" in
+      FAIL\|*) emit fail S4 "${s4#FAIL|}" ;;
+      OK\|*)   emit ok S4 "${s4#OK|}" ;;
+      *)       emit nr S4 "string parity check produced no result" ;;
+    esac
   else
-    emit nr S4 "string parity not checked (needs $XCSTRINGS and python3)"
+    emit nr S4 "string parity not checked (needs $ANDROID_STRINGS, $XCSTRINGS and python3)"
   fi
 fi
 

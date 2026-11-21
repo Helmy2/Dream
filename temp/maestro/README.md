@@ -53,8 +53,8 @@ App IDs: Android `com.dream.template.android`, iOS `com.dream.template.ios`. Bui
 Recommended use:
 
 ```bash
-maestro test maestro/features/sample/android.yaml
-maestro test maestro/features/sample/ios.yaml
+maestro test maestro/features/<feature-name>/android.yaml
+maestro test maestro/features/<feature-name>/ios.yaml
 ```
 
 Before running either command, boot or open the target emulator/simulator, install the app, and confirm the app launches with platform tooling. Maestro smoke flows validate user behavior after runtime launch is healthy; they are not a substitute for installing the app first.

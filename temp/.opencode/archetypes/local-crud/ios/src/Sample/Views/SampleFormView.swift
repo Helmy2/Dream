@@ -9,7 +9,7 @@ struct SampleFormView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("sample_details_header") {
+                Section("sample_ios_details_header") {
                     DreamTextField(
                         "sample_title_label",
                         text: $formState.title,

@@ -12,7 +12,7 @@ validated_with:
   kotlin: 2.4.0
   compose_multiplatform: 1.11.1
   room: 2.8.4
-  commit: ecb3067
+  commit: 1d99e39   # base starter commit; re-run the archetype check after any later archetype change
   date: "2026-11-21"
   note: >
     Archetype code lives outside the build and can rot. Re-validate it (see archetypes/README.md,
