@@ -63,36 +63,16 @@ Treat `$ARGUMENTS` as optional override hints (e.g., app name, package name).
     | codebase-memory-mcp      | passed        |
     | specs/               | initialized   |
     | Kotlin Toolchain build   | passed        |
-    | Models                   | current session model / preset name |
+    | Models                   | current session model / custom |
     ```
 
-7. **Model configuration** — Ask the user which models Dream should use. Use the `question` tool with these options, recommended first:
+7. **Model configuration** — Ask the user which models Dream should use. Use the `question` tool with these two options, recommended first:
    - **Current model (recommended, default)**: every agent uses the model selected in this session. Write nothing to `opencode.json`; subagents without a pinned model inherit the model of the agent that called them.
-   - **Role presets**: pin a model per agent role (see Optional Presets below)
-     - **Balanced**: Qwen3.7 Plus for orchestrator, designer and UI; DeepSeek V4 Pro for implementer; Big Pickle for discovery and research; MiMo V2.5 for tester and inspector
-     - **Budget**: Big Pickle for all agents (free, 200K context)
    - **Custom**: ask for a model per agent, and use `opencode models` to list valid IDs
-   - Only for presets and custom: write the choice to `.opencode/opencode.json` under the `agent` key, and confirm every model ID exists in `opencode models` first
+   - Only for custom: write the choice to `.opencode/opencode.json` under the `agent` key, and confirm every model ID exists in `opencode models` first
    - Never overwrite an existing `agent` block without showing it to the user and getting a yes
-   - Report "models: current session model" or "models: <preset name>" in the readiness table
+   - Report "models: current session model" or "models: custom" in the readiness table
    - If the chosen model has no image input, warn that `dream-tester` and `dream-inspector` cannot read screenshots; they must rely on `mobile_list_elements_on_screen` and crash logs, and the report must say which visual checks were not run
-
-### Optional Presets
-
-Only used when the user picks a preset or Custom. The default is no pinning.
-
-| Agent | Model | Model ID | Context | Images | Cost ($/M in/out) |
-|---|---|---|---|---|---|
-| `dream-general` | Qwen3.7 Plus | `opencode-go/qwen3.7-plus` | 1M | Yes | $0.40/$1.60 |
-| `dream-designer` | Qwen3.7 Plus | `opencode-go/qwen3.7-plus` | 1M | Yes | $0.40/$1.60 |
-| `dream-discovery` | Big Pickle | `opencode/big-pickle` | 200K | No | FREE |
-| `dream-implementer` | DeepSeek V4 Pro | `opencode-go/deepseek-v4-pro` | 1M | No | $1.74/$3.48 |
-| `dream-implementer-ui` | Qwen3.7 Plus | `opencode-go/qwen3.7-plus` | 1M | Yes | $0.40/$1.60 |
-| `dream-research` | Big Pickle | `opencode/big-pickle` | 200K | No | FREE |
-| `dream-tester` | MiMo V2.5 | `opencode-go/mimo-v2.5` | 1M | Yes | $0.14/$0.28 |
-| `dream-inspector` | MiMo V2.5 | `opencode-go/mimo-v2.5` | 1M | Yes | $0.14/$0.28 |
-
-To change later, edit `.opencode/opencode.json` or re-run `/dream-init`.
 
 ### Notes
 

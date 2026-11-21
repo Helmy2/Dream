@@ -51,7 +51,7 @@ See `.opencode/guidance/reference/complexity-routing.md` for full details and ex
 
 ## Model Selection
 
-Agents use the model of the current session unless the project pins one. Subagents inherit the model of the agent that called them. `/dream-init` asks the user whether to keep that default, use a role preset, or choose per agent; see `opencode-agent-map.md` for details and overrides.
+Agents use the model of the current session unless the project pins one. Subagents inherit the model of the agent that called them. `/dream-init` asks the user whether to keep that default, or choose per agent; see `opencode-agent-map.md` for details and overrides.
 
 Do not assume a model can read images. Check whether the active model accepts image input before relying on screenshots; if it does not, report the visual checks as `not run`.
 
@@ -174,11 +174,7 @@ See `.opencode/guidance/reference/skip-conditions.md`
 
 **State persistence**: Before delegating, write to `specs/<feature>/report.md`: iteration number, failures, past fixes, expected action, relevant rules.
 
-**Context budget**: If conversation exceeds ~3 repair rounds, write state to `specs/`, start fresh conversation with compact handoff.
-
-### Context Compaction Workflow
-
-When context window approaches limit or after 3 repair rounds:
+**Handoff**: After 3 repair rounds:
 
 1. **Write state to file** `specs/<feature>/report.md`
 2. **Create compact handoff prompt** with: iteration, what was tried, what fails, next module, relevant rules

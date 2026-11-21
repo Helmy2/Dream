@@ -163,19 +163,13 @@ Quick-reference rules for Dream agents. Load specific files for details.
 ### Phase Checkpoints
 
 - [ckpt-1] After each phase completes, write checkpoint to `specs/<feature>/checkpoints.md`
-- [ckpt-2] Checkpoint includes: phase name, git commit hash, status, timestamp, context usage
+- [ckpt-2] Checkpoint includes: phase name, git commit hash, status, timestamp
 - [ckpt-3] If a later phase fails, offer to roll back to last good checkpoint
 - [ckpt-4] Checkpoints are append-only — never overwrite previous entries
 
-### Context Management
+### State Handoff
 
-- [ctx-1] Track context usage continuously (estimate based on files read, tool calls, file sizes)
-- [ctx-2] At 50% context: warn user in conversation
-- [ctx-3] At 70% context: compact automatically (write state to specs/, start fresh subagent)
-- [ctx-4] At 90% context: force compaction with minimal handoff
-- [ctx-5] Compact proactively after 3 repair rounds (even if context < 70%)
-- [ctx-6] Include context usage estimate in phase checkpoints
-- [ctx-7] Do not wait for context overflow or skip conditions — compact early
+- [ctx-5] After 3 repair rounds, write state to specs/ and continue with a fresh subagent
 
 ### Priority
 

@@ -232,59 +232,9 @@ When delegating codebase exploration tasks, prefer `dream-discovery` or `dream-r
 - When inspector returns defects, present to user with severity; max 2 repair rounds before escalating
 - Before reporting a feature complete, run `.opencode/scripts/verify-feature.sh <feature-name>` (full, not `--quick`). Any `FAILED` line or an `INCOMPLETE` result blocks success; carry its `not run` lines into the verification report as `not run`, never as passed
 
-## Proactive Context Management
+## State Handoff
 
-Track context usage continuously to prevent overflow:
-
-### Context Tracking
-
-Estimate context usage based on:
-- Number of files read
-- Number of tool calls made
-- Size of file contents loaded
-- Number of subagent invocations
-
-### Thresholds
-
-- **50% context**: Warn user in conversation
-  ```
-  ⚠️ Context usage: ~50%
-  Consider: Starting a fresh conversation after this phase if work continues.
-  ```
-
-- **70% context**: Compact automatically
-  - Write current state to `specs/<feature>/report.md`
-  - Include: iteration, what was tried, what fails, next module, relevant rules
-  - Start fresh subagent with compact handoff
-  - Notify user: "Context compacted. Continuing with fresh subagent."
-
-- **90% context**: Force compaction with minimal handoff
-  - Write minimal state to `specs/<feature>/report.md`
-  - Include only: iteration, current blocker, next action
-  - Start fresh conversation with handoff prompt only
-  - Notify user: "Context critical. Starting fresh conversation to continue."
-
-### Context Usage in Checkpoints
-
-Add context usage to phase checkpoints:
-
-```markdown
-## Phase N: name
-- Status: completed
-- Git hash: <hash>
-- Timestamp: <ISO-8601>
-- Context usage: ~45% (estimated)
-- Notes: <what was accomplished>
-```
-
-### When to Compact
-
-Compact proactively when:
-- Context reaches 70%
-- After 3 repair rounds (even if context < 70%)
-- Before launching a new subagent if context > 60%
-
-Do not wait for context overflow or skip conditions.
+After 3 repair rounds, write state to `specs/<feature>/report.md` (iteration, what was tried, what fails, next module, relevant rules) and continue with a fresh subagent that reads that file.
 
 ## Constraints
 
