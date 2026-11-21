@@ -2,8 +2,8 @@ package com.dream.template.feature.sample.data.repository
 
 import com.dream.template.feature.sample.domain.model.SampleCategory
 import com.dream.template.feature.sample.domain.model.SampleItem
-import com.dream.template.shared.core.data.local.SampleItemDao
-import com.dream.template.shared.core.data.local.SampleItemEntity
+import com.dream.template.feature.sample.data.local.SampleItemDao
+import com.dream.template.feature.sample.data.local.SampleItemEntity
 import com.dream.template.shared.core.domain.Result
 import com.dream.template.shared.core.testing.FakeTimeProvider
 import kotlinx.coroutines.test.runTest

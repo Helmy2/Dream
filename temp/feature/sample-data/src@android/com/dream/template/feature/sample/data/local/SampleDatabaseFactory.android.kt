@@ -1,4 +1,4 @@
-package com.dream.template.shared.core.data.local
+package com.dream.template.feature.sample.data.local
 
 import android.content.Context
 import androidx.room.Room

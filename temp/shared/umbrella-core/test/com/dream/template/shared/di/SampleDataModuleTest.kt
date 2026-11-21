@@ -1,8 +1,9 @@
 package com.dream.template.shared.di
 
 import androidx.room.RoomDatabase
-import com.dream.template.shared.core.data.local.SampleDatabase
-import com.dream.template.shared.core.data.local.SampleDatabaseFactory
+import com.dream.template.feature.sample.data.di.sampleDataModule
+import com.dream.template.feature.sample.data.local.SampleDatabase
+import com.dream.template.feature.sample.data.local.SampleDatabaseFactory
 import com.dream.template.shared.core.domain.TimeProvider
 import org.koin.dsl.koinApplication
 import kotlin.test.Test
@@ -18,7 +19,7 @@ class SampleDataModuleTest {
         }
 
         val koin = koinApplication {
-            modules(sampleDataModule(testFactory))
+            modules(coreModule(), sampleDataModule(testFactory))
         }.koin
 
         assertNotNull(koin.get<TimeProvider>())

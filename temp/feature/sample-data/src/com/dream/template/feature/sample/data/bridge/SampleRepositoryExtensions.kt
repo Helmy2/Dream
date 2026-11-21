@@ -1,4 +1,4 @@
-package com.dream.template.shared.di
+package com.dream.template.feature.sample.data.bridge
 
 import com.dream.template.feature.sample.domain.model.SampleItem
 import com.dream.template.feature.sample.domain.model.SampleCategory

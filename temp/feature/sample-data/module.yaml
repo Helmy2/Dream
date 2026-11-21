@@ -9,6 +9,7 @@ dependencies:
   - //feature/sample-domain: exported
   - //shared/core-data: exported
   - //shared/core-domain: exported
+  - $libs.androidx.room.runtime
   - $libs.koin.core
   - $libs.kotlinx.coroutines.core
   - $libs.ktor.client.core
@@ -20,6 +21,11 @@ settings:
   android:
     namespace: com.dream.template.feature.sample.data
   kotlin:
+    ksp:
+      processors:
+        - $libs.androidx.room.compiler
+      processorOptions:
+        room.schemaLocation: ./schemas
     compilerPlugins:
       - id: io.insert-koin.compiler.plugin
         dependency: $libs.koin.compiler.plugin

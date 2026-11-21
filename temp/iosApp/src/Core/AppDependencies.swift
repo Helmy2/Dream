@@ -7,6 +7,6 @@ final class AppDependencies {
     let bridge: any SampleRepositoryBridge
 
     private init() {
-        bridge = SharedCoreBridge()
+        bridge = SampleBridge()
     }
 }

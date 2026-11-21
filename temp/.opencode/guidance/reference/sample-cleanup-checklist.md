@@ -12,7 +12,7 @@ Run this checklist after the first real feature replaces the starter sample.
 - [ ] `androidApp/src/main/AndroidManifest.xml` — remove sample activity references
 - [ ] `androidApp/src/main/java/*/MainActivity.kt` — remove sample navigation entries
 - [ ] `shared/umbrella-ui/src/*/UiModule.kt` — remove sample Koin module import
-- [ ] `shared/umbrella-core/src/*/CoreModule.kt` — remove sample core imports
+- [ ] `shared/umbrella-core/src/*/CoreModule.kt` — generic infrastructure only; confirm nothing sample-specific remains (the sample data module lives in `feature/sample-data`)
 
 ### Navigation
 - [ ] `shared/navigation/src/*/AppNavigation.kt` — remove sample routes
@@ -23,8 +23,8 @@ Run this checklist after the first real feature replaces the starter sample.
 - [ ] `iosApp/src/Localizable.xcstrings` — remove `sample_*` entries
 
 ### Database
-- [ ] `shared/core-data/src/*/database/` — remove sample DAO references
-- [ ] Room schema exports — remove sample entity schemas
+- [ ] The sample Room database, DAO, entity, factories, and schema exports live in `feature/sample-data` and are deleted with it
+- [ ] `shared/core-data` must contain no sample references (database path helpers and `RoomDatabaseBuilder` are generic and stay)
 
 ### Documentation
 - [ ] `README.md` — update to reflect real feature

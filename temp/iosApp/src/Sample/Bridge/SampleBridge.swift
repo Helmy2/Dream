@@ -8,19 +8,7 @@ protocol SampleRepositoryBridge {
     func updateItem(_ item: SampleItemSwift) async throws -> SampleItemSwift
 }
 
-enum BridgeError: LocalizedError {
-    case unknown
-    case message(String)
-
-    var errorDescription: String? {
-        switch self {
-        case .unknown: "Something went wrong."
-        case .message(let text): text
-        }
-    }
-}
-
-final class SharedCoreBridge: SampleRepositoryBridge {
+final class SampleBridge: SampleRepositoryBridge {
     let repository: SampleRepository
 
     init() {

@@ -5,8 +5,8 @@ import com.dream.template.feature.sample.data.mapper.toEntity
 import com.dream.template.feature.sample.domain.model.SampleCategory
 import com.dream.template.feature.sample.domain.model.SampleItem
 import com.dream.template.feature.sample.domain.repository.SampleRepository
-import com.dream.template.shared.core.data.local.SampleItemDao
-import com.dream.template.shared.core.data.local.SampleItemEntity
+import com.dream.template.feature.sample.data.local.SampleItemDao
+import com.dream.template.feature.sample.data.local.SampleItemEntity
 import com.dream.template.shared.core.domain.AppError
 import com.dream.template.shared.core.domain.Result
 import com.dream.template.shared.core.domain.TimeProvider

@@ -26,9 +26,3 @@ dependencies@ios:
 settings:
   android:
     namespace: com.dream.template.shared.core.data
-  kotlin:
-    ksp:
-      processors:
-        - $libs.androidx.room.compiler
-      processorOptions:
-        room.schemaLocation: ./schemas

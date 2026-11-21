@@ -2,7 +2,7 @@ package com.dream.template.feature.sample.data.mapper
 
 import com.dream.template.feature.sample.domain.model.SampleCategory
 import com.dream.template.feature.sample.domain.model.SampleItem
-import com.dream.template.shared.core.data.local.SampleItemEntity
+import com.dream.template.feature.sample.data.local.SampleItemEntity
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

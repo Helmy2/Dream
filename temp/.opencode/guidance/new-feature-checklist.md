@@ -112,7 +112,7 @@ Apply when the feature has an iOS screen:
 - [ ] Create SwiftUI views in `iosApp/src/<FeatureName>/Views/`.
 - [ ] Create `@Observable` ViewModels in `iosApp/src/<FeatureName>/ViewModels/`.
 - [ ] Create Swift models in `iosApp/src/<FeatureName>/Models/` when needed.
-- [ ] Extend bridge layer (`Core/SharedCoreBridge`) with new capabilities.
+- [ ] Add the feature's own bridge under `iosApp/src/<FeatureName>/Bridge/` (import `KotlinModules`). The Kotlin side (`*OrThrow` helpers and the `ios<Feature>Repository()` factory) lives in `feature/<name>-data` (`src@ios` for the factory), not in `umbrella-core`. Generic bridge types such as `BridgeError` stay in `iosApp/src/Core/`.
 - [ ] Add string keys to `iosApp/src/Localizable.xcstrings` matching `strings.xml`.
 - [ ] New `.swift` files in `iosApp/src` are picked up automatically (no project sync script).
 - [ ] Run `./kotlin build -m iosApp --platform=iosSimulatorArm64` and install/launch with `xcrun simctl`. 

@@ -1,4 +1,4 @@
-package com.dream.template.shared.core.data.local
+package com.dream.template.feature.sample.data.local
 
 import androidx.room.ConstructedBy
 import androidx.room.Database

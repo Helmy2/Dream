@@ -2,13 +2,7 @@ package com.dream.template.shared.di
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.dream.template.feature.sample.data.repository.RoomSampleRepository
-import com.dream.template.feature.sample.domain.repository.SampleRepository
 import com.dream.template.shared.core.data.datastore.createDataStore
-import com.dream.template.shared.core.data.local.SampleDatabase
-import com.dream.template.shared.core.data.local.SampleDatabaseFactory
-import com.dream.template.shared.core.data.local.SampleItemDao
-import com.dream.template.shared.core.data.local.createSampleDatabase
 import com.dream.template.shared.core.data.network.HttpClientFactory
 import com.dream.template.shared.core.data.session.DataStoreSessionStorage
 import com.dream.template.shared.core.domain.SystemTimeProvider
@@ -18,15 +12,12 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
-fun sampleDataModule(
-    sampleDatabaseFactory: SampleDatabaseFactory,
-    appContext: Any? = null,
-) = module {
+/**
+ * Feature-independent infrastructure: time, preferences storage, session storage, and HTTP.
+ * Feature modules contribute their own Koin modules on top of this one.
+ */
+fun coreModule(appContext: Any? = null) = module {
     single<TimeProvider> { SystemTimeProvider }
-    single { sampleDatabaseFactory }
-    single<SampleDatabase> { createSampleDatabase(get()) }
-    single<SampleItemDao> { get<SampleDatabase>().sampleItemDao() }
-    singleOf(::RoomSampleRepository).bind<SampleRepository>()
 
     single<DataStore<Preferences>> { createDataStore(appContext) }
     singleOf(::DataStoreSessionStorage).bind<SessionStorage>()
