@@ -29,7 +29,7 @@ Expected output back to the orchestrator:
 - list of renamed identifiers
 - canonical app identity summary
 - list of preserved structural modules
-- note of whether sample feature scaffolding was kept temporarily or replaced
+- confirmation that the starter has no feature modules and still shows the placeholder home screen
 
 Primary goal:
 Create a runnable, renamed, app-specific baseline while preserving Dream's architecture and template structure.
@@ -52,14 +52,14 @@ Instantiation steps:
 5. Rename package identifiers from template-specific values to project-specific values.
 6. Update `project.yaml`, `module.yaml` settings, application id, namespace, and framework naming where needed.
 7. Audit all required identity surfaces and record each rename explicitly.
-8. Replace sample-facing display text that should not survive into the generated app baseline.
+8. Replace placeholder or template display text that should not survive into the generated app baseline.
 9. Preserve reusable shared infrastructure, build logic, and architecture modules.
 10. Reset `specs/verification-report.md` to reflect the new generation cycle rather than the source template's prior validation state.
 11. Update `specs/decisions.yaml` and `specs/app-contract.yaml` to reflect the generated app.
-12. Decide whether the sample feature should remain temporarily as scaffolding or be replaced immediately by the first real feature.
+12. Leave the placeholder home screen in place; the first real feature replaces it (see the First Feature section of `.opencode/guidance/new-feature-checklist.md`).
 13. Verify git readiness in the destination project before later workflow stages depend on git commands.
 14. Verify Android SDK readiness early, or record precise environment blockers.
-15. Run `./scripts/dream-preflight.sh` when it exists and include the result in the instantiation summary.
+15. Run `./.opencode/scripts/dream-preflight.sh` when it exists and include the result in the instantiation summary.
 16. Check and install development dependencies interactively:
     - `mobilecli` (`command -v mobilecli`; install via `npm install -g @mobilenext/mobilecli`)
     - `xcodeproj` Ruby gem (`gem list -i xcodeproj`; install via `gem install xcodeproj`)
@@ -83,10 +83,9 @@ Required identity audit surfaces:
 - Android manifest labels and other visible app identity text
 - iOS configuration values that carry app identity
 - README or `specs/` metadata values that still carry template identity
-- obvious sample or template display strings that would misidentify the generated app
+- obvious placeholder or template display strings that would misidentify the generated app
 
 Template-specific decisions you must make explicitly:
-- whether `feature/sample/*` is kept only until the first real feature is generated
 - whether package prefixes should become app-specific immediately or through a later normalization pass
 - whether verification should run immediately after instantiation or only after the first feature lands
 
@@ -111,7 +110,7 @@ What to customize:
 - app name
 - application id and namespace values
 - package roots that still contain template identity
-- display text such as window title, starter labels, and obvious sample text
+- display text such as window title, starter labels, and placeholder text
 - `specs/` metadata for the new project
 
 Required identity audit output:
@@ -120,14 +119,11 @@ Required identity audit output:
 - list of any intentionally deferred renames with reason
 - explicit statement that no known template-only identity remains in user-facing or package-defining surfaces, or a precise exception list
 
-Rules for the sample feature:
-- keep it only if it is still needed as temporary structural scaffolding
-- remove or replace it as soon as the first real feature is generated
-- do not let sample-domain concepts leak into the final generated product
-- when the first real feature is present, remove the `feature/sample` module directory from the generated app unless a documented scaffolding exception is still active
-- when removing sample, also remove sample routes, DI registrations, settings includes, docs text, string resources, and Room schema exports
-- run a leftover artifact scan for sample route names, module names, database names, string keys, schema paths, and README/AGENTS references before review
-- if `feature/sample` is intentionally retained temporarily, record the exact reason, the owner, and the removal step in the instantiation summary
+Rules for the placeholder and archetypes:
+- the generated project has no feature modules; `shared/umbrella-ui` provides a placeholder home screen and `iosApp` shows an empty state
+- `.opencode/archetypes/` holds reference features (for example `local-crud`) that agents read and adapt when building the first feature; do not apply them during instantiation
+- the first real feature replaces the placeholder (route, Koin module, strings, `ContentView`); the First Feature checklist lists every step
+- when the first real feature is present, run a leftover scan for `HomeRoute`, `PlaceholderHome`, and `placeholder_` before review
 
 Required outputs:
 - instantiated project on disk

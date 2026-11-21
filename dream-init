@@ -247,12 +247,9 @@ YAMLEOF
 cat > "$DEST/specs/decisions.yaml" <<- YAMLEOF
 template: dream-kmp-base
 architecture: modular-hybrid
+androidUi: jetpack-compose
 iosUi: swiftui
-storage: local-room
-sampleStarterData:
-  persistence: room
-  seedContent: stable resource keys stored in data and resolved by presentation shared string resources
-  userEnteredContent: raw create/update text persisted locally
+storage: none
 YAMLEOF
 
 cat > "$DEST/specs/verification-report.md" <<- MDEOF

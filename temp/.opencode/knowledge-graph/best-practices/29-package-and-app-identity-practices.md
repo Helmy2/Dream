@@ -46,8 +46,8 @@ Temporary sample scaffolding may survive briefly for structural reasons, but sam
 Reusable principle:
 
 - keep structural scaffolding decisions separate from app identity decisions
-- record any temporary sample module retention explicitly
-- remove sample-domain naming as soon as the first real feature is generated
+- rename archetype names (`sample`, `Sample*`) consistently using the archetype's `naming` map
+- remove demo content from the archetype (seed data, demo enums, demo strings) before review
 
 ### 29.5 Keep feature paths and packages aligned
 

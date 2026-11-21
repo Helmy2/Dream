@@ -33,7 +33,7 @@ shared/designsystem|navigation|umbrella-core|umbrella-ui
 feature/<name>-domain|-data|-api|-impl
 ```
 
-- **Module name = directory name and must be unique.** Leaf directories are therefore `core-domain`, `sample-data`, ... (never two directories both called `domain`). Refer to modules as `//shared/core-domain`, `//feature/sample-impl` in `dependencies`. Gradle paths like `:shared:core:domain` no longer exist. Kotlin package names are unchanged (`com.dream.template.shared.core.domain`).
+- **Module name = directory name and must be unique.** Leaf directories are therefore `core-domain`, `expense-data`, ... (never two directories both called `domain`). Refer to modules as `//shared/core-domain`, `//feature/sample-impl` in `dependencies`. Gradle paths like `:shared:core:domain` no longer exist. Kotlin package names are unchanged (`com.dream.template.shared.core.domain`).
 - New module: create the directory, add `module.yaml`, add it to `project.yaml`.
 
 ## Source layout (replaces `src/commonMain/kotlin` etc.)
@@ -98,11 +98,11 @@ Not supported by Toolchain 0.13: SKIE, Swift export, a platform-scoped KMP-Nativ
 - Top-level Kotlin functions are static methods on a generated `<FileName>Kt` class: `SampleRepositoryFactoryKt.iosSampleRepository()`, `SampleRepositoryExtensionsKt.loadItemsOrThrow(repository)`. Prefer `*OrThrow` Kotlin wrappers that turn `Result` into exceptions.
 - Kotlin enums and sealed classes are Swift classes, not Swift enums: `switch` needs a `default:`, and subtypes need a cast (`as! Foo.Bar`). For sealed types add a Kotlin-side `kind` enum.
 - Flows: expose a Kotlin helper that collects on `Dispatchers.Main` and returns a cancellable subscription, and wrap it in an `AsyncStream` in Swift. Generic ObjC classes need `T: AnyObject`, and extensions cannot use the generic parameter, so use a free function.
-- Only add these helpers when a screen needs flows; the sample iOS app uses suspend functions only.
+- Only add these helpers when a screen needs flows; the `local-crud` archetype's iOS code uses suspend functions only.
 
 ## iOS app and Xcode project
 
-- `iosApp/module.yaml` is `product: ios/app` with `dependencies: [//shared/umbrella-core]`. Swift sources, `Assets.xcassets`, `Localizable.xcstrings`, `Info.plist` live in `iosApp/src`. The Xcode project is `iosApp/module.xcodeproj` (targets `app` and `appTests`; test scheme `iosApp`), checked into git. The Toolchain regenerates `app.xcscheme` on every build and discards edits to it, so the test action lives in the separate `iosApp.xcscheme` (do not delete it); always pass `-scheme iosApp` to `xcodebuild test`.
+- `iosApp/module.yaml` is `product: ios/app` with `dependencies: [//shared/umbrella-core]`. Swift sources, `Assets.xcassets`, `Localizable.xcstrings`, `Info.plist` live in `iosApp/src`. The Xcode project is `iosApp/module.xcodeproj` (targets `app` and `appTests`; test scheme `iosApp`), checked into git. The Toolchain regenerates `app.xcscheme` on every build and discards edits to it, so the test action lives in the separate `iosApp.xcscheme` (do not delete it); always pass `-scheme iosApp` to `xcodebuild test`. When iOS sources change, a Toolchain build can regenerate the project and strip the `appTests` testable from `iosApp.xcscheme`, which makes `xcodebuild test` fail with "not currently configured for the test action"; run `.opencode/scripts/fix-ios-project.sh` (it restores the testable) before testing, and do not commit a scheme that lacks it.
 - The project uses a file-system-synchronized folder, so new Swift files in `iosApp/src` are picked up automatically; `sync-pbxproj.rb` is no longer needed.
 - Hand-maintained settings in `module.xcodeproj/project.pbxproj`: `KOTLIN_CLI_WRAPPER_PATH = ../kotlin`, `PRODUCT_BUNDLE_IDENTIFIER = com.dream.template.ios`, `IPHONEOS_DEPLOYMENT_TARGET = 17.0`. The Toolchain does not set a deployment target; without one the app only installs on the newest iOS. If the project is regenerated, re-apply these. `CFBundleDisplayName` is in `iosApp/src/Info.plist`.
 - Removing a Swift package dependency leaves stale references; delete `module.xcodeproj` and re-apply the settings above.

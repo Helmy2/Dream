@@ -8,7 +8,8 @@ class TestKnowledgeGraph(unittest.TestCase):
         # Resolve paths relative to this test file
         cls.test_dir = os.path.dirname(os.path.abspath(__file__))
         cls.kg_dir = os.path.dirname(cls.test_dir)
-        cls.repo_root = os.path.dirname(cls.kg_dir)
+        # Source paths in graph.json are relative to the project root (the folder that contains .opencode/).
+        cls.repo_root = os.path.dirname(os.path.dirname(cls.kg_dir))
         
         cls.graph_path = os.path.join(cls.kg_dir, 'graph.json')
         cls.chunks_path = os.path.join(cls.kg_dir, 'source-chunks.json')

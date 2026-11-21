@@ -22,6 +22,7 @@ Then:
 ### Phase 0: Plan & User Review (mandatory first step)
 
 - gather context using `dream-discovery` (deep mode) — understand project structure, existing features, applicable rules
+- choose an archetype from `.opencode/archetypes/README.md` (read each `archetype.yaml`) and record it in the plan's Archetype section, or record `none` with the reason
 - produce `specs/<feature>/plan.md` using the template at `.opencode/guidance/templates/plan-template.md`
   - define feature goal, modules to create/modify, screens with states, architecture decisions, dependencies, phases
   - include priority field: `hotfix`, `high`, `normal`, or `low`
@@ -34,7 +35,7 @@ Then:
 
 ### Preflights
 - run early preflights before implementation depends on the environment:
-- run `./scripts/dream-preflight.sh` from the project root when it exists
+- run `./.opencode/scripts/dream-preflight.sh` from the project root when it exists
 - verify the destination project is a git repository and `git status`, `git diff`, and `git log --oneline -10` work, or record a precise git blocker
 - verify Android SDK readiness through `ANDROID_HOME` or the configured SDK path, or record a precise Android environment blocker
 ### Contract & Implementation
@@ -43,12 +44,13 @@ Then:
 - instantiate the appropriate Dream template (this command handles its own initialization — `/dream-init` is a prerequisite for `/dream-feature` and `/dream-verify` only)
 - generate the first feature contract before any feature code is written
 - inspect the feature contract for entity fields, actions, states, time behavior, storage choices, and required tests
-- if external research is needed for dependencies or APIs, delegate to `dream-search`
+- if external research is needed for dependencies or APIs, delegate to `dream-research`
 - before platform UI implementation, delegate to `dream-designer` to produce `specs/<feature>/ui-spec.md` from the feature contract
 - only then hand implementation to the appropriate subagents using the phased approach:
   - **Phase 1 (domain + data)**: delegate to `dream-implementer` for entities, repository interfaces, data mappings, domain/data tests, and `feature/<name>-api` with `NavKey` route types only.
-  - **Phase 2 (UI — parallel)**: launch Compose UI (delegate to `dream-implementer-android` for `feature/<name>-impl` with screens, ViewModels, presentation tests) and SwiftUI (delegate to `dream-implementer-ios` for views, ViewModels, models, bridge) as independent subagent calls.
+  - **Phase 2 (UI — parallel)**: launch Compose UI (delegate to `dream-implementer-ui` (platform: android) for `feature/<name>-impl` with screens, ViewModels, presentation tests) and SwiftUI (delegate to `dream-implementer-ui` (platform: ios) for views, ViewModels, models, bridge) as independent subagent calls.
   - **Phase 3 (wiring)**: delegate to `dream-implementer` for umbrella imports, DI registration, navigation entries.
+- run `.opencode/scripts/verify-feature.sh <feature-name>` (full) as the final gate; it covers the ladder below and exits 1 on any failure or unrun check
 - delegate to `dream-tester` for the verification ladder: unit tests, platform builds, device install/launch, log inspection; include `./kotlin build -m iosApp --platform=iosSimulatorArm64` and `xcrun simctl` install/launch
 - repair failures until green, blocked, or a skip condition triggers (see Skip Conditions in dream-agent-operating-guide.md)
 - update `specs/<feature-name>/implementation-report.md`
@@ -60,6 +62,6 @@ Then:
 - on deny: keep branch, document reason in report
 - finish with `specs/verification-report.md` using `.opencode/guidance/templates/verification-report-template.md`
 
-Use `dream-implementer`, `dream-implementer-android`, and `dream-implementer-ios` for code changes (layer-appropriate) and `dream-inspector` as the final QA gate for substantial work.
+Use `dream-implementer`, `dream-implementer-ui` (platform: android), and `dream-implementer-ui` (platform: ios) for code changes (layer-appropriate) and `dream-inspector` as the final QA gate for substantial work.
 
 Do not commit blocked, partial, unreviewed, or unsafe worktree states. If unrelated changes make safe staging unclear, stop and report the blocker instead of committing. Do not commit until the user explicitly approves the commit after Dream reports verification and review are green.

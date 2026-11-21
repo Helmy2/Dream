@@ -50,6 +50,14 @@ Choose the appropriate depth based on change scope:
 
 One-line summary of what this feature does and why it exists.
 
+## Archetype
+
+`<name>` | `none`
+
+- **Why it fits / why none fits**: <one or two sentences, referring to the archetype's `when_to_use` / `when_not_to_use`>
+- **Deviations**: <what will differ from the archetype>
+- **Demo content to drop**: <seed data, demo enums, demo strings>
+
 ## Modules
 
 ### Create
@@ -104,4 +112,5 @@ One-line summary of what this feature does and why it exists.
 4. Each screen must list all four states (Loading, Empty, Content, Error).
 5. Architecture decisions should be concrete — if storage is Room, say Room; if DataStore, say DataStore.
 6. Dependencies section is for new dependencies only; omit if none.
-7. After writing, present to user and ask: **questions? edits? confirm? deny?**
+7. Choose an archetype from `.opencode/archetypes/README.md`, or write `none` with the reason.
+8. After writing, present to user and ask: **questions? edits? confirm? deny?**

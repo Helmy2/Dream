@@ -524,7 +524,7 @@
       "id": "rule.ios_xctest_packaging",
       "type": "Rule",
       "name": "Swift unit tests run in a hosted appTests target",
-      "statement": "The Xcode project has an app target (the only one with the Kotlin Toolchain integration script phase) and a hosted appTests unit-test target; Swift tests live in iosApp/test, use @testable import app, and run with xcodebuild test -scheme app; ./kotlin test runs only Kotlin tests.",
+      "statement": "The Xcode project has an app target (the only one with the Kotlin Toolchain integration script phase) and a hosted appTests unit-test target; Swift tests live in iosApp/test, use @testable import app, and run with xcodebuild test -scheme iosApp; ./kotlin test runs only Kotlin tests.",
       "scope": "platform",
       "classification": "project_specific",
       "strength": "recommended",
@@ -1003,6 +1003,86 @@
         "file": ".opencode/knowledge-graph/best-practices/39-ios-string-localization-practices.md",
         "startLine": 5,
         "endLine": 26
+      }
+    },
+    {
+      "id": "section.archetypes",
+      "type": "Section",
+      "title": "Archetype Practices",
+      "sectionNumber": "40",
+      "documentId": "document.best_practices",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/40-archetype-practices.md",
+        "startLine": 1,
+        "endLine": 42
+      }
+    },
+    {
+      "id": "practice.choose_archetype",
+      "type": "Practice",
+      "name": "Choose an archetype before planning a feature",
+      "statement": "Read the archetype index and each archetype.yaml, pick the closest fit by when_to_use and when_not_to_use, and record it (or none with the reason) in the plan's Archetype section.",
+      "classification": "project_specific",
+      "strength": "default",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/40-archetype-practices.md",
+        "startLine": 5,
+        "endLine": 9
+      }
+    },
+    {
+      "id": "rule.adapt_archetype_not_copy",
+      "type": "Rule",
+      "name": "Adapt archetypes, never copy them unchanged",
+      "statement": "Rename consistently using the archetype's naming map, drop demo content (seed data, demo enums, demo strings), and keep its pitfalls in mind. Archetypes are reference code, not templates; apply-verbatim.sh is for the archetype check only.",
+      "scope": "feature-generation",
+      "classification": "project_specific",
+      "strength": "non_negotiable",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/40-archetype-practices.md",
+        "startLine": 11,
+        "endLine": 17
+      }
+    },
+    {
+      "id": "practice.validate_archetypes",
+      "type": "Practice",
+      "name": "Re-validate archetypes when versions change",
+      "statement": "Archetype code lives outside the build. Run the archetype check (scratch copy outside git and outside /tmp, /var, /etc; apply-verbatim.sh; full verify-feature.sh) before releases and whenever the Toolchain or library versions change.",
+      "classification": "project_specific",
+      "strength": "recommended",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/40-archetype-practices.md",
+        "startLine": 25,
+        "endLine": 30
+      }
+    },
+    {
+      "id": "rule.verify_feature_gate",
+      "type": "Rule",
+      "name": "Finish a feature with the verify-feature gate",
+      "statement": "Run verify-feature.sh <feature-name> in full before reporting a feature complete. A FAILED line blocks success, and a full run with checks not run is INCOMPLETE (exit 1), never a pass. --quick is not a verification result.",
+      "scope": "verification",
+      "classification": "project_specific",
+      "strength": "non_negotiable",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/40-archetype-practices.md",
+        "startLine": 32,
+        "endLine": 37
+      }
+    },
+    {
+      "id": "antipattern.shipping_archetype_content",
+      "type": "AntiPattern",
+      "name": "Shipping archetype content in a product feature",
+      "statement": "Leaving the sample naming, seed rows, demo categories, or demo strings in a feature, or keeping HomeRoute and placeholder_* strings after the first real feature.",
+      "replacementGuidance": "Adapt the archetype per the naming map, remove demo content, and follow the First Feature checklist to remove the placeholder before review.",
+      "classification": "project_specific",
+      "strength": "non_negotiable",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/40-archetype-practices.md",
+        "startLine": 39,
+        "endLine": 42
       }
     }
   ],
@@ -1735,6 +1815,86 @@
         "file": ".opencode/knowledge-graph/best-practices/39-ios-string-localization-practices.md",
         "startLine": 5,
         "endLine": 26
+      }
+    },
+    {
+      "from": "document.best_practices",
+      "type": "CONTAINS",
+      "to": "section.archetypes",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/40-archetype-practices.md",
+        "startLine": 1,
+        "endLine": 42
+      }
+    },
+    {
+      "from": "practice.choose_archetype",
+      "type": "APPLIES_TO",
+      "to": "section.archetypes",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/40-archetype-practices.md",
+        "startLine": 5,
+        "endLine": 9
+      }
+    },
+    {
+      "from": "rule.adapt_archetype_not_copy",
+      "type": "APPLIES_TO",
+      "to": "section.archetypes",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/40-archetype-practices.md",
+        "startLine": 11,
+        "endLine": 17
+      }
+    },
+    {
+      "from": "practice.validate_archetypes",
+      "type": "APPLIES_TO",
+      "to": "section.archetypes",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/40-archetype-practices.md",
+        "startLine": 25,
+        "endLine": 30
+      }
+    },
+    {
+      "from": "rule.verify_feature_gate",
+      "type": "APPLIES_TO",
+      "to": "section.archetypes",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/40-archetype-practices.md",
+        "startLine": 32,
+        "endLine": 37
+      }
+    },
+    {
+      "from": "antipattern.shipping_archetype_content",
+      "type": "APPLIES_TO",
+      "to": "section.archetypes",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/40-archetype-practices.md",
+        "startLine": 39,
+        "endLine": 42
+      }
+    },
+    {
+      "from": "antipattern.shipping_archetype_content",
+      "type": "REPLACED_BY",
+      "to": "rule.adapt_archetype_not_copy",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/40-archetype-practices.md",
+        "startLine": 39,
+        "endLine": 42
+      }
+    },
+    {
+      "from": "rule.adapt_archetype_not_copy",
+      "type": "REQUIRES",
+      "to": "practice.choose_archetype",
+      "source": {
+        "file": ".opencode/knowledge-graph/best-practices/40-archetype-practices.md",
+        "startLine": 11,
+        "endLine": 17
       }
     }
   ]

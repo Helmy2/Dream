@@ -95,10 +95,10 @@ See `.opencode/guidance/reference/non-negotiable-rules.md`
 
 Code-writing agents should:
 - Preserve valid module boundaries
-- Replace sample feature content with real content
+- Start from an archetype in `.opencode/archetypes/` when one fits, and adapt it to the feature
 - Reuse shared core, design system, navigation, build-logic modules
 - Avoid collapsing modular template
-- Remove `feature/sample` after first real feature (run `./scripts/remove-sample.sh`)
+- Replace the placeholder home screen when the first real feature lands (see `new-feature-checklist.md`, First Feature)
 
 Should not: move logic to app shells, bypass shared infrastructure, introduce cross-feature `impl` coupling.
 

@@ -52,6 +52,7 @@ Maps topics to full best-practice files. Use this to find specific rules quickly
 | iOS Xcode | `37-ios-xcode-configuration-practices.md` | module.xcodeproj, deployment target |
 | iOS Testing | `38-ios-testing-practices.md` | Single-app-target limitation, Kotlin iOS tests |
 | iOS Strings | `39-ios-string-localization-practices.md` | xcstrings sync |
+| Archetypes | `40-archetype-practices.md` | choosing, adapting, and validating archetypes; first feature; verify-feature gate |
 
 ## Quick Lookup
 
@@ -61,5 +62,6 @@ Maps topics to full best-practice files. Use this to find specific rules quickly
 **"How do I set up Koin?"** → `18-dependency-injection-practices.md`
 **"How do I structure Navigation?"** → `15-navigation-practices.md`
 **"How do I set up iOS bridge?"** → `36-ios-kmp-bridge-practices.md`
+**"How do I start a new feature?"** → `40-archetype-practices.md`
 **"What should I avoid?"** → `26-anti-patterns-to-avoid-when-reusing-this-architecture.md`
 **"How do I write tests?"** → `23-testing-oriented-practices-to-reuse.md`

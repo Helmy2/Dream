@@ -52,7 +52,7 @@ Why it is good:
 
 ### 7.3 Unique module names
 
-The module name is the directory name and must be unique across the project. Leaf directories are therefore `core-domain`, `core-data`, `sample-data`, `sample-impl`, and so on; never two directories both called `domain`. Kotlin package names are unaffected by the directory names.
+The module name is the directory name and must be unique across the project. Leaf directories are therefore `core-domain`, `core-data`, `expense-data`, `expense-impl`, and so on; never two directories both called `domain`. Kotlin package names are unaffected by the directory names.
 
 ### 7.4 Version catalog
 

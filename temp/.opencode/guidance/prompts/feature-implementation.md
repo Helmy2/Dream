@@ -3,7 +3,7 @@
 Use this prompt scaffold when implementing a feature inside a Dream-generated project.
 
 ```text
-Intended OpenCode agent: varies by layer — use `dream-implementer` for KMP foundation, `dream-implementer-android` for Compose UI, `dream-implementer-ios` for SwiftUI
+Intended OpenCode agent: varies by layer — use `dream-implementer` for KMP foundation, `dream-implementer-ui` (platform: android) for Compose UI, `dream-implementer-ui` (platform: ios) for SwiftUI
 
 You are implementing a feature layer inside a Dream Kotlin Multiplatform project.
 
@@ -92,7 +92,7 @@ Test requirements:
 - **Presentation tests**: Use reusable main dispatcher setup with `@BeforeTest` and `@AfterTest` when `Dispatchers.Main` is needed. Prefer Turbine or an explicit flow-testing pattern for ordered state transition assertions.
 - **Time-sensitive tests**: Use `FakeTimeProvider` from `shared/core-testing` or an equivalent fixed-time fake for behavior involving current time, date filters, timestamps, formatting, or logical periods. Use `kotlinx-datetime` helpers for readable date and month construction instead of unexplained raw epoch values.
 - **Test dependencies**: Ensure every module's `module.yaml` declares `test-dependencies` required by its tests (kotlin-test, `//shared/core-testing`, Turbine via the `feature-impl` template) where reusable fakes are needed. Add these BEFORE writing tests.
-- **SwiftUI host tests**: Swift unit tests live in `iosApp/test/*.swift` (hosted `appTests` target, `@testable import app`) and run with `xcodebuild test -project iosApp/module.xcodeproj -scheme app -destination 'platform=iOS Simulator,name=iPhone 17 Pro' CODE_SIGNING_ALLOWED=NO`; keep native ViewModel logic thin, mock the bridge protocol, and cover shared behavior in Kotlin tests.
+- **SwiftUI host tests**: Swift unit tests live in `iosApp/test/*.swift` (hosted `appTests` target, `@testable import app`) and run with `xcodebuild test -project iosApp/module.xcodeproj -scheme iosApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro' CODE_SIGNING_ALLOWED=NO`; keep native ViewModel logic thin, mock the bridge protocol, and cover shared behavior in Kotlin tests.
 
 Output requirements:
 - implement the code directly

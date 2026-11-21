@@ -44,6 +44,7 @@ This folder contains the best-practices source material in small, section-focuse
 - `37-ios-xcode-configuration-practices.md`
 - `38-ios-testing-practices.md`
 - `39-ios-string-localization-practices.md`
+- `40-archetype-practices.md`
 
 ## Notes
 

@@ -38,13 +38,15 @@ Prefer linking to those documents in discussions and change summaries instead of
   - `dream-improve` — Apply unapplied feature retrospectives and token optimization
   - `dream-info` — Display Dream tool overview, commands, agents, and features
 - [temp/.opencode/guidance/](temp/.opencode/guidance): packaged operating guidance and prompt scaffolds
+- [temp/.opencode/archetypes/](temp/.opencode/archetypes/README.md): working reference features (`local-crud`) that agents read and adapt when building a similar feature
+- [plans/](plans): Dream's own change plans and baselines (not part of the starter)
 - [temp/.opencode/guidance/reference/](temp/.opencode/guidance/reference): agent constraints, non-negotiable rules, verification commands/patterns, skip conditions, and token optimization guidelines
 - [temp/.opencode/guidance/templates/](temp/.opencode/guidance/templates): feature contract, feature report, feature spec, plan, maestro smoke checklist, retrospective, and verification report templates
 - [temp/.opencode/knowledge-graph/README.md](temp/.opencode/knowledge-graph/README.md): packaged reusable architecture rules and source graph
 - [temp/.opencode/scripts/dream-preflight.sh](temp/.opencode/scripts/dream-preflight.sh): local readiness check for git, Android SDK, and tooling
 - [temp/.opencode/scripts/sync-pbxproj.rb](temp/.opencode/scripts/sync-pbxproj.rb): obsolete under the Kotlin Toolchain (the Xcode project uses a file-system-synchronized folder, so new Swift files are picked up automatically); kept only for reference
-- [temp/.opencode/scripts/fix-ios-project.sh](temp/.opencode/scripts/fix-ios-project.sh): re-applies hand-maintained `module.xcodeproj` settings (wrapper path, deployment target, bundle id) after the Toolchain regenerates the project
-- [temp/.opencode/scripts/remove-sample.sh](temp/.opencode/scripts/remove-sample.sh): removes sample feature files, strips sample deps, and checks for leftovers
+- [temp/.opencode/scripts/fix-ios-project.sh](temp/.opencode/scripts/fix-ios-project.sh): re-applies hand-maintained `module.xcodeproj` settings (wrapper path, deployment target, bundle id) and restores the `appTests` testable in `iosApp.xcscheme` after the Toolchain regenerates the project
+- [temp/.opencode/scripts/verify-feature.sh](temp/.opencode/scripts/verify-feature.sh): final gate for a feature (structure, architecture, wiring, then build and tests; `--quick` for structure only), with a self-test in `test-verify-feature.sh`
 - [temp/.opencode/scripts/start-codebase-memory-mcp.sh](temp/.opencode/scripts/start-codebase-memory-mcp.sh): launches codebase-memory-mcp binary for code intelligence via persistent knowledge graph
 
 ## Build system: Kotlin Toolchain (Alpha)
@@ -119,7 +121,8 @@ Use the lighter template commands for focused iteration, but do not report final
 ## When Updating Dream
 
 - If you change generation workflow or success criteria, update [temp/.opencode/guidance/dream-agent-operating-guide.md](temp/.opencode/guidance/dream-agent-operating-guide.md) and the relevant files under [temp/.opencode/guidance/prompts/](temp/.opencode/guidance/prompts/).
-- If you change reusable architecture rules, update the corresponding files in [temp/.opencode/knowledge-graph/best-practices/](temp/.opencode/knowledge-graph/best-practices/README.md).
+- If you change reusable architecture rules, update the corresponding files in [temp/.opencode/knowledge-graph/best-practices/](temp/.opencode/knowledge-graph/best-practices/README.md), keep `graph.json` and `source-chunks.json` in step, and run `python3 temp/.opencode/knowledge-graph/test/test_graph.py`.
+- If you add or change an archetype, update its `archetype.yaml` and `wiring.md`, then run the archetype check described in [temp/.opencode/archetypes/README.md](temp/.opencode/archetypes/README.md).
 - If you change starter structure or validation commands, update [temp/AGENTS.md](temp/AGENTS.md).
 - If you add or change scripts, update the relevant files under [temp/.opencode/scripts/](temp/.opencode/scripts/) and document them in root [ONBOARDING.md](ONBOARDING.md) and [AGENTS.md](AGENTS.md).
 

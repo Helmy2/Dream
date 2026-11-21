@@ -6,8 +6,6 @@ apply:
   - //templates/common.module-template.yaml
 
 dependencies:
-  - //feature/sample-data: exported
-  - //feature/sample-domain: exported
   - //shared/core-data: exported
   - //shared/core-domain: exported
   - $libs.koin.core

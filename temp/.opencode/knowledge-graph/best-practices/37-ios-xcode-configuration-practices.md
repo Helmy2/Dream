@@ -4,7 +4,7 @@ The packaged iOS host should work cleanly with Xcode while remaining determinist
 
 ### 37.1 Let the Toolchain drive framework building from Xcode
 
-The Xcode project is `iosApp/module.xcodeproj` (targets `app` and `appTests`; test scheme `iosApp`), checked into git. The Toolchain regenerates `app.xcscheme` on every build and discards edits to it, so the test action lives in the separate `iosApp.xcscheme` (do not delete it); always pass `-scheme iosApp` to `xcodebuild test`. The Kotlin Toolchain builds the `KotlinModules` framework for it.
+The Xcode project is `iosApp/module.xcodeproj` (targets `app` and `appTests`; test scheme `iosApp`), checked into git. The Toolchain regenerates `app.xcscheme` on every build and discards edits to it, so the test action lives in the separate `iosApp.xcscheme` (do not delete it); always pass `-scheme iosApp` to `xcodebuild test`. When iOS sources change, a Toolchain build can regenerate the project and strip the `appTests` testable from `iosApp.xcscheme`, which makes `xcodebuild test` fail with "not currently configured for the test action"; run `.opencode/scripts/fix-ios-project.sh` (it restores the testable) before testing, and do not commit a scheme that lacks it. The Kotlin Toolchain builds the `KotlinModules` framework for it.
 
 Best practice:
 

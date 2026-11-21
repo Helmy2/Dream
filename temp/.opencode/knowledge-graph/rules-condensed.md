@@ -126,6 +126,14 @@ Quick-reference rules for Dream agents. Load specific files for details.
 - [ios-str-3] iOS-only strings use `ios_` infix in key
 - [ios-str-4] No hardcoded user-visible strings in SwiftUI views
 
+## Archetypes [file:40]
+
+- [arc-1] Choose an archetype from `.opencode/archetypes/` before planning a feature; record it (or `none` with the reason) in the plan's Archetype section
+- [arc-2] Adapt the archetype: rename per its `naming` map and drop demo content (seed data, demo enums, demo strings); never copy it unchanged
+- [arc-3] The starter has no features; the first feature replaces the placeholder home (New Feature Checklist, First Feature)
+- [arc-4] Run `.opencode/scripts/verify-feature.sh <name>` (full) before reporting a feature complete; `FAILED` or `INCOMPLETE` blocks success
+- [arc-5] Re-validate archetypes with the archetype check when versions change; use a scratch dir outside git and outside `/tmp`, `/var`, `/etc`
+
 ## Anti-Patterns [file:26]
 
 - [anti-1] No cross-feature data-module coupling (move to shared core)

@@ -40,7 +40,7 @@ Assess the request against these criteria:
 
 **SIMPLE** (1 feature, <5 screens, no new shared modules)
 - Workflow: Lightweight feature
-- Phase 0: Brief plan in conversation (no plan.md file)
+- Phase 0: Brief plan in conversation (no plan.md file); name the archetype used, if one fits
 - Artifacts: conversation plan, verification-report.md
 - Inspector: No (unless >2 files changed)
 
@@ -97,6 +97,7 @@ See `.opencode/guidance/reference/complexity-routing.md` for full details.
 **Tier 1 (always loaded):** This file + condensed rules (`.opencode/knowledge-graph/rules-condensed.md`)
 
 **Tier 2 (load when relevant):**
+- Archetypes: `.opencode/archetypes/README.md` (working reference features; choose one before planning a feature)
 - Architecture: `.opencode/knowledge-graph/best-practices/03-core-architectural-philosophy.md`
 - Anti-patterns: `.opencode/knowledge-graph/best-practices/26-anti-patterns-to-avoid-when-reusing-this-architecture.md`
 - Full rules index: `.opencode/knowledge-graph/rules-index.md`
@@ -116,7 +117,7 @@ See `.opencode/guidance/reference/complexity-routing.md` for full details.
 - Done. No inspector, no feature branch.
 
 ### Simple Complexity (Lightweight feature)
-- Phase 0: Brief plan in conversation (no plan.md file)
+- Phase 0: Brief plan in conversation (no plan.md file); name the archetype used, if one fits
 - Phase 1: dream-research for context (if needed)
 - Phase 2: dream-implementer for domain/data/api + tests
 - Phase 3: dream-implementer-ui for UI (platform: both)
@@ -146,12 +147,23 @@ This phase runs **before** any implementation, research, or design work. Its pur
 - Read the user request
 - Use `dream-research` (codebase deep mode) to understand project structure, existing features, and applicable rules
 - Read `specs/app-contract.yaml`, `specs/decisions.yaml`, and any existing feature contracts
+- Read `.opencode/archetypes/README.md` and each archetype's `archetype.yaml` (`when_to_use`, `when_not_to_use`, `tradeoffs`)
+
+### Step 1b: Choose an Archetype
+
+Archetypes are working reference features under `.opencode/archetypes/`. Choose one before writing the plan:
+
+1. Pick the closest fit using `when_to_use` / `when_not_to_use`. If none fits, say so: the feature is then built from the architecture rules, and a new archetype can be proposed afterwards (see the archetypes README).
+2. Record the choice in the plan's **Archetype** section: the name, why it fits, what will deviate from it, and which demo content (seed data, demo enums, demo strings) will be dropped.
+3. Give the archetype path to `dream-implementer` and `dream-implementer-ui` when delegating. They read `archetype.yaml`, `wiring.md`, and the reference code, then adapt it; nobody copies it unchanged. `apply-verbatim.sh` exists only for the archetype check.
+4. For the first feature, include the "First Feature" steps from `.opencode/guidance/new-feature-checklist.md` (replace the placeholder home screen and its strings).
 
 ### Step 2: Produce the Plan
 Write `specs/<feature>/plan.md` using the template at `.opencode/guidance/templates/plan-template.md`.
 
 The plan must cover:
 - **Feature/goal**: one-line summary of what will be built
+- **Archetype**: the chosen archetype (or `none` with the reason), deviations, and demo content to drop
 - **Modules to create**: exact paths for domain/data/api/impl modules
 - **Modules to modify**: existing files that need changes (umbrellas, DI, navigation, strings)
 - **Screens**: each screen with its purpose and states (Loading/Empty/Content/Error)
@@ -218,6 +230,7 @@ When delegating codebase exploration tasks, prefer `dream-discovery` or `dream-r
 - Create feature branch after Phase 0 confirmation; commit to branch, not main
 - Write phase checkpoints to `specs/<feature>/checkpoints.md` after each phase
 - When inspector returns defects, present to user with severity; max 2 repair rounds before escalating
+- Before reporting a feature complete, run `.opencode/scripts/verify-feature.sh <feature-name>` (full, not `--quick`). Any `FAILED` line or an `INCOMPLETE` result blocks success; carry its `not run` lines into the verification report as `not run`, never as passed
 
 ## Proactive Context Management
 

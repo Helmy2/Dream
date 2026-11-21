@@ -19,20 +19,21 @@ When working in this generated project, read in this order:
 - [.opencode/agents/](.opencode/agents): Dream agent definitions (dream-general, dream-research, dream-designer, dream-implementer, dream-implementer-ui, dream-tester, dream-inspector)
 - [.opencode/commands/](.opencode/commands): Dream slash-command workflows
 - [.opencode/guidance/](.opencode/guidance): operating guide and prompt scaffolds
+- [.opencode/archetypes/](.opencode/archetypes/README.md): working reference features for common architectures (start with `local-crud`); read one before building a similar feature
 - [.opencode/knowledge-graph/](.opencode/knowledge-graph): architecture rules and retrieval sources
 - [maestro/](maestro): Android and iOS smoke-flow scaffolding for generated feature validation
 - [.opencode/scripts/dream-preflight.sh](.opencode/scripts/dream-preflight.sh): git, Android SDK, and tooling readiness preflight
 - [.opencode/scripts/sync-pbxproj.rb](.opencode/scripts/sync-pbxproj.rb): obsolete under the Kotlin Toolchain (the Xcode project uses a file-system-synchronized folder, so new Swift files are picked up automatically); kept only for reference
 - [.opencode/guidance/reference/kotlin-toolchain.md](.opencode/guidance/reference/kotlin-toolchain.md): Kotlin Toolchain commands, project layout, module names, and iOS/Android rules
-- [.opencode/scripts/fix-ios-project.sh](.opencode/scripts/fix-ios-project.sh): re-applies hand-maintained `module.xcodeproj` settings (wrapper path, deployment target, bundle id) after the Toolchain regenerates the project
-- [.opencode/scripts/remove-sample.sh](.opencode/scripts/remove-sample.sh): removes sample feature files, strips sample deps, and checks for leftovers
+- [.opencode/scripts/fix-ios-project.sh](.opencode/scripts/fix-ios-project.sh): re-applies hand-maintained `module.xcodeproj` settings (wrapper path, deployment target, bundle id) and restores the `appTests` testable in `iosApp.xcscheme` after the Toolchain regenerates the project
+- [.opencode/scripts/verify-feature.sh](.opencode/scripts/verify-feature.sh): final gate for a feature: structure, architecture and wiring checks, then build and tests (`--quick` for structure only); its self-test is [test-verify-feature.sh](.opencode/scripts/test-verify-feature.sh)
 - [.opencode/guidance/new-feature-checklist.md](.opencode/guidance/new-feature-checklist.md): contract-first feature wiring, verification, and git checklist
 
 ## Build system: Kotlin Toolchain (Alpha)
 
 This project builds with the JetBrains Kotlin Toolchain (`./kotlin` CLI, YAML config, v0.13, Alpha). There is no Gradle or `gradlew`. Modules are listed in `project.yaml`; each has a `module.yaml`, and module names equal directory names (for example `core-domain`, `sample-impl`).
 
-Not supported by Toolchain 0.13: SKIE, Swift export, and the Xcode 27 JSON project format (`project.xcproj`). The Xcode project has an `app` target (the only one with the Kotlin integration script phase) and a hosted `appTests` unit-test target (Swift tests in `iosApp/test`, run with `xcodebuild test -project iosApp/module.xcodeproj -scheme app -destination 'platform=iOS Simulator,name=iPhone 17 Pro' CODE_SIGNING_ALLOWED=NO`; `./kotlin test` runs Kotlin tests only). Alpha tool: if something is unsupported, stop and report; do not work around it with Gradle. Full reference: [.opencode/guidance/reference/kotlin-toolchain.md](.opencode/guidance/reference/kotlin-toolchain.md).
+Not supported by Toolchain 0.13: SKIE, Swift export, and the Xcode 27 JSON project format (`project.xcproj`). The Xcode project has an `app` target (the only one with the Kotlin integration script phase) and a hosted `appTests` unit-test target (Swift tests in `iosApp/test`, run with `xcodebuild test -project iosApp/module.xcodeproj -scheme iosApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro' CODE_SIGNING_ALLOWED=NO`; `./kotlin test` runs Kotlin tests only). Alpha tool: if something is unsupported, stop and report; do not work around it with Gradle. Full reference: [.opencode/guidance/reference/kotlin-toolchain.md](.opencode/guidance/reference/kotlin-toolchain.md).
 
 ## Working Rules
 

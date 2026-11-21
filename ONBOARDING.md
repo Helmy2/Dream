@@ -31,11 +31,13 @@ flowchart TD
 - `temp/`: canonical Kotlin Multiplatform starter project.
 - `temp/.opencode/`: packaged OpenCode config, agents (7 agents: dream-general, dream-research, dream-designer, dream-implementer, dream-implementer-ui, dream-tester, dream-inspector), commands, and prompt guidance.
 - `temp/.opencode/knowledge-graph/`: reusable architecture rules and retrieval sources.
+- `temp/.opencode/archetypes/`: working reference features for common architectures (currently `local-crud`). Agents read an archetype and adapt it; see its `README.md` for choosing, applying, and re-validating one.
+- `plans/`: Dream's own change plans and baselines (not part of the starter).
 - `temp/specs/`: generated app contracts, feature specs, decisions, reports, and retrospectives.
 - `temp/maestro/`: Android and iOS smoke-flow scaffolding.
 - `temp/.opencode/scripts/dream-preflight.sh`: local readiness check for git, Android SDK, and tooling.
 - `temp/.opencode/scripts/sync-pbxproj.rb`: obsolete under the Kotlin Toolchain (the Xcode project uses a file-system-synchronized folder, so new Swift files are picked up automatically).
-- `temp/.opencode/scripts/remove-sample.sh`: removes sample feature files, strips sample deps, and checks for leftovers.
+- `temp/.opencode/scripts/verify-feature.sh`: final gate for a feature. Checks module structure, layer rules, Koin ids, wiring, tests, strings, iOS files and Maestro flows, then runs the build and test ladder (`--quick` skips the ladder). `test-verify-feature.sh` is its self-test.
 - `temp/.opencode/scripts/start-codebase-memory-mcp.sh`: launches codebase-memory-mcp binary for code intelligence via persistent knowledge graph.
 - `temp/.cbmignore`: excludes files from codebase-memory-mcp indexing (build artifacts, generated files, Dream metadata).
 
@@ -261,7 +263,7 @@ Important defaults:
 - Room builder policy is centralized in `shared/core-data`.
 - The bundled SQLite driver is configured once.
 - Room query execution uses `Dispatchers.Default` for KMP-safe behavior.
-- First-pass MVP iteration uses destructive migration fallback to recover from stale local test schemas.
+- First-pass MVP iteration may opt in to destructive migration fallback (`allowDestructiveMigration`, off by default) to recover from stale local test schemas.
 - Real apps that need to preserve user data must replace destructive fallback with migrations.
 
 ## Testing
@@ -348,20 +350,13 @@ Dream agents have access to two MCP servers for enhanced capabilities:
 
 Agents should prefer MCP queries over grep/read for codebase exploration. See `temp/.opencode/guidance/reference/codebase-memory-mcp-tools.md` for the full tool reference.
 
-## Sample Feature Policy
+## Placeholder And Archetypes
 
-`feature/sample-*` exists as starter scaffolding. It is useful for demonstrating module shape, Room, strings, ViewModel tests, navigation, and DI.
+The starter has no feature modules. `shared/umbrella-ui` provides a placeholder home screen on Android and `ContentView` shows an empty state on iOS, so the app always builds and launches. The first real feature replaces both; the "First Feature" section of `temp/.opencode/guidance/new-feature-checklist.md` lists the steps.
 
-Once a real first feature replaces it in a generated app, remove sample leftovers:
+Working reference features live in `temp/.opencode/archetypes/`. The first one, `local-crud`, is the former sample feature: Room persistence, list/detail/edit screens, tests, strings, and Maestro flows on both platforms. Agents read an archetype and adapt it; they do not copy it blindly. See `temp/.opencode/archetypes/README.md` for choosing, applying, and re-validating one.
 
-- `feature/sample-*` modules
-- `project.yaml` module entries
-- sample DI registrations
-- sample route keys and navigation entries
-- sample strings and docs text
-- sample database names and Room schema exports
-
-The current template guidance explicitly calls out these cleanup checks because leftover sample artifacts were a source of review drift in the first generated-app run.
+Run `temp/.opencode/scripts/verify-feature.sh <feature-name>` as the final gate for any feature.
 
 ## Updating Dream Itself
 
@@ -376,5 +371,5 @@ When changing Dream rather than a generated app:
 ## Current Follow-Ups
 
 - Run a fresh generated-project flow to verify the hardening changes eliminate first-run drift in practice.
-- Keep sample schema exports only as starter scaffolding; remove them when a generated app replaces `feature/sample-*`.
+- Add more archetypes (`remote-list`, `settings`) and run the archetype check before releases.
 - Continue tightening identity normalization during project instantiation.

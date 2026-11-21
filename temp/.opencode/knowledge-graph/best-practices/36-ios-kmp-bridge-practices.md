@@ -75,7 +75,7 @@ Best practice:
 
 ### 36.8 Bridge protocol template for new features
 
-Every feature with an iOS presence follows the same bridge triad: protocol → concrete implementation → mock. The pattern is identical across features and should be copyable from the sample.
+Every feature with an iOS presence follows the same bridge triad: protocol → concrete implementation → mock. The pattern is identical across features and should be copyable from the `local-crud` archetype (`ios/src/Sample/Bridge/`).
 
 **Protocol + Concrete (one file in `iosApp/src/Core/`):**
 
@@ -199,7 +199,7 @@ Error fidelity note:
 
 ### 36.11 Flows in Swift without SKIE
 
-Only add flow helpers when a screen needs them; the sample iOS app uses suspend functions only.
+Only add flow helpers when a screen needs them; the `local-crud` archetype's iOS code uses suspend functions only.
 
 Best practice:
 

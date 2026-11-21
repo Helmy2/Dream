@@ -84,7 +84,6 @@ Keep these files in `.opencode/guidance/reference/`:
 | `agent-constraints.md` | Per-agent "do not" constraints | ~63 |
 | `verification-commands.md` | All verification commands | ~104 |
 | `skip-conditions.md` | Repair loop stop conditions | ~45 |
-| `sample-cleanup-checklist.md` | One-time cleanup checklist | ~50 |
 
 ## 4. Operating Guide
 

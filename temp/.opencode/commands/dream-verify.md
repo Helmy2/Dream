@@ -30,7 +30,7 @@ Then:
 
 ### Preflights
 - run early preflights before verification depends on the environment:
-- run `./scripts/dream-preflight.sh` from the project root when it exists
+- run `./.opencode/scripts/dream-preflight.sh` from the project root when it exists
 - verify the project is a git repository and `git status`, `git diff`, and `git log --oneline -10` work, or record a precise git blocker
 - verify Android SDK readiness through `ANDROID_HOME` or the configured SDK path, or record a precise Android environment blocker
 
@@ -40,8 +40,8 @@ Then:
 - before each repair round, write iteration state to `specs/verification-report.md` (current iteration, failures, past attempts, next module to fix)
 - delegate fixes to the layer-appropriate implementer based on the failing surface:
   - `dream-implementer` for domain, data, api, or wiring failures
-  - `dream-implementer-android` for Compose UI or `impl` failures
-  - `dream-implementer-ios` for SwiftUI or bridge failures
+  - `dream-implementer-ui` (platform: android) for Compose UI or `impl` failures
+  - `dream-implementer-ui` (platform: ios) for SwiftUI or bridge failures
 - delegate reverification to `dream-tester` after each repair
 - check skip conditions after each round: iteration ≤ 5? failure count decreased? no regressions? environment blocker repeated? (see Skip Conditions in dream-agent-operating-guide.md)
 - use `dream-inspector` as the final QA gate for substantial work

@@ -10,7 +10,7 @@ Best practice:
 
 - put Swift tests in `iosApp/test/*.swift` (SampleListViewModelTests, SampleDetailViewModelTests, MockSampleRepositoryBridge); that folder belongs to the `appTests` target
 - use `@testable import app` (the app's Swift module name is `app`, not `iosApp`)
-- run with `xcodebuild test -project iosApp/module.xcodeproj -scheme app -destination 'platform=iOS Simulator,name=iPhone 17 Pro' CODE_SIGNING_ALLOWED=NO` (or `-destination "id=<simulator-udid>"`); this also runs the Toolchain integration script, so no separate `./kotlin build` is needed
+- run with `xcodebuild test -project iosApp/module.xcodeproj -scheme iosApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro' CODE_SIGNING_ALLOWED=NO` (or `-destination "id=<simulator-udid>"`); this also runs the Toolchain integration script, so no separate `./kotlin build` is needed
 - `./kotlin test` runs only Kotlin tests, never Swift tests; cover shared logic there with `./kotlin test --platform=iosSimulatorArm64`
 - do not add a second target carrying the Kotlin integration script phase
 - if editing the Xcode project, avoid `xcodebuild -convert-project` (see 37.6)

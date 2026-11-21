@@ -1,0 +1,28 @@
+package com.dream.template.shared.di
+
+import androidx.room.RoomDatabase
+import com.dream.template.feature.sample.data.di.sampleDataModule
+import com.dream.template.feature.sample.data.local.SampleDatabase
+import com.dream.template.feature.sample.data.local.SampleDatabaseFactory
+import com.dream.template.shared.core.domain.TimeProvider
+import org.koin.dsl.koinApplication
+import kotlin.test.Test
+import kotlin.test.assertNotNull
+
+class SampleDataModuleTest {
+    @Test
+    fun resolvesTimeProviderAndSampleRepository() {
+        val testFactory = object : SampleDatabaseFactory {
+            override fun createBuilder(): RoomDatabase.Builder<SampleDatabase> {
+                error("The DI graph test should not eagerly create the Room database")
+            }
+        }
+
+        val koin = koinApplication {
+            modules(coreModule(), sampleDataModule(testFactory))
+        }.koin
+
+        assertNotNull(koin.get<TimeProvider>())
+        assertNotNull(koin.get<SampleDatabaseFactory>())
+    }
+}
