@@ -54,11 +54,11 @@ Use the following techniques based on the bug type:
 **For runtime/logic bugs (wrong data, wrong state, wrong navigation):**
 - run `./kotlin test -m <name>-domain --platform=android` and `./kotlin test -m <name>-data --platform=android` for targeted test feedback
 - if tests pass but behavior is wrong, inspect the feature's contract and trace the data flow
-- use `dream-search` for cryptic error messages, unfamiliar exceptions, or dependency issues
+- use `dream-research` for cryptic error messages, unfamiliar exceptions, or dependency issues
 
 **For build/compilation bugs:**
 - run `./kotlin build -m androidApp --platform=android` or `./kotlin build -m iosApp --platform=iosSimulatorArm64` and capture the error output
-- delegate to `dream-search` for unfamiliar compiler errors
+- delegate to `dream-research` for unfamiliar compiler errors
 
 ### Phase 2: Root Cause Analysis
 
@@ -81,8 +81,8 @@ Use the following techniques based on the bug type:
 
 - delegate to the layer-appropriate implementer:
   - `dream-implementer` for domain, data, api, or wiring bugs
-  - `dream-implementer-android` for Compose/ViewModel bugs in `impl`
-  - `dream-implementer-ios` for SwiftUI or bridge bugs
+  - `dream-implementer-ui` (platform: android) for Compose/ViewModel bugs in `impl`
+  - `dream-implementer-ui` (platform: ios) for SwiftUI or bridge bugs
 - include in the fix prompt:
   - the bug description and reproduction steps
   - the diagnostic output (stack trace, error message, failing test)
@@ -124,6 +124,6 @@ After the fix is applied, run targeted verification based on the fixed layer:
 - on confirm: squash merge to main, delete feature branch
 - on deny: keep branch, document reason in report
 
-Use `dream-implementer`, `dream-implementer-android`, and `dream-implementer-ios` for code changes (layer-appropriate) and `dream-inspector` for final review when >2 files changed.
+Use `dream-implementer` and `dream-implementer-ui` for code changes (layer-appropriate) and `dream-inspector` for final review when >2 files changed.
 
 Do not commit blocked, partial, unreviewed, or unsafe worktree states. Do not commit until the user explicitly approves the commit after Dream reports verification and review are green.

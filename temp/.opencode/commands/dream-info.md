@@ -72,19 +72,18 @@ Present as a clean terminal-friendly summary:
 │ .opencode/scripts/fix-ios-project.sh │ Restore hand-maintained Xcode project settings   │
 └──────────────────────────────────────┴──────────────────────────────────────────────────┘
 
-┌──────────────────────┬───────────────────────────────────────────┐
-│ AGENT                │ ROLE                                      │
-├──────────────────────┼───────────────────────────────────────────┤
-│ dream-general        │ Orchestrator — interprets requests...     │
-│ dream-discovery      │ Fast codebase discovery + context packs   │
-│ dream-search         │ External technical research               │
-│ dream-designer       │ Translates contracts to UI specs          │
-│ dream-implementer    │ KMP business foundation (domain/data/api) │
-│ dream-implementer-android│ Jetpack Compose presentation layer  │
-│ dream-implementer-ios│ Native SwiftUI layer                     │
-│ dream-tester         │ Full verification ladder                  │
-│ dream-inspector      │ Final QA and architecture review gate     │
-└──────────────────────┴───────────────────────────────────────────┘
+┌──────────────────────┬────────────────────────────────────────────────┐
+│ AGENT                │ ROLE                                           │
+├──────────────────────┼────────────────────────────────────────────────┤
+│ dream-general        │ Orchestrator: interprets requests, delegates   │
+│ dream-discovery      │ Fast codebase discovery + context packs        │
+│ dream-research       │ External technical research                    │
+│ dream-designer       │ Translates contracts to UI specs               │
+│ dream-implementer    │ KMP business foundation (domain/data/api)      │
+│ dream-implementer-ui │ Android Compose + iOS SwiftUI (platform param) │
+│ dream-tester         │ Full verification ladder                       │
+│ dream-inspector      │ Final QA and architecture review gate          │
+└──────────────────────┴────────────────────────────────────────────────┘
 
 ┌───────────────────────────┬────────────────────────────────────────┐
 │ MCP SERVER                │ PURPOSE                                │

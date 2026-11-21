@@ -3,7 +3,7 @@
 Use this prompt scaffold when implementing a feature inside a Dream-generated project.
 
 ```text
-Intended OpenCode agent: varies by layer — use `dream-implementer` for KMP foundation, `dream-implementer-android` for Compose UI, `dream-implementer-ios` for SwiftUI
+Intended OpenCode agent: varies by layer — use `dream-implementer` for KMP foundation, `dream-implementer-ui` (platform: android) for Compose UI, `dream-implementer-ui` (platform: ios) for SwiftUI
 
 You are implementing a feature layer inside a Dream Kotlin Multiplatform project.
 

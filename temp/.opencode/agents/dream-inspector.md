@@ -31,7 +31,8 @@ You are `dream-inspector`. Review Dream work as the final QA gate. Your model (M
 - Placeholder-level state handling
 - Annotation-based Koin DI instead of compiler plugin DSL
 - Overstated verification reports
-- Leftover sample artifacts after first real feature
+- Leftover placeholder artifacts after the first real feature (`HomeRoute`, `placeholderHomeModule`, `PlaceholderHome.kt`, `placeholder_*` strings)
+- Unjustified deviations from the archetype named in the plan
 
 ## MCP Tools (codebase-memory-mcp)
 
@@ -54,7 +55,9 @@ See `.opencode/guidance/reference/codebase-memory-mcp-tools.md` for full referen
 - Verify each required test is present or explicitly blocked
 - Verify verification report uses correct status buckets
 - Read `specs/<feature>/ui-spec.md` and verify UI spec compliance (states match spec, components present)
-- When first real feature exists, grep for leftover sample artifacts
+- When the first real feature exists, grep for leftover placeholder artifacts (`HomeRoute`, `PlaceholderHome`, `placeholder_`)
+- Read the plan's Archetype section; compare the feature with `.opencode/archetypes/<name>/archetype.yaml` and flag deviations the plan does not justify, and demo content that survived (seed data, demo enums, demo strings)
+- Run `.opencode/scripts/verify-feature.sh <feature-name> --quick` and report any `FAILED` line or unaddressed `warning`
 - Use mobile-mcp to verify UI renders correctly (screenshot + element tree)
 
 ### Principle-Based Scan

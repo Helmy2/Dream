@@ -128,7 +128,7 @@ Based on changed files, run only necessary checks:
 
 **If only iOS files changed:**
 - `./kotlin build -m iosApp --platform=iosSimulatorArm64` + `xcrun simctl` install/launch
-- Swift unit tests: `xcodebuild test -project iosApp/module.xcodeproj -scheme iosApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro' CODE_SIGNING_ALLOWED=NO` (`./kotlin test` never runs Swift tests)
+- Swift unit tests: `xcodebuild test -project iosApp/module.xcodeproj -scheme iosApp -destination 'platform=iOS Simulator,name=<an available simulator>' CODE_SIGNING_ALLOWED=NO` (`./kotlin test` never runs Swift tests; run `.opencode/scripts/fix-ios-project.sh` first and list simulators with `xcrun simctl list devices available`)
 - Skip: Android build and Android unit tests
 
 **If shared/* changed:**
@@ -138,6 +138,8 @@ Based on changed files, run only necessary checks:
 - Full verification ladder
 
 Use `git diff --name-only` to identify changed modules before deciding scope.
+
+**Final gate for a feature:** run `.opencode/scripts/verify-feature.sh <name>` (full). Its `passed` / `FAILED` / `not run` / `not applicable` lines map directly to the verification buckets. An `INCOMPLETE` result is not a pass.
 
 ## Constraints
 

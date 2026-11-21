@@ -40,8 +40,8 @@ Then:
 - before each repair round, write iteration state to `specs/verification-report.md` (current iteration, failures, past attempts, next module to fix)
 - delegate fixes to the layer-appropriate implementer based on the failing surface:
   - `dream-implementer` for domain, data, api, or wiring failures
-  - `dream-implementer-android` for Compose UI or `impl` failures
-  - `dream-implementer-ios` for SwiftUI or bridge failures
+  - `dream-implementer-ui` (platform: android) for Compose UI or `impl` failures
+  - `dream-implementer-ui` (platform: ios) for SwiftUI or bridge failures
 - delegate reverification to `dream-tester` after each repair
 - check skip conditions after each round: iteration ≤ 5? failure count decreased? no regressions? environment blocker repeated? (see Skip Conditions in dream-agent-operating-guide.md)
 - use `dream-inspector` as the final QA gate for substantial work

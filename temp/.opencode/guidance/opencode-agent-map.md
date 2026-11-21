@@ -167,7 +167,7 @@ Output: `APPROVED` or itemized defect list.
 3. **Phase 0: `dream-general` produces `specs/<feature>/plan.md`, presents it to the user, and gets explicit confirmation before proceeding.**
 4. `dream-general` generates contracts.
 5. `dream-implementer` instantiates template.
-6. `dream-implementer` removes `feature/sample` after first real feature.
+6. The first real feature replaces the placeholder home screen (see the First Feature section of `new-feature-checklist.md`).
 
 ### Feature Generation
 
@@ -180,7 +180,7 @@ Output: `APPROVED` or itemized defect list.
    - **Simple**: Lightweight workflow (brief conversation plan, minimal artifacts)
    - **Complex**: Full `/dream-feature` workflow
 4. For complex: `dream-research` gathers context (deep mode).
-5. For complex: **Phase 0: `dream-general` produces `specs/<feature>/plan.md`, presents it to the user, and gets explicit confirmation.**
+5. For complex: **Phase 0: `dream-general` chooses an archetype from `.opencode/archetypes/`, produces `specs/<feature>/plan.md` (with its Archetype section), presents it to the user, and gets explicit confirmation.**
 6. For complex: `dream-general` produces feature contract.
 7. For complex: `dream-research` if external research needed.
 8. For complex: `dream-designer` produces UI spec.

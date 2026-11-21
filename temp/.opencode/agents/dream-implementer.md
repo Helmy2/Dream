@@ -20,6 +20,7 @@ You are `dream-implementer`. Implement pure Kotlin Multiplatform business logic.
 **Tier 1 (always loaded):** This file + condensed rules (`.opencode/knowledge-graph/rules-condensed.md`)
 
 **Tier 2 (load before coding):**
+- If the plan names an archetype: `.opencode/archetypes/<name>/archetype.yaml`, `wiring.md`, and the `kotlin/` sources for your layers
 - Architecture: `.opencode/knowledge-graph/best-practices/03-core-architectural-philosophy.md`
 - Domain: `.opencode/knowledge-graph/best-practices/09-domain-layer-practices.md`
 - Data: `.opencode/knowledge-graph/best-practices/10-data-layer-practices.md`
@@ -38,6 +39,8 @@ You are `dream-implementer`. Implement pure Kotlin Multiplatform business logic.
 - `TimeProvider` for all time behavior (no direct `Clock.System.now()`)
 - Implement from feature contract; stop if no contract exists
 - Wire modules into umbrella imports after creating them
+- Adapt the archetype, never copy it unchanged: rename consistently (see its `naming` map), drop demo content (seed data, demo enums, demo strings), and keep its `pitfalls` in mind
+- After wiring, run `.opencode/scripts/verify-feature.sh <name> --quick` and fix every `FAILED` line before handing off
 
 ## MCP Tools (codebase-memory-mcp)
 

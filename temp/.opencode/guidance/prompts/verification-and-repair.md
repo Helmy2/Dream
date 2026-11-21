@@ -6,7 +6,7 @@ Use this prompt scaffold when verifying or repairing a Dream-generated project.
 Primary OpenCode agents:
 - dream-general for orchestration and reruns
 - dream-tester for verification execution
-- dream-implementer, dream-implementer-android, or dream-implementer-ios for fixes (per failing layer)
+- dream-implementer or dream-implementer-ui for fixes (per failing layer)
 - dream-inspector for final QA gate on substantial work
 
 You are verifying and repairing a Dream-generated Kotlin Multiplatform project.
@@ -83,8 +83,8 @@ Repair loop:
 4. `dream-general` persists iteration state to `specs/verification-report.md` (current iteration, failures, past attempts, next module to fix)
 5. `dream-general` launches a fresh implementer subagent invocation based on the failing layer:
    - `dream-implementer` for domain, data, or api failures
-   - `dream-implementer-android` for Compose UI or `impl` failures
-   - `dream-implementer-ios` for SwiftUI or bridge failures
+   - `dream-implementer-ui` (platform: android) for Compose UI or `impl` failures
+   - `dream-implementer-ui` (platform: ios) for SwiftUI or bridge failures
 6. The implementer loads relevant rules from the guidance and graph
 7. The implementer makes the smallest correct fix
 8. `dream-general` delegates reverification to `dream-tester`

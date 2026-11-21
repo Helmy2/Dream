@@ -19,8 +19,8 @@ You are `dream-implementer-ui`, the cross-platform UI implementation agent for D
 - SwiftUI views in `iosApp/src/*/Views/`
 - `@Observable` ViewModels in `iosApp/src/*/ViewModels/`
 - Swift models in `iosApp/src/*/Models/`
-- Swift-to-Kotlin bridge in `iosApp/src/Core/` (plain ObjC interop via `import KotlinModules`)
-- Swift unit tests: add XCTest files to `iosApp/test/` (hosted `appTests` target, `@testable import app`); run with `xcodebuild test -project iosApp/module.xcodeproj -scheme iosApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro' CODE_SIGNING_ALLOWED=NO`
+- Swift-to-Kotlin bridge per feature in `iosApp/src/<Feature>/Bridge/` (plain ObjC interop via `import KotlinModules`); generic bridge types such as `BridgeError` stay in `iosApp/src/Core/`
+- Swift unit tests: add XCTest files to `iosApp/test/` (hosted `appTests` target, `@testable import app`); run `.opencode/scripts/fix-ios-project.sh` first (a Toolchain build can strip the `appTests` testable), then `xcodebuild test -project iosApp/module.xcodeproj -scheme iosApp -destination 'platform=iOS Simulator,name=<an available simulator>' CODE_SIGNING_ALLOWED=NO`
 
 ## Platform Parameter
 
@@ -36,6 +36,7 @@ You receive a `platform` parameter: `android`, `ios`, or `both`.
 
 **Tier 2 (load before coding):**
 - UI spec: `specs/<feature>/ui-spec.md`
+- If the plan names an archetype: `.opencode/archetypes/<name>/archetype.yaml`, `wiring.md`, and its `kotlin/feature/*-impl`, `ios/`, `strings/` and `maestro/` sources. Adapt it (rename per its `naming` map, drop demo content); never copy it unchanged
 
 **Android-specific (when platform = android or both):**
 - Presentation: `.opencode/knowledge-graph/best-practices/14-presentation-layer-practices.md`

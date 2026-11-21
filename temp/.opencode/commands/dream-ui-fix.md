@@ -50,15 +50,15 @@ Then:
   - identify which states (Loading/Empty/Content/Error) are rendering incorrectly
   - identify missing, mispositioned, or malformed components
 - determine the fix layer:
-  - **Compose-only issue** → `dream-implementer-android`
-  - **SwiftUI-only issue** → `dream-implementer-ios`
+  - **Compose-only issue** → `dream-implementer-ui` (platform: android)
+  - **SwiftUI-only issue** → `dream-implementer-ui` (platform: ios)
   - **Cross-platform issue** → both (check if shared ViewModel/state is the root cause first)
 
 ### Phase 3: Apply Fix
 
 - delegate to the layer-appropriate implementer:
-  - `dream-implementer-android` for Compose screen composables, ViewModels, UI state/events, navigation entries
-  - `dream-implementer-ios` for SwiftUI views, ViewModels, models, bridge code
+  - `dream-implementer-ui` (platform: android) for Compose screen composables, ViewModels, UI state/events, navigation entries
+  - `dream-implementer-ui` (platform: ios) for SwiftUI views, ViewModels, models, bridge code
 - if the fix affects both platforms, launch parallel subagent calls
 - include in the fix prompt:
   - the UI spec and expected rendering
@@ -92,6 +92,6 @@ Then:
 - on confirm: squash merge feature branch to main, delete feature branch
 - on deny: keep branch, document reason in report
 
-Use `dream-implementer-android` and `dream-implementer-ios` for code changes (never domain/data/api) and `dream-inspector` for final review if >2 files were changed.
+Use `dream-implementer-ui` (platform: android or ios) for code changes (never domain/data/api) and `dream-inspector` for final review if >2 files were changed.
 
 Do not commit blocked, partial, unreviewed, or unsafe worktree states. Do not commit until the user explicitly approves.
