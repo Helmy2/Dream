@@ -31,9 +31,9 @@ When working in this generated project, read in this order:
 
 ## Build system: Kotlin Toolchain (Alpha)
 
-This project builds with the JetBrains Kotlin Toolchain (`./kotlin` CLI, YAML config, v0.13, Alpha). There is no Gradle or `gradlew`. Modules are listed in `project.yaml`; each has a `module.yaml`, and module names equal directory names (for example `core-domain`, `sample-impl`).
+This project builds with the JetBrains Kotlin Toolchain (`./kotlin` CLI, YAML config, v0.14, Alpha). There is no Gradle or `gradlew`. Modules are listed in `project.yaml`; each has a `module.yaml`, and module names equal directory names (for example `core-domain`, `sample-impl`).
 
-Not supported by Toolchain 0.13: SKIE, Swift export, and the Xcode 27 JSON project format (`project.xcproj`). The Xcode project has an `app` target (the only one with the Kotlin integration script phase) and a hosted `appTests` unit-test target (Swift tests in `iosApp/test`, run with `xcodebuild test -project iosApp/module.xcodeproj -scheme iosApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro' CODE_SIGNING_ALLOWED=NO`; `./kotlin test` runs Kotlin tests only). Alpha tool: if something is unsupported, stop and report; do not work around it with Gradle. Full reference: [.opencode/guidance/reference/kotlin-toolchain.md](.opencode/guidance/reference/kotlin-toolchain.md).
+Not supported by Toolchain 0.14: SKIE, Swift export, and the Xcode 27 JSON project format (`project.xcproj`). The Xcode project has an `app` target (the only one with the Kotlin integration script phase) and a hosted `appTests` unit-test target (Swift tests in `iosApp/test`, run with `xcodebuild test -project iosApp/module.xcodeproj -scheme iosApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro' CODE_SIGNING_ALLOWED=NO`; `./kotlin test` runs Kotlin tests only). Alpha tool: if something is unsupported, stop and report; do not work around it with Gradle. Full reference: [.opencode/guidance/reference/kotlin-toolchain.md](.opencode/guidance/reference/kotlin-toolchain.md).
 
 ## Working Rules
 
