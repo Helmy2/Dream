@@ -38,6 +38,7 @@ flowchart TD
 - `temp/.opencode/scripts/dream-preflight.sh`: local readiness check for git, Android SDK, and tooling.
 - `temp/.opencode/scripts/sync-pbxproj.rb`: obsolete under the Kotlin Toolchain (the Xcode project uses a file-system-synchronized folder, so new Swift files are picked up automatically).
 - `temp/.opencode/scripts/remove-sample.sh`: removes sample feature files, strips sample deps, and checks for leftovers.
+- `temp/.opencode/scripts/verify-feature.sh`: final gate for a feature. Checks module structure, layer rules, Koin ids, wiring, tests, strings, iOS files and Maestro flows, then runs the build and test ladder (`--quick` skips the ladder). `test-verify-feature.sh` is its self-test.
 - `temp/.opencode/scripts/start-codebase-memory-mcp.sh`: launches codebase-memory-mcp binary for code intelligence via persistent knowledge graph.
 - `temp/.cbmignore`: excludes files from codebase-memory-mcp indexing (build artifacts, generated files, Dream metadata).
 

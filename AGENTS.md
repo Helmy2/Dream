@@ -45,8 +45,9 @@ Prefer linking to those documents in discussions and change summaries instead of
 - [temp/.opencode/knowledge-graph/README.md](temp/.opencode/knowledge-graph/README.md): packaged reusable architecture rules and source graph
 - [temp/.opencode/scripts/dream-preflight.sh](temp/.opencode/scripts/dream-preflight.sh): local readiness check for git, Android SDK, and tooling
 - [temp/.opencode/scripts/sync-pbxproj.rb](temp/.opencode/scripts/sync-pbxproj.rb): obsolete under the Kotlin Toolchain (the Xcode project uses a file-system-synchronized folder, so new Swift files are picked up automatically); kept only for reference
-- [temp/.opencode/scripts/fix-ios-project.sh](temp/.opencode/scripts/fix-ios-project.sh): re-applies hand-maintained `module.xcodeproj` settings (wrapper path, deployment target, bundle id) after the Toolchain regenerates the project
+- [temp/.opencode/scripts/fix-ios-project.sh](temp/.opencode/scripts/fix-ios-project.sh): re-applies hand-maintained `module.xcodeproj` settings (wrapper path, deployment target, bundle id) and restores the `appTests` testable in `iosApp.xcscheme` after the Toolchain regenerates the project
 - [temp/.opencode/scripts/remove-sample.sh](temp/.opencode/scripts/remove-sample.sh): removes sample feature files, strips sample deps, and checks for leftovers
+- [temp/.opencode/scripts/verify-feature.sh](temp/.opencode/scripts/verify-feature.sh): final gate for a feature (structure, architecture, wiring, then build and tests; `--quick` for structure only), with a self-test in `test-verify-feature.sh`
 - [temp/.opencode/scripts/start-codebase-memory-mcp.sh](temp/.opencode/scripts/start-codebase-memory-mcp.sh): launches codebase-memory-mcp binary for code intelligence via persistent knowledge graph
 
 ## Build system: Kotlin Toolchain (Alpha)

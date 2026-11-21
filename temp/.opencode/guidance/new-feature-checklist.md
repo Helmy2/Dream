@@ -15,10 +15,41 @@ For detailed rules, see `.opencode/knowledge-graph/rules-condensed.md`.
 
 ---
 
+## Automated Gate (Always)
+
+Many items below are checked by one command. Run it as the last step before reporting a feature as done:
+
+```bash
+.opencode/scripts/verify-feature.sh <feature-name>            # structure, then build, tests, Swift tests
+.opencode/scripts/verify-feature.sh <feature-name> --quick    # structure only, takes seconds
+```
+
+Every line is `passed`, `FAILED`, `warning`, `not applicable`, or `not run`, matching the verification buckets. Exit code 1 means at least one `FAILED`. A `--quick` pass is not a verification result; only a full run counts. Warnings do not fail the run but must be fixed or explained in the report.
+
+| Check | What it enforces |
+| --- | --- |
+| M1-M3 | the four modules exist with `module.yaml`, are listed in `project.yaml`, and module names are unique |
+| K1-K2 | Koin compiler plugin `moduleId` equals the module name and is unique across the project |
+| D1-D5 | domain is pure Kotlin; api is a minimal `NavKey` contract; data does not reach into presentation; impl uses api and domain, not data |
+| X1-X2 | no other module depends on `<name>-impl`; cross-feature `-data` reuse is flagged |
+| W1-W4 | umbrella-ui depends on impl and api; impl and data Koin modules are installed; Navigation 3 entry providers exist |
+| T1 | domain, data, and impl each have tests |
+| S1-S4 | no hardcoded UI text; raw Material3 flagged; Android and iOS string keys match |
+| I1-I4 | SwiftUI views, view models, bridge, Swift tests; the `appTests` testable in `iosApp.xcscheme` is intact (repaired if the Toolchain stripped it) |
+| E1-E2 | Maestro flows exist and use the real `applicationId` |
+| B1-B7 | `./kotlin build`, Android and iOS Kotlin tests, both app builds, Swift tests |
+
+The script cannot judge contract parity, UI quality, or runtime behavior. The items below that it does not cover still apply, along with device launch, log inspection, and `/dream-e2e`.
+
+`.opencode/scripts/test-verify-feature.sh` breaks a scratch copy of the project in 18 ways and checks the gate catches each one. Run it after editing `verify-feature.sh`.
+
+---
+
 ## Phase 0: Plan & User Review (Always)
 
 - [ ] Create `specs/<feature-name>/plan.md` using the plan template before any implementation.
 - [ ] Plan must define: feature goal, priority, modules to create/modify, screens with states, architecture decisions, dependencies, and phases.
+- [ ] Choose an archetype from `.opencode/archetypes/README.md` (for example `local-crud`) and say why it fits, or state that none does. Read its `archetype.yaml` and `wiring.md` before designing modules.
 - [ ] Present the plan to the user and ask: **questions? edits? confirm? deny?**
 - [ ] On **Confirm**: create feature branch (`dream/feature/<name>`) and proceed.
 - [ ] On **Edit**: update plan and re-present; loop until confirmed or denied.
@@ -89,7 +120,7 @@ For detailed rules, see `.opencode/knowledge-graph/rules-condensed.md`.
 
 ## Verification And Commit (Always)
 
-- [ ] Run required `./kotlin test`/`./kotlin build` commands, platform builds, and UI inspection or document precise blockers.
+- [ ] Run `.opencode/scripts/verify-feature.sh <feature-name>` (full, not `--quick`) and fix every `FAILED` line. Add UI inspection, device install/launch and log inspection, or document precise blockers.
 - [ ] Record verification in explicit buckets: passed, blocked by environment, not run, not applicable.
 - [ ] Run `dream-inspector` or manual review fallback against contract parity and architecture rules.
 - [ ] Run `git status`, `git diff`, and `git log --oneline -10`.
@@ -99,7 +130,7 @@ For detailed rules, see `.opencode/knowledge-graph/rules-condensed.md`.
 
 ## Preflight (Always)
 
-- [ ] Run `./scripts/dream-preflight.sh` and record any blockers.
+- [ ] Run `./.opencode/scripts/dream-preflight.sh` and record any blockers.
 - [ ] Verify git and Android SDK readiness before verification.
 
 
@@ -116,7 +147,7 @@ Apply when the feature has an iOS screen:
 - [ ] Add string keys to `iosApp/src/Localizable.xcstrings` matching `strings.xml`.
 - [ ] New `.swift` files in `iosApp/src` are picked up automatically (no project sync script).
 - [ ] Run `./kotlin build -m iosApp --platform=iosSimulatorArm64` and install/launch with `xcrun simctl`. 
-- [ ] Run Swift unit tests: `xcodebuild test -project iosApp/module.xcodeproj -scheme iosApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro' CODE_SIGNING_ALLOWED=NO` (tests in `iosApp/test`, target `appTests`).
+- [ ] Run `.opencode/scripts/fix-ios-project.sh`, then the Swift unit tests: `xcodebuild test -project iosApp/module.xcodeproj -scheme iosApp -destination 'platform=iOS Simulator,name=<an available simulator>' CODE_SIGNING_ALLOWED=NO` (tests in `iosApp/test`, target `appTests`; list simulators with `xcrun simctl list devices available`). `verify-feature.sh` does both.
 
 ## Responsive Forms And IME (Forms)
 
@@ -131,8 +162,8 @@ Apply only when feature has editable text inputs:
 
 Apply only when feature uses dates, timestamps, or time-sensitive logic:
 
-- [ ] Keep shared Room builder policy in shared core modules.
-- [ ] Add new entities and DAOs to shared database unless intentionally isolated.
+- [ ] Keep the shared Room builder policy (`buildBundledRoomDatabase`) in `shared/core-data`.
+- [ ] Each feature owns its Room database, DAOs, entities, and schema export in its `-data` module; do not add feature entities to `shared/core-data`.
 - [ ] Inject `TimeProvider` — use `nowMillis()`, `today()`, `currentYearMonth()`, `formatDate(...)`, `formatDateTime(...)`.
 - [ ] Use `FakeTimeProvider` in time-sensitive tests.
 - [ ] Do not add feature-local date formatting helpers in common code.
@@ -141,11 +172,11 @@ Apply only when feature uses dates, timestamps, or time-sensitive logic:
 
 Apply only when removing the sample feature for the first time:
 
-- [ ] Run `./scripts/remove-sample.sh --dry-run` first.
-- [ ] Run `./scripts/remove-sample.sh` to delete sample files and strip deps.
+- [ ] Run `./.opencode/scripts/remove-sample.sh --dry-run` first.
+- [ ] Run `./.opencode/scripts/remove-sample.sh` to delete sample files and strip deps.
 - [ ] Complete manual edits from script output.
 - [ ] Update `AGENTS.md`, `README.md`, and `maestro/README.md`.
-- [ ] Run `./scripts/remove-sample.sh --dry-run` again to confirm no leftovers.
+- [ ] Run `./.opencode/scripts/remove-sample.sh --dry-run` again to confirm no leftovers.
 
 ---
 

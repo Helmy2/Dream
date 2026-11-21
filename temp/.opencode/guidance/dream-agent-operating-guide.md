@@ -98,7 +98,7 @@ Code-writing agents should:
 - Replace sample feature content with real content
 - Reuse shared core, design system, navigation, build-logic modules
 - Avoid collapsing modular template
-- Remove `feature/sample` after first real feature (run `./scripts/remove-sample.sh`)
+- Remove `feature/sample` after first real feature (run `./.opencode/scripts/remove-sample.sh`)
 
 Should not: move logic to app shells, bypass shared infrastructure, introduce cross-feature `impl` coupling.
 

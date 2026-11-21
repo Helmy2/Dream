@@ -20,8 +20,8 @@ Read all `.opencode/commands/*.md` files. For each, extract the `description:` f
 ### 3. Available Scripts
 
 From the repository map in `ONBOARDING.md` and `AGENTS.md`, list:
-- `scripts/dream-preflight.sh` — local readiness check for git, Android SDK, and tooling
-- `scripts/remove-sample.sh` — removes sample feature files, strips sample deps, and checks for leftovers
+- `.opencode/scripts/dream-preflight.sh` — local readiness check for git, Android SDK, and tooling
+- `.opencode/scripts/remove-sample.sh` — removes sample feature files, strips sample deps, and checks for leftovers
 
 ### 4. Agents
 
@@ -65,12 +65,14 @@ Present as a clean terminal-friendly summary:
 │ /dream-info      │ Display this overview                           │
 └──────────────────┴─────────────────────────────────────────────────┘
 
-┌───────────────────────────┬────────────────────────────────────────┐
-│ SCRIPT                    │ PURPOSE                                │
-├───────────────────────────┼────────────────────────────────────────┤
-│ scripts/dream-preflight.sh│ git, Android SDK, tooling readiness   │
-│ scripts/remove-sample.sh  │ Remove sample feature and check leftovers│
-└───────────────────────────┴────────────────────────────────────────┘
+┌──────────────────────────────────────┬──────────────────────────────────────────────────┐
+│ SCRIPT                               │ PURPOSE                                          │
+├──────────────────────────────────────┼──────────────────────────────────────────────────┤
+│ .opencode/scripts/dream-preflight.sh │ git, Android SDK, tooling readiness              │
+│ .opencode/scripts/verify-feature.sh  │ Check a feature's structure, then build and test │
+│ .opencode/scripts/fix-ios-project.sh │ Restore hand-maintained Xcode project settings   │
+│ .opencode/scripts/remove-sample.sh   │ Remove sample feature and check leftovers        │
+└──────────────────────────────────────┴──────────────────────────────────────────────────┘
 
 ┌──────────────────────┬───────────────────────────────────────────┐
 │ AGENT                │ ROLE                                      │

@@ -59,7 +59,7 @@ Instantiation steps:
 12. Decide whether the sample feature should remain temporarily as scaffolding or be replaced immediately by the first real feature.
 13. Verify git readiness in the destination project before later workflow stages depend on git commands.
 14. Verify Android SDK readiness early, or record precise environment blockers.
-15. Run `./scripts/dream-preflight.sh` when it exists and include the result in the instantiation summary.
+15. Run `./.opencode/scripts/dream-preflight.sh` when it exists and include the result in the instantiation summary.
 16. Check and install development dependencies interactively:
     - `mobilecli` (`command -v mobilecli`; install via `npm install -g @mobilenext/mobilecli`)
     - `xcodeproj` Ruby gem (`gem list -i xcodeproj`; install via `gem install xcodeproj`)

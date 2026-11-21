@@ -4,7 +4,7 @@ Run this checklist after the first real feature replaces the starter sample.
 
 ## Files to Remove
 
-- [ ] `feature/sample/` directory (run `./scripts/remove-sample.sh`)
+- [ ] `feature/sample/` directory (run `./.opencode/scripts/remove-sample.sh`)
 
 ## Files to Update
 

@@ -25,8 +25,9 @@ When working in this generated project, read in this order:
 - [.opencode/scripts/dream-preflight.sh](.opencode/scripts/dream-preflight.sh): git, Android SDK, and tooling readiness preflight
 - [.opencode/scripts/sync-pbxproj.rb](.opencode/scripts/sync-pbxproj.rb): obsolete under the Kotlin Toolchain (the Xcode project uses a file-system-synchronized folder, so new Swift files are picked up automatically); kept only for reference
 - [.opencode/guidance/reference/kotlin-toolchain.md](.opencode/guidance/reference/kotlin-toolchain.md): Kotlin Toolchain commands, project layout, module names, and iOS/Android rules
-- [.opencode/scripts/fix-ios-project.sh](.opencode/scripts/fix-ios-project.sh): re-applies hand-maintained `module.xcodeproj` settings (wrapper path, deployment target, bundle id) after the Toolchain regenerates the project
+- [.opencode/scripts/fix-ios-project.sh](.opencode/scripts/fix-ios-project.sh): re-applies hand-maintained `module.xcodeproj` settings (wrapper path, deployment target, bundle id) and restores the `appTests` testable in `iosApp.xcscheme` after the Toolchain regenerates the project
 - [.opencode/scripts/remove-sample.sh](.opencode/scripts/remove-sample.sh): removes sample feature files, strips sample deps, and checks for leftovers
+- [.opencode/scripts/verify-feature.sh](.opencode/scripts/verify-feature.sh): final gate for a feature: structure, architecture and wiring checks, then build and tests (`--quick` for structure only); its self-test is [test-verify-feature.sh](.opencode/scripts/test-verify-feature.sh)
 - [.opencode/guidance/new-feature-checklist.md](.opencode/guidance/new-feature-checklist.md): contract-first feature wiring, verification, and git checklist
 
 ## Build system: Kotlin Toolchain (Alpha)
