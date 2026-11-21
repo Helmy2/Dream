@@ -34,7 +34,7 @@ Defines which OpenCode agent owns each Dream workflow stage.
 
 ## Model Assignments
 
-By default no agent pins a model: every agent uses the model selected in the current OpenCode session, and subagents inherit the model of the agent that called them. `/dream-init` lets the user keep that default, choose a role preset, or pick a model per agent; presets and custom choices are written to `opencode.json` under the `agent` key. The preset table lives in `.opencode/commands/dream-init.md` (Optional Presets).
+By default no agent pins a model: every agent uses the model selected in the current OpenCode session, and subagents inherit the model of the agent that called them. `/dream-init` lets the user keep that default or pick a model per agent; custom choices are written to `opencode.json` under the `agent` key.
 
 Agents that read screenshots (`dream-general`, `dream-tester`, `dream-inspector`, and UI work in `dream-designer` and `dream-implementer-ui`) need a model with image input. If the active model has none, rely on `mobile_list_elements_on_screen` and crash logs, and report visual checks as `not run`.
 
