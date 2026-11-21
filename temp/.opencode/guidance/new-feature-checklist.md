@@ -122,7 +122,7 @@ The script cannot judge contract parity, UI quality, or runtime behavior. The it
 ## Slice Loop (Always, COMPLEX features)
 
 - [ ] Amend `contract.yaml` for the slice before implementing it; record changes to earlier-slice definitions in the change notes.
-- [ ] Run the full `verify-feature.sh <feature-name>` after every slice, plus device install/launch on Android and iOS. Android-only does not count.
+- [ ] Iterate with focused module tests and `verify-feature.sh --quick`; run the full `verify-feature.sh <feature-name>` once per slice when those pass, plus device install/launch on Android and iOS if the slice changed UI. Android-only does not count.
 - [ ] Commit the green slice on the feature branch (`<feature>: slice N - <title>`), update the slice status in `plan.md`, then continue without asking the user.
 - [ ] Stop and report only on failure.
 

@@ -15,6 +15,13 @@ Replace the one-pass COMPLEX workflow (all domain/data, then all UI, then one ve
 - **Contract grows per slice.** Changes to an earlier slice's definitions go in the contract's change notes.
 - **Iteration limits are per slice**; rollback targets the previous slice's commit.
 
+## Speed
+
+- **Focused inner loop.** While implementing and repairing, use focused module tests and `verify-feature.sh --quick`. The full gate runs once per slice, when those pass. A repair round no longer costs a full gate.
+- **Launch only when UI changed.** The full gate still runs on both platforms every slice; the device install/launch step is skipped for slices with no UI change.
+- **Merge tiny slices** into the previous one instead of giving them their own gate.
+- Not done: changes to `verify-feature.sh` itself (overlap between `./kotlin build` and the app builds, running Android and iOS tests concurrently). Decide after timing the steps.
+
 ## Changed files (all under `temp/.opencode/`)
 
 - `agents/dream-general.md`: COMPLEX workflow, new "Slice Loop" section, key rules, state handoff.

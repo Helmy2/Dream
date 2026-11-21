@@ -52,7 +52,8 @@ Then:
   - **domain + data + api**: delegate to `dream-implementer` for the slice's entities, repository interfaces, data mappings, domain/data tests, and `feature/<name>-api` with `NavKey` route types only
   - **UI (parallel)**: launch Compose UI (`dream-implementer-ui` platform: android, for `feature/<name>-impl`) and SwiftUI (`dream-implementer-ui` platform: ios, for views, ViewModels, models, bridge) as independent subagent calls
   - **wiring**: `dream-implementer` for umbrella imports, DI registration, navigation entries
-  - **gate**: run `.opencode/scripts/verify-feature.sh <feature-name>` (full: Android and iOS), then have `dream-tester` install and launch on Android and on an iOS simulator (`xcrun simctl`) and inspect logs. Android-only is not enough
+  - iterate with focused commands (`./kotlin test -m <module> --platform=...`, `verify-feature.sh <feature-name> --quick`); run the full gate only when those pass
+  - **gate**: run `.opencode/scripts/verify-feature.sh <feature-name>` (full: Android and iOS); if the slice changed UI, also have `dream-tester` install and launch on Android and on an iOS simulator (`xcrun simctl`) and inspect logs. Android-only is not enough
   - repair until the slice is green or a skip condition triggers (see `.opencode/guidance/reference/skip-conditions.md`; the iteration counter is per slice)
   - commit the green slice on the feature branch, update its status in `plan.md`, append to `specs/<feature>/checkpoints.md`, and continue to the next slice without asking the user
 - stop and ask the user only on failure (skip condition, repeated environment blocker, a slice that cannot be made green)
