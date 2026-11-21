@@ -276,19 +276,7 @@ MDEOF
 ok "✓ specs/ metadata reset."
 
 # ──────────────────────────────────────────────
-# Step 5: Protect agent source in generated project
-# ──────────────────────────────────────────────
-info "🔒 Protecting agent source from git history..."
-cat >> "$DEST/.gitignore" <<- 'EOF'
-
-# Dream agent layer — do not commit
-.opencode/
-AGENTS.md
-EOF
-ok "✓ Agent source protected."
-
-# ──────────────────────────────────────────────
-# Step 6: Cleanup
+# Step 5: Cleanup
 # ──────────────────────────────────────────────
 info "🧹 Cleaning up..."
 
@@ -300,7 +288,7 @@ find "$DEST" -name "*.iml" -delete 2>/dev/null || true
 ok "✓ Cleanup done."
 
 # ──────────────────────────────────────────────
-# Step 7: Install dependencies
+# Step 6: Install dependencies
 # ──────────────────────────────────────────────
 echo ""
 info "╔══════════════════════════════════════════════╗"
