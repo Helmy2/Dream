@@ -24,6 +24,15 @@ if ! grep -q 'shellScript = "# !KOTLIN INTEGRATION STEP!' "$PBX"; then
   exit 1
 fi
 
+# 1b. The Swift test action lives in the hand-maintained iosApp.xcscheme (app.xcscheme is regenerated
+#     by the Toolchain and has no test action). Fail loudly if it was deleted or lost appTests.
+SCHEME="$ROOT/iosApp/module.xcodeproj/xcshareddata/xcschemes/iosApp.xcscheme"
+if [ ! -f "$SCHEME" ] || ! grep -q 'BlueprintName = "appTests"' "$SCHEME"; then
+  echo "ERROR: $SCHEME is missing or no longer lists the appTests testable." >&2
+  echo "Restore it from git (git checkout -- iosApp/module.xcodeproj/xcshareddata/xcschemes/iosApp.xcscheme)." >&2
+  exit 1
+fi
+
 # 2. Wrapper path relative to the iosApp module root.
 if grep -q 'KOTLIN_CLI_WRAPPER_PATH = ' "$PBX"; then
   sed -i '' 's#KOTLIN_CLI_WRAPPER_PATH = .*;#KOTLIN_CLI_WRAPPER_PATH = ../kotlin;#' "$PBX"

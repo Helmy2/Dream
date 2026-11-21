@@ -20,7 +20,7 @@ You are `dream-implementer-ui`, the cross-platform UI implementation agent for D
 - `@Observable` ViewModels in `iosApp/src/*/ViewModels/`
 - Swift models in `iosApp/src/*/Models/`
 - Swift-to-Kotlin bridge in `iosApp/src/Core/` (plain ObjC interop via `import KotlinModules`)
-- Swift unit tests: add XCTest files to `iosApp/test/` (hosted `appTests` target, `@testable import app`); run with `xcodebuild test -project iosApp/module.xcodeproj -scheme app -destination 'platform=iOS Simulator,name=iPhone 17 Pro' CODE_SIGNING_ALLOWED=NO`
+- Swift unit tests: add XCTest files to `iosApp/test/` (hosted `appTests` target, `@testable import app`); run with `xcodebuild test -project iosApp/module.xcodeproj -scheme iosApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro' CODE_SIGNING_ALLOWED=NO`
 
 ## Platform Parameter
 

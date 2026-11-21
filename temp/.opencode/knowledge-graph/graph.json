@@ -524,7 +524,7 @@
       "id": "rule.ios_xctest_packaging",
       "type": "Rule",
       "name": "Swift unit tests run in a hosted appTests target",
-      "statement": "The Xcode project has an app target (the only one with the Kotlin Toolchain integration script phase) and a hosted appTests unit-test target; Swift tests live in iosApp/test, use @testable import app, and run with xcodebuild test -scheme app; ./kotlin test runs only Kotlin tests.",
+      "statement": "The Xcode project has an app target (the only one with the Kotlin Toolchain integration script phase) and a hosted appTests unit-test target; Swift tests live in iosApp/test, use @testable import app, and run with xcodebuild test -scheme iosApp; ./kotlin test runs only Kotlin tests.",
       "scope": "platform",
       "classification": "project_specific",
       "strength": "recommended",

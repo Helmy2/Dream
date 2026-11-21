@@ -245,7 +245,7 @@
         "endLine": 35
       },
       "summary": "Defines the hosted appTests target, bridge-protocol mocking, and validation through xcodebuild test, ./kotlin build, and runtime smoke checks.",
-      "text": "The Xcode project has an app target (sole holder of the Kotlin integration script phase) and a hosted appTests target; Swift tests live in iosApp/test with @testable import app and run via xcodebuild test -project iosApp/module.xcodeproj -scheme app. Mock the native bridge protocol instead of framework internals. Keep shared business logic covered by Kotlin tests run with ./kotlin test --platform=iosSimulatorArm64. Validate native hosts with ./kotlin build -m iosApp --platform=iosSimulatorArm64, then runtime smoke flows after simulator launch is healthy."
+      "text": "The Xcode project has an app target (sole holder of the Kotlin integration script phase) and a hosted appTests target; Swift tests live in iosApp/test with @testable import app and run via xcodebuild test -project iosApp/module.xcodeproj -scheme iosApp. Mock the native bridge protocol instead of framework internals. Keep shared business logic covered by Kotlin tests run with ./kotlin test --platform=iosSimulatorArm64. Validate native hosts with ./kotlin build -m iosApp --platform=iosSimulatorArm64, then runtime smoke flows after simulator launch is healthy."
     },
     {
       "id": "chunk.ios.string_localization",

@@ -128,7 +128,7 @@ Based on changed files, run only necessary checks:
 
 **If only iOS files changed:**
 - `./kotlin build -m iosApp --platform=iosSimulatorArm64` + `xcrun simctl` install/launch
-- Swift unit tests: `xcodebuild test -project iosApp/module.xcodeproj -scheme app -destination 'platform=iOS Simulator,name=iPhone 17 Pro' CODE_SIGNING_ALLOWED=NO` (`./kotlin test` never runs Swift tests)
+- Swift unit tests: `xcodebuild test -project iosApp/module.xcodeproj -scheme iosApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro' CODE_SIGNING_ALLOWED=NO` (`./kotlin test` never runs Swift tests)
 - Skip: Android build and Android unit tests
 
 **If shared/* changed:**

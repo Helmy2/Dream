@@ -116,7 +116,7 @@ Apply when the feature has an iOS screen:
 - [ ] Add string keys to `iosApp/src/Localizable.xcstrings` matching `strings.xml`.
 - [ ] New `.swift` files in `iosApp/src` are picked up automatically (no project sync script).
 - [ ] Run `./kotlin build -m iosApp --platform=iosSimulatorArm64` and install/launch with `xcrun simctl`. 
-- [ ] Run Swift unit tests: `xcodebuild test -project iosApp/module.xcodeproj -scheme app -destination 'platform=iOS Simulator,name=iPhone 17 Pro' CODE_SIGNING_ALLOWED=NO` (tests in `iosApp/test`, target `appTests`).
+- [ ] Run Swift unit tests: `xcodebuild test -project iosApp/module.xcodeproj -scheme iosApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro' CODE_SIGNING_ALLOWED=NO` (tests in `iosApp/test`, target `appTests`).
 
 ## Responsive Forms And IME (Forms)
 
