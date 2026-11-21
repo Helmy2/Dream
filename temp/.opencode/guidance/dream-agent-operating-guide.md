@@ -51,15 +51,9 @@ See `.opencode/guidance/reference/complexity-routing.md` for full details and ex
 
 ## Model Selection
 
-Each agent uses a model optimized for its role. The default mapping balances cost, context window, and capability:
+Agents use the model of the current session unless the project pins one. Subagents inherit the model of the agent that called them. `/dream-init` asks the user whether to keep that default, use a role preset, or choose per agent; see `opencode-agent-map.md` for details and overrides.
 
-- **Orchestration** (dream-general): Qwen3.7 Plus — image support for screen viewing + 1M context
-- **Implementation** (dream-implementer): DeepSeek V4 Pro — strongest reasoning, 1M context (no image support needed)
-- **UI & Design** (dream-designer, dream-implementer-ui): Qwen3.7 Plus — image support for visual tasks
-- **Exploration & Research** (dream-discovery, dream-research): Big Pickle — free, sufficient for read-only tasks
-- **Verification & QA** (dream-tester, dream-inspector): MiMo V2.5 — low cost with image support for screenshot comparison
-
-Users can customize model assignments during `/dream-init` or by editing `opencode.json`. See `opencode-agent-map.md` for the full mapping and override instructions.
+Do not assume a model can read images. Check whether the active model accepts image input before relying on screenshots; if it does not, report the visual checks as `not run`.
 
 ## Substantial Work Threshold
 

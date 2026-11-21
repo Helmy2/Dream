@@ -199,7 +199,7 @@ Ask the user explicitly:
 When the user asks to "see the screen" or "show me the device screen":
 1. Delegate `dream-tester` to capture the current device screen via mobile-mcp (`mobile_take_screenshot` + `mobile_list_elements_on_screen`)
 2. `dream-tester` returns the screenshot and element tree
-3. Review the screenshot and element tree directly (your Qwen3.7 Plus model supports image inputs)
+3. Review the screenshot and element tree directly (if your model does not accept image input, rely on the element tree and report the visual check as `not run`)
 4. Present a clear description of what's on screen to the user, including UI state, visible elements, and any anomalies
 
 ## Subagents
