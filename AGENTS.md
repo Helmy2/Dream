@@ -51,9 +51,9 @@ Prefer linking to those documents in discussions and change summaries instead of
 
 ## Build system: Kotlin Toolchain (Alpha)
 
-The starter builds with the JetBrains Kotlin Toolchain (`./kotlin` CLI, YAML config, v0.13, Alpha). There is no Gradle, `gradlew`, or `build.gradle.kts`. Modules are declared in `temp/project.yaml` and each has a `module.yaml`; module names equal directory names (for example `core-domain`, `sample-impl`). iOS is native SwiftUI only (`temp/iosApp`); Android UI is Jetpack Compose in Android-only modules.
+The starter builds with the JetBrains Kotlin Toolchain (`./kotlin` CLI, YAML config, v0.14, Alpha). There is no Gradle, `gradlew`, or `build.gradle.kts`. Modules are declared in `temp/project.yaml` and each has a `module.yaml`; module names equal directory names (for example `core-domain`, `sample-impl`). iOS is native SwiftUI only (`temp/iosApp`); Android UI is Jetpack Compose in Android-only modules.
 
-Not supported by Toolchain 0.13: SKIE, Swift export, and the Xcode 27 JSON project format (`project.xcproj`). The Xcode project has an `app` target (carries the Kotlin integration script phase) and a hosted `appTests` unit-test target (Swift tests in `iosApp/test`, run with `xcodebuild test`). Full reference: [temp/.opencode/guidance/reference/kotlin-toolchain.md](temp/.opencode/guidance/reference/kotlin-toolchain.md).
+Not supported by Toolchain 0.14: SKIE, Swift export, and the Xcode 27 JSON project format (`project.xcproj`). The Xcode project has an `app` target (carries the Kotlin integration script phase) and a hosted `appTests` unit-test target (Swift tests in `iosApp/test`, run with `xcodebuild test`). Full reference: [temp/.opencode/guidance/reference/kotlin-toolchain.md](temp/.opencode/guidance/reference/kotlin-toolchain.md).
 
 ## MCP Servers
 

@@ -1,6 +1,6 @@
 # Kotlin Toolchain Reference (replaces Gradle)
 
-Dream builds with the JetBrains **Kotlin Toolchain** (`./kotlin` CLI, YAML config, v0.13, Alpha). There is no Gradle, no `build.gradle.kts`, no `settings.gradle.kts`, no `build-logic`, no convention plugins, no `gradlew`. Run every command from the project root.
+Dream builds with the JetBrains **Kotlin Toolchain** (`./kotlin` CLI, YAML config, v0.14, Alpha). There is no Gradle, no `build.gradle.kts`, no `settings.gradle.kts`, no `build-logic`, no convention plugins, no `gradlew`. Run every command from the project root.
 
 ## Commands
 
@@ -91,7 +91,7 @@ Templates (`templates/`): `common` (Kotlin 2.4.0, `-Xexpect-actual-classes`, ser
 
 ## Swift interop (no SKIE, no Swift export, no KMP-NativeCoroutines)
 
-Not supported by Toolchain 0.13: SKIE, Swift export, a platform-scoped KMP-NativeCoroutines. iOS uses plain Kotlin/Native Objective-C interop:
+Not supported by Toolchain 0.14: SKIE, Swift export, a platform-scoped KMP-NativeCoroutines. iOS uses plain Kotlin/Native Objective-C interop:
 
 - `import KotlinModules` (single framework containing `iosApp`, its dependency modules, and their transitive code). Qualify types as `KotlinModules.SampleItem` when they clash with Swift names. Old `import SharedCore` no longer exists.
 - `suspend fun` is exposed as Swift `async throws` automatically. Cancelling the Swift task does not cancel the Kotlin coroutine.
@@ -108,7 +108,7 @@ Not supported by Toolchain 0.13: SKIE, Swift export, a platform-scoped KMP-Nativ
 - Removing a Swift package dependency leaves stale references; delete `module.xcodeproj` and re-apply the settings above.
 - Build: `./kotlin build -m iosApp --platform=iosSimulatorArm64`. App bundle: `build/tasks/_iosApp_buildIosAppIosSimulatorArm64Debug/bin/Debug-iphonesimulator/iosApp.app`.
 - Install/launch: `xcrun simctl install <udid> <app>` then `xcrun simctl launch <udid> com.dream.template.ios`.
-- Not supported by Toolchain 0.13: the new Xcode 27 JSON project format (`project.xcproj`). Keep `project.pbxproj`. Convertible later with `xcodebuild -convert-project "Xcode Project" -project module.xcodeproj`.
+- Not supported by Toolchain 0.14: the new Xcode 27 JSON project format (`project.xcproj`). Keep `project.pbxproj`. Convertible later with `xcodebuild -convert-project "Xcode Project" -project module.xcodeproj`.
 - The Toolchain requires exactly one target WITH the Kotlin integration script phase (`app`). A hosted unit-test target without that phase (`appTests`, bundle id `com.dream.template.ios.tests`) is accepted. Swift tests live in `iosApp/test/*.swift` and use `@testable import app`; run them with `xcodebuild test` (see verification-commands.md). `./kotlin test` runs only Kotlin tests.
 - Caveat: `xcodebuild -convert-project` rewrites the `Build Kotlin` phase `shellScript` from a single string into a multi-line list, after which the Toolchain rejects the project ("must contain a single target with the Kotlin Toolchain integration"). Keep it exactly the single string `"# !KOTLIN INTEGRATION STEP!\n# This script is managed by the Kotlin Toolchain, do not edit manually!\n\"${KOTLIN_CLI_WRAPPER_PATH}\" tool xcode-integration\n";`.
 
