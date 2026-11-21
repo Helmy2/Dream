@@ -162,7 +162,7 @@ Quick-reference rules for Dream agents. Load specific files for details.
 
 ### Phase Checkpoints
 
-- [ckpt-1] After each phase completes, write checkpoint to `specs/<feature>/checkpoints.md`
+- [ckpt-1] After each phase and each slice completes, write checkpoint to `specs/<feature>/checkpoints.md`
 - [ckpt-2] Checkpoint includes: phase name, git commit hash, status, timestamp
 - [ckpt-3] If a later phase fails, offer to roll back to last good checkpoint
 - [ckpt-4] Checkpoints are append-only — never overwrite previous entries

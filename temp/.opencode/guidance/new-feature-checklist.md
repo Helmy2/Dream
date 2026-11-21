@@ -48,7 +48,8 @@ The script cannot judge contract parity, UI quality, or runtime behavior. The it
 ## Phase 0: Plan & User Review (Always)
 
 - [ ] Create `specs/<feature-name>/plan.md` using the plan template before any implementation.
-- [ ] Plan must define: feature goal, priority, modules to create/modify, screens with states, architecture decisions, dependencies, and phases.
+- [ ] Plan must define: feature goal, priority, modules to create/modify, screens with states, architecture decisions, dependencies, and slices.
+- [ ] Slice the feature vertically (each slice runnable on both platforms, never by layer). Slice 1 is the foundation: all four modules, tests, SwiftUI, bridge, and Maestro flow. Each slice has an observable acceptance line.
 - [ ] Choose an archetype from `.opencode/archetypes/README.md` (for example `local-crud`) and say why it fits, or state that none does. Read its `archetype.yaml` and `wiring.md` before designing modules.
 - [ ] Present the plan to the user and ask: **questions? edits? confirm? deny?**
 - [ ] On **Confirm**: create feature branch (`dream/feature/<name>`) and proceed.
@@ -112,11 +113,18 @@ The script cannot judge contract parity, UI quality, or runtime behavior. The it
 - [ ] On confirm: squash merge to main, delete feature branch.
 - [ ] On deny: keep branch, document reason in report.
 
-## Phase Checkpoints (Always)
+## Phase And Slice Checkpoints (Always)
 
-- [ ] After each phase completes, append to `specs/<feature>/checkpoints.md`.
-- [ ] Checkpoint includes: phase name, git commit hash, status, timestamp.
-- [ ] If a later phase fails, offer to roll back to last good checkpoint.
+- [ ] After each phase and each slice completes, append to `specs/<feature>/checkpoints.md`.
+- [ ] Checkpoint includes: phase or slice name, git commit hash, status, timestamp.
+- [ ] If a later phase or slice fails, offer to roll back to last good checkpoint.
+
+## Slice Loop (Always, COMPLEX features)
+
+- [ ] Amend `contract.yaml` for the slice before implementing it; record changes to earlier-slice definitions in the change notes.
+- [ ] Iterate with focused module tests and `verify-feature.sh --quick`; run the full `verify-feature.sh <feature-name>` once per slice when those pass, plus device install/launch on Android and iOS if the slice changed UI. Android-only does not count.
+- [ ] Commit the green slice on the feature branch (`<feature>: slice N - <title>`), update the slice status in `plan.md`, then continue without asking the user.
+- [ ] Stop and report only on failure.
 
 ## Verification And Commit (Always)
 
@@ -125,7 +133,7 @@ The script cannot judge contract parity, UI quality, or runtime behavior. The it
 - [ ] Run `dream-inspector` or manual review fallback against contract parity and architecture rules.
 - [ ] Run `git status`, `git diff`, and `git log --oneline -10`.
 - [ ] Stage only intended files.
-- [ ] Present commit summary to user and get explicit approval before committing.
+- [ ] Green slices are committed on the feature branch as they finish; present the merge summary (slices and commit hashes) and get explicit approval before merging to main.
 - [ ] Write `specs/<feature-name>/retrospective.md`.
 
 ## Preflight (Always)
