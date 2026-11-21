@@ -34,24 +34,13 @@ Defines which OpenCode agent owns each Dream workflow stage.
 
 ## Model Assignments
 
-Each agent is configured with a model optimized for its role. Configuration lives in `opencode.json` under the `agent` key. Users can customize during `/dream-init` or by editing `opencode.json` directly.
+By default no agent pins a model: every agent uses the model selected in the current OpenCode session, and subagents inherit the model of the agent that called them. `/dream-init` lets the user keep that default, choose a role preset, or pick a model per agent; presets and custom choices are written to `opencode.json` under the `agent` key. The preset table lives in `.opencode/commands/dream-init.md` (Optional Presets).
 
-**Image-capable** models (Qwen3.7 Plus, MiMo V2.5) are assigned to agents that view screenshots — `dream-general` (user requests like "show me the screen"), `dream-designer` (visual specs), `dream-implementer-ui` (UI spec interpretation), `dream-tester` (verification), and `dream-inspector` (QA screenshot checks). Agents that work purely with text (`dream-implementer`, `dream-discovery`, `dream-research`) use DeepSeek V4 Pro or Big Pickle.
-
-| Agent | Model | Model ID | Rationale |
-|---|---|---|---|---|
-| `dream-general` | Qwen3.7 Plus | `opencode-go/qwen3.7-plus` | 1M context + image support for visual orchestration and screen viewing |
-| `dream-designer` | Qwen3.7 Plus | `opencode-go/qwen3.7-plus` | Image support for visual understanding |
-| `dream-discovery` | Big Pickle | `opencode/big-pickle` | Free, 200K context for fast exploration |
-| `dream-implementer` | DeepSeek V4 Pro | `opencode-go/deepseek-v4-pro` | Strongest reasoning for complex KMP code (no image support needed) |
-| `dream-implementer-ui` | Qwen3.7 Plus | `opencode-go/qwen3.7-plus` | Image support for UI spec interpretation |
-| `dream-research` | Big Pickle | `opencode/big-pickle` | Free, 200K context for research |
-| `dream-tester` | MiMo V2.5 | `opencode-go/mimo-v2.5` | Low cost, image support for screenshot comparison |
-| `dream-inspector` | MiMo V2.5 | `opencode-go/mimo-v2.5` | Low cost, image support for screenshot-based QA verification |
+Agents that read screenshots (`dream-general`, `dream-tester`, `dream-inspector`, and UI work in `dream-designer` and `dream-implementer-ui`) need a model with image input. If the active model has none, rely on `mobile_list_elements_on_screen` and crash logs, and report visual checks as `not run`.
 
 ### Overriding Models
 
-Edit `opencode.json` to change any agent's model:
+Pin a model for one agent by adding it to `opencode.json`:
 
 ```json
 {

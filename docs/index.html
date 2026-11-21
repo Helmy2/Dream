@@ -726,17 +726,10 @@
 
   slides.push({ section: 'C', html:
     '<div class="slide-body">' +
-      '<h2>The model fits the job, not the other way round</h2>' +
-      '<div class="table-wrap"><table class="deck-table">' +
-        '<tr><th>Agent</th><th>Model</th><th>Why</th></tr>' +
-        '<tr><td class="mono">dream-general</td><td>Qwen3.7 Plus</td><td>1M context + image support, for orchestration and screen-viewing</td></tr>' +
-        '<tr><td class="mono">dream-implementer</td><td>DeepSeek V4 Pro</td><td>Strongest reasoning for complex KMP code — no image support needed</td></tr>' +
-        '<tr><td class="mono">discovery / research</td><td>Big Pickle</td><td>Free, 200K context, built for fast exploration</td></tr>' +
-        '<tr><td class="mono">tester / inspector</td><td>MiMo V2.5</td><td>Low cost + image support, for screenshot-based verification</td></tr>' +
-      '</table></div>' +
-      '<p class="lede" style="margin-top: 1.4em;">Verification runs on every change — so it runs on the cheapest model that can still see the screen.</p>' +
-      '<p class="lede" style="margin-top: 1em;">Chosen once, at bootstrap, as a preset:</p>' +
-      '<div class="pill-row"><span class="pill">Balanced</span><span class="pill">Budget</span><span class="pill accent">Maximum Quality</span></div>' +
+      '<h2>Your model, unless you say otherwise</h2>' +
+      '<p class="lede">Every agent uses the model of your current session. Nothing is pinned.</p>' +
+      '<p class="lede" style="margin-top: 1em;">At bootstrap you can instead choose a role preset or pick a model per agent:</p>' +
+      '<div class="pill-row"><span class="pill accent">Current model</span><span class="pill">Balanced</span><span class="pill">Budget</span><span class="pill">Custom</span></div>' +
     '</div>'
   });
 
