@@ -14,7 +14,7 @@ Choose the appropriate depth based on change scope:
 - Example: "Fix typo in strings.xml, update 1 Compose preview"
 
 ### `standard` (Simple: 1 feature, <5 screens, no new shared modules)
-- Brief plan.md with only: Goal, Modules to Create/Modify, Screens, Phases
+- Brief plan.md with only: Goal, Modules to Create/Modify, Screens, Slices
 - Skip: Architecture Decisions, Dependencies sections
 - Example: "Add expense list screen with 3 states"
 
@@ -91,17 +91,33 @@ One-line summary of what this feature does and why it exists.
 - <library or service> — <reason>
 - <library or service> — <reason>
 
-## Phases
+## Slices
 
-| Phase | Scope | Agent |
-|-------|-------|-------|
-| Phase 1 | External research (if needed) | dream-research |
-| Phase 1.5 | UI spec generation | dream-designer |
-| Phase 2 | Domain, data, api modules + tests | dream-implementer |
-| Phase 3 | Compose UI + iOS SwiftUI (parallel) | dream-implementer-ui (platform: both) |
-| Phase 4 | Wiring: umbrellas, DI, navigation | dream-implementer |
-| Phase 5 | Verification ladder | dream-tester |
-| Final | Inspector review | dream-inspector |
+Ordered, small, vertical increments. Each slice is built, verified on Android and iOS, and committed before the next starts. `dream-general` decides the slices; the user sees them here and may edit them during plan review.
+
+| # | Slice | Adds | Acceptance (observable) | Status |
+|---|-------|------|-------------------------|--------|
+| 1 | Foundation: <smallest end-to-end path> | all four modules, DI/navigation wiring, SwiftUI + bridge, tests, Maestro flow | <what the user can do, on both platforms> | pending |
+| 2 | <next increment> | <fields/screens/behavior> | <what the user can do> | pending |
+
+Status values: `pending`, `in-progress`, `done` (with commit hash), `blocked` (with reason).
+
+## Per-Slice Loop
+
+Every slice runs the same steps (see `dream-general`, "Slice Loop"):
+
+| Step | Scope | Agent |
+|------|-------|-------|
+| a | Contract amendment for this slice (record changes, never silently drift) | dream-general |
+| b | External research, only if the slice needs a new dependency or API | dream-research |
+| c | UI spec for new or changed screens | dream-designer |
+| d | Domain, data, api changes + tests | dream-implementer |
+| e | Compose UI + iOS SwiftUI (parallel) | dream-implementer-ui (platform: android / ios) |
+| f | Wiring changes: umbrellas, DI, navigation | dream-implementer |
+| g | Gate: `verify-feature.sh <name>` (full, Android and iOS), then device install/launch on both | dream-tester |
+| h | Commit on the feature branch, update slice status and `checkpoints.md` | dream-general |
+
+After the last slice: inspector review (`dream-inspector`) over the whole feature, then the merge summary.
 ```
 
 ## Instructions
@@ -113,4 +129,10 @@ One-line summary of what this feature does and why it exists.
 5. Architecture decisions should be concrete — if storage is Room, say Room; if DataStore, say DataStore.
 6. Dependencies section is for new dependencies only; omit if none.
 7. Choose an archetype from `.opencode/archetypes/README.md`, or write `none` with the reason.
-8. After writing, present to user and ask: **questions? edits? confirm? deny?**
+8. Slice the feature (`standard` and `full` depth). Rules:
+   - Slice vertically (a path the user can run on both platforms), never by layer. "All domain, then all data, then all UI" is not slicing.
+   - Slice 1 is the foundation: the smallest end-to-end path. It creates all four modules, tests, SwiftUI views, bridge, and the Maestro flow, because the gate requires them from the first run. Give it the full data model shape so later slices extend it rather than reshape it.
+   - Each later slice adds one cohesive increment (a field group, a screen, a behavior) and ends with something observable.
+   - Aim for 3-6 slices. A feature that is really one increment gets one slice; do not pad.
+   - Every slice has an acceptance line a person could check by hand.
+9. After writing, present to user and ask: **questions? edits? confirm? deny?**

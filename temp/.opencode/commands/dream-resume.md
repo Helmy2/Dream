@@ -30,7 +30,8 @@ Then:
 Read the resume file and extract:
 - **Current phase**: which phase was in progress when the session stopped
 - **Completed phases**: which phases finished successfully (with git hashes from checkpoints)
-- **Iteration count**: how many repair rounds have been attempted
+- **Slice progress**: from the Slices table in `specs/<feature>/plan.md`, which slices are `done` (with commit hashes), which is `in-progress` or `blocked`, and which are `pending`
+- **Iteration count**: how many repair rounds have been attempted on the current slice
 - **Failures**: what failed in the last attempt
 - **Next action**: what the agent planned to do next
 - **Relevant state**: pointers to contracts, specs, reports, verification status
@@ -41,7 +42,8 @@ Present a clear summary:
 ```
 Resuming: <feature name>
 Current phase: <phase name>
-Completed: <list of completed phases with hashes>
+Current slice: <N of M — title>
+Completed: <list of completed phases and slices with hashes>
 Iteration: <N> of max 5
 Last failure: <what went wrong>
 Next action: <what Dream will do next>
@@ -59,8 +61,9 @@ Ask the user:
 - verify the feature branch exists and is checked out
 - if the last phase was interrupted mid-execution, re-delegate to the appropriate subagent
 - if the last phase completed but the next phase hasn't started, begin the next phase
-- write new checkpoints as phases complete
-- continue tracking iterations against the max 5 limit
+- if a slice was `in-progress` or `blocked`, check the working tree against the last slice commit, then re-run that slice from its first unfinished step of the Slice Loop (do not redo earlier slices; start from their commits)
+- write new checkpoints as phases and slices complete
+- continue tracking iterations against the max 5 limit (the counter is per slice)
 
 **On Rollback:**
 - present available checkpoints with git hashes
@@ -100,12 +103,14 @@ The resume file should follow this structure:
 ## Current State
 - Phase: <current phase name>
 - Branch: <feature branch name>
-- Iteration: <N> of 5
+- Slice: <N of M — title>
+- Iteration: <N> of 5 (current slice)
 - Status: <in-progress | blocked | waiting-for-user>
 
 ## Completed Phases
 - Phase 0: Plan & User Review — completed — <git-hash> — <timestamp>
-- Phase 1: External Research — completed — <git-hash> — <timestamp>
+- Slice 1: <title> — done — <git-hash> — <timestamp>
+- Slice 2: <title> — done — <git-hash> — <timestamp>
 - ...
 
 ## Last Action

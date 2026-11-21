@@ -249,7 +249,7 @@ User: "yes"
 ```
 
 ### Complex Phase 0
-Full plan.md created and presented for review.
+Full plan.md created and presented for review, including the ordered Slices table. Implementation then runs the Slice Loop (one verified, committed slice at a time).
 
 ## Benefits
 

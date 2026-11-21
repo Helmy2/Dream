@@ -95,6 +95,8 @@ When a phase fails or skip condition triggers, present these options:
 
 ## Iteration Tracking
 
+Features are built in slices. Track iterations **per slice**: the counter starts at 0 for each slice and resets when the next slice starts, and every skip condition above applies to the current slice. A blocked slice is marked `blocked` in `specs/<feature>/plan.md`; rollback targets the previous slice's commit.
+
 1. Before first repair, record initial failure count and set iteration = 1
 2. After each repair, delegate `dream-tester` to run verification and record: iteration number, failure count, list of failing tests/checks, whether new failures appeared
 3. Before starting next repair, check all skip conditions against tracked data

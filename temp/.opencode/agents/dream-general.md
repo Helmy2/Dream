@@ -125,15 +125,10 @@ See `.opencode/guidance/reference/complexity-routing.md` for full details.
 - Done. No inspector (unless >2 files changed), no contract.yaml, no ui-spec.md.
 
 ### Complex Complexity (`/dream-feature`)
-Full workflow with all phases:
-- Phase 0: **Plan & User Review** — produce `specs/<feature>/plan.md`, present to user, collect questions/edits, get explicit confirmation
-- Phase 1: `dream-research` for external research
-- Phase 1.5: `dream-designer` for UI spec from contract
-- Phase 2: `dream-implementer` for domain/data/api + tests + wiring
-- Phase 3 (parallel): `dream-implementer-ui` for UI (platform: both)
-- Phase 4: `dream-implementer` for umbrella/DI/navigation consolidation
-- Phase 5: `dream-tester` for full verification ladder
-- Final: `dream-inspector` for substantial work review
+Incremental workflow: plan once, then build the feature slice by slice:
+- Phase 0: **Plan & User Review** — produce `specs/<feature>/plan.md` (including the Slices table), present to user, collect questions/edits, get explicit confirmation
+- Phase 1: **Slice Loop** — for each slice in order: contract amendment, research and UI spec if needed, domain/data/api, Compose and SwiftUI in parallel, wiring, then the full gate on Android and iOS and a commit on the feature branch (see "Slice Loop" below)
+- Final: `dream-inspector` for review of the whole feature, then the merge summary
 
 `/dream-ui-fix` and `/dream-bug-fix` have their own dedicated phase structures (see those command files for exact flow).
 
@@ -169,7 +164,7 @@ The plan must cover:
 - **Screens**: each screen with its purpose and states (Loading/Empty/Content/Error)
 - **Architecture decisions**: data flow, storage type, time provider usage
 - **Dependencies**: any new libraries or services needed
-- **Phases**: the implementation phases with estimated scope
+- **Slices**: the ordered slice list (see "Slice Loop" for how to cut it)
 
 ### Step 3: Present the Plan to the User
 Present the plan clearly in the conversation. Format it for readability. Include:
@@ -187,12 +182,46 @@ Ask the user explicitly:
 ### Step 5: Handle User Response
 - **Question**: Answer the question. If it changes the plan, update `specs/<feature>/plan.md` and re-present.
 - **Edit**: Apply the edit, update `specs/<feature>/plan.md`, and re-present the updated plan. Cycle back to Step 4.
-- **Confirm**: The plan is approved. Proceed to Phase 1.
+- **Confirm**: The plan is approved. Create the feature branch and start the Slice Loop at slice 1.
 - **Deny**: Stop the workflow. Write a note in `specs/<feature>/report.md` documenting why the plan was denied.
 
 ### Iteration Rule for Phase 0
 - The plan-review loop (steps 3-5) is not counted in the 5-iteration repair limit
 - However, if the user denies the plan and does not provide actionable edits, stop and document the blocker
+
+## Slice Loop
+
+**This section applies to COMPLEX workflows.** After the plan is confirmed, build the feature one slice at a time instead of in one pass. Small slices keep each subagent's context narrow and make failures cheap to repair.
+
+### Cutting the slices (you decide; the user sees them in the plan)
+
+- Slice vertically: each slice is something a person can run and check on both platforms. Never slice by layer.
+- Slice 1 is the foundation: the smallest end-to-end path. It creates all four modules, tests, SwiftUI views, bridge, and Maestro flow, because `verify-feature.sh` requires them from its first run. Give it the full data model shape so later slices extend the model rather than reshape it. If an archetype was chosen, slice 1 is where it is adapted.
+- Later slices each add one cohesive increment (a field group, a screen, a behavior). Aim for 3-6 slices; a feature that is really one increment gets one slice.
+- Write each slice's acceptance line (observable behavior) in the plan's Slices table.
+
+### For each slice, in order
+
+1. **Mark** the slice `in-progress` in `specs/<feature>/plan.md`.
+2. **Amend the contract** (`specs/<feature>/contract.yaml`) for this slice only. Any change to something an earlier slice defined (a renamed field, a changed action) is recorded in the contract's change notes with the reason. Never drift silently.
+3. **Research / design** only when needed: `dream-research` if the slice adds a dependency or API; `dream-designer` for new or changed screens (update `ui-spec.md`, do not rewrite it).
+4. **Implement**: `dream-implementer` for domain/data/api + tests, then `dream-implementer-ui` for Compose (platform: android) and SwiftUI (platform: ios) in parallel, then `dream-implementer` for wiring. Give each subagent a narrow brief: the contract, the plan, this slice's goal and acceptance line, the archetype path (slice 1), and the files from earlier slices it must extend. Do not hand a subagent the whole feature.
+5. **Gate**: run `.opencode/scripts/verify-feature.sh <feature-name>` (full: build, Android and iOS tests, both app builds, Swift tests), then have `dream-tester` install and launch on both an Android device and an iOS simulator and check logs for the slice's acceptance behavior. Android-only verification is not enough. Any `FAILED`, or `INCOMPLETE`, is a failed slice.
+6. **Repair in place** while the slice is red, using the iteration limits in `.opencode/guidance/reference/skip-conditions.md`. The counter is per slice and resets when the next slice starts. After 3 repair rounds, apply "State Handoff".
+7. **Commit** the green slice on the feature branch (never main) with message `<feature>: slice N - <title>`. Stage explicit paths only and check `git diff --cached --stat` first. Update the slice to `done (<hash>)` in the plan and append to `specs/<feature>/checkpoints.md`.
+8. **Continue to the next slice without asking the user.**
+
+### When to stop
+
+Stop and report only on failure: a skip condition triggers, an environment blocker repeats, or a slice cannot be made green. Mark the slice `blocked` with the reason, present the recovery options from `skip-conditions.md` (repair, rollback to the last slice's commit, skip, stop), and wait. The user is not interrupted when slices pass.
+
+### After the last slice
+
+Run `dream-inspector` over the whole feature, write the retrospective and `specs/verification-report.md` (carry `not run` lines through as `not run`), then present the merge summary and ask for confirmation. Merging to main is still the user's decision.
+
+### Small requests
+
+Do not pad. If the feature is genuinely one increment, the plan has one slice and the loop runs once. For trivial and simple requests, skip the loop entirely (see routing above).
 
 ## Screen Viewing
 
@@ -228,13 +257,14 @@ When delegating codebase exploration tasks, prefer `dream-discovery` or `dream-r
 - Write `specs/verification-report.md` with explicit status buckets
 - Write `specs/<feature>/plan.md` during Phase 0 before any implementation code is written
 - Create feature branch after Phase 0 confirmation; commit to branch, not main
-- Write phase checkpoints to `specs/<feature>/checkpoints.md` after each phase
+- Write checkpoints to `specs/<feature>/checkpoints.md` after each phase and after each slice (with the commit hash)
+- Build COMPLEX features slice by slice (see "Slice Loop"); a slice is not done until the full gate passes on Android and iOS and it is committed on the feature branch
 - When inspector returns defects, present to user with severity; max 2 repair rounds before escalating
 - Before reporting a feature complete, run `.opencode/scripts/verify-feature.sh <feature-name>` (full, not `--quick`). Any `FAILED` line or an `INCOMPLETE` result blocks success; carry its `not run` lines into the verification report as `not run`, never as passed
 
 ## State Handoff
 
-After 3 repair rounds, write state to `specs/<feature>/report.md` (iteration, what was tried, what fails, next module, relevant rules) and continue with a fresh subagent that reads that file.
+After 3 repair rounds, write state to `specs/<feature>/report.md` (current slice, iteration, what was tried, what fails, next module, relevant rules) and continue with a fresh subagent that reads that file.
 
 ## Constraints
 

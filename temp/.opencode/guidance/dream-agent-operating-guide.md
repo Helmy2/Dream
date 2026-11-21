@@ -137,6 +137,10 @@ Plans must exist and be confirmed by the user before any implementation phase be
 
 Implementation must map each contract item to code and tests explicitly. Green commands alone are not sufficient stop conditions.
 
+## Slice Rules
+
+COMPLEX features are built in ordered vertical slices (see "Slice Loop" in `.opencode/agents/dream-general.md`). `dream-general` cuts the slices and shows them in the plan; the user confirms the plan, not each slice. Every slice ends with the full `verify-feature.sh` gate on Android and iOS plus a device launch on both, and a commit on the feature branch. The loop stops only on failure; iteration limits are per slice.
+
 ## Git Rules
 
 See `.opencode/knowledge-graph/rules-condensed.md` for the full Git & Workflow rules ([git-1] through [git-7], [cmt-1] through [cmt-5]).

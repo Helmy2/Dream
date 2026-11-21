@@ -42,26 +42,29 @@ Then:
 - generate or update `specs/app-contract.yaml` (do not overwrite if it already exists with content)
 - generate or update `specs/decisions.yaml`
 - instantiate the appropriate Dream template (this command handles its own initialization — `/dream-init` is a prerequisite for `/dream-feature` and `/dream-verify` only)
-- generate the first feature contract before any feature code is written
-- inspect the feature contract for entity fields, actions, states, time behavior, storage choices, and required tests
-- if external research is needed for dependencies or APIs, delegate to `dream-research`
-- before platform UI implementation, delegate to `dream-designer` to produce `specs/<feature>/ui-spec.md` from the feature contract
-- only then hand implementation to the appropriate subagents using the phased approach:
-  - **Phase 1 (domain + data)**: delegate to `dream-implementer` for entities, repository interfaces, data mappings, domain/data tests, and `feature/<name>-api` with `NavKey` route types only.
-  - **Phase 2 (UI — parallel)**: launch Compose UI (delegate to `dream-implementer-ui` (platform: android) for `feature/<name>-impl` with screens, ViewModels, presentation tests) and SwiftUI (delegate to `dream-implementer-ui` (platform: ios) for views, ViewModels, models, bridge) as independent subagent calls.
-  - **Phase 3 (wiring)**: delegate to `dream-implementer` for umbrella imports, DI registration, navigation entries.
-- run `.opencode/scripts/verify-feature.sh <feature-name>` (full) as the final gate; it covers the ladder below and exits 1 on any failure or unrun check
-- delegate to `dream-tester` for the verification ladder: unit tests, platform builds, device install/launch, log inspection; include `./kotlin build -m iosApp --platform=iosSimulatorArm64` and `xcrun simctl` install/launch
-- repair failures until green, blocked, or a skip condition triggers (see Skip Conditions in dream-agent-operating-guide.md)
+- generate the first feature contract (`specs/<feature>/contract.yaml`) before any feature code is written; it covers slice 1 first and grows with each later slice
+- if the product request names several features, treat each as its own feature in plan order, and run the Slice Loop for each one
+- build each feature **one slice at a time** using the Slice Loop in `.opencode/agents/dream-general.md`, in the order of the plan's Slices table; do not start slice N+1 until slice N is green and committed
+- before each slice's implementation, amend the contract (record changes to earlier-slice definitions in its change notes) and confirm the slice's entity fields, actions, states, time behavior, storage choices, and required tests are explicit
+- for each slice:
+  - if the slice needs a new dependency or API, delegate to `dream-research`
+  - for new or changed screens, delegate to `dream-designer` to update `specs/<feature>/ui-spec.md`
+  - **domain + data + api**: delegate to `dream-implementer` for the slice's entities, repository interfaces, data mappings, domain/data tests, and `feature/<name>-api` with `NavKey` route types only
+  - **UI (parallel)**: launch Compose UI (`dream-implementer-ui` platform: android, for `feature/<name>-impl`) and SwiftUI (`dream-implementer-ui` platform: ios, for views, ViewModels, models, bridge) as independent subagent calls
+  - **wiring**: `dream-implementer` for umbrella imports, DI registration, navigation entries
+  - **gate**: run `.opencode/scripts/verify-feature.sh <feature-name>` (full: Android and iOS), then have `dream-tester` install and launch on Android and on an iOS simulator (`xcrun simctl`) and inspect logs. Android-only is not enough
+  - repair until the slice is green or a skip condition triggers (see `.opencode/guidance/reference/skip-conditions.md`; the iteration counter is per slice)
+  - commit the green slice on the feature branch, update its status in `plan.md`, append to `specs/<feature>/checkpoints.md`, and continue to the next slice without asking the user
+- stop and ask the user only on failure (skip condition, repeated environment blocker, a slice that cannot be made green)
+- after the last slice: run `dream-inspector` as the final QA gate over the whole feature
 - update `specs/<feature-name>/implementation-report.md`
 - write `specs/<feature>/retrospective.md` using `.opencode/guidance/templates/template-improvement-retrospective-template.md`
-- write phase checkpoints to `specs/<feature>/checkpoints.md` after each phase completes
 - run `git status`, `git diff`, and `git log --oneline -10`
-- when verification is green, inspector review passes, and only intended files are staged, present the merge summary to the user and request explicit confirmation
+- when verification is green, inspector review passes, and only intended files are staged, present the merge summary (list the slices and their commits) to the user and request explicit confirmation
 - on confirm: squash merge feature branch to main, delete feature branch
 - on deny: keep branch, document reason in report
 - finish with `specs/verification-report.md` using `.opencode/guidance/templates/verification-report-template.md`
 
 Use `dream-implementer`, `dream-implementer-ui` (platform: android), and `dream-implementer-ui` (platform: ios) for code changes (layer-appropriate) and `dream-inspector` as the final QA gate for substantial work.
 
-Do not commit blocked, partial, unreviewed, or unsafe worktree states. If unrelated changes make safe staging unclear, stop and report the blocker instead of committing. Do not commit until the user explicitly approves the commit after Dream reports verification and review are green.
+Do not commit blocked, partial, or unsafe worktree states, and never commit to main. A slice is committed on the feature branch only after its full gate is green; if unrelated changes make safe staging unclear, stop and report the blocker instead of committing. Merging the feature branch to main requires the user's explicit approval after Dream reports verification and review are green.
